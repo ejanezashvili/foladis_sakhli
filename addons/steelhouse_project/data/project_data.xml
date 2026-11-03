@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Sample project for operational tasks (manager -> subordinate) -->
+    <record id="project_operational" model="project.project">
+        <field name="name">ოპერატიული დავალებები</field>
+        <field name="privacy_visibility">employees</field>
+    </record>
+
+    <!-- Stages -->
+    <record id="stage_new" model="project.task.type">
+        <field name="name">ახალი</field>
+        <field name="sequence">1</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_accepted" model="project.task.type">
+        <field name="name">მიღებული</field>
+        <field name="sequence">2</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_in_progress" model="project.task.type">
+        <field name="name">მიმდინარე</field>
+        <field name="sequence">3</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_on_hold" model="project.task.type">
+        <field name="name">შეჩერებული</field>
+        <field name="sequence">4</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_review" model="project.task.type">
+        <field name="name">შემოწმებაზე</field>
+        <field name="sequence">5</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_returned" model="project.task.type">
+        <field name="name">დაბრუნებული</field>
+        <field name="sequence">6</field>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_done" model="project.task.type">
+        <field name="name">დასრულებული</field>
+        <field name="sequence">7</field>
+        <field name="fold" eval="True"/>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+    <record id="stage_cancelled" model="project.task.type">
+        <field name="name">გაუქმებული</field>
+        <field name="sequence">8</field>
+        <field name="fold" eval="True"/>
+        <field name="user_id" eval="False"/>
+        <field name="project_ids" eval="[(4, ref('project_operational'))]"/>
+    </record>
+
+    <!-- Task templates -->
+    <record id="template_stock_count" model="project.task">
+        <field name="name">მარაგების დათვლა</field>
+        <field name="project_id" ref="project_operational"/>
+        <field name="stage_id" ref="stage_new"/>
+        <field name="is_template" eval="True"/>
+        <field name="evidence_required" eval="True"/>
+        <field name="priority">1</field>
+        <field name="description" type="html">
+            <p><b>რა უნდა გაკეთდეს:</b> მითითებული საწყობის / პროდუქციის ნაშთების დათვლა და სისტემის მონაცემებთან შედარება.</p>
+            <p><b>საწყობი / ლოკაცია:</b> </p>
+            <p><b>პროდუქცია:</b> </p>
+            <ul class="o_checklist">
+                <li>ნაშთების დათვლა</li>
+                <li>შედარება სისტემის მონაცემებთან</li>
+                <li>სხვაობის აღრიცხვა (თუ არის)</li>
+                <li>დათვლის აქტის მიმაგრება</li>
+            </ul>
+        </field>
+    </record>
+    <record id="template_stock_replenish" model="project.task">
+        <field name="name">მარაგის შევსების მოთხოვნა</field>
+        <field name="project_id" ref="project_operational"/>
+        <field name="stage_id" ref="stage_new"/>
+        <field name="is_template" eval="True"/>
+        <field name="priority">1</field>
+        <field name="description" type="html">
+            <p><b>რა პროდუქცია:</b> </p>
+            <p><b>რაოდენობა:</b> </p>
+            <p><b>რომელ საწყობში:</b> </p>
+            <p><b>რა ვადაში სჭირდება:</b> </p>
+            <ul class="o_checklist">
+                <li>მარაგის ხელმისაწვდომობის შემოწმება</li>
+                <li>შეკვეთა / გადატანა</li>
+                <li>მიღება საწყობში</li>
+            </ul>
+        </field>
+    </record>
+</odoo>

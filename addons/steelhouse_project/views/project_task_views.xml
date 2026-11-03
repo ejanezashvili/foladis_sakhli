@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Task form -->
+    <record id="view_task_form_steelhouse" model="ir.ui.view">
+        <field name="name">project.task.form.steelhouse</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="sh_stage_key" invisible="1"/>
+                <field name="has_pending_extension" invisible="1"/>
+                <button name="action_sh_accept" type="object" string="მიღება" class="btn-primary"
+                        invisible="is_template or sh_stage_key != 'new'"/>
+                <button name="action_sh_start" type="object" string="დაწყება" class="btn-primary"
+                        invisible="is_template or sh_stage_key not in ('accepted', 'returned')"/>
+                <button name="action_sh_submit_review" type="object" string="შემოწმებაზე გაგზავნა" class="btn-primary"
+                        invisible="is_template or sh_stage_key not in ('accepted', 'in_progress', 'returned')"/>
+                <button name="action_sh_approve" type="object" string="დადასტურება" class="btn-primary"
+                        invisible="is_template or sh_stage_key != 'review'"/>
+                <button name="action_sh_return" type="object" string="დაბრუნება"
+                        invisible="is_template or sh_stage_key != 'review'"/>
+                <button name="action_sh_resume" type="object" string="განახლება" class="btn-primary"
+                        invisible="is_template or sh_stage_key != 'on_hold'"/>
+                <button name="action_sh_hold" type="object" string="შეჩერება"
+                        invisible="is_template or sh_stage_key not in ('accepted', 'in_progress', 'returned')"/>
+                <button name="action_sh_request_extension" type="object" string="ვადის გადაწევის მოთხოვნა"
+                        invisible="is_template or not date_deadline or has_pending_extension or sh_stage_key in (False, 'done', 'cancelled')"/>
+                <button name="action_sh_cancel" type="object" string="გაუქმება"
+                        invisible="is_template or sh_stage_key in (False, 'done', 'cancelled')"/>
+            </xpath>
+
+            <xpath expr="//t[@name='warning_section']" position="after">
+                <div class="alert alert-warning mb-0" role="alert" invisible="not has_pending_extension">
+                    ვადის გადაწევის მოთხოვნა განსახილველია — იხ. ჩანართი „ვადა და შემოწმება“.
+                </div>
+                <div class="alert alert-danger mb-0" role="alert" invisible="sh_stage_key != 'returned'">
+                    <b>დაბრუნდა შესასწორებლად:</b> <field name="last_return_reason" readonly="1" class="d-inline"/>
+                </div>
+                <div class="alert alert-info mb-0" role="alert" invisible="sh_stage_key != 'on_hold'">
+                    <b>შეჩერებულია:</b> <field name="hold_reason" readonly="1" class="d-inline"/>
+                    <span invisible="not resume_date"> — განახლება: <field name="resume_date" readonly="1" class="d-inline"/></span>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="responsible_id" options="{'no_create': True}" invisible="is_template"/>
+                <field name="reviewer_id" options="{'no_create': True}" invisible="is_template"/>
+            </xpath>
+
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="evidence_required"/>
+            </xpath>
+
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
+                <field name="date_deadline_original"
+                       invisible="not date_deadline_original or date_deadline_original == date_deadline"/>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page name="steelhouse_control" string="ვადა და შემოწმება" invisible="is_template">
+                    <group>
+                        <group string="ვადა">
+                            <field name="date_deadline_original"/>
+                            <field name="deadline_extension_count"/>
+                            <field name="date_done"/>
+                            <field name="done_on_time" invisible="not date_done"/>
+                            <field name="done_within_original" invisible="not date_done"/>
+                        </group>
+                        <group string="შემოწმება">
+                            <field name="return_count"/>
+                            <field name="last_return_reason" invisible="not last_return_reason"/>
+                            <field name="cancel_reason" invisible="not cancel_reason"/>
+                        </group>
+                    </group>
+                    <separator string="ვადის გადაწევის მოთხოვნები"/>
+                    <field name="extension_request_ids" readonly="1" nolabel="1">
+                        <list create="0" delete="0"
+                              decoration-warning="state == 'pending'"
+                              decoration-success="state == 'approved'"
+                              decoration-muted="state == 'rejected'">
+                            <field name="create_date" string="თარიღი"/>
+                            <field name="requested_by_id" widget="many2one_avatar_user"/>
+                            <field name="old_deadline"/>
+                            <field name="new_deadline"/>
+                            <field name="reason"/>
+                            <field name="state"/>
+                            <field name="decided_by_id" optional="show"/>
+                            <button name="action_approve" type="object" string="დადასტურება"
+                                    icon="fa-check" class="text-success" invisible="state != 'pending'"/>
+                            <button name="action_reject" type="object" string="უარყოფა"
+                                    icon="fa-times" class="text-danger" invisible="state != 'pending'"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Task list -->
+    <record id="view_task_list_steelhouse" model="ir.ui.view">
+        <field name="name">project.task.list.steelhouse</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_task_view_tree_main_base"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="responsible_id" optional="show" widget="many2one_avatar_user"/>
+                <field name="reviewer_id" optional="hide" widget="many2one_avatar_user"/>
+                <field name="deadline_extension_count" optional="hide"/>
+                <field name="return_count" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Task search -->
+    <record id="view_task_search_steelhouse" model="ir.ui.view">
+        <field name="name">project.task.search.steelhouse</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="responsible_id"/>
+                <field name="reviewer_id"/>
+                <separator/>
+                <filter name="sh_to_review" string="ჩემთან შესამოწმებელი"
+                        domain="[('reviewer_id', '=', uid), ('sh_stage_key', '=', 'review')]"/>
+                <filter name="sh_pending_extension" string="გადაწევის მოთხოვნით"
+                        domain="[('has_pending_extension', '=', True)]"/>
+                <filter name="sh_returned" string="დაბრუნებული"
+                        domain="[('sh_stage_key', '=', 'returned')]"/>
+                <filter name="sh_on_hold" string="შეჩერებული"
+                        domain="[('sh_stage_key', '=', 'on_hold')]"/>
+                <filter name="sh_overdue" string="ვადაგადაცილებული (ღია)"
+                        domain="[('date_deadline', '&lt;', 'today'), ('is_closed', '=', False)]"/>
+                <separator/>
+                <filter name="sh_responsible" string="პასუხისმგებელი" context="{'group_by': 'responsible_id'}"/>
+                <filter name="sh_reviewer" string="შემმოწმებელი" context="{'group_by': 'reviewer_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

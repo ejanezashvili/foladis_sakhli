@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_extension_request_user,extension.request.user,model_steelhouse_task_extension_request,project.group_project_user,1,1,1,0
+access_extension_request_manager,extension.request.manager,model_steelhouse_task_extension_request,project.group_project_manager,1,1,1,1
+access_reason_wizard_user,reason.wizard.user,model_steelhouse_task_reason_wizard,project.group_project_user,1,1,1,1
+access_extension_wizard_user,extension.wizard.user,model_steelhouse_task_extension_wizard,project.group_project_user,1,1,1,1
