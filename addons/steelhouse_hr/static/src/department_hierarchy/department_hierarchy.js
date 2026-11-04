@@ -1,11 +1,13 @@
-import { Component } from "@odoo/owl";
+import { Component, useEffect, useExternalListener, useRef } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { HierarchyCard } from "@web_hierarchy/hierarchy_card";
 import { HierarchyRenderer } from "@web_hierarchy/hierarchy_renderer";
 import { hierarchyView } from "@web_hierarchy/hierarchy_view";
 
 /**
- * One department card with its sub-departments shown right under it.
+ * One department card. When opened, its sub-departments are shown in a panel
+ * right under the row that contains the card (the card itself stays in place).
+ * The template has two roots (card + panel) so both sit in the parent grid.
  */
 export class DepartmentTreeNode extends Component {
     static template = "steelhouse_hr.DepartmentTreeNode";
@@ -15,13 +17,28 @@ export class DepartmentTreeNode extends Component {
         openRecord: Function,
         archInfo: Object,
     };
+
+    setup() {
+        this.cardRef = useRef("card");
+        this.panelRef = useRef("panel");
+        useEffect(() => this.placeArrow());
+        useExternalListener(window, "resize", () => this.placeArrow());
+    }
+
+    // Point the panel's arrow at the opened card.
+    placeArrow() {
+        const card = this.cardRef.el;
+        const panel = this.panelRef.el;
+        if (!card || !panel) {
+            return;
+        }
+        const c = card.getBoundingClientRect();
+        const p = panel.getBoundingClientRect();
+        panel.style.setProperty("--sh-arrow-left", `${c.left + c.width / 2 - p.left}px`);
+    }
 }
 DepartmentTreeNode.components.DepartmentTreeNode = DepartmentTreeNode;
 
-/**
- * Department hierarchy: children open directly under the card
- * (Odoo's default opens them in a new row at the bottom).
- */
 export class DepartmentHierarchyRenderer extends HierarchyRenderer {
     static template = "steelhouse_hr.DepartmentHierarchyRenderer";
     static components = { ...HierarchyRenderer.components, DepartmentTreeNode };

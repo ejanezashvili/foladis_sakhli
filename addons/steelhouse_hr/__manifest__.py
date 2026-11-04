@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse HR',
-    'version': '19.0.1.1.2',
+    'version': '19.0.1.1.3',
     'category': 'Human Resources',
     'summary': 'ფოლადის სახლი: შემცვლელი, დეპარტამენტების იერარქია',
     'author': 'Steelhouse',
