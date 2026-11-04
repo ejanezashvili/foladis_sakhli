@@ -27,3 +27,33 @@
         opacity: 1 !important;
     }
 }
+
+// Top level (company): card centered, its departments below across the full width.
+.o_sh_dept_tree .o_sh_root_level {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    > .o_sh_tree_item > .o_sh_tree_card {
+        width: 280px;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    > .o_sh_tree_item > .o_sh_tree_children {
+        position: relative;
+        margin: 24px 0 0 0;
+        padding: 16px 0 0 0;
+        border-left: 0;
+        border-top: 2px solid #ababb1;
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            height: 24px;
+            border-left: 2px solid #ababb1;
+        }
+    }
+}

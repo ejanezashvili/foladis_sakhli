@@ -4,7 +4,7 @@
     <t t-name="steelhouse_hr.DepartmentHierarchyRenderer">
         <div class="o_hierarchy_renderer o_renderer o_sh_dept_tree w-100 d-flex justify-content-center" t-ref="renderer">
             <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
-                <div class="o_sh_tree_level">
+                <div class="o_sh_tree_level o_sh_root_level">
                     <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
                         <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo"/>
                     </t>
