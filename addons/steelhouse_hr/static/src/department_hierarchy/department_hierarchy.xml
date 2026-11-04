@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="steelhouse_hr.DepartmentHierarchyRenderer">
+        <div class="o_hierarchy_renderer o_renderer o_sh_dept_tree w-100 d-flex justify-content-center" t-ref="renderer">
+            <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
+                <div class="o_sh_tree_level">
+                    <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
+                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="steelhouse_hr.DepartmentTreeNode">
+        <div class="o_sh_tree_item" t-att-class="{ 'o_sh_tree_item_open': props.node.nodes.length }">
+            <div class="o_sh_tree_card">
+                <HierarchyCard node="props.node" openRecord="props.openRecord" archInfo="props.archInfo"/>
+            </div>
+            <div t-if="props.node.nodes.length" class="o_sh_tree_level o_sh_tree_children">
+                <t t-foreach="props.node.nodes" t-as="child" t-key="child.id">
+                    <DepartmentTreeNode node="child" openRecord="props.openRecord" archInfo="props.archInfo"/>
+                </t>
+            </div>
+        </div>
+    </t>
+
+</templates>

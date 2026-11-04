@@ -1,0 +1,29 @@
+.o_sh_dept_tree {
+    .o_sh_tree_level {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        gap: 12px;
+        align-items: start;
+    }
+
+    // An opened department takes the whole row, so its children appear right under it.
+    .o_sh_tree_item_open {
+        grid-column: 1 / -1;
+
+        > .o_sh_tree_card {
+            max-width: 280px;
+        }
+    }
+
+    .o_sh_tree_children {
+        margin-top: 8px;
+        margin-left: 20px;
+        padding-left: 16px;
+        border-left: 2px solid #ababb1;
+    }
+
+    // Keep other cards fully visible (default view fades them).
+    .o_hierarchy_node_container {
+        opacity: 1 !important;
+    }
+}

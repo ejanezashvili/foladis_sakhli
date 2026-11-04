@@ -1,14 +1,20 @@
 {
     'name': 'Steelhouse HR',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.1',
     'category': 'Human Resources',
-    'summary': 'ფოლადის სახლი: დეპარტამენტის ხელმძღვანელის შემცვლელი',
+    'summary': 'ფოლადის სახლი: შემცვლელი, დეპარტამენტების იერარქია',
     'author': 'Steelhouse',
     'license': 'LGPL-3',
-    'depends': ['hr'],
+    'depends': ['hr', 'hr_org_chart', 'web_hierarchy'],
     'data': [
         'views/hr_department_views.xml',
+        'views/hr_department_hierarchy_views.xml',
     ],
+    'assets': {
+        'web.assets_backend_lazy': [
+            'steelhouse_hr/static/src/department_hierarchy/*',
+        ],
+    },
     'installable': True,
     'application': False,
 }
