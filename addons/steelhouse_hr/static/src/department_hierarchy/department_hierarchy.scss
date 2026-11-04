@@ -1,5 +1,5 @@
 $sh-line: #ababb1;
-$sh-accent: #714b67;
+$sh-frame: #4b3a5a;
 
 .o_sh_dept_tree {
     // Cards of one level. "dense" lets the cards after an opened one fill its row,
@@ -12,33 +12,39 @@ $sh-accent: #714b67;
         align-items: start;
     }
 
-    // Sub-departments panel: full width, right under the row of the opened card.
+    // Row under the opened card (full width, transparent).
     .o_sh_tree_children {
         grid-column: 1 / -1;
-        position: relative;
-        margin-top: 6px;
-        padding: 14px;
-        border: 1px solid $sh-line;
-        border-top: 3px solid $sh-accent;
-        border-radius: 4px;
-        background-color: rgba(0, 0, 0, 0.02);
+        margin-top: 4px;
+    }
 
-        // Arrow pointing at the opened card (position set in JS).
+    // Dark frame with the sub-departments, centered under the opened card (position set in JS).
+    .o_sh_tree_frame {
+        position: relative;
+        width: max-content;
+        max-width: 100%;
+        grid-template-columns: repeat(var(--sh-cols, 2), 250px);
+        padding: 14px;
+        border: 2px solid $sh-frame;
+        border-radius: 6px;
+        background-color: rgba(75, 58, 90, 0.05);
+
+        // Arrow pointing at the opened card.
         &:before {
             content: "";
             position: absolute;
             top: -11px;
-            left: var(--sh-arrow-left, 40px);
+            left: var(--sh-arrow-left, 50%);
             transform: translateX(-50%);
             border-left: 9px solid transparent;
             border-right: 9px solid transparent;
-            border-bottom: 9px solid $sh-accent;
+            border-bottom: 9px solid $sh-frame;
         }
     }
 
     .o_sh_tree_card_open .o_hierarchy_node {
-        border-color: $sh-accent !important;
-        box-shadow: 0 0 0 1px $sh-accent;
+        border-color: $sh-frame !important;
+        box-shadow: 0 0 0 1px $sh-frame;
     }
 
     // Keep other cards fully visible (default view fades them).
@@ -58,19 +64,17 @@ $sh-accent: #714b67;
         }
 
         > .o_sh_tree_children {
+            position: relative;
             margin-top: 24px;
-            padding: 16px 0 0 0;
-            border: 0;
+            padding-top: 16px;
             border-top: 2px solid $sh-line;
-            border-radius: 0;
-            background: none;
 
             &:before {
+                content: "";
+                position: absolute;
                 top: -26px;
                 left: 50%;
-                transform: none;
                 height: 24px;
-                border: 0;
                 border-left: 2px solid $sh-line;
             }
         }

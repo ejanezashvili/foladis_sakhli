@@ -6,7 +6,7 @@
             <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
                 <div class="o_sh_root_level">
                     <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
-                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo"/>
+                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo" isRoot="true"/>
                     </t>
                 </div>
             </div>
@@ -18,7 +18,7 @@
             <HierarchyCard node="props.node" openRecord="props.openRecord" archInfo="props.archInfo"/>
         </div>
         <div t-if="props.node.nodes.length" class="o_sh_tree_children" t-ref="panel">
-            <div class="o_sh_tree_level">
+            <div class="o_sh_tree_level" t-att-class="{ 'o_sh_tree_frame': !props.isRoot }">
                 <t t-foreach="props.node.nodes" t-as="child" t-key="child.id">
                     <DepartmentTreeNode node="child" openRecord="props.openRecord" archInfo="props.archInfo"/>
                 </t>

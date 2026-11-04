@@ -16,6 +16,7 @@ export class DepartmentTreeNode extends Component {
         node: Object,
         openRecord: Function,
         archInfo: Object,
+        isRoot: { type: Boolean, optional: true },
     };
 
     setup() {
@@ -25,16 +26,26 @@ export class DepartmentTreeNode extends Component {
         useExternalListener(window, "resize", () => this.placeArrow());
     }
 
-    // Point the panel's arrow at the opened card.
+    // Center the sub-departments frame under the opened card (kept inside the page width)
+    // and point its arrow at the card.
     placeArrow() {
         const card = this.cardRef.el;
         const panel = this.panelRef.el;
-        if (!card || !panel) {
+        if (!card || !panel || this.props.isRoot) {
             return;
         }
+        const frame = panel.querySelector(":scope > .o_sh_tree_frame");
+        const COL = 250, GAP = 12, PAD = 14;
+        const avail = panel.clientWidth - 2 * PAD - 4;
+        const cols = Math.max(1, Math.min(this.props.node.nodes.length, Math.floor((avail + GAP) / (COL + GAP))));
+        frame.style.setProperty("--sh-cols", cols);
+        const width = cols * COL + (cols - 1) * GAP + 2 * PAD + 4;
         const c = card.getBoundingClientRect();
         const p = panel.getBoundingClientRect();
-        panel.style.setProperty("--sh-arrow-left", `${c.left + c.width / 2 - p.left}px`);
+        const center = c.left + c.width / 2 - p.left;
+        const left = Math.max(0, Math.min(center - width / 2, panel.clientWidth - width));
+        frame.style.marginLeft = `${left}px`;
+        frame.style.setProperty("--sh-arrow-left", `${center - left}px`);
     }
 }
 DepartmentTreeNode.components.DepartmentTreeNode = DepartmentTreeNode;
