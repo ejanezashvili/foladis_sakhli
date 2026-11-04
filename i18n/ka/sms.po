@@ -1,0 +1,373 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: sms
+#. odoo-python
+#: code:addons/sms/models/sms_template.py:0
+msgid "%s (copy)"
+msgstr "%s (ასლი)"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_account_code__account_id model:ir.model.fields,field_description:sms.field_sms_account_phone__account_id model:ir.model.fields,field_description:sms.field_sms_account_sender__account_id
+msgid "Account"
+msgstr "ანგარიში"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__model_id model:ir.model.fields,field_description:sms.field_sms_template_preview__model_id
+msgid "Applies to"
+msgstr "ვრცელდება"
+
+#. module: sms
+#: model:ir.model,name:sms.model_base
+msgid "Base"
+msgstr "ბაზა"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_sms__body model:ir.model.fields,field_description:sms.field_sms_template__body model:ir.model.fields,field_description:sms.field_sms_template_preview__body
+msgid "Body"
+msgstr "ტექსტი"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_account_code_view_form model_terms:ir.ui.view,arch_db:sms.sms_account_phone_view_form model_terms:ir.ui.view,arch_db:sms.sms_sms_view_tree model_terms:ir.ui.view,arch_db:sms.sms_template_reset_view_form model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.ir_actions_server_view_form
+msgid "Choose a template..."
+msgstr "აირჩიეთ შაბლონი..."
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "Contact"
+msgstr "კონტაქტი"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
+msgid "Content"
+msgstr "შინაარსი"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__state__sent
+msgid "Delivered"
+msgstr "მიწოდებულია"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form model_terms:ir.ui.view,arch_db:sms.sms_template_preview_form
+msgid "Discard"
+msgstr "ცვლილებების გაუქმება"
+
+#. module: sms
+#: model:ir.model,name:sms.model_mail_followers
+msgid "Document Followers"
+msgstr "დოკუმენტის გამომწერები"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_composer__res_ids
+msgid "Document IDs"
+msgstr "დოკუმენტის ID-ები"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_duplicate
+msgid "Duplicate"
+msgstr "დუბლირება"
+
+#. module: sms
+#: model:ir.model,name:sms.model_mail_thread
+msgid "Email Thread"
+msgstr "ელფოსტის თემა"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__state__error
+msgid "Error"
+msgstr "შეცდომა"
+
+#. module: sms
+#. odoo-javascript
+#: code:addons/sms/static/src/core/notification_model_patch.js:0 model:ir.model.fields.selection,name:sms.selection__mail_notification__failure_type__sms_expired
+msgid "Expired"
+msgstr "ვადაგასული"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_mail_notification__failure_type
+msgid "Failure type"
+msgstr "წარუმატებლობის ტიპი"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_sms_template__template_fs
+msgid "File from where the template originates. Used to reset broken template."
+msgstr "ფაილი, საიდანაც შაბლონი მომდინარეობს. გამოიყენება დაზიანებული შაბლონის აღსადგენად."
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_account_analytic_account__message_has_sms_error model:ir.model.fields,help:sms.field_calendar_event__message_has_sms_error model:ir.model.fields,help:sms.field_crm_team__message_has_sms_error model:ir.model.fields,help:sms.field_crm_team_member__message_has_sms_error model:ir.model.fields,help:sms.field_discuss_channel__message_has_sms_error model:ir.model.fields,help:sms.field_fleet_vehicle__message_has_sms_error model:ir.model.fields,help:sms.field_fleet_vehicle_log_contract__message_has_sms_error model:ir.model.fields,help:sms.field_fleet_vehicle_log_services__message_has_sms_error model:ir.model.fields,help:sms.field_fleet_vehicle_model__message_has_sms_error model:ir.model.fields,help:sms.field_gamification_badge__message_has_sms_error model:ir.model.fields,help:sms.field_gamification_badge_user__message_has_sms_error model:ir.model.fields,help:sms.field_gamification_challenge__message_has_sms_error model:ir.model.fields,help:sms.field_iap_account__message_has_sms_error model:ir.model.fields,help:sms.field_ir_actions_server__message_has_sms_error model:ir.model.fields,help:sms.field_ir_cron__message_has_sms_error model:ir.model.fields,help:sms.field_lunch_supplier__message_has_sms_error model:ir.model.fields,help:sms.field_mail_blacklist__message_has_sms_error model:ir.model.fields,help:sms.field_mail_thread__message_has_sms_error model:ir.model.fields,help:sms.field_mail_thread_blacklist__message_has_sms_error model:ir.model.fields,help:sms.field_mail_thread_cc__message_has_sms_error model:ir.model.fields,help:sms.field_mail_thread_main_attachment__message_has_sms_error model:ir.model.fields,help:sms.field_mail_thread_phone__message_has_sms_error model:ir.model.fields,help:sms.field_mail_tracking_duration_mixin__message_has_sms_error model:ir.model.fields,help:sms.field_maintenance_equipment__message_has_sms_error model:ir.model.fields,help:sms.field_maintenance_request__message_has_sms_error model:ir.model.fields,help:sms.field_maintenance_team__message_has_sms_error model:ir.model.fields,help:sms.field_phone_blacklist__message_has_sms_error model:ir.model.fields,help:sms.field_product_category__message_has_sms_error model:ir.model.fields,help:sms.field_product_pricelist__message_has_sms_error model:ir.model.fields,help:sms.field_product_product__message_has_sms_error model:ir.model.fields,help:sms.field_product_template__message_has_sms_error model:ir.model.fields,help:sms.field_rating_mixin__message_has_sms_error model:ir.model.fields,help:sms.field_res_partner__message_has_sms_error model:ir.model.fields,help:sms.field_res_users__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "თუ მონიშნულია, ზოგიერთი შეტყობინების მიწოდება ვერ მოხერხდა."
+
+#. module: sms
+#. odoo-javascript
+#: code:addons/sms/static/src/components/sms_widget/fields_sms_widget.xml:0
+msgid "Insert Field"
+msgstr "ველის ჩასმა"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__lang
+msgid "Language"
+msgstr "ენა"
+
+#. module: sms
+#: model:ir.model,name:sms.model_mail_message model:ir.model.fields,field_description:sms.field_sms_composer__body model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "Message"
+msgstr "შეტყობინება"
+
+#. module: sms
+#: model:ir.model,name:sms.model_mail_notification
+msgid "Message Notifications"
+msgstr "შეტყობინებები"
+
+#. module: sms
+#: model:ir.model,name:sms.model_ir_model
+msgid "Models"
+msgstr "მოდელები"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__name
+msgid "Name"
+msgstr "სახელი"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template_preview__no_record
+msgid "No Record"
+msgstr "ჩანაწერი არ არის"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_mail_notification__notification_type
+msgid "Notification Type"
+msgstr "შეტყობინების ტიპი"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__sms_optout
+msgid "Opted Out"
+msgstr "გამოწერა გაუქმებულია"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_sms_template__lang
+msgid "Optional translation language (ISO code) to select when sending out an email. If not set, the main partner's language will be used. This should usually be a placeholder expression that provides the appropriate language, e.g. {{ object.partner_id.lang }}."
+msgstr "თარგმანის ენა (ISO კოდი), რომელიც ელფოსტის გაგზავნისას შეირჩევა (არასავალდებულო). თუ არ არის მითითებული, გამოყენებული იქნება მთავარი კონტაქტის ენა. როგორც წესი, ეს უნდა იყოს ჩანაცვლების გამოსახულება, რომელიც შესაბამის ენას აბრუნებს, მაგ. {{ object.partner_id.lang }}."
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_composer__composition_mode__comment
+msgid "Post on a document"
+msgstr "დოკუმენტზე გამოქვეყნება"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_sms_composer__use_exclusion_list
+msgid "Prevent sending messages to blacklisted contacts. Disable only when absolutely necessary."
+msgstr "შავ სიაში მყოფ კონტაქტებზე შეტყობინებების გაგზავნის აკრძალვა. გათიშეთ მხოლოდ უკიდურესი აუცილებლობისას."
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__state__process
+msgid "Processing"
+msgstr "მუშავდება"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__model
+msgid "Related Document Model"
+msgstr "დაკავშირებული დოკუმენტის მოდელი"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__render_model
+msgid "Rendering Model"
+msgstr "რენდერინგის მოდელი"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
+msgid "Reset Template"
+msgstr "შაბლონის აღდგენა"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_sms_view_tree model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "Retry"
+msgstr "ხელახლა ცდა"
+
+#. module: sms
+#. odoo-javascript
+#: code:addons/sms/static/src/components/sms_button/sms_button.xml:0 code:addons/sms/static/src/core/notification_model_patch.js:0 model:ir.actions.act_window,name:sms.sms_sms_action model:ir.model.fields,field_description:sms.field_mail_notification__sms_id model:ir.model.fields.selection,name:sms.selection__mail_message__message_type__sms model:ir.model.fields.selection,name:sms.selection__mail_notification__notification_type__sms model:ir.ui.menu,name:sms.sms_sms_menu model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "SMS"
+msgstr "SMS"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_account_analytic_account__message_has_sms_error model:ir.model.fields,field_description:sms.field_calendar_event__message_has_sms_error model:ir.model.fields,field_description:sms.field_crm_team__message_has_sms_error model:ir.model.fields,field_description:sms.field_crm_team_member__message_has_sms_error model:ir.model.fields,field_description:sms.field_discuss_channel__message_has_sms_error model:ir.model.fields,field_description:sms.field_fleet_vehicle__message_has_sms_error model:ir.model.fields,field_description:sms.field_fleet_vehicle_log_contract__message_has_sms_error model:ir.model.fields,field_description:sms.field_fleet_vehicle_log_services__message_has_sms_error model:ir.model.fields,field_description:sms.field_fleet_vehicle_model__message_has_sms_error model:ir.model.fields,field_description:sms.field_gamification_badge__message_has_sms_error model:ir.model.fields,field_description:sms.field_gamification_badge_user__message_has_sms_error model:ir.model.fields,field_description:sms.field_gamification_challenge__message_has_sms_error model:ir.model.fields,field_description:sms.field_iap_account__message_has_sms_error model:ir.model.fields,field_description:sms.field_ir_actions_server__message_has_sms_error model:ir.model.fields,field_description:sms.field_ir_cron__message_has_sms_error model:ir.model.fields,field_description:sms.field_lunch_supplier__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_blacklist__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_thread__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_thread_blacklist__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_thread_cc__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_thread_main_attachment__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_thread_phone__message_has_sms_error model:ir.model.fields,field_description:sms.field_mail_tracking_duration_mixin__message_has_sms_error model:ir.model.fields,field_description:sms.field_maintenance_equipment__message_has_sms_error model:ir.model.fields,field_description:sms.field_maintenance_request__message_has_sms_error model:ir.model.fields,field_description:sms.field_maintenance_team__message_has_sms_error model:ir.model.fields,field_description:sms.field_phone_blacklist__message_has_sms_error model:ir.model.fields,field_description:sms.field_product_category__message_has_sms_error model:ir.model.fields,field_description:sms.field_product_pricelist__message_has_sms_error model:ir.model.fields,field_description:sms.field_product_product__message_has_sms_error model:ir.model.fields,field_description:sms.field_product_template__message_has_sms_error model:ir.model.fields,field_description:sms.field_rating_mixin__message_has_sms_error model:ir.model.fields,field_description:sms.field_res_partner__message_has_sms_error model:ir.model.fields,field_description:sms.field_res_users__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "SMS-ის მიწოდების შეცდომა"
+
+#. module: sms
+#: model:ir.model,name:sms.model_sms_template model:ir.ui.menu,name:sms.sms_template_menu model_terms:ir.ui.view,arch_db:sms.sms_sms_view_tree model_terms:ir.ui.view,arch_db:sms.sms_template_view_form model_terms:ir.ui.view,arch_db:sms.sms_template_view_tree
+msgid "SMS Templates"
+msgstr "SMS შაბლონები"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form
+msgid "Send"
+msgstr "გაგზავნა"
+
+#. module: sms
+#. odoo-python
+#: code:addons/sms/models/ir_actions_server.py:0
+msgid "Send %(template_name)s"
+msgstr "%(template_name)s-ის გაგზავნა"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_sms_view_tree model_terms:ir.ui.view,arch_db:sms.sms_tsms_view_form
+msgid "Send Now"
+msgstr "ახლავე გაგზავნა"
+
+#. module: sms
+#. odoo-javascript
+#: code:addons/sms/static/src/components/sms_button/sms_button.js:0 model:ir.actions.act_window,name:sms.res_partner_act_window_sms_composer_multi model:ir.actions.act_window,name:sms.res_partner_act_window_sms_composer_single model:ir.actions.act_window,name:sms.sms_composer_action_form model:ir.model.fields.selection,name:sms.selection__ir_actions_server__state__sms
+msgid "Send SMS"
+msgstr "SMS-ის გაგზავნა"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__state__pending
+msgid "Sent"
+msgstr "გაგზავნილი"
+
+#. module: sms
+#: model:ir.model,name:sms.model_ir_actions_server
+msgid "Server Action"
+msgstr "სერვერის მოქმედება"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__sidebar_action_id
+msgid "Sidebar action"
+msgstr "გვერდითი პანელის მოქმედება"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_sms_template__sidebar_action_id
+msgid "Sidebar action to make this template available on records of the related document model"
+msgstr "გვერდითი პანელის მოქმედება, რომელიც ამ შაბლონს დაკავშირებული დოკუმენტის მოდელის ჩანაწერებზე ხელმისაწვდომს ხდის"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template_reset__template_ids
+msgid "Template"
+msgstr "შაბლონი"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template__template_fs
+msgid "Template Filename"
+msgstr "შაბლონის ფაილის სახელი"
+
+#. module: sms
+#: model:ir.actions.act_window,name:sms.sms_template_preview_action
+msgid "Template Preview"
+msgstr "შაბლონის გადახედვა"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_template_preview__lang
+msgid "Template Preview Language"
+msgstr "შაბლონის გადახედვის ენა"
+
+#. module: sms
+#: model:ir.actions.act_window,name:sms.sms_template_action
+msgid "Templates"
+msgstr "შაბლონები"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form
+msgid "To"
+msgstr "მდე"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_ir_actions_server__state model:ir.model.fields,field_description:sms.field_ir_cron__state model:ir.model.fields,field_description:sms.field_mail_mail__message_type model:ir.model.fields,field_description:sms.field_mail_message__message_type
+msgid "Type"
+msgstr "ტიპი"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_ir_actions_server__state model:ir.model.fields,help:sms.field_ir_cron__state
+msgid ""
+"Type of server action. The following values are available:\n"
+"- 'Update a Record': update the values of a record\n"
+"- 'Create Activity': create an activity (Discuss)\n"
+"- 'Send Email': post a message, a note or send an email (Discuss)\n"
+"- 'Send SMS': send SMS, log them on documents (SMS)- 'Add/Remove Followers': add or remove followers to a record (Discuss)\n"
+"- 'Create Record': create a new record with new values\n"
+"- 'Execute Code': a block of Python code that will be executed\n"
+"- 'Send Webhook Notification': send a POST request to an external system, also known as a Webhook\n"
+"- 'Multi Actions': define an action that triggers several other server actions\n"
+msgstr ""
+"სერვერის მოქმედების ტიპი. ხელმისაწვდომია შემდეგი მნიშვნელობები:\n"
+"- 'ჩანაწერის განახლება': ჩანაწერის მნიშვნელობების განახლება\n"
+"- 'აქტივობის შექმნა': აქტივობის შექმნა (დისკუსია)\n"
+"- 'ელფოსტის გაგზავნა': შეტყობინების ან შენიშვნის გამოქვეყნება ან ელფოსტის გაგზავნა (დისკუსია)\n"
+"- 'SMS-ის გაგზავნა': SMS-ის გაგზავნა და დოკუმენტებზე აღრიცხვა (SMS)- 'გამომწერების დამატება/წაშლა': ჩანაწერზე გამომწერების დამატება ან წაშლა (დისკუსია)\n"
+"- 'ჩანაწერის შექმნა': ახალი ჩანაწერის შექმნა ახალი მნიშვნელობებით\n"
+"- 'კოდის შესრულება': Python კოდის ბლოკი, რომელიც შესრულდება\n"
+"- 'Webhook შეტყობინების გაგზავნა': POST მოთხოვნის გაგზავნა გარე სისტემაში, ე.წ. Webhook\n"
+"- 'მრავალი მოქმედება': მოქმედება, რომელიც რამდენიმე სხვა სერვერის მოქმედებას იწვევს\n"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_sms__uuid
+msgid "UUID"
+msgstr "UUID"
+
+#. module: sms
+#: model:ir.model.fields.selection,name:sms.selection__sms_sms__failure_type__unknown
+msgid "Unknown error"
+msgstr "უცნობი შეცდომა"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_composer__use_exclusion_list
+msgid "Use Exclusion List"
+msgstr "გამონაკლისების სიის გამოყენება"
+
+#. module: sms
+#: model:ir.model.fields,help:sms.field_mail_mail__message_type model:ir.model.fields,help:sms.field_mail_message__message_type
+msgid ""
+"Used to categorize message generator\n"
+"'email': generated by an incoming email e.g. mailgateway\n"
+"'comment': generated by user input e.g. through discuss or composer\n"
+"'email_outgoing': generated by a mailing\n"
+"'notification': generated by system e.g. tracking messages\n"
+"'auto_comment': generated by automated notification mechanism e.g. acknowledgment\n"
+"'user_notification': generated for a specific recipient"
+msgstr ""
+"გამოიყენება შეტყობინების წყაროს კატეგორიზაციისთვის\n"
+"'email': შექმნილია შემომავალი ელფოსტით, მაგ. mailgateway\n"
+"'comment': შექმნილია მომხმარებლის მიერ, მაგ. დისკუსიიდან ან რედაქტორიდან\n"
+"'email_outgoing': შექმნილია დაგზავნით\n"
+"'notification': შექმნილია სისტემის მიერ, მაგ. თვალყურის დევნების შეტყობინებები\n"
+"'auto_comment': შექმნილია ავტომატური შეტყობინების მექანიზმით, მაგ. დადასტურება\n"
+"'user_notification': შექმნილია კონკრეტული მიმღებისთვის"
+
+#. module: sms
+#: model:ir.model.fields,field_description:sms.field_sms_account_code__verification_code
+msgid "Verification Code"
+msgstr "დადასტურების კოდი"
+
+#. module: sms
+#. odoo-python
+#: code:addons/sms/models/sms_sms.py:0
+msgid "Warning"
+msgstr "გაფრთხილება"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form
+msgid "Write a message..."
+msgstr "დაწერეთ შეტყობინება..."
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_template_view_form
+msgid "e.g. Contact"
+msgstr "მაგ. კონტაქტი"
+
+#. module: sms
+#: model_terms:ir.ui.view,arch_db:sms.sms_composer_view_form
+msgid "out of"
+msgstr "სულ"

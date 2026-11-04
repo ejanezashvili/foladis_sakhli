@@ -1,0 +1,485 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__user_count model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__rank_users_count
+msgid "# Users"
+msgstr "# მომხმარებლები"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__action_id
+msgid "Action"
+msgstr "მოქმედება"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_needaction model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_needaction model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_needaction
+msgid "Action Needed"
+msgstr "საჭიროა მოქმედება"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__active
+msgid "Active"
+msgstr "აქტიური"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.challenge_form_view
+msgid "Advanced Options"
+msgstr "გაფართოებული ოფციები"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.badge_form_view model_terms:ir.ui.view,arch_db:gamification.gamification_badge_view_search
+msgid "Archived"
+msgstr "დაარქივებული"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_attachment_count model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_attachment_count model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_attachment_count
+msgid "Attachment Count"
+msgstr "მიმაგრებული ფაილების რაოდენობა"
+
+#. module: gamification
+#: model:gamification.karma.rank,name:gamification.rank_bachelor
+msgid "Bachelor"
+msgstr "ბაკალავრი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__name model:ir.model.fields,field_description:gamification.field_gamification_badge_user__badge_id model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__badge_id model_terms:ir.ui.view,arch_db:gamification.badge_form_view
+msgid "Badge"
+msgstr "ბეიჯი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge_user__badge_name
+msgid "Badge Name"
+msgstr "ბეიჯის დასახელება"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.badge_list_action model:ir.model.fields,field_description:gamification.field_res_users__badge_ids model:ir.ui.menu,name:gamification.gamification_badge_menu
+msgid "Badges"
+msgstr "ბეჯები"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.view_badge_wizard_grant model_terms:ir.ui.view,arch_db:gamification.view_goal_wizard_update_current
+msgid "Cancel"
+msgstr "შეწყვეტა"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.challenge_form_view
+msgid "Category"
+msgstr "კატეგორია"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.challenge_list_action model:ir.ui.menu,name:gamification.gamification_challenge_menu model_terms:ir.ui.view,arch_db:gamification.challenge_list_view model_terms:ir.ui.view,arch_db:gamification.view_challenge_kanban
+msgid "Challenges"
+msgstr "გამოწვევები"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_goal__color
+msgid "Color Index"
+msgstr "ფერის ინდექსი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge_user__comment model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__comment
+msgid "Comment"
+msgstr "კომენტარი"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.action_new_simplified_res_users
+msgid "Create User"
+msgstr "მომხმარებლის შექმნა"
+
+#. module: gamification
+#: model_terms:ir.actions.act_window,help:gamification.challenge_list_action
+msgid "Create a new challenge"
+msgstr "ახალი გამოწვევის შექმნა"
+
+#. module: gamification
+#: model_terms:ir.actions.act_window,help:gamification.goal_list_action
+msgid "Create a new goal"
+msgstr "ახალი მიზნის შექმნა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__create_uid model:ir.model.fields,field_description:gamification.field_gamification_badge_user__create_uid model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__create_uid model:ir.model.fields,field_description:gamification.field_gamification_challenge__create_uid model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__create_uid model:ir.model.fields,field_description:gamification.field_gamification_goal__create_uid model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__create_uid model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__create_uid model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__create_uid model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__create_date model:ir.model.fields,field_description:gamification.field_gamification_badge_user__create_date model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__create_date model:ir.model.fields,field_description:gamification.field_gamification_challenge__create_date model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__create_date model:ir.model.fields,field_description:gamification.field_gamification_goal__create_date model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__create_date model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__create_date model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__create_date model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__current
+msgid "Current"
+msgstr "მიმდინარე"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__period__daily model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__report_message_frequency__daily
+msgid "Daily"
+msgstr "ყოველდღიური"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.goal_form_view
+msgid "Data"
+msgstr "მონაცემები"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.gamification_karma_tracking_view_tree
+msgid "Date"
+msgstr "თარიღი"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.view_badge_wizard_grant
+msgid "Describe what they did and why it matters (will be public)"
+msgstr "აღწერეთ, რა გააკეთეს და რატომ არის ეს მნიშვნელოვანი (საჯარო იქნება)"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__description model:ir.model.fields,field_description:gamification.field_gamification_challenge__description model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__description model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__reason model_terms:ir.ui.view,arch_db:gamification.gamification_karma_rank_view_form
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__display_name model:ir.model.fields,field_description:gamification.field_gamification_badge_user__display_name model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__display_name model:ir.model.fields,field_description:gamification.field_gamification_challenge__display_name model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__display_name model:ir.model.fields,field_description:gamification.field_gamification_goal__display_name model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__display_name model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__display_name model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__display_name model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__display_name model:ir.model.fields,field_description:gamification.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: gamification
+#: model:gamification.karma.rank,name:gamification.rank_doctor
+msgid "Doctor"
+msgstr "დოქტორი"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__state__done model_terms:ir.ui.view,arch_db:gamification.goal_search_view
+msgid "Done"
+msgstr "შესრულებული"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__state__draft model:ir.model.fields.selection,name:gamification.selection__gamification_goal__state__draft model_terms:ir.ui.view,arch_db:gamification.goal_search_view
+msgid "Draft"
+msgstr "მონახაზი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__end_date model:ir.model.fields,field_description:gamification.field_gamification_goal__end_date model_terms:ir.ui.view,arch_db:gamification.goal_search_view
+msgid "End Date"
+msgstr "დასრულების თარიღი"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_badge__rule_auth__everyone
+msgid "Everyone"
+msgstr "ყველა"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_goal__state__failed
+msgid "Failed"
+msgstr "წარუმატებელი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_follower_ids model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_follower_ids model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_follower_ids
+msgid "Followers"
+msgstr "გამომწერები"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_partner_ids model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_partner_ids model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "გამომწერები (კონტაქტები)"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.goal_kanban_view
+msgid "From"
+msgstr "-დან"
+
+#. module: gamification
+#: model:ir.model,name:gamification.model_gamification_badge
+msgid "Gamification Badge"
+msgstr "გეიმიფიკაციის ბეიჯი"
+
+#. module: gamification
+#: model:ir.ui.menu,name:gamification.gamification_menu
+msgid "Gamification Tools"
+msgstr "გეიმიფიკაციის ხელსაწყოები"
+
+#. module: gamification
+#: model:ir.model,name:gamification.model_gamification_badge_user
+msgid "Gamification User Badge"
+msgstr "გეიმიფიკაციის მომხმარებლის ბეიჯი"
+
+#. module: gamification
+#: model:ir.model,name:gamification.model_gamification_badge_user_wizard
+msgid "Gamification User Badge Wizard"
+msgstr "გეიმიფიკაციის მომხმარებლის ბეიჯის ოსტატი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__goal_id model_terms:ir.ui.view,arch_db:gamification.goal_form_view
+msgid "Goal"
+msgstr "მიზანი"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.goal_definition_list_action model:ir.ui.menu,name:gamification.gamification_definition_menu model_terms:ir.ui.view,arch_db:gamification.goal_definition_list_view
+msgid "Goal Definitions"
+msgstr "მიზნების განსაზღვრებები"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.goal_list_action model:ir.ui.menu,name:gamification.gamification_goal_menu model_terms:ir.ui.view,arch_db:gamification.challenge_form_view model_terms:ir.ui.view,arch_db:gamification.view_challenge_kanban
+msgid "Goals"
+msgstr "მიზნები"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__has_message model:ir.model.fields,field_description:gamification.field_gamification_badge_user__has_message model:ir.model.fields,field_description:gamification.field_gamification_challenge__has_message
+msgid "Has Message"
+msgstr "აქვს შეტყობინება"
+
+#. module: gamification
+#: model:gamification.badge,name:gamification.badge_hidden
+msgid "Hidden"
+msgstr "დამალული"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__id model:ir.model.fields,field_description:gamification.field_gamification_badge_user__id model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__id model:ir.model.fields,field_description:gamification.field_gamification_challenge__id model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__id model:ir.model.fields,field_description:gamification.field_gamification_goal__id model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__id model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__id model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__id model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__id model:ir.model.fields,field_description:gamification.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: gamification
+#: model:ir.model.fields,help:gamification.field_gamification_badge__message_needaction model:ir.model.fields,help:gamification.field_gamification_badge_user__message_needaction model:ir.model.fields,help:gamification.field_gamification_challenge__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "თუ მონიშნულია, ახალი შეტყობინებები თქვენს ყურადღებას საჭიროებს."
+
+#. module: gamification
+#: model:ir.model.fields,help:gamification.field_gamification_badge__message_has_error model:ir.model.fields,help:gamification.field_gamification_badge_user__message_has_error model:ir.model.fields,help:gamification.field_gamification_challenge__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "თუ მონიშნულია, ზოგიერთი შეტყობინების მიწოდება ვერ მოხერხდა."
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__image_1920 model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__image_1920
+msgid "Image"
+msgstr "სურათი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__image_1024 model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__image_1024
+msgid "Image 1024"
+msgstr "სურათი 1024"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__image_128 model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__image_128
+msgid "Image 128"
+msgstr "სურათი 128"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__image_256 model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__image_256
+msgid "Image 256"
+msgstr "სურათი 256"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__image_512 model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__image_512
+msgid "Image 512"
+msgstr "სურათი 512"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__state__inprogress
+msgid "In Progress"
+msgstr "მიმდინარე"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_is_follower model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_is_follower model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_is_follower
+msgid "Is Follower"
+msgstr "არის გამომწერი"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.gamification_karma_tracking_action model:ir.ui.menu,name:gamification.gamification_karma_tracking_menu
+msgid "Karma Tracking"
+msgstr "კარმის აღრიცხვა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__write_uid model:ir.model.fields,field_description:gamification.field_gamification_badge_user__write_uid model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__write_uid model:ir.model.fields,field_description:gamification.field_gamification_challenge__write_uid model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__write_uid model:ir.model.fields,field_description:gamification.field_gamification_goal__write_uid model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__write_uid model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__write_uid model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__write_uid model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__write_date model:ir.model.fields,field_description:gamification.field_gamification_badge_user__write_date model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__write_date model:ir.model.fields,field_description:gamification.field_gamification_challenge__write_date model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__write_date model:ir.model.fields,field_description:gamification.field_gamification_goal__write_date model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__write_date model:ir.model.fields,field_description:gamification.field_gamification_goal_wizard__write_date model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__write_date model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: gamification
+#: model:gamification.karma.rank,name:gamification.rank_master
+msgid "Master"
+msgstr "მაგისტრი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_has_error model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_has_error model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_has_error
+msgid "Message Delivery error"
+msgstr "შეტყობინების მიწოდების შეცდომა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_ids model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_ids model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_ids
+msgid "Messages"
+msgstr "შეტყობინებები"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__model_id model_terms:ir.ui.view,arch_db:gamification.goal_definition_search_view
+msgid "Model"
+msgstr "მოდელი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__definition_monetary
+msgid "Monetary"
+msgstr "ფულადი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__name
+msgid "Name"
+msgstr "სახელი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_needaction_counter model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_needaction_counter model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_needaction_counter
+msgid "Number of Actions"
+msgstr "მოქმედებების რაოდენობა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__message_has_error_counter model:ir.model.fields,field_description:gamification.field_gamification_badge_user__message_has_error_counter model:ir.model.fields,field_description:gamification.field_gamification_challenge__message_has_error_counter
+msgid "Number of errors"
+msgstr "შეცდომების რაოდენობა"
+
+#. module: gamification
+#: model:ir.model.fields,help:gamification.field_gamification_badge__message_needaction_counter model:ir.model.fields,help:gamification.field_gamification_badge_user__message_needaction_counter model:ir.model.fields,help:gamification.field_gamification_challenge__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "მოქმედების საჭიროების მქონე შეტყობინებების რაოდენობა"
+
+#. module: gamification
+#: model:ir.model.fields,help:gamification.field_gamification_badge__message_has_error_counter model:ir.model.fields,help:gamification.field_gamification_badge_user__message_has_error_counter model:ir.model.fields,help:gamification.field_gamification_challenge__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "მიწოდების შეცდომის მქონე შეტყობინებების რაოდენობა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__user_ids model_terms:ir.ui.view,arch_db:gamification.challenge_form_view model_terms:ir.ui.view,arch_db:gamification.view_challenge_kanban
+msgid "Participants"
+msgstr "მონაწილეები"
+
+#. module: gamification
+#: model:ir.model.fields,help:gamification.field_gamification_badge_user__user_partner_id model:ir.model.fields,help:gamification.field_gamification_goal__user_partner_id
+msgid "Partner-related data of the user"
+msgstr "მომხმარებლის კონტაქტთან დაკავშირებული მონაცემები"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.challenge_search_view
+msgid "Period"
+msgstr "პერიოდი"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.gamification_karma_ranks_action model:ir.ui.menu,name:gamification.gamification_karma_ranks_menu
+msgid "Ranks"
+msgstr "რანგები"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_goal__state__reached
+msgid "Reached"
+msgstr "მიღწეული"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.goal_form_view
+msgid "Reference"
+msgstr "მითითება"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge_user__user_partner_id model:ir.model.fields,field_description:gamification.field_gamification_goal__user_partner_id
+msgid "Related Partner"
+msgstr "დაკავშირებული კონტაქტი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__manager_id
+msgid "Responsible"
+msgstr "პასუხისმგებელი"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.goal_form_view
+msgid "Schedule"
+msgstr "გრაფიკი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__sequence
+msgid "Sequence"
+msgstr "მიმდევრობა"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__origin_ref
+msgid "Source"
+msgstr "წყარო"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__start_date model:ir.model.fields,field_description:gamification.field_gamification_goal__start_date
+msgid "Start Date"
+msgstr "დაწყების თარიღი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge__state model:ir.model.fields,field_description:gamification.field_gamification_goal__state model_terms:ir.ui.view,arch_db:gamification.challenge_search_view model_terms:ir.ui.view,arch_db:gamification.goal_search_view
+msgid "State"
+msgstr "სტატუსი"
+
+#. module: gamification
+#: model:gamification.karma.rank,name:gamification.rank_student
+msgid "Student"
+msgstr "სტუდენტი"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__definition_full_suffix model:ir.model.fields,field_description:gamification.field_gamification_goal__definition_suffix model:ir.model.fields,field_description:gamification.field_gamification_goal_definition__suffix
+msgid "Suffix"
+msgstr "სუფიქსი"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.challenge_form_view model_terms:ir.ui.view,arch_db:gamification.challenge_line_list_view
+msgid "Target"
+msgstr "მიზანი"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.goal_kanban_view
+msgid "To"
+msgstr "მდე"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_badge__granted_count model_terms:ir.ui.view,arch_db:gamification.gamification_karma_tracking_view_tree
+msgid "Total"
+msgstr "სულ"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.gamification_karma_tracking_view_form
+msgid "Tracking"
+msgstr "თვალყურის დევნება"
+
+#. module: gamification
+#: model:ir.model.fields,field_description:gamification.field_gamification_challenge_line__definition_suffix
+msgid "Unit"
+msgstr "ერთეული"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.view_goal_wizard_update_current
+msgid "Update"
+msgstr "განახლება"
+
+#. module: gamification
+#. odoo-python
+#: code:addons/gamification/models/gamification_karma_tracking.py:0 model:ir.model,name:gamification.model_res_users model:ir.model.fields,field_description:gamification.field_gamification_badge_user__user_id model:ir.model.fields,field_description:gamification.field_gamification_badge_user_wizard__user_id model:ir.model.fields,field_description:gamification.field_gamification_goal__user_id model:ir.model.fields,field_description:gamification.field_gamification_karma_tracking__user_id model_terms:ir.ui.view,arch_db:gamification.goal_search_view
+msgid "User"
+msgstr "მომხმარებელი"
+
+#. module: gamification
+#: model:ir.actions.act_window,name:gamification.action_current_rank_users model:ir.model.fields,field_description:gamification.field_gamification_karma_rank__user_ids
+msgid "Users"
+msgstr "მომხმარებლები"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__period__weekly model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__report_message_frequency__weekly
+msgid "Weekly"
+msgstr "ყოველკვირეული"
+
+#. module: gamification
+#: model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__period__yearly model:ir.model.fields.selection,name:gamification.selection__gamification_challenge__report_message_frequency__yearly
+msgid "Yearly"
+msgstr "ყოველწლიური"
+
+#. module: gamification
+#: model_terms:ir.ui.view,arch_db:gamification.challenge_form_view model_terms:ir.ui.view,arch_db:gamification.goal_form_view
+msgid "days"
+msgstr "დღეები"

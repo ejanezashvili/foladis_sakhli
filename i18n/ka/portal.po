@@ -1,0 +1,1245 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "\" to validate your action."
+msgstr "\" მოქმედების დასადასტურებლად."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/sidebar.js:0
+msgid "%s days overdue"
+msgstr "ვადაგადაცილებულია %s დღით"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "1. Enter your password to confirm you own this account"
+msgstr "1. შეიყვანეთ პაროლი, რათა დაადასტუროთ, რომ ეს ანგარიში თქვენია"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid ""
+"2. Confirm you want to delete your account by\n"
+"                                        copying down your login ("
+msgstr ""
+"2. დაადასტურეთ ანგარიშის წაშლის სურვილი\n"
+"                                        თქვენი მომხმარებლის სახელის კოპირებით ("
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.my_account_link
+msgid "<i class=\"fa fa-fw fa-id-card-o me-1 small text-primary-emphasis\"/> My Account"
+msgstr "<i class=\"fa fa-fw fa-id-card-o me-1 small text-primary-emphasis\"/> ჩემი ანგარიში"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.user_dropdown
+msgid "<i class=\"fa fa-fw fa-sign-out me-1 small text-primary-emphasis\"/> Logout"
+msgstr "<i class=\"fa fa-fw fa-sign-out me-1 small text-primary-emphasis\"/> გასვლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.user_dropdown
+msgid "<i class=\"fa fa-fw fa-th me-1 small text-primary-emphasis\"/> Apps"
+msgstr "<i class=\"fa fa-fw fa-th me-1 small text-primary-emphasis\"/> აპლიკაციები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.side_content
+msgid "<i class=\"fa fa-pencil\"/> Edit information"
+msgstr "<i class=\"fa fa-pencil\"/> ინფორმაციის რედაქტირება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_footer
+msgid "<i class=\"fw-light fa fa-angle-left me-2\"/>Discard"
+msgstr "<i class=\"fw-light fa fa-angle-left me-2\"/>ცვლილებების გაუქმება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_back_in_edit_mode
+msgid "<i class=\"oi oi-arrow-right me-1\"/>Back to edit mode"
+msgstr "<i class=\"oi oi-arrow-right me-1\"/>რედაქტირების რეჟიმში დაბრუნება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.record_pager
+msgid "<i class=\"oi oi-chevron-left\" role=\"img\" aria-label=\"Previous\" title=\"Previous\"/>"
+msgstr "<i class=\"oi oi-chevron-left\" role=\"img\" aria-label=\"წინა\" title=\"წინა\"/>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.record_pager
+msgid "<i class=\"oi oi-chevron-right\" role=\"img\" aria-label=\"Next\" title=\"Next\"/>"
+msgstr "<i class=\"oi oi-chevron-right\" role=\"img\" aria-label=\"შემდეგი\" title=\"შემდეგი\"/>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "<i class=\"oi oi-plus me-2\"/>Add Address"
+msgstr "<i class=\"oi oi-plus me-2\"/>მისამართის დამატება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "<i title=\"Documentation\" class=\"fa fa-fw o_button_icon fa-info-circle\"/>"
+msgstr "<i title=\"დოკუმენტაცია\" class=\"fa fa-fw o_button_icon fa-info-circle\"/>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "<option value=\"\">Country...</option>"
+msgstr "<option value=\"\">ქვეყანა...</option>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "<option value=\"\">State / Province...</option>"
+msgstr "<option value=\"\">რეგიონი / მხარე...</option>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid ""
+"<small class=\"form-text text-muted\">\n"
+"                            Changing VAT number is not allowed once document(s) have\n"
+"                            been issued for your account. Please contact us directly for this\n"
+"                            operation.\n"
+"                        </small>"
+msgstr ""
+"<small class=\"form-text text-muted\">\n"
+"                            დღგ-ის ნომრის შეცვლა დაუშვებელია, თუ თქვენს ანგარიშზე\n"
+"                            უკვე გაცემულია დოკუმენტ(ებ)ი. ამ ოპერაციისთვის\n"
+"                            დაგვიკავშირდით პირდაპირ.\n"
+"                        </small>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid ""
+"<small class=\"form-text text-muted\">\n"
+"                            The VAT number can only be updated on the company account.\n"
+"                        </small>"
+msgstr ""
+"<small class=\"form-text text-muted\">\n"
+"                            დღგ-ის ნომრის განახლება შესაძლებელია მხოლოდ კომპანიის ანგარიშზე.\n"
+"                        </small>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid ""
+"<small class=\"form-text text-muted\">\n"
+"                    Changing country is not allowed once document(s) have\n"
+"                    been issued for your account. Please contact us directly for this\n"
+"                    operation.\n"
+"                </small>"
+msgstr ""
+"<small class=\"form-text text-muted\">\n"
+"                    ქვეყნის შეცვლა დაუშვებელია, თუ თქვენს ანგარიშზე\n"
+"                    უკვე გაცემულია დოკუმენტ(ებ)ი. ამ ოპერაციისთვის\n"
+"                    დაგვიკავშირდით პირდაპირ.\n"
+"                </small>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.pager
+msgid "<span class=\"oi oi-chevron-left\" role=\"img\" aria-label=\"Previous\" title=\"Previous\"/>"
+msgstr "<span class=\"oi oi-chevron-left\" role=\"img\" aria-label=\"წინა\" title=\"წინა\"/>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.pager
+msgid "<span class=\"oi oi-chevron-right\" role=\"img\" aria-label=\"Next\" title=\"Next\"/>"
+msgstr "<span class=\"oi oi-chevron-right\" role=\"img\" aria-label=\"შემდეგი\" title=\"შემდეგი\"/>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_footer
+msgid "<span class=\"px-3\">or</span>"
+msgstr "<span class=\"px-3\">ან</span>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_searchbar
+msgid "<span class=\"small me-1 navbar-text\">Filter By:</span>"
+msgstr "<span class=\"small me-1 navbar-text\">ფილტრი:</span>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_searchbar
+msgid "<span class=\"small me-1 navbar-text\">Group By:</span>"
+msgstr "<span class=\"small me-1 navbar-text\">დაჯგუფება:</span>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_searchbar
+msgid "<span class=\"small me-1 navbar-text\">Sort By:</span>"
+msgstr "<span class=\"small me-1 navbar-text\">დალაგება:</span>"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_share_template
+msgid "<strong>Open </strong>"
+msgstr "<strong>გახსნა </strong>"
+
+#. module: portal
+#: model:ir.model,name:portal.model_res_users_apikeys_description
+msgid "API Key Description"
+msgstr "API გასაღების აღწერა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0
+msgid "API Key Ready"
+msgstr "API გასაღები მზადაა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/signature_form/signature_form.js:0
+msgid "Accept & Sign"
+msgstr "მიღება და ხელმოწერა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_mixin__access_warning model:ir.model.fields,field_description:portal.field_portal_share__access_warning
+msgid "Access warning"
+msgstr "წვდომის გაფრთხილება"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Account deleted!"
+msgstr "ანგარიში წაიშალა!"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_share_wizard
+msgid "Add a note"
+msgstr "შენიშვნის დამატება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "Add an address"
+msgstr "მისამართის დამატება"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Add attachment"
+msgstr "ფაილის მიმაგრება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_share_wizard
+msgid "Add contacts to share the document..."
+msgstr "დაამატეთ კონტაქტები დოკუმენტის გასაზიარებლად..."
+
+#. module: portal
+#: model:ir.model.fields,help:portal.field_portal_share__note
+msgid "Add extra content to display in the email"
+msgstr "წერილში საჩვენებელი დამატებითი შინაარსი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_home
+msgid "Add, remove or modify your addresses"
+msgstr "მისამართების დამატება, წაშლა ან შეცვლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Added On"
+msgstr "დამატების თარიღი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_management
+msgid "Address Management"
+msgstr "მისამართების მართვა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_breadcrumbs model_terms:ir.ui.view,arch_db:portal.portal_my_home
+msgid "Addresses"
+msgstr "მისამართები"
+
+#. module: portal
+#: model:ir.model.fields.selection,name:portal.selection__portal_wizard_user__email_state__exist
+msgid "Already Registered"
+msgstr "უკვე რეგისტრირებულია"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Apartment, suite, etc."
+msgstr "ბინა, ოფისი და ა.შ."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Are you sure you want to do this?"
+msgstr "დარწმუნებული ხართ, რომ გსურთ ამის გაკეთება?"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Avatar"
+msgstr "ავატარი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_card
+msgid "Billing Address"
+msgstr "საგადასახადო მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_management model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "Billing address"
+msgstr "საგადასახადო მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security model_terms:ir.ui.view,arch_db:portal.portal_share_wizard
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Change Password"
+msgstr "პაროლის შეცვლა"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Changing VAT number is not allowed once document(s) have been issued for your account. Please contact us directly for this operation."
+msgstr "დღგ-ის ნომრის შეცვლა დაუშვებელია, თუ თქვენს ანგარიშზე უკვე გაცემულია დოკუმენტ(ებ)ი. ამ ოპერაციისთვის დაგვიკავშირდით პირდაპირ."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Changing your country is not allowed once document(s) have been issued for your account. Please contact us directly for this operation."
+msgstr "ქვეყნის შეცვლა დაუშვებელია, თუ თქვენს ანგარიშზე უკვე გაცემულია დოკუმენტ(ებ)ი. ამ ოპერაციისთვის დაგვიკავშირდით პირდაპირ."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0
+msgid "Check failed"
+msgstr "შემოწმება ვერ მოხერხდა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "City"
+msgstr "ქალაქი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/signature_form/signature_form.xml:0
+msgid "Click here to see your document."
+msgstr "დააწკაპუნეთ აქ დოკუმენტის სანახავად."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0 model_terms:ir.ui.view,arch_db:portal.portal_back_in_edit_mode model_terms:ir.ui.view,arch_db:portal.side_content model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Close"
+msgstr "დახურვა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Company Name"
+msgstr "კომპანიის დასახელება"
+
+#. module: portal
+#: model:ir.model,name:portal.model_res_config_settings
+msgid "Config Settings"
+msgstr "კონფიგურაციის პარამეტრები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_home
+msgid "Configure your connection parameters"
+msgstr "კავშირის პარამეტრების კონფიგურაცია"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0
+msgid "Confirm"
+msgstr "დადასტურება"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0
+msgid "Confirm Password"
+msgstr "პაროლის დადასტურება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_home model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Connection &amp; Security"
+msgstr "კავშირი და უსაფრთხოება"
+
+#. module: portal
+#: model:ir.model,name:portal.model_res_partner model:ir.model.fields,field_description:portal.field_portal_wizard_user__partner_id model_terms:ir.ui.view,arch_db:portal.portal_layout model_terms:ir.ui.view,arch_db:portal.portal_my_contact model_terms:ir.ui.view,arch_db:portal.side_content
+msgid "Contact"
+msgstr "კონტაქტი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_details
+msgid "Contact Details"
+msgstr "საკონტაქტო მონაცემები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Contacts"
+msgstr "კონტაქტები"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_composer.js:0
+msgid "Could not save file %s"
+msgstr "ფაილის %s შენახვა ვერ მოხერხდა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Country"
+msgstr "ქვეყანა"
+
+#. module: portal
+#: model:ir.model,website_form_label:portal.model_res_partner
+msgid "Create a Customer"
+msgstr "კლიენტის შექმნა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_res_config_settings__portal_allow_api_keys
+msgid "Customer API Keys"
+msgstr "კლიენტის API გასაღებები"
+
+#. module: portal
+#: model:ir.model.fields,help:portal.field_portal_mixin__access_url
+msgid "Customer Portal URL"
+msgstr "კლიენტის პორტალის URL"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.res_config_settings_view_form
+msgid "Customers can generate API Keys"
+msgstr "კლიენტებს შეუძლიათ API გასაღებების გენერირება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_share_template
+msgid "Dear"
+msgstr "ძვირფასო"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Delete"
+msgstr "წაშლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Delete Account"
+msgstr "ანგარიშის წაშლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_card
+msgid "Delivery Address"
+msgstr "მიწოდების მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_management model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "Delivery address"
+msgstr "მიწოდების მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_breadcrumbs
+msgid "Details"
+msgstr "დეტალები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Developer API Keys"
+msgstr "დეველოპერის API გასაღებები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid ""
+"Disable your account, preventing any further login.<br/>\n"
+"                                        <b>\n"
+"                                            <i class=\"fa fa-exclamation-triangle text-danger\"/>\n"
+"                                            This action cannot be undone.\n"
+"                                        </b>"
+msgstr ""
+"ანგარიშის გათიშვა, რაც შემდგომ შესვლას შეუძლებელს ხდის.<br/>\n"
+"                                        <b>\n"
+"                                            <i class=\"fa fa-exclamation-triangle text-danger\"/>\n"
+"                                            ამ მოქმედების გაუქმება შეუძლებელია.\n"
+"                                        </b>"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/sidebar.js:0
+msgid "Due in %s days"
+msgstr "ვადამდე %s დღე"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/sidebar.js:0
+msgid "Due today"
+msgstr "ვადა დღეს იწურება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_card
+msgid "Edit this address"
+msgstr "ამ მისამართის რედაქტირება"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__email model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Email"
+msgstr "ელფოსტა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Email Address already taken by another user"
+msgstr "ელფოსტის მისამართი უკვე გამოიყენება სხვა მომხმარებლის მიერ"
+
+#. module: portal
+#: model:ir.model,name:portal.model_mail_thread
+msgid "Email Thread"
+msgstr "ელფოსტის თემა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Enter a description of and purpose for the key."
+msgstr "შეიყვანეთ გასაღების აღწერა და დანიშნულება."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Expiration Date"
+msgstr "ვადის გასვლის თარიღი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Forgot password?"
+msgstr "დაგავიწყდათ პაროლი?"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Give a duration for the key's validity"
+msgstr "მიუთითეთ გასაღების მოქმედების ვადა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Go Back"
+msgstr "უკან დაბრუნება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Grant Access"
+msgstr "წვდომის მინიჭება"
+
+#. module: portal
+#: model:ir.model,name:portal.model_portal_wizard
+msgid "Grant Portal Access"
+msgstr "პორტალზე წვდომის მინიჭება"
+
+#. module: portal
+#: model:ir.actions.act_window,name:portal.partner_wizard_action model:ir.actions.server,name:portal.partner_wizard_action_create_and_open
+msgid "Grant portal access"
+msgstr "პორტალზე წვდომის მინიჭება"
+
+#. module: portal
+#: model:ir.model,name:portal.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP მარშრუტიზაცია"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid ""
+"Here is your new API key, use it instead of a password for RPC access.\n"
+"                Your login is still necessary for interactive usage."
+msgstr ""
+"ეს არის თქვენი ახალი API გასაღები, RPC წვდომისთვის გამოიყენეთ ის პაროლის ნაცვლად.\n"
+"                ინტერაქტიული გამოყენებისთვის მომხმარებლის სახელი კვლავ საჭიროა."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_breadcrumbs
+msgid "Home"
+msgstr "სახლი"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "If you are ordering for an external person, please place your order via the backend. If you wish to change your name or email address, please do so in the account settings or contact your administrator."
+msgstr "თუ შეკვეთას სხვა პირისთვის აკეთებთ, გააფორმეთ ის სისტემის შიდა ნაწილიდან. თუ გსურთ სახელის ან ელფოსტის მისამართის შეცვლა, გააკეთეთ ეს ანგარიშის პარამეტრებში ან მიმართეთ ადმინისტრატორს."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "If you want to modify it, update"
+msgstr "თუ გსურთ მისი შეცვლა, განაახლეთ"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Important:"
+msgstr "მნიშვნელოვანი:"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Internal User"
+msgstr "შიდა მომხმარებელი"
+
+#. module: portal
+#: model:ir.model.fields.selection,name:portal.selection__portal_wizard_user__email_state__ko
+msgid "Invalid"
+msgstr "არასწორი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Invalid Email Address"
+msgstr "არასწორი ელფოსტის მისამართი"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Invalid Email! Please enter a valid email address."
+msgstr "არასწორი ელფოსტა! გთხოვთ, შეიყვანოთ სწორი ელფოსტის მისამართი."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Invalid report type: %s"
+msgstr "ანგარიშის არასწორი ტიპი: %s"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard__welcome_message
+msgid "Invitation Message"
+msgstr "მოწვევის შეტყობინება"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_share.py:0
+msgid "Invitation to access %s"
+msgstr "წვდომის მოწვევა: %s"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__is_internal
+msgid "Is Internal"
+msgstr "შიდაა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__is_portal
+msgid "Is Portal"
+msgstr "პორტალისაა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid ""
+"It is very important that this description be clear\n"
+"                and complete,"
+msgstr ""
+"ძალიან მნიშვნელოვანია, რომ ეს აღწერა იყოს მკაფიო\n"
+"                და სრული,"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__login_date
+msgid "Latest Authentication"
+msgstr "ბოლო ავტორიზაცია"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Leave a comment"
+msgstr "კომენტარის დატოვება"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__share_link
+msgid "Link"
+msgstr "ბმული"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Log out from all devices"
+msgstr "ყველა მოწყობილობიდან გასვლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_card
+msgid "Main Address"
+msgstr "მთავარი მისამართი"
+
+#. module: portal
+#: model:ir.model,name:portal.model_mail_message
+msgid "Message"
+msgstr "შეტყობინება"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/models/mail_thread.py:0
+msgid "Model %(model_name)s does not support token signature, as it does not have %(field_name)s field."
+msgstr "მოდელს %(model_name)s არ აქვს ტოკენით ხელმოწერის მხარდაჭერა, რადგან მას არ აქვს ველი %(field_name)s."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Multi company reports are not supported."
+msgstr "მრავალკომპანიური ანგარიშები არ არის მხარდაჭერილი."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_layout
+msgid "My account"
+msgstr "ჩემი ანგარიში"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "My addresses"
+msgstr "ჩემი მისამართები"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Name your key"
+msgstr "დაარქვით გასაღებს სახელი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0 model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "New API Key"
+msgstr "ახალი API გასაღები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "New Password:"
+msgstr "ახალი პაროლი:"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Next"
+msgstr "შემდეგი"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__note
+msgid "Note"
+msgstr "შენიშვნა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_record_sidebar
+msgid "Odoo Logo"
+msgstr "Odoo-ს ლოგო"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/models/res_users_apikeys_description.py:0
+msgid "Only internal and portal users can create API keys"
+msgstr "API გასაღებების შექმნა მხოლოდ შიდა და პორტალის მომხმარებლებს შეუძლიათ"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Oops! Something went wrong. Try to reload the page and log in."
+msgstr "უი! რაღაც შეცდომა მოხდა. სცადეთ გვერდის განახლება და ხელახლა შესვლა."
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard__partner_ids
+msgid "Partners"
+msgstr "კონტაქტები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Password"
+msgstr "პაროლი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Password Updated!"
+msgstr "პაროლი განახლდა!"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Password:"
+msgstr "პაროლი:"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Phone"
+msgstr "ტელეფონი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Please enter your password to confirm you own this account"
+msgstr "შეიყვანეთ პაროლი, რათა დაადასტუროთ, რომ ეს ანგარიში თქვენია"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0 model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Portal Access Management"
+msgstr "პორტალზე წვდომის მართვა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_mixin__access_url
+msgid "Portal Access URL"
+msgstr "პორტალზე წვდომის URL"
+
+#. module: portal
+#: model:ir.model,name:portal.model_portal_mixin
+msgid "Portal Mixin"
+msgstr "პორტალის მიქსინი"
+
+#. module: portal
+#: model:ir.model,name:portal.model_portal_share
+msgid "Portal Sharing"
+msgstr "პორტალით გაზიარება"
+
+#. module: portal
+#: model:ir.model,name:portal.model_portal_wizard_user
+msgid "Portal User Config"
+msgstr "პორტალის მომხმარებლის კონფიგურაცია"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_record_sidebar
+msgid "Powered by"
+msgstr "მხარდაჭერილია"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Previous"
+msgstr "წინა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Put my email and phone in a block list to make sure I'm never contacted again"
+msgstr "ჩემი ელფოსტა და ტელეფონი დაბლოკილთა სიაში დაამატეთ, რომ აღარასოდეს დამიკავშირდნენ"
+
+#. module: portal
+#: model:ir.model,name:portal.model_ir_qweb
+msgid "Qweb"
+msgstr "Qweb"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Re-Invite"
+msgstr "ხელახლა მოწვევა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__partner_ids
+msgid "Recipients"
+msgstr "მიმღებები"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__resource_ref
+msgid "Related Document"
+msgstr "დაკავშირებული დოკუმენტი"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__res_id
+msgid "Related Document ID"
+msgstr "დაკავშირებული დოკუმენტის ID"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_share__res_model
+msgid "Related Document Model"
+msgstr "დაკავშირებული დოკუმენტის მოდელი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_card
+msgid "Remove this address"
+msgstr "ამ მისამართის წაშლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Revoke Access"
+msgstr "წვდომის გაუქმება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Revoke All Sessions"
+msgstr "ყველა სესიის გაუქმება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.my_addresses
+msgid "Same as delivery address"
+msgstr "იგივე, რაც მიწოდების მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_footer
+msgid "Save Address"
+msgstr "მისამართის შენახვა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Scope"
+msgstr "არეალი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_searchbar
+msgid "Search"
+msgstr "ძიება"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Security"
+msgstr "უსაფრთხოება"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_security.js:0
+msgid "Security Control"
+msgstr "უსაფრთხოების კონტროლი"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_mixin__access_token
+msgid "Security Token"
+msgstr "უსაფრთხოების ტოკენი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid ""
+"Select which contacts should belong to the portal in the list below.\n"
+"                        The email address of each selected contact must be valid and unique.\n"
+"                        If necessary, you can fix any contact's email address directly in the list."
+msgstr ""
+"ქვემოთ მოცემულ სიაში აირჩიეთ, რომელი კონტაქტები უნდა ჰქონდეთ პორტალზე წვდომა.\n"
+"                        თითოეული არჩეული კონტაქტის ელფოსტის მისამართი უნდა იყოს სწორი და უნიკალური.\n"
+"                        საჭიროების შემთხვევაში, ნებისმიერი კონტაქტის ელფოსტის გასწორება შეგიძლიათ პირდაპირ სიაში."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_composer.js:0 model_terms:ir.ui.view,arch_db:portal.portal_share_wizard
+msgid "Send"
+msgstr "გაგზავნა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_contact
+msgid "Send message"
+msgstr "შეტყობინების გაგზავნა"
+
+#. module: portal
+#: model:ir.actions.act_window,name:portal.portal_share_action model_terms:ir.ui.view,arch_db:portal.portal_share_wizard
+msgid "Share Document"
+msgstr "დოკუმენტის გაზიარება"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_ir_ui_view__customize_show
+msgid "Show As Optional Inherit"
+msgstr "არჩევითად ჩვენება მემკვიდრეობით"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.user_sign_in
+msgid "Sign in"
+msgstr "შესვლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.frontend_layout
+msgid "Skip to Content"
+msgstr "შინაარსზე გადასვლა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/interactions/portal_composer.js:0
+msgid "Some fields are required. Please make sure to write a message or attach a document"
+msgstr "ზოგიერთი ველი სავალდებულოა. გთხოვთ, დაწეროთ შეტყობინება ან მიამაგროთ დოკუმენტი"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "Some required fields are empty."
+msgstr "ზოგიერთი სავალდებულო ველი ცარიელია."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "State / Province"
+msgstr "რეგიონი / მხარე"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Street and Number"
+msgstr "ქუჩა და ნომერი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/signature_form/signature_form.xml:0
+msgid "Thank You!"
+msgstr "გმადლობთ!"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The %(field_name)s is managed on your company account."
+msgstr "%(field_name)s იმართება თქვენი კომპანიის ანგარიშიდან."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The %(field_name)s is managed on your main account address."
+msgstr "%(field_name)s იმართება თქვენი მთავარი ანგარიშის მისამართიდან."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The attachment %s cannot be removed because it is linked to a message."
+msgstr "მიმაგრებული ფაილის %s წაშლა შეუძლებელია, რადგან ის შეტყობინებასთანაა დაკავშირებული."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The attachment %s cannot be removed because it is not in a pending state."
+msgstr "მიმაგრებული ფაილის %s წაშლა შეუძლებელია, რადგან ის მოლოდინის მდგომარეობაში არ არის."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The attachment does not exist or you do not have the rights to access it."
+msgstr "მიმაგრებული ფაილი არ არსებობს ან მასზე წვდომის უფლება არ გაქვთ."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "The company name and VAT number can only be updated on your main account."
+msgstr "კომპანიის დასახელება და დღგ-ის ნომერი შეიძლება განახლდეს მხოლოდ თქვენს მთავარ ანგარიშზე."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "The contact \"%s\" does not have a valid email."
+msgstr "კონტაქტს \"%s\" არ აქვს სწორი ელფოსტა."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "The contact \"%s\" has the same email as an existing user"
+msgstr "კონტაქტს \"%s\" აქვს იგივე ელფოსტა, რაც არსებულ მომხმარებელს"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "The key cannot be retrieved later and provides"
+msgstr "გასაღების მოგვიანებით აღდგენა შეუძლებელია და ის იძლევა"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "The key will be deleted once this period has elapsed."
+msgstr "ამ პერიოდის გასვლის შემდეგ გასაღები წაიშლება."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The new password and its confirmation must be identical."
+msgstr "ახალი პაროლი და მისი დადასტურება ერთნაირი უნდა იყოს."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "The old password you provided is incorrect, your password was not changed."
+msgstr "მითითებული ძველი პაროლი არასწორია, პაროლი არ შეიცვალა."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "The partner \"%s\" already has the portal access."
+msgstr "კონტაქტს \"%s\" უკვე აქვს პორტალზე წვდომა."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "The partner \"%s\" has no portal access or is internal."
+msgstr "კონტაქტს \"%s\" არ აქვს პორტალზე წვდომა ან შიდა მომხმარებელია."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "The template \"Portal: new user\" not found for sending email to the portal user."
+msgstr "პორტალის მომხმარებლისთვის ელფოსტის გასაგზავნად შაბლონი \"Portal: new user\" ვერ მოიძებნა."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "This document does not exist."
+msgstr "ეს დოკუმენტი არ არსებობს."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_back_in_edit_mode
+msgid "This is a preview of the customer portal."
+msgstr "ეს არის კლიენტის პორტალის გადახედვა."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "This partner is linked to an internal User and already has access to the Portal."
+msgstr "ეს კონტაქტი დაკავშირებულია შიდა მომხმარებელთან და უკვე აქვს პორტალზე წვდომა."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "This text is included at the end of the email sent to new portal users."
+msgstr "ეს ტექსტი დაემატება პორტალის ახალი მომხმარებლებისთვის გაგზავნილი წერილის ბოლოს."
+
+#. module: portal
+#: model:ir.model.fields,help:portal.field_portal_wizard__welcome_message
+msgid "This text is included in the email sent to new users of the portal."
+msgstr "ეს ტექსტი ჩაირთვება პორტალის ახალი მომხმარებლებისთვის გაგზავნილ წერილში."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_searchbar
+msgid "Toggle filters"
+msgstr "ფილტრების ჩვენება/დამალვა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__user_id
+msgid "User"
+msgstr "მომხმარებელი"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "User Dashboard"
+msgstr "მომხმარებლის დაფა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard__user_ids
+msgid "Users"
+msgstr "მომხმარებლები"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "VAT"
+msgstr "დღგ"
+
+#. module: portal
+#: model:ir.model.fields.selection,name:portal.selection__portal_wizard_user__email_state__ok
+msgid "Valid"
+msgstr "ვალიდური"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.wizard_view
+msgid "Valid Email Address"
+msgstr "სწორი ელფოსტის მისამართი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Verify New Password:"
+msgstr "გაიმეორეთ ახალი პაროლი:"
+
+#. module: portal
+#: model:ir.model,name:portal.model_ir_ui_view
+msgid "View"
+msgstr "ნახვა"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_account_analytic_account__website_message_ids model:ir.model.fields,field_description:portal.field_calendar_event__website_message_ids model:ir.model.fields,field_description:portal.field_crm_team__website_message_ids model:ir.model.fields,field_description:portal.field_crm_team_member__website_message_ids model:ir.model.fields,field_description:portal.field_discuss_channel__website_message_ids model:ir.model.fields,field_description:portal.field_fleet_vehicle__website_message_ids model:ir.model.fields,field_description:portal.field_fleet_vehicle_log_contract__website_message_ids model:ir.model.fields,field_description:portal.field_fleet_vehicle_log_services__website_message_ids model:ir.model.fields,field_description:portal.field_fleet_vehicle_model__website_message_ids model:ir.model.fields,field_description:portal.field_gamification_badge__website_message_ids model:ir.model.fields,field_description:portal.field_gamification_badge_user__website_message_ids model:ir.model.fields,field_description:portal.field_gamification_challenge__website_message_ids model:ir.model.fields,field_description:portal.field_iap_account__website_message_ids model:ir.model.fields,field_description:portal.field_ir_actions_server__website_message_ids model:ir.model.fields,field_description:portal.field_ir_cron__website_message_ids model:ir.model.fields,field_description:portal.field_lunch_supplier__website_message_ids model:ir.model.fields,field_description:portal.field_mail_blacklist__website_message_ids model:ir.model.fields,field_description:portal.field_mail_thread__website_message_ids model:ir.model.fields,field_description:portal.field_mail_thread_blacklist__website_message_ids model:ir.model.fields,field_description:portal.field_mail_thread_cc__website_message_ids model:ir.model.fields,field_description:portal.field_mail_thread_main_attachment__website_message_ids model:ir.model.fields,field_description:portal.field_mail_thread_phone__website_message_ids model:ir.model.fields,field_description:portal.field_mail_tracking_duration_mixin__website_message_ids model:ir.model.fields,field_description:portal.field_maintenance_equipment__website_message_ids model:ir.model.fields,field_description:portal.field_maintenance_request__website_message_ids model:ir.model.fields,field_description:portal.field_maintenance_team__website_message_ids model:ir.model.fields,field_description:portal.field_phone_blacklist__website_message_ids model:ir.model.fields,field_description:portal.field_product_category__website_message_ids model:ir.model.fields,field_description:portal.field_product_pricelist__website_message_ids model:ir.model.fields,field_description:portal.field_product_product__website_message_ids model:ir.model.fields,field_description:portal.field_product_template__website_message_ids model:ir.model.fields,field_description:portal.field_rating_mixin__website_message_ids model:ir.model.fields,field_description:portal.field_res_partner__website_message_ids model:ir.model.fields,field_description:portal.field_res_users__website_message_ids
+msgid "Website Messages"
+msgstr "ვებსაიტის შეტყობინებები"
+
+#. module: portal
+#: model:ir.model.fields,help:portal.field_account_analytic_account__website_message_ids model:ir.model.fields,help:portal.field_calendar_event__website_message_ids model:ir.model.fields,help:portal.field_crm_team__website_message_ids model:ir.model.fields,help:portal.field_crm_team_member__website_message_ids model:ir.model.fields,help:portal.field_discuss_channel__website_message_ids model:ir.model.fields,help:portal.field_fleet_vehicle__website_message_ids model:ir.model.fields,help:portal.field_fleet_vehicle_log_contract__website_message_ids model:ir.model.fields,help:portal.field_fleet_vehicle_log_services__website_message_ids model:ir.model.fields,help:portal.field_fleet_vehicle_model__website_message_ids model:ir.model.fields,help:portal.field_gamification_badge__website_message_ids model:ir.model.fields,help:portal.field_gamification_badge_user__website_message_ids model:ir.model.fields,help:portal.field_gamification_challenge__website_message_ids model:ir.model.fields,help:portal.field_iap_account__website_message_ids model:ir.model.fields,help:portal.field_ir_actions_server__website_message_ids model:ir.model.fields,help:portal.field_ir_cron__website_message_ids model:ir.model.fields,help:portal.field_lunch_supplier__website_message_ids model:ir.model.fields,help:portal.field_mail_blacklist__website_message_ids model:ir.model.fields,help:portal.field_mail_thread__website_message_ids model:ir.model.fields,help:portal.field_mail_thread_blacklist__website_message_ids model:ir.model.fields,help:portal.field_mail_thread_cc__website_message_ids model:ir.model.fields,help:portal.field_mail_thread_main_attachment__website_message_ids model:ir.model.fields,help:portal.field_mail_thread_phone__website_message_ids model:ir.model.fields,help:portal.field_mail_tracking_duration_mixin__website_message_ids model:ir.model.fields,help:portal.field_maintenance_equipment__website_message_ids model:ir.model.fields,help:portal.field_maintenance_request__website_message_ids model:ir.model.fields,help:portal.field_maintenance_team__website_message_ids model:ir.model.fields,help:portal.field_phone_blacklist__website_message_ids model:ir.model.fields,help:portal.field_product_category__website_message_ids model:ir.model.fields,help:portal.field_product_pricelist__website_message_ids model:ir.model.fields,help:portal.field_product_product__website_message_ids model:ir.model.fields,help:portal.field_product_template__website_message_ids model:ir.model.fields,help:portal.field_rating_mixin__website_message_ids model:ir.model.fields,help:portal.field_res_partner__website_message_ids model:ir.model.fields,help:portal.field_res_users__website_message_ids
+msgid "Website communication history"
+msgstr "ვებსაიტზე კომუნიკაციის ისტორია"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "What's this key for?"
+msgstr "რისთვისაა ეს გასაღები?"
+
+#. module: portal
+#: model:ir.model.fields,field_description:portal.field_portal_wizard_user__wizard_id
+msgid "Wizard"
+msgstr "ოსტატი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "Write a message..."
+msgstr "დაწერეთ შეტყობინება..."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/chatter/core/composer_patch.js:0
+msgid "Write a message…"
+msgstr "დაწერეთ შეტყობინება…"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "Write down your key"
+msgstr "ჩაიწერეთ თქვენი გასაღები"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "Wrong password."
+msgstr "არასწორი პაროლი."
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "You cannot archive your main address"
+msgstr "მთავარი მისამართის დაარქივება შეუძლებელია"
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/controllers/portal.py:0
+msgid "You cannot leave any password empty."
+msgstr "პაროლის ველები ცარიელი არ უნდა იყოს."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "You must be"
+msgstr "საჭიროა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "You should enter \""
+msgstr "უნდა შეიყვანოთ \""
+
+#. module: portal
+#. odoo-python
+#: code:addons/portal/wizard/portal_wizard.py:0
+msgid "You should first grant the portal access to the partner \"%s\"."
+msgstr "ჯერ კონტაქტს \"%s\" უნდა მიანიჭოთ პორტალზე წვდომა."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_contact
+msgid "Your contact"
+msgstr "თქვენი კონტაქტი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Your name"
+msgstr "თქვენი სახელი"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "Zip Code"
+msgstr "საფოსტო ინდექსი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "full access"
+msgstr "სრულ წვდომას"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_share_template
+msgid "has invited you to access the following"
+msgstr "მოგიწვიათ შემდეგზე წვდომისთვის:"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid ""
+"it will be the only way to\n"
+"                identify the key once created"
+msgstr ""
+"შექმნის შემდეგ ეს იქნება გასაღების\n"
+"                ამოცნობის ერთადერთი საშუალება"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "logged in"
+msgstr "სისტემაში შესვლა"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_record_sidebar
+msgid "odoo"
+msgstr "odoo"
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.portal_my_security
+msgid "password"
+msgstr "პაროლი"
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_chatter.xml:0
+msgid "to post a comment."
+msgstr "კომენტარის დასატოვებლად."
+
+#. module: portal
+#. odoo-javascript
+#: code:addons/portal/static/src/xml/portal_security.xml:0
+msgid "to your user account, it is very important to store it securely."
+msgstr "თქვენს მომხმარებლის ანგარიშზე, ამიტომ ძალიან მნიშვნელოვანია მისი უსაფრთხოდ შენახვა."
+
+#. module: portal
+#: model_terms:ir.ui.view,arch_db:portal.address_form_fields
+msgid "your account details"
+msgstr "თქვენი ანგარიშის მონაცემები"

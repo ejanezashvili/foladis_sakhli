@@ -1,0 +1,919 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.js:0
+msgid "%(number)s file(s) selected"
+msgstr "არჩეულია %(number)s ფაილი"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "%(property_string)s (%(parent_name)s)"
+msgstr "%(property_string)s (%(parent_name)s)"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "%s at multiple rows"
+msgstr "%s რამდენიმე სტრიქონში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "%s records successfully imported"
+msgstr "წარმატებით დაიმპორტდა %s ჩანაწერი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "A single column was found in the file, this often means the file separator is incorrect."
+msgstr "ფაილში მხოლოდ ერთი სვეტი მოიძებნა, რაც ხშირად ნიშნავს, რომ ფაილის გამყოფი არასწორია."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.js:0
+msgid "Additional Fields"
+msgstr "დამატებითი ველები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Advanced"
+msgstr "გაფართოებული"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "After each batch import, this delay is applied to avoid unthrottled calls"
+msgstr "ყოველი ნაწილის იმპორტის შემდეგ გამოიყენება ეს დაყოვნება, რათა თავიდან ავიცილოთ შეუზღუდავი გამოძახებები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Allow matching with subfields"
+msgstr "ქვეველებთან შესაბამისობის დაშვება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "An unknown issue occurred during import (possibly lost connection, data limit exceeded or memory limits exceeded). Please retry in case the issue is transient. If the issue still occurs, try to split the file rather than import it at once."
+msgstr "იმპორტისას მოხდა უცნობი შეცდომა (შესაძლოა, კავშირი გაწყდა ან გადაჭარბდა მონაცემების ან მეხსიერების ლიმიტი). თუ პრობლემა დროებითია, გთხოვთ, სცადოთ ხელახლა. თუ შეცდომა განმეორდება, სცადეთ ფაილის ნაწილებად დაყოფა მთლიანად იმპორტის ნაცვლად."
+
+#. module: base_import
+#: model:ir.model,name:base_import.model_base
+msgid "Base"
+msgstr "ბაზა"
+
+#. module: base_import
+#: model:ir.model,name:base_import.model_base_import_import
+msgid "Base Import"
+msgstr "საბაზო იმპორტი"
+
+#. module: base_import
+#: model:ir.model,name:base_import.model_base_import_mapping
+msgid "Base Import Mapping"
+msgstr "საბაზო იმპორტის შესაბამისობა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "Batch"
+msgstr "ნაწილი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Batch Import"
+msgstr "ნაწილ-ნაწილ იმპორტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Batch limit"
+msgstr "ნაწილის ლიმიტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "But, you can also use .csv files"
+msgstr "თუმცა, შეგიძლიათ .csv ფაილებიც გამოიყენოთ"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Cancel"
+msgstr "შეწყვეტა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Click 'Resume' to proceed with the import, resuming at line %s."
+msgstr "დააჭირეთ 'გაგრძელება'-ს, რათა იმპორტი გაგრძელდეს %s-ე სტრიქონიდან."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Column %(column)s contains incorrect values (value: %(value)s)"
+msgstr "სვეტი %(column)s შეიცავს არასწორ მნიშვნელობებს (მნიშვნელობა: %(value)s)"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Column %(column)s contains incorrect values. Error in line %(line)d: %(error)s"
+msgstr "სვეტი %(column)s შეიცავს არასწორ მნიშვნელობებს. შეცდომა %(line)d-ე სტრიქონში: %(error)s"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_mapping__column_name
+msgid "Column Name"
+msgstr "სვეტის დასახელება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Comma"
+msgstr "მძიმე"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Comments"
+msgstr "კომენტარები"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Could not retrieve URL: %(url)s [%(field_name)s: L%(line_number)d]: %(error)s"
+msgstr "URL-ის მიღება ვერ მოხერხდა: %(url)s [%(field_name)s: L%(line_number)d]: %(error)s"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Create new values"
+msgstr "ახალი მნიშვნელობების შექმნა"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__create_uid model:ir.model.fields,field_description:base_import.field_base_import_mapping__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__create_date model:ir.model.fields,field_description:base_import.field_base_import_mapping__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Data to import"
+msgstr "დასაიმპორტებელი მონაცემები"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Database ID"
+msgstr "მონაცემთა ბაზის ID"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Date Format:"
+msgstr "თარიღის ფორმატი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Datetime Format:"
+msgstr "თარიღისა და დროის ფორმატი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Decimals Separator:"
+msgstr "ათწილადის გამყოფი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Defines how many megabytes can be imported in each batch import"
+msgstr "განსაზღვრავს, რამდენი მეგაბაიტის იმპორტი შეიძლება თითო ნაწილში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Delay after each batch"
+msgstr "დაყოვნება ყოველი ნაწილის შემდეგ"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__display_name model:ir.model.fields,field_description:base_import.field_base_import_mapping__display_name model:ir.model.fields,field_description:base_import.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Dot"
+msgstr "წერტილი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0 code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Download"
+msgstr "ჩამოტვირთვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Drop or upload a file to import"
+msgstr "იმპორტისთვის ჩააგდეთ ან ატვირთეთ ფაილი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Encoding:"
+msgstr "კოდირება:"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Error Parsing Date [%(field)s:L%(line)d]: %(error)s"
+msgstr "თარიღის დამუშავების შეცდომა [%(field)s:L%(line)d]: %(error)s"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Error at row %(row)s: \"%(error)s\""
+msgstr "შეცდომა %(row)s-ე სტრიქონში: \"%(error)s\""
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Error while importing records: Text Delimiter should be a single character."
+msgstr "ჩანაწერების იმპორტის შეცდომა: ტექსტის გამყოფი უნდა იყოს ერთი სიმბოლო."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Error while importing records: all rows should be of the same size, but the title row has %(title_row_entries)d entries while the first row has %(first_row_entries)d. You may need to change the separator character."
+msgstr "ჩანაწერების იმპორტის შეცდომა: ყველა სტრიქონი ერთი ზომის უნდა იყოს, თუმცა სათაურის სტრიქონს აქვს %(title_row_entries)d ელემენტი, ხოლო პირველ სტრიქონს — %(first_row_entries)d. შესაძლოა, საჭიროა გამყოფი სიმბოლოს შეცვლა."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "Estimated time left:"
+msgstr "დარჩენილი სავარაუდო დრო:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Everything seems valid."
+msgstr "ყველაფერი სწორი ჩანს."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Excel files are recommended as formatting is automatic."
+msgstr "რეკომენდებულია Excel ფაილები, რადგან ფორმატირება ავტომატურია."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "External ID"
+msgstr "გარე ID"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Field '%(field)s' does not accept date/time values."
+msgstr "ველი '%(field)s' არ იღებს თარიღის/დროის მნიშვნელობებს."
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_mapping__field_name
+msgid "Field Name"
+msgstr "ველის დასახელება"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__file
+msgid "File"
+msgstr "ფაილი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "File Column"
+msgstr "ფაილის სვეტი"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__file_name
+msgid "File Name"
+msgstr "ფაილის სახელი"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__file_type
+msgid "File Type"
+msgstr "ფაილის ტიპი"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "File size exceeds configured maximum (%s bytes)"
+msgstr "ფაილის ზომა აღემატება დაშვებულ მაქსიმუმს (%s ბაიტი)"
+
+#. module: base_import
+#: model:ir.model.fields,help:base_import.field_base_import_import__file
+msgid "File to check and/or import, raw binary (not base64)"
+msgstr "შესამოწმებელი და/ან დასაიმპორტებელი ფაილი, ნედლი ბინარული სახით (არა base64)"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Files to import"
+msgstr "დასაიმპორტებელი ფაილები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "Finalizing current batch before interrupting..."
+msgstr "მიმდინარე ნაწილის დასრულება შეწყვეტამდე..."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "For CSV files, you may need to select the correct separator."
+msgstr "CSV ფაილებისთვის შესაძლოა საჭირო გახდეს სწორი გამყოფის არჩევა."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Formatting"
+msgstr "ფორმატირება"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Found invalid image data, images should be imported as either URLs or base64-encoded data."
+msgstr "აღმოჩენილია სურათის არასწორი მონაცემები; სურათები უნდა დაიმპორტდეს URL-ების ან base64-ით კოდირებული მონაცემების სახით."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Go to Import FAQ"
+msgstr "იმპორტის ხშირად დასმულ კითხვებზე გადასვლა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Help"
+msgstr "დახმარება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Here is the start of the file we could not import:"
+msgstr "ფაილის დასაწყისი, რომლის იმპორტიც ვერ მოხერხდა:"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__id model:ir.model.fields,field_description:base_import.field_base_import_mapping__id model:ir.model.fields,field_description:base_import.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid ""
+"If the file contains\n"
+"                    the column names, Odoo can try auto-detecting the\n"
+"                    field corresponding to the column. This makes imports\n"
+"                    simpler especially when the file has many columns."
+msgstr ""
+"თუ ფაილი შეიცავს\n"
+"                    სვეტების სახელებს, Odoo შეეცდება ავტომატურად ამოიცნოს\n"
+"                    თითოეული სვეტის შესაბამისი ველი. ეს იმპორტს\n"
+"                    ამარტივებს, განსაკუთრებით როცა ფაილს ბევრი სვეტი აქვს."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "If the model uses openchatter, history tracking will set up subscriptions and send notifications during the import, but lead to a slower import."
+msgstr "თუ მოდელი იყენებს openchatter-ს, ისტორიის აღრიცხვა იმპორტისას შექმნის გამოწერებს და გააგზავნის შეტყობინებებს, თუმცა იმპორტი უფრო ნელი იქნება."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Image size excessive, imported images must be smaller than 42 million pixel"
+msgstr "სურათის ზომა ზედმეტად დიდია, დასაიმპორტებელი სურათები 42 მილიონ პიქსელზე ნაკლები უნდა იყოს"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Import"
+msgstr "იმპორტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Import FAQ"
+msgstr "იმპორტის ხშირად დასმული კითხვები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Import a File"
+msgstr "ფაილის იმპორტი"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Import file has no content or is corrupt"
+msgstr "იმპორტის ფაილი ცარიელია ან დაზიანებულია"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Import preview failed due to: \""
+msgstr "იმპორტის წინასწარი ნახვა ვერ მოხერხდა მიზეზით: \""
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_records/import_records.xml:0
+msgid "Import records"
+msgstr "ჩანაწერების იმპორტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Imported records"
+msgstr "დაიმპორტებული ჩანაწერები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Importing"
+msgstr "მიმდინარეობს იმპორტი"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Invalid cell format at row %(row)s, column %(col)s: %(cell_value)s, with format: %(cell_format)s, as (%(format_type)s) formats are not supported."
+msgstr "უჯრის არასწორი ფორმატი %(row)s-ე სტრიქონში, %(col)s-ე სვეტში: %(cell_value)s, ფორმატით: %(cell_format)s, რადგან (%(format_type)s) ფორმატები არ არის მხარდაჭერილი."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Invalid cell value at row %(row)s, column %(col)s: %(cell_value)s"
+msgstr "უჯრის არასწორი მნიშვნელობა %(row)s-ე სტრიქონში, %(col)s-ე სვეტში: %(cell_value)s"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__write_uid model:ir.model.fields,field_description:base_import.field_base_import_mapping__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__write_date model:ir.model.fields,field_description:base_import.field_base_import_mapping__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Load Data File"
+msgstr "მონაცემების ფაილის ჩატვირთვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Loading file..."
+msgstr "ფაილი იტვირთება..."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_block_ui.xml:0
+msgid "Loading..."
+msgstr "იტვირთება..."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Max size per batch"
+msgstr "თითო ნაწილის მაქსიმალური ზომა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Mb"
+msgstr "მბ"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_import__res_model
+msgid "Model"
+msgstr "მოდელი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "Multiple errors occurred"
+msgstr "მოხდა რამდენიმე შეცდომა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Need Help?"
+msgstr "გჭირდებათ დახმარება?"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "No Separator"
+msgstr "გამყოფის გარეშე"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.js:0
+msgid "No file selected"
+msgstr "ფაილი არ არის არჩეული"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "No matching records found for the following name"
+msgstr "შემდეგი სახელისთვის შესაბამისი ჩანაწერები ვერ მოიძებნა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Odoo Field"
+msgstr "Odoo-ს ველი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Please upload a single file."
+msgstr "გთხოვთ, ატვირთოთ ერთი ფაილი."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Please upload an Excel (.xls or .xlsx) or .csv file to import."
+msgstr "გთხოვთ, იმპორტისთვის ატვირთოთ Excel (.xls ან .xlsx) ან .csv ფაილი."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Prevent import"
+msgstr "იმპორტის აკრძალვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Preview"
+msgstr "წინასწარი ნახვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "Progress bar"
+msgstr "პროგრესის ზოლი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Reimport"
+msgstr "ხელახალი იმპორტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.js:0
+msgid "Relation Fields"
+msgstr "დაკავშირებული ველები"
+
+#. module: base_import
+#: model:ir.model.fields,field_description:base_import.field_base_import_mapping__res_model
+msgid "Res Model"
+msgstr "რესურსის მოდელი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Resume"
+msgstr "გაგრძელება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Search a field..."
+msgstr "ველის ძიება..."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "See possible values"
+msgstr "შესაძლო მნიშვნელობების ნახვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Selected Sheet:"
+msgstr "არჩეული ფურცელი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Semicolon"
+msgstr "წერტილ-მძიმე"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Separator:"
+msgstr "გამყოფი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Set to: %s"
+msgstr "მნიშვნელობა: %s"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Set to: False"
+msgstr "მნიშვნელობა: არა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Set to: True"
+msgstr "მნიშვნელობა: დიახ"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Set value as empty"
+msgstr "მნიშვნელობის დაცარიელება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Sheet:"
+msgstr "ფურცელი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.js:0
+msgid "Skip record"
+msgstr "ჩანაწერის გამოტოვება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Space"
+msgstr "ჰარი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.js:0
+msgid "Standard Fields"
+msgstr "სტანდარტული ველები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Start at line"
+msgstr "დაწყება სტრიქონიდან"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "Stop Import"
+msgstr "იმპორტის შეჩერება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.js:0
+msgid "Suggested Fields"
+msgstr "შემოთავაზებული ველები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Tab"
+msgstr "ტაბულაცია"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Test"
+msgstr "ტესტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.js:0
+msgid "Testing"
+msgstr "მიმდინარეობს ტესტირება"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Text Delimiter:"
+msgstr "ტექსტის გამყოფი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "The file contains blocking errors (see below)"
+msgstr "ფაილი შეიცავს დამბლოკავ შეცდომებს (იხ. ქვემოთ)"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "The file will be imported by batches"
+msgstr "ფაილის იმპორტი მოხდება ნაწილ-ნაწილ"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid ""
+"There was an issue decoding the file using encoding “%s”.\n"
+"This encoding was automatically detected."
+msgstr ""
+"ფაილის დეკოდირებისას კოდირებით “%s” მოხდა შეცდომა.\n"
+"ეს კოდირება ავტომატურად იქნა ამოცნობილი."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid ""
+"There was an issue decoding the file using encoding “%s”.\n"
+"This encoding was manually selected."
+msgstr ""
+"ფაილის დეკოდირებისას კოდირებით “%s” მოხდა შეცდომა.\n"
+"ეს კოდირება ხელით იქნა არჩეული."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "This column will be concatenated in field"
+msgstr "ეს სვეტი გაერთიანდება ველში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Thousands Separator:"
+msgstr "ათასების გამყოფი:"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "To import multiple values, separate them by a comma."
+msgstr "რამდენიმე მნიშვნელობის იმპორტისთვის გამოყავით ისინი მძიმით."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "To import, select a field..."
+msgstr "იმპორტისთვის აირჩიეთ ველი..."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Track history during import"
+msgstr "ისტორიის აღრიცხვა იმპორტისას"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Unable to load \"{extension}\" file: requires Python module \"{modname}\""
+msgstr "\"{extension}\" ფაილის ჩატვირთვა ვერ მოხერხდა: საჭიროა Python მოდული \"{modname}\""
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "Unsupported file format \"{}\", import only supports CSV, ODS, XLS and XLSX"
+msgstr "ფაილის ფორმატი \"{}\" არ არის მხარდაჭერილი, იმპორტი შესაძლებელია მხოლოდ CSV, ODS, XLS და XLSX ფორმატებიდან"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_content/import_data_content.xml:0
+msgid "Untitled"
+msgstr "უსათაურო"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_action/import_action.xml:0
+msgid "Upload Data File"
+msgstr "მონაცემების ფაილის ატვირთვა"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Upload your files"
+msgstr "ატვირთეთ თქვენი ფაილები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Use HH for hours in a 24h system, use II in conjonction with 'p' for a 12h system. You can use a custom format in addition to the suggestions provided. Leave empty to let Odoo guess the format (recommended)"
+msgstr "24-საათიანი ფორმატისთვის საათები აღნიშნეთ HH-ით, 12-საათიანისთვის გამოიყენეთ II 'p'-სთან ერთად. შემოთავაზებული ვარიანტების გარდა შეგიძლიათ საკუთარი ფორმატიც გამოიყენოთ. დატოვეთ ცარიელი, რომ Odoo-მ თავად ამოიცნოს ფორმატი (რეკომენდებულია)"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "Use YYYY to represent the year, MM for the month and DD for the day. Include separators such as a dot, forward slash or dash. You can use a custom format in addition to the suggestions provided. Leave empty to let Odoo guess the format (recommended)"
+msgstr "წელი აღნიშნეთ YYYY-ით, თვე MM-ით, დღე კი DD-ით. გამოიყენეთ გამყოფები, მაგალითად წერტილი, დახრილი ხაზი ან ტირე. შემოთავაზებული ვარიანტების გარდა შეგიძლიათ საკუთარი ფორმატიც გამოიყენოთ. დატოვეთ ცარიელი, რომ Odoo-მ თავად ამოიცნოს ფორმატი (რეკომენდებულია)"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Use first row as header"
+msgstr "პირველი სტრიქონის გამოყენება სათაურად"
+
+#. module: base_import
+#: model:ir.model,name:base_import.model_res_users
+msgid "User"
+msgstr "მომხმარებელი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "Warning: ignores the labels line, empty lines and lines composed only of empty cells"
+msgstr "გაფრთხილება: გამოტოვებულია სათაურების სტრიქონი, ცარიელი სტრიქონები და მხოლოდ ცარიელი უჯრებისგან შემდგარი სტრიქონები"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_options/import_data_options.xml:0
+msgid "When a value cannot be matched:"
+msgstr "როცა მნიშვნელობას შესაბამისი ვერ მოეძებნება:"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "You can not import file via URL, check with your administrator or support for the reason."
+msgstr "URL-ით ფაილის იმპორტი შეუძლებელია, მიზეზის გასარკვევად მიმართეთ ადმინისტრატორს ან მხარდაჭერის სამსახურს."
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_model.js:0
+msgid "You can test or reload your file before resuming the import."
+msgstr "იმპორტის გაგრძელებამდე შეგიძლიათ ფაილის შემოწმება ან ხელახლა ჩატვირთვა."
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "You must configure at least one field to import"
+msgstr "იმპორტისთვის საჭიროა მინიმუმ ერთი ველის კონფიგურაცია"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "at multiple rows"
+msgstr "რამდენიმე სტრიქონში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "at row"
+msgstr "სტრიქონში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "in field"
+msgstr "ველში"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "minutes"
+msgstr "წუთი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_column_error/import_data_column_error.xml:0
+msgid "more"
+msgstr "მეტი"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0
+msgid "out of"
+msgstr "სულ"
+
+#. module: base_import
+#. odoo-javascript
+#: code:addons/base_import/static/src/import_data_progress/import_data_progress.xml:0 code:addons/base_import/static/src/import_data_sidepanel/import_data_sidepanel.xml:0
+msgid "seconds"
+msgstr "წამი"
+
+#. module: base_import
+#. odoo-python
+#: code:addons/base_import/models/base_import.py:0
+msgid "unknown error code %s"
+msgstr "უცნობი შეცდომის კოდი %s"

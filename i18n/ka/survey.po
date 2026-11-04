@@ -1,0 +1,696 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/survey_survey.py:0
+msgid "%s (copy)"
+msgstr "%s (ასლი)"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "<i class=\"fa fa-long-arrow-right mx-2\" aria-label=\"Arrow icon\" title=\"Arrow\"/>"
+msgstr "<i class=\"fa fa-long-arrow-right mx-2\" aria-label=\"ისრის ხატულა\" title=\"ისარი\"/>"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__survey_access_mode model:ir.model.fields,field_description:survey.field_survey_survey__access_mode
+msgid "Access Mode"
+msgstr "წვდომის რეჟიმი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__access_token
+msgid "Access Token"
+msgstr "წვდომის ტოკენი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_needaction model:ir.model.fields,field_description:survey.field_survey_user_input__message_needaction
+msgid "Action Needed"
+msgstr "საჭიროა მოქმედება"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__active
+msgid "Active"
+msgstr "აქტიური"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_ids model:ir.model.fields,field_description:survey.field_survey_user_input__activity_ids
+msgid "Activities"
+msgstr "აქტივობები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_exception_decoration model:ir.model.fields,field_description:survey.field_survey_user_input__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "აქტივობის გამონაკლისის აღნიშვნა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_state model:ir.model.fields,field_description:survey.field_survey_user_input__activity_state
+msgid "Activity State"
+msgstr "აქტივობის სტატუსი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_type_icon model:ir.model.fields,field_description:survey.field_survey_user_input__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "აქტივობის ტიპის ხატულა"
+
+#. module: survey
+#: model:res.groups,name:survey.group_survey_manager
+msgid "Administrator"
+msgstr "ადმინისტრატორი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.user_input_session_leaderboard
+msgid "Anonymous"
+msgstr "ანონიმური"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__user_input_line_ids model:ir.model.fields,field_description:survey.field_survey_user_input__user_input_line_ids model_terms:ir.ui.view,arch_db:survey.survey_question_form model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_form
+msgid "Answers"
+msgstr "პასუხები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_kanban model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "Archived"
+msgstr "დაარქივებული"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_attachment_count model:ir.model.fields,field_description:survey.field_survey_user_input__message_attachment_count
+msgid "Attachment Count"
+msgstr "მიმაგრებული ფაილების რაოდენობა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__attachment_ids
+msgid "Attachments"
+msgstr "თანდართული ფაილები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__author_id
+msgid "Author"
+msgstr "ავტორი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_page_statistics_question
+msgid "Average"
+msgstr "საშუალო"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__background_image model:ir.model.fields,field_description:survey.field_survey_survey__background_image
+msgid "Background Image"
+msgstr "ფონის სურათი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.gamification_badge_form_view_simplified
+msgid "Badge"
+msgstr "ბეიჯი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__body_has_template_value
+msgid "Body content is the same as the template"
+msgstr "ტექსტი შაბლონის იდენტურია"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__can_edit_body
+msgid "Can Edit Body"
+msgstr "ტექსტის რედაქტირების უფლება"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/templates/survey_survey.py:0 model_terms:ir.ui.view,arch_db:survey.survey_survey_view_tree
+msgid "Certification"
+msgstr "სერტიფიცირება"
+
+#. module: survey
+#: model:ir.actions.report,name:survey.certification_report model:ir.model.fields.selection,name:survey.selection__gamification_challenge__challenge_category__certification
+msgid "Certifications"
+msgstr "სერტიფიკატები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Close"
+msgstr "დახურვა"
+
+#. module: survey
+#: model:survey.question.answer,value:survey.vendor_certification_page_1_question_3_choice_1 model_terms:ir.ui.view,arch_db:survey.survey_survey_view_kanban
+msgid "Color"
+msgstr "ფერი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__color
+msgid "Color Index"
+msgstr "ფერის ინდექსი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.question_result_comments
+msgid "Comment"
+msgstr "კომენტარი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Compose Email"
+msgstr "წერილის შედგენა"
+
+#. module: survey
+#: model:ir.model,name:survey.model_res_partner model:ir.model.fields,field_description:survey.field_survey_user_input__partner_id
+msgid "Contact"
+msgstr "კონტაქტი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__body
+msgid "Contents"
+msgstr "შინაარსი"
+
+#. module: survey
+#. odoo-javascript
+#: code:addons/survey/static/src/interactions/survey_form.js:0 model_terms:ir.ui.view,arch_db:survey.survey_fill_form_in_progress
+msgid "Continue"
+msgstr "გაგრძელება"
+
+#. module: survey
+#: model:ir.model,website_form_label:survey.model_res_partner
+msgid "Create a Customer"
+msgstr "კლიენტის შექმნა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__create_uid model:ir.model.fields,field_description:survey.field_survey_question__create_uid model:ir.model.fields,field_description:survey.field_survey_question_answer__create_uid model:ir.model.fields,field_description:survey.field_survey_survey__create_uid model:ir.model.fields,field_description:survey.field_survey_user_input__create_uid model:ir.model.fields,field_description:survey.field_survey_user_input_line__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__create_date model:ir.model.fields,field_description:survey.field_survey_question__create_date model:ir.model.fields,field_description:survey.field_survey_question_answer__create_date model:ir.model.fields,field_description:survey.field_survey_survey__create_date model:ir.model.fields,field_description:survey.field_survey_user_input__create_date model:ir.model.fields,field_description:survey.field_survey_user_input_line__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: survey
+#: model:ir.model.fields.selection,name:survey.selection__survey_survey__survey_type__custom
+msgid "Custom"
+msgstr "მორგებული"
+
+#. module: survey
+#: model:ir.model.fields.selection,name:survey.selection__survey_question__question_type__date model:ir.model.fields.selection,name:survey.selection__survey_user_input_line__answer_type__date
+msgid "Date"
+msgstr "თარიღი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_user_input__deadline
+msgid "Deadline"
+msgstr "ვადა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_kanban
+msgid "Delete"
+msgstr "წაშალე"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__description model:ir.model.fields,field_description:survey.field_survey_survey__description model_terms:ir.ui.view,arch_db:survey.survey_question_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: survey
+#: model:ir.actions.act_window,name:survey.survey_user_input_line_action model:ir.ui.menu,name:survey.menu_survey_response_line_form
+msgid "Detailed Answers"
+msgstr "დეტალური პასუხები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_gamification_badge__display_name model:ir.model.fields,field_description:survey.field_gamification_challenge__display_name model:ir.model.fields,field_description:survey.field_ir_http__display_name model:ir.model.fields,field_description:survey.field_res_lang__display_name model:ir.model.fields,field_description:survey.field_res_partner__display_name model:ir.model.fields,field_description:survey.field_survey_invite__display_name model:ir.model.fields,field_description:survey.field_survey_question__display_name model:ir.model.fields,field_description:survey.field_survey_question_answer__display_name model:ir.model.fields,field_description:survey.field_survey_survey__display_name model:ir.model.fields,field_description:survey.field_survey_user_input__display_name model:ir.model.fields,field_description:survey.field_survey_user_input_line__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_user_input__email model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "Email"
+msgstr "ელ.ფოსტა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_form
+msgid "Failed"
+msgstr "წარუმატებელი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_follower_ids model:ir.model.fields,field_description:survey.field_survey_user_input__message_follower_ids
+msgid "Followers"
+msgstr "გამომწერები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_partner_ids model:ir.model.fields,field_description:survey.field_survey_user_input__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "გამომწერები (კონტაქტები)"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__activity_type_icon model:ir.model.fields,help:survey.field_survey_user_input__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr "Font Awesome ხატულა, მაგ. fa-tasks"
+
+#. module: survey
+#: model:ir.model,name:survey.model_gamification_badge
+msgid "Gamification Badge"
+msgstr "გეიმიფიკაციის ბეიჯი"
+
+#. module: survey
+#: model:ir.model,name:survey.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP მარშრუტიზაცია"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__has_message model:ir.model.fields,field_description:survey.field_survey_user_input__has_message
+msgid "Has Message"
+msgstr "აქვს შეტყობინება"
+
+#. module: survey
+#: model:survey.question,title:survey.survey_demo_burger_quiz_p3 model:survey.question.answer,value:survey.survey_demo_burger_quiz_p1_q1_sug2
+msgid "History"
+msgstr "ისტორია"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_gamification_badge__id model:ir.model.fields,field_description:survey.field_gamification_challenge__id model:ir.model.fields,field_description:survey.field_ir_http__id model:ir.model.fields,field_description:survey.field_res_lang__id model:ir.model.fields,field_description:survey.field_res_partner__id model:ir.model.fields,field_description:survey.field_survey_invite__id model:ir.model.fields,field_description:survey.field_survey_question__id model:ir.model.fields,field_description:survey.field_survey_question_answer__id model:ir.model.fields,field_description:survey.field_survey_survey__id model:ir.model.fields,field_description:survey.field_survey_user_input__id model:ir.model.fields,field_description:survey.field_survey_user_input_line__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_exception_icon model:ir.model.fields,field_description:survey.field_survey_user_input__activity_exception_icon
+msgid "Icon"
+msgstr "ხატულა"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__activity_exception_icon model:ir.model.fields,help:survey.field_survey_user_input__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr "გამონაკლისი აქტივობის აღმნიშვნელი ხატულა."
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__message_needaction model:ir.model.fields,help:survey.field_survey_user_input__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "თუ მონიშნულია, ახალი შეტყობინებები თქვენს ყურადღებას საჭიროებს."
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__message_has_error model:ir.model.fields,help:survey.field_survey_survey__message_has_sms_error model:ir.model.fields,help:survey.field_survey_user_input__message_has_error model:ir.model.fields,help:survey.field_survey_user_input__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "თუ მონიშნულია, ზოგიერთი შეტყობინების მიწოდება ვერ მოხერხდა."
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question_answer__value_image model_terms:ir.ui.view,arch_db:survey.question_result_choice
+msgid "Image"
+msgstr "სურათი"
+
+#. module: survey
+#: model:ir.model.fields.selection,name:survey.selection__survey_survey__session_state__in_progress model:ir.model.fields.selection,name:survey.selection__survey_user_input__state__in_progress model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "In Progress"
+msgstr "მიმდინარე"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__is_mail_template_editor
+msgid "Is Editor"
+msgstr "რედაქტორია"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_is_follower model:ir.model.fields,field_description:survey.field_survey_user_input__message_is_follower
+msgid "Is Follower"
+msgstr "არის გამომწერი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "Label"
+msgstr "წარწერა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__lang model:ir.model.fields,field_description:survey.field_survey_user_input__lang_id model:ir.model.fields,field_description:survey.field_survey_user_input_line__lang_id model_terms:ir.ui.view,arch_db:survey.survey_user_input_line_view_search model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "Language"
+msgstr "ენა"
+
+#. module: survey
+#: model:ir.model,name:survey.model_res_lang model:ir.model.fields,field_description:survey.field_survey_survey__lang_ids
+msgid "Languages"
+msgstr "ენები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__write_uid model:ir.model.fields,field_description:survey.field_survey_question__write_uid model:ir.model.fields,field_description:survey.field_survey_question_answer__write_uid model:ir.model.fields,field_description:survey.field_survey_survey__write_uid model:ir.model.fields,field_description:survey.field_survey_user_input__write_uid model:ir.model.fields,field_description:survey.field_survey_user_input_line__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__write_date model:ir.model.fields,field_description:survey.field_survey_question__write_date model:ir.model.fields,field_description:survey.field_survey_question_answer__write_date model:ir.model.fields,field_description:survey.field_survey_survey__write_date model:ir.model.fields,field_description:survey.field_survey_user_input__write_date model:ir.model.fields,field_description:survey.field_survey_user_input_line__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "Late Activities"
+msgstr "დაგვიანებული აქტივობები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_access_error
+msgid "Leave"
+msgstr "დატოვება"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__template_id
+msgid "Mail Template"
+msgstr "ელფოსტის შაბლონი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_has_error model:ir.model.fields,field_description:survey.field_survey_user_input__message_has_error
+msgid "Message Delivery error"
+msgstr "შეტყობინების მიწოდების შეცდომა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_ids model:ir.model.fields,field_description:survey.field_survey_user_input__message_ids
+msgid "Messages"
+msgstr "შეტყობინებები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "My Activities"
+msgstr "ჩემი აქტივობები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__my_activity_date_deadline model:ir.model.fields,field_description:survey.field_survey_user_input__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "ჩემი აქტივობის ვადა"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/templates/survey_survey.py:0 model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "Neutral"
+msgstr "ნეიტრალური"
+
+#. module: survey
+#: model:ir.model.fields.selection,name:survey.selection__survey_user_input__state__new model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "New"
+msgstr "ახალი"
+
+#. module: survey
+#. odoo-javascript
+#: code:addons/survey/static/src/interactions/survey_session_manage.js:0 model_terms:ir.ui.view,arch_db:survey.survey_fill_form_in_progress
+msgid "Next"
+msgstr "შემდეგი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_calendar_event_id model:ir.model.fields,field_description:survey.field_survey_user_input__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "შემდეგი აქტივობის კალენდარული მოვლენა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_date_deadline model:ir.model.fields,field_description:survey.field_survey_user_input__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "შემდეგი აქტივობის ვადა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_summary model:ir.model.fields,field_description:survey.field_survey_user_input__activity_summary
+msgid "Next Activity Summary"
+msgstr "შემდეგი აქტივობის შეჯამება"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_type_id model:ir.model.fields,field_description:survey.field_survey_user_input__activity_type_id
+msgid "Next Activity Type"
+msgstr "შემდეგი აქტივობის ტიპი"
+
+#. module: survey
+#: model:survey.question.answer,value:survey.survey_demo_food_preferences_q1_sug2 model:survey.question.answer,value:survey.survey_demo_food_preferences_q2_sug2 model:survey.question.answer,value:survey.vendor_certification_page_1_question_1_choice_1
+msgid "No"
+msgstr "არა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_needaction_counter model:ir.model.fields,field_description:survey.field_survey_user_input__message_needaction_counter
+msgid "Number of Actions"
+msgstr "მოქმედებების რაოდენობა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_has_error_counter model:ir.model.fields,field_description:survey.field_survey_user_input__message_has_error_counter
+msgid "Number of errors"
+msgstr "შეცდომების რაოდენობა"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__message_needaction_counter model:ir.model.fields,help:survey.field_survey_user_input__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "მოქმედების საჭიროების მქონე შეტყობინებების რაოდენობა"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__message_has_error_counter model:ir.model.fields,help:survey.field_survey_user_input__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "მიწოდების შეცდომის მქონე შეტყობინებების რაოდენობა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.certification_report_view_general
+msgid "Odoo"
+msgstr "Odoo"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_invite__lang
+msgid "Optional translation language (ISO code) to select when sending out an email. If not set, the main partner's language will be used. This should usually be a placeholder expression that provides the appropriate language, e.g. {{ object.partner_id.lang }}."
+msgstr "თარგმანის ენა (ISO კოდი), რომელიც ელფოსტის გაგზავნისას შეირჩევა (არასავალდებულო). თუ არ არის მითითებული, გამოყენებული იქნება მთავარი კონტაქტის ენა. როგორც წესი, ეს უნდა იყოს ჩანაცვლების გამოსახულება, რომელიც შესაბამის ენას აბრუნებს, მაგ. {{ object.partner_id.lang }}."
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_question_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Options"
+msgstr "ოფციები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__mail_server_id
+msgid "Outgoing mail server"
+msgstr "გამავალი ფოსტის სერვერი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__page_id
+msgid "Page"
+msgstr "გვერდი"
+
+#. module: survey
+#: model:ir.actions.act_window,name:survey.action_survey_user_input model:ir.ui.menu,name:survey.menu_survey_type_form1 model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Participants"
+msgstr "მონაწილეები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "Partner"
+msgstr "პარტნიორი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__question_placeholder
+msgid "Placeholder"
+msgstr "მინიშნება"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Preview"
+msgstr "წინასწარი ნახვა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_page_statistics_header model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_form
+msgid "Print"
+msgstr "ბეჭდვა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.user_input_session_manage_content
+msgid "Progress bar"
+msgstr "პროგრესის ზოლი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question_answer__question_id model:ir.model.fields,field_description:survey.field_survey_user_input_line__question_id model_terms:ir.ui.view,arch_db:survey.survey_question_answer_view_search model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "Question"
+msgstr "შეკითხვა"
+
+#. module: survey
+#: model:ir.actions.act_window,name:survey.action_survey_question_form model:ir.model.fields,field_description:survey.field_survey_question__question_ids model:ir.model.fields,field_description:survey.field_survey_survey__question_ids model:ir.ui.menu,name:survey.menu_survey_question_form1 model_terms:ir.ui.view,arch_db:survey.survey_page_statistics_inner model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "Questions"
+msgstr "კითხვები"
+
+#. module: survey
+#: model:ir.ui.menu,name:survey.survey_menu_questions
+msgid "Questions & Answers"
+msgstr "კითხვები და პასუხები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__rating_ids model:ir.model.fields,field_description:survey.field_survey_user_input__rating_ids
+msgid "Ratings"
+msgstr "შეფასებები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__partner_ids
+msgid "Recipients"
+msgstr "მიმღებები"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__render_model
+msgid "Rendering Model"
+msgstr "რენდერინგის მოდელი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__user_id model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "Responsible"
+msgstr "პასუხისმგებელი"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__activity_user_id model:ir.model.fields,field_description:survey.field_survey_user_input__activity_user_id
+msgid "Responsible User"
+msgstr "პასუხისმგებელი მომხმარებელი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_button_retake
+msgid "Retry"
+msgstr "ხელახლა ცდა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__message_has_sms_error model:ir.model.fields,field_description:survey.field_survey_user_input__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "SMS-ის მიწოდების შეცდომა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_user_input_line__page_id model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "Section"
+msgstr "სექცია"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_fill_header
+msgid "Select a language"
+msgstr "ენის არჩევა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Send"
+msgstr "გაგზავნა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__send_email
+msgid "Send Email"
+msgstr "ელფოსტის გაგზავნა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__sequence model:ir.model.fields,field_description:survey.field_survey_user_input_line__question_sequence
+msgid "Sequence"
+msgstr "მიმდევრობა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "Show all records whose next activity date is past"
+msgstr "ყველა ჩანაწერის ჩვენება, რომელთა შემდეგი აქტივობის თარიღი გასულია"
+
+#. module: survey
+#. odoo-javascript
+#: code:addons/survey/static/src/interactions/survey_session_manage.js:0 model:survey.question,title:survey.survey_demo_burger_quiz_p1
+msgid "Start"
+msgstr "დაწყება"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_user_input__state
+msgid "Status"
+msgstr "სტატუსი"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__activity_state model:ir.model.fields,help:survey.field_survey_user_input__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+"სტატუსი აქტივობების მიხედვით\n"
+"ვადაგადაცილებული: ვადა უკვე გასულია\n"
+"დღეს: აქტივობის თარიღი დღესაა\n"
+"დაგეგმილი: მომავალი აქტივობები."
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_invite__subject
+msgid "Subject"
+msgstr "თემა"
+
+#. module: survey
+#: model:ir.actions.act_window,name:survey.survey_question_answer_action model:ir.ui.menu,name:survey.menu_survey_label_form1
+msgid "Suggested Values"
+msgstr "შემოთავაზებული მნიშვნელობები"
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/models/templates/survey_survey.py:0 model:ir.model,name:survey.model_survey_survey model:ir.model.fields,field_description:survey.field_gamification_badge__survey_id model:ir.model.fields,field_description:survey.field_survey_invite__survey_id model:ir.model.fields,field_description:survey.field_survey_question__survey_id model:ir.model.fields,field_description:survey.field_survey_user_input__survey_id model:ir.model.fields,field_description:survey.field_survey_user_input_line__survey_id model:ir.model.fields.selection,name:survey.selection__survey_survey__survey_type__survey model_terms:ir.ui.view,arch_db:survey.survey_question_search model_terms:ir.ui.view,arch_db:survey.survey_survey_view_activity model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search model_terms:ir.ui.view,arch_db:survey.survey_survey_view_tree model_terms:ir.ui.view,arch_db:survey.survey_user_input_line_view_search model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "Survey"
+msgstr "გამოკითხვა"
+
+#. module: survey
+#: model:ir.actions.act_window,name:survey.action_survey_form model:ir.ui.menu,name:survey.menu_survey_form model:ir.ui.menu,name:survey.menu_surveys model:res.groups.privilege,name:survey.res_groups_privilege_surveys
+msgid "Surveys"
+msgstr "გამოკითხვები"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form model_terms:ir.ui.view,arch_db:survey.survey_survey_view_kanban
+msgid "Test"
+msgstr "ტესტი"
+
+#. module: survey
+#: model:ir.model.fields.selection,name:survey.selection__survey_user_input_line__answer_type__char_box
+msgid "Text"
+msgstr "ტექსტი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_question_form
+msgid "Time Limit (seconds)"
+msgstr "დროის ლიმიტი (წამი)"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_question__title
+msgid "Title"
+msgstr "სახელწოდება"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_search
+msgid "Today Activities"
+msgstr "დღევანდელი აქტივობები"
+
+#. module: survey
+#: model:survey.question.answer,value:survey.survey_demo_burger_quiz_p2_q2_sug2
+msgid "Tokyo"
+msgstr "ტოკიო"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_question_search
+msgid "Type"
+msgstr "ტიპი"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__activity_exception_decoration model:ir.model.fields,help:survey.field_survey_user_input__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "ჩანაწერზე გამონაკლისი აქტივობის ტიპი."
+
+#. module: survey
+#. odoo-python
+#: code:addons/survey/wizard/survey_invite.py:0
+msgid "Unable to post message, please configure the sender's email address."
+msgstr "შეტყობინების გამოქვეყნება ვერ მოხერხდა, გთხოვთ, მიუთითოთ გამგზავნის ელფოსტის მისამართი."
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_invite_view_form
+msgid "Use template"
+msgstr "შაბლონის გამოყენება"
+
+#. module: survey
+#: model:res.groups,name:survey.group_survey_user
+msgid "User"
+msgstr "მომხმარებელი"
+
+#. module: survey
+#. odoo-javascript
+#: code:addons/survey/static/src/question_page/question_page_one2many_field.js:0 model:ir.model.fields,field_description:survey.field_survey_question__validation_error_msg
+msgid "Validation Error"
+msgstr "ვალიდაციის შეცდომა"
+
+#. module: survey
+#: model:ir.model.fields,field_description:survey.field_survey_survey__website_message_ids model:ir.model.fields,field_description:survey.field_survey_user_input__website_message_ids
+msgid "Website Messages"
+msgstr "ვებსაიტის შეტყობინებები"
+
+#. module: survey
+#: model:ir.model.fields,help:survey.field_survey_survey__website_message_ids model:ir.model.fields,help:survey.field_survey_user_input__website_message_ids
+msgid "Website communication history"
+msgstr "ვებსაიტზე კომუნიკაციის ისტორია"
+
+#. module: survey
+#: model:survey.question.answer,value:survey.survey_demo_food_preferences_q1_sug1 model:survey.question.answer,value:survey.survey_demo_food_preferences_q2_sug1 model:survey.question.answer,value:survey.vendor_certification_page_1_question_1_choice_2
+msgid "Yes"
+msgstr "დიახ"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "minutes"
+msgstr "წუთი"

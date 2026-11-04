@@ -1,0 +1,220 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__active model:ir.model.fields,field_description:utm.field_utm_medium__active
+msgid "Active"
+msgstr "აქტიური"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Approved"
+msgstr "დამტკიცებული"
+
+#. module: utm
+#: model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_kanban
+msgid "Archive"
+msgstr "დაარქივება"
+
+#. module: utm
+#: model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_form model_terms:ir.ui.view,arch_db:utm.utm_medium_view_search model_terms:ir.ui.view,arch_db:utm.view_utm_campaign_view_search
+msgid "Archived"
+msgstr "დაარქივებული"
+
+#. module: utm
+#: model:ir.actions.act_window,name:utm.action_view_utm_tag model_terms:ir.ui.view,arch_db:utm.utm_tag_view_tree
+msgid "Campaign Tags"
+msgstr "კამპანიის თეგები"
+
+#. module: utm
+#: model:ir.actions.act_window,name:utm.utm_campaign_action model:ir.ui.menu,name:utm.menu_utm_campaign_act model_terms:ir.ui.view,arch_db:utm.view_utm_campaign_view_search
+msgid "Campaigns"
+msgstr "კამპანიები"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__color model:ir.model.fields,field_description:utm.field_utm_tag__color
+msgid "Color Index"
+msgstr "ფერის ინდექსი"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Copywriting"
+msgstr "კოპირაიტინგი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__create_uid model:ir.model.fields,field_description:utm.field_utm_medium__create_uid model:ir.model.fields,field_description:utm.field_utm_source__create_uid model:ir.model.fields,field_description:utm.field_utm_stage__create_uid model:ir.model.fields,field_description:utm.field_utm_tag__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__create_date model:ir.model.fields,field_description:utm.field_utm_medium__create_date model:ir.model.fields,field_description:utm.field_utm_source__create_date model:ir.model.fields,field_description:utm.field_utm_stage__create_date model:ir.model.fields,field_description:utm.field_utm_tag__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: utm
+#: model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_kanban
+msgid "Delete"
+msgstr "წაშლა"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0 model:utm.stage,name:utm.campaign_stage_2
+msgid "Design"
+msgstr "დიზაინი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_ir_http__display_name model:ir.model.fields,field_description:utm.field_utm_campaign__display_name model:ir.model.fields,field_description:utm.field_utm_medium__display_name model:ir.model.fields,field_description:utm.field_utm_mixin__display_name model:ir.model.fields,field_description:utm.field_utm_source__display_name model:ir.model.fields,field_description:utm.field_utm_source_mixin__display_name model:ir.model.fields,field_description:utm.field_utm_stage__display_name model:ir.model.fields,field_description:utm.field_utm_tag__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Done"
+msgstr "შესრულებული"
+
+#. module: utm
+#: model:ir.model,name:utm.model_ir_http
+msgid "HTTP Routing"
+msgstr "HTTP მარშრუტიზაცია"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_ir_http__id model:ir.model.fields,field_description:utm.field_utm_campaign__id model:ir.model.fields,field_description:utm.field_utm_medium__id model:ir.model.fields,field_description:utm.field_utm_mixin__id model:ir.model.fields,field_description:utm.field_utm_source__id model:ir.model.fields,field_description:utm.field_utm_source_mixin__id model:ir.model.fields,field_description:utm.field_utm_stage__id model:ir.model.fields,field_description:utm.field_utm_tag__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__write_uid model:ir.model.fields,field_description:utm.field_utm_medium__write_uid model:ir.model.fields,field_description:utm.field_utm_source__write_uid model:ir.model.fields,field_description:utm.field_utm_stage__write_uid model:ir.model.fields,field_description:utm.field_utm_tag__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__write_date model:ir.model.fields,field_description:utm.field_utm_medium__write_date model:ir.model.fields,field_description:utm.field_utm_source__write_date model:ir.model.fields,field_description:utm.field_utm_stage__write_date model:ir.model.fields,field_description:utm.field_utm_tag__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Later"
+msgstr "მოგვიანებით"
+
+#. module: utm
+#: model:ir.ui.menu,name:utm.menu_link_tracker_root
+msgid "Link Tracker"
+msgstr "ბმულების ტრეკერი"
+
+#. module: utm
+#: model:utm.tag,name:utm.utm_tag_1
+msgid "Marketing"
+msgstr "მარკეტინგი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_mixin__medium_id model_terms:ir.ui.view,arch_db:utm.utm_medium_view_form
+msgid "Medium"
+msgstr "საშუალო"
+
+#. module: utm
+#: model:ir.actions.act_window,name:utm.utm_medium_action model:ir.ui.menu,name:utm.menu_utm_medium model_terms:ir.ui.view,arch_db:utm.utm_medium_view_tree
+msgid "Mediums"
+msgstr "არხები"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_source_mixin__name model:ir.model.fields,field_description:utm.field_utm_stage__name model:ir.model.fields,field_description:utm.field_utm_tag__name model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_tree
+msgid "Name"
+msgstr "სახელი"
+
+#. module: utm
+#: model:utm.stage,name:utm.default_utm_stage
+msgid "New"
+msgstr "ახალი"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Report"
+msgstr "ანგარიში"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__user_id model_terms:ir.ui.view,arch_db:utm.view_utm_campaign_view_search
+msgid "Responsible"
+msgstr "პასუხისმგებელი"
+
+#. module: utm
+#: model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_kanban
+msgid "Restore"
+msgstr "აღდგენა"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Review"
+msgstr "შეფასება"
+
+#. module: utm
+#: model:utm.stage,name:utm.campaign_stage_1
+msgid "Schedule"
+msgstr "გრაფიკი"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Send"
+msgstr "გაგზავნა"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0 model:utm.stage,name:utm.campaign_stage_3
+msgid "Sent"
+msgstr "გაგზავნილი"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_stage__sequence
+msgid "Sequence"
+msgstr "რიგითობა"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_mixin__source_id model:ir.model.fields,field_description:utm.field_utm_source_mixin__source_id model_terms:ir.ui.view,arch_db:utm.utm_source_view_form model_terms:ir.ui.view,arch_db:utm.utm_source_view_tree
+msgid "Source"
+msgstr "წყარო"
+
+#. module: utm
+#: model:ir.actions.act_window,name:utm.utm_source_action model:ir.ui.menu,name:utm.menu_utm_source
+msgid "Sources"
+msgstr "წყაროები"
+
+#. module: utm
+#: model:ir.model.constraint,message:utm.constraint_utm_tag_name_uniq
+msgid "Tag name already exists!"
+msgstr "ასეთი თეგი უკვე არსებობს!"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__tag_ids model_terms:ir.ui.view,arch_db:utm.view_utm_campaign_view_search
+msgid "Tags"
+msgstr "თეგები"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "This Month"
+msgstr "ეს თვე"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "This Week"
+msgstr "ეს კვირა"
+
+#. module: utm
+#: model:ir.ui.menu,name:utm.marketing_utm
+msgid "UTMs"
+msgstr "UTM-ები"

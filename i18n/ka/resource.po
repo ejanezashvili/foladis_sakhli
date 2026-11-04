@@ -1,0 +1,890 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree
+msgid "# Work Resources"
+msgstr "# სამუშაო რესურსი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_attendance.py:0
+msgid "%(att)s is a break attendance, You should not have such record on duration based calendar"
+msgstr "%(att)s შესვენებაა; ხანგრძლივობაზე დაფუძნებულ კალენდარში ასეთი ჩანაწერი არ უნდა იყოს"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0 code:addons/resource/models/resource_resource.py:0
+msgid "%s (copy)"
+msgstr "%s (ასლი)"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "2 Week's Calendar"
+msgstr "2-კვირიანი კალენდარი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "<span class=\"ms-1\">%</span>"
+msgstr "<span class=\"ms-1\">%</span>"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "<span class=\"ms-2\">hours/day</span>"
+msgstr "<span class=\"ms-2\">საათი/დღეში</span>"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "<span class=\"ms-2\">hours/week</span>"
+msgstr "<span class=\"ms-2\">საათი/კვირაში</span>"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "<span class=\"o_stat_text\">Time Off</span>"
+msgstr "<span class=\"o_stat_text\">შვებულება</span>"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "<span>hours/week</span>"
+msgstr "<span>საათი/კვირაში</span>"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__active model:ir.model.fields,field_description:resource.field_resource_resource__active
+msgid "Active"
+msgstr "აქტიური"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__day_period__afternoon
+msgid "Afternoon"
+msgstr "შუადღის შემდეგ"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form model_terms:ir.ui.view,arch_db:resource.resource_resource_form model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Archived"
+msgstr "დაარქივებული"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Are you sure you want to switch to a 1-week calendar? All work entries will be lost."
+msgstr "დარწმუნებული ხართ, რომ გსურთ 1-კვირიან კალენდარზე გადართვა? ყველა სამუშაო ჩანაწერი დაიკარგება."
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Are you sure you want to switch to a 2-week calendar? All work entries will be lost."
+msgstr "დარწმუნებული ხართ, რომ გსურთ 2-კვირიან კალენდარზე გადართვა? ყველა სამუშაო ჩანაწერი დაიკარგება."
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__duration_based model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__duration_based
+msgid "Attendance based on duration"
+msgstr "ხანგრძლივობაზე დაფუძნებული დასწრება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Attendances can't overlap."
+msgstr "დასწრებები ერთმანეთს არ უნდა ემთხვეოდეს."
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__avatar_128
+msgid "Avatar 128"
+msgstr "ავატარი 128"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__hours_per_day
+msgid "Average Hour per Day"
+msgstr "საშუალო საათი დღეში"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__hours_per_day
+msgid "Average hours per day a resource is supposed to work with this calendar."
+msgstr "საათების საშუალო რაოდენობა დღეში, რომელიც რესურსმა ამ კალენდრით უნდა იმუშაოს."
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Avg"
+msgstr "საშ."
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__day_period__lunch
+msgid "Break"
+msgstr "შესვენება"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__two_weeks_calendar model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__two_weeks_calendar
+msgid "Calendar in 2 weeks mode"
+msgstr "კალენდარი 2-კვირიან რეჟიმში"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__schedule_type
+msgid ""
+"Choose which level of definition you want to define on your Schedule\n"
+"- Flexible : Define an amount of hours to work on the week.\n"
+"- Fully Fixed : define the days, periods and the start & end time for each period of the day"
+msgstr ""
+"აირჩიეთ, რა დონის სიზუსტით გსურთ გრაფიკის განსაზღვრა\n"
+"- მოქნილი: განსაზღვრეთ კვირაში სამუშაო საათების რაოდენობა.\n"
+"- სრულად ფიქსირებული: განსაზღვრეთ დღეები, პერიოდები და დღის თითოეული პერიოდის დაწყებისა და დასრულების დრო"
+
+#. module: resource
+#: model:ir.actions.act_window,name:resource.resource_calendar_closing_days
+msgid "Closing Days"
+msgstr "არასამუშაო დღეები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__company_id model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__company_id model:ir.model.fields,field_description:resource.field_resource_mixin__company_id model:ir.model.fields,field_description:resource.field_resource_resource__company_id model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Company"
+msgstr "კომპანია"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Confirm"
+msgstr "დადასტურება"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__create_uid model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__create_uid model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__create_uid model:ir.model.fields,field_description:resource.field_resource_resource__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__create_date model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__create_date model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__create_date model:ir.model.fields,field_description:resource.field_resource_resource__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search
+msgid "Date"
+msgstr "თარიღი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__day_period
+msgid "Day Period"
+msgstr "დღის პერიოდი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__dayofweek
+msgid "Day of Week"
+msgstr "კვირის დღე"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_res_company__resource_calendar_id model:ir.model.fields,field_description:resource.field_res_users__resource_calendar_id
+msgid "Default Working Hours"
+msgstr "ნაგულისხმევი სამუშაო საათები"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Define Amount of Hours per day"
+msgstr "დღეში საათების რაოდენობის განსაზღვრა"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_res_users__resource_calendar_id model:ir.model.fields,help:resource.field_resource_mixin__resource_calendar_id model:ir.model.fields,help:resource.field_resource_resource__calendar_id
+msgid "Define the working schedule of the resource. If not set, the resource will have fully flexible working hours."
+msgstr "განსაზღვრეთ რესურსის სამუშაო გრაფიკი. თუ არ არის მითითებული, რესურსს ექნება სრულად მოქნილი სამუშაო საათები."
+
+#. module: resource
+#: model_terms:ir.actions.act_window,help:resource.action_resource_calendar_form
+msgid "Define working hours and time table that could be scheduled to your project members"
+msgstr "განსაზღვრეთ სამუშაო საათები და განრიგი, რომელიც შეიძლება დაეგეგმოს თქვენი პროექტის წევრებს"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_res_company__display_name model:ir.model.fields,field_description:resource.field_res_users__display_name model:ir.model.fields,field_description:resource.field_resource_calendar__display_name model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__display_name model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__display_name model:ir.model.fields,field_description:resource.field_resource_mixin__display_name model:ir.model.fields,field_description:resource.field_resource_resource__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__display_type
+msgid "Display Type"
+msgstr "ჩვენების ტიპი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__duration_days
+msgid "Duration (days)"
+msgstr "ხანგრძლივობა (დღე)"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__duration_hours
+msgid "Duration (hours)"
+msgstr "ხანგრძლივობა (საათი)"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__time_efficiency
+msgid "Efficiency Factor"
+msgstr "ეფექტიანობის კოეფიციენტი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__email
+msgid "Email"
+msgstr "ელფოსტა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__date_to
+msgid "End Date"
+msgstr "დასრულების თარიღი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__two_weeks_explanation
+msgid "Explanation"
+msgstr "განმარტება"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_resource__share
+msgid "External user with limited access, created only for the purpose of sharing data."
+msgstr "გარე მომხმარებელი შეზღუდული წვდომით, შექმნილი მხოლოდ მონაცემების გაზიარების მიზნით."
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__week_type__0
+msgid "First"
+msgstr "პირველი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_attendance.py:0
+msgid "First week"
+msgstr "პირველი კვირა"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar__schedule_type__flexible model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search
+msgid "Flexible"
+msgstr "მოქნილი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__flexible_hours
+msgid "Flexible Hours"
+msgstr "მოქნილი საათები"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__4
+msgid "Friday"
+msgstr "პარასკევი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Friday Afternoon"
+msgstr "პარასკევი, შუადღის შემდეგ"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Friday Lunch"
+msgstr "პარასკევი, შესვენება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Friday Morning"
+msgstr "პარასკევი, დილა"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__day_period__full_day
+msgid "Full Day"
+msgstr "სრული დღე"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__full_time_required_hours
+msgid "Full Time Equivalent"
+msgstr "სრული განაკვეთის ეკვივალენტი"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar__schedule_type__fully_fixed
+msgid "Fully Fixed"
+msgstr "სრულად ფიქსირებული"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_resource_form
+msgid "Fully Flexible"
+msgstr "სრულად მოქნილი"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar_attendance__sequence
+msgid "Gives the sequence of this line when displaying the resource calendar."
+msgstr "განსაზღვრავს ამ სტრიქონის რიგითობას რესურსის კალენდრის ჩვენებისას."
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__global_leave_ids
+msgid "Global Time Off"
+msgstr "საერთო შვებულება"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_attendance_form
+msgid "Hours"
+msgstr "საათები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__hours_per_week
+msgid "Hours per Week"
+msgstr "საათები კვირაში"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_resource__resource_type__user model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Human"
+msgstr "ადამიანი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_res_company__id model:ir.model.fields,field_description:resource.field_res_users__id model:ir.model.fields,field_description:resource.field_resource_calendar__id model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__id model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__id model:ir.model.fields,field_description:resource.field_resource_mixin__id model:ir.model.fields,field_description:resource.field_resource_resource__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "If checked, the working schedule will be based on an amount of hours (defined for each day) and not a start & end time anymore.Do you confirm ?"
+msgstr "თუ მონიშნულია, სამუშაო გრაფიკი დაეფუძნება საათების რაოდენობას (თითოეული დღისთვის) და არა დაწყებისა და დასრულების დროს. ადასტურებთ?"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar_leaves__resource_id
+msgid "If empty, this is a generic time off for the company. If a resource is set, the time off is only for this resource"
+msgstr "თუ ცარიელია, ეს კომპანიის საერთო შვებულებაა. თუ რესურსი მითითებულია, შვებულება მხოლოდ ამ რესურსს ეხება"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_resource__active
+msgid "If the active field is set to False, it will allow you to hide the resource record without removing it."
+msgstr "თუ ველი „აქტიური“ False-ზეა დაყენებული, რესურსის ჩანაწერი დაიმალება წაშლის გარეშე."
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__active
+msgid "If the active field is set to false, it will allow you to hide the Working Time without removing it."
+msgstr "თუ აქტიური ველი გამორთულია, შეგიძლიათ სამუშაო დრო დამალოთ წაშლის გარეშე."
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "If unchecked, the working schedule will be based on a defined start and end hours.Do you confirm ?"
+msgstr "თუ მონიშნული არ არის, სამუშაო გრაფიკი დაეფუძნება განსაზღვრულ დაწყებისა და დასრულების საათებს. ადასტურებთ?"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "In a calendar with 2 weeks mode, all periods need to be in the sections."
+msgstr "2-კვირიანი რეჟიმის კალენდარში ყველა პერიოდი სექციებში უნდა იყოს."
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__is_fulltime
+msgid "Is Full Time"
+msgstr "სრული განაკვეთია"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__write_uid model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__write_uid model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__write_uid model:ir.model.fields,field_description:resource.field_resource_resource__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__write_date model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__write_date model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__write_date model:ir.model.fields,field_description:resource.field_resource_resource__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_resource__resource_type__material model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Material"
+msgstr "მასალა"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__0
+msgid "Monday"
+msgstr "ორშაბათი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Monday Afternoon"
+msgstr "ორშაბათი, შუადღის შემდეგ"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Monday Lunch"
+msgstr "ორშაბათი, შესვენება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Monday Morning"
+msgstr "ორშაბათი, დილა"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__day_period__morning
+msgid "Morning"
+msgstr "დილა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__name model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__name model:ir.model.fields,field_description:resource.field_resource_resource__name
+msgid "Name"
+msgstr "სახელი"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__full_time_required_hours
+msgid "Number of hours to work on the company schedule to be considered as fulltime."
+msgstr "კომპანიის გრაფიკით სამუშაო საათების რაოდენობა, რომელიც სრულ განაკვეთად ითვლება."
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_leaves__time_type__other
+msgid "Other"
+msgstr "სხვა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search
+msgid "Partial working schedules"
+msgstr "ნაწილობრივი სამუშაო გრაფიკები"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search
+msgid "Period"
+msgstr "პერიოდი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__phone
+msgid "Phone"
+msgstr "ტელეფონი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Provided datetimes needs to be timezoned"
+msgstr "მითითებულ თარიღებს დროის სარტყელი უნდა ჰქონდეს"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__name model_terms:ir.ui.view,arch_db:resource.resource_calendar_leave_form model_terms:ir.ui.view,arch_db:resource.resource_calendar_leave_tree
+msgid "Reason"
+msgstr "ოკ"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_resource__user_id
+msgid "Related user name for the resource to manage its access."
+msgstr "რესურსთან დაკავშირებული მომხმარებლის სახელი მისი წვდომის სამართავად."
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Required Full Time"
+msgstr "საჭირო სრული განაკვეთი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__resource_id model:ir.model.fields,field_description:resource.field_resource_mixin__resource_id model:ir.ui.menu,name:resource.menu_resource_config model_terms:ir.ui.view,arch_db:resource.resource_resource_form model_terms:ir.ui.view,arch_db:resource.view_resource_calendar model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search
+msgid "Resource"
+msgstr "რესურსი"
+
+#. module: resource
+#: model:ir.model,name:resource.model_resource_mixin
+msgid "Resource Mixin"
+msgstr "რესურსის მიქსინი"
+
+#. module: resource
+#: model:ir.actions.act_window,name:resource.action_resource_calendar_leave_tree model:ir.actions.act_window,name:resource.resource_calendar_leaves_action_from_calendar model:ir.ui.menu,name:resource.menu_view_resource_calendar_leaves_search
+msgid "Resource Time Off"
+msgstr "რესურსის შვებულება"
+
+#. module: resource
+#: model:ir.model,name:resource.model_resource_calendar_leaves
+msgid "Resource Time Off Detail"
+msgstr "რესურსის შვებულების დეტალები"
+
+#. module: resource
+#: model:ir.model,name:resource.model_resource_calendar
+msgid "Resource Working Time"
+msgstr "რესურსის სამუშაო დრო"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__calendar_id
+msgid "Resource's Calendar"
+msgstr "რესურსის კალენდარი"
+
+#. module: resource
+#: model:ir.actions.act_window,name:resource.action_resource_resource_tree model:ir.actions.act_window,name:resource.resource_resource_action_from_calendar model:ir.model,name:resource.model_resource_resource model:ir.model.fields,field_description:resource.field_res_users__resource_ids model:ir.ui.menu,name:resource.menu_resource_resource model_terms:ir.ui.view,arch_db:resource.resource_resource_tree
+msgid "Resources"
+msgstr "რესურსები"
+
+#. module: resource
+#: model:ir.actions.act_window,name:resource.resource_calendar_resources_leaves
+msgid "Resources Time Off"
+msgstr "რესურსების შვებულებები"
+
+#. module: resource
+#: model_terms:ir.actions.act_window,help:resource.action_resource_resource_tree model_terms:ir.actions.act_window,help:resource.resource_resource_action_from_calendar
+msgid "Resources allow you to create and manage resources that should be involved in a specific project phase. You can also set their efficiency level and workload based on their weekly working hours."
+msgstr "რესურსები საშუალებას გაძლევთ შექმნათ და მართოთ რესურსები, რომლებიც პროექტის კონკრეტულ ფაზაში უნდა ჩაერთონ. ასევე შეგიძლიათ განსაზღვროთ მათი ეფექტიანობა და დატვირთვა კვირის სამუშაო საათების მიხედვით."
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__5
+msgid "Saturday"
+msgstr "შაბათი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree
+msgid "Schedule Total Time"
+msgstr "გრაფიკის ჯამური დრო"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__schedule_type
+msgid "Schedule Type"
+msgstr "გრაფიკის ტიპი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Search Resource"
+msgstr "რესურსის ძიება"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search
+msgid "Search Working Period Time Off"
+msgstr "სამუშაო პერიოდის შვებულების ძიება"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search
+msgid "Search Working Time"
+msgstr "სამუშაო დროის ძიება"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__week_type__1
+msgid "Second"
+msgstr "მეორე"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_attendance.py:0
+msgid "Second week"
+msgstr "მეორე კვირა"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__display_type__line_section
+msgid "Section"
+msgstr "სექცია"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__sequence
+msgid "Sequence"
+msgstr "რიგითობა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__share
+msgid "Share User"
+msgstr "გაზიარებული მომხმარებელი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/res_company.py:0
+msgid "Standard 40 hours/week"
+msgstr "სტანდარტული 40 საათი/კვირაში"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__date_from
+msgid "Start Date"
+msgstr "დაწყების თარიღი"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar_attendance__hour_from
+msgid ""
+"Start and End time of working.\n"
+"A specific value of 24:00 is interpreted as 23:59:59.999999."
+msgstr ""
+"მუშაობის დაწყებისა და დასრულების დრო.\n"
+"მნიშვნელობა 24:00 აღიქმება როგორც 23:59:59.999999."
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_leaves_search
+msgid "Starting Date of Time Off"
+msgstr "შვებულების დაწყების თარიღი"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__6
+msgid "Sunday"
+msgstr "კვირა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Switch"
+msgstr "გადართვა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Switch to 1-week calendar"
+msgstr "1-კვირიან კალენდარზე გადართვა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Switch to 2-weeks calendar"
+msgstr "2-კვირიან კალენდარზე გადართვა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Switch to Duration based attendance"
+msgstr "ხანგრძლივობაზე დაფუძნებულ დასწრებაზე გადართვა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Switch to fixed attendance"
+msgstr "ფიქსირებულ დასწრებაზე გადართვა"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar_attendance__display_type
+msgid "Technical field for UX purpose."
+msgstr "ტექნიკური ველი UX-ისთვის."
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "The current week (from %(first_day)s to %(last_day)s) corresponds to %(number)s week."
+msgstr "მიმდინარე კვირა (%(first_day)s-დან %(last_day)s-მდე) შეესაბამება %(number)s კვირას."
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__duration_based model:ir.model.fields,help:resource.field_resource_calendar_attendance__duration_based
+msgid "The hours will be centered around 12:00 to cover the duration for the day"
+msgstr "საათები განთავსდება 12:00-ის გარშემო დღის ხანგრძლივობის დასაფარად"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_leaves.py:0
+msgid "The start date of the time off must be earlier than the end date."
+msgstr "შვებულების დაწყების თარიღი დასრულების თარიღზე ადრე უნდა იყოს."
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__tz model:ir.model.fields,help:resource.field_resource_mixin__tz
+msgid "This field is used in order to define in which timezone the resources will work."
+msgstr "ეს ველი განსაზღვრავს, რომელ დროის სარტყელში იმუშავებენ რესურსები."
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_resource__time_efficiency
+msgid "This field is used to calculate the expected duration of a work order at this work center. For example, if a work order takes one hour and the efficiency factor is 100%, then the expected duration will be one hour. If the efficiency factor is 200%, however the expected duration will be 30 minutes."
+msgstr "ეს ველი გამოიყენება ამ სამუშაო ცენტრში სამუშაო შეკვეთის მოსალოდნელი ხანგრძლივობის გამოსათვლელად. მაგალითად, თუ სამუშაო შეკვეთას ერთი საათი სჭირდება და ეფექტიანობის კოეფიციენტი 100%-ია, მოსალოდნელი ხანგრძლივობა ერთი საათი იქნება. თუ ეფექტიანობის კოეფიციენტი 200%-ია, მოსალოდნელი ხანგრძლივობა 30 წუთი იქნება."
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__3
+msgid "Thursday"
+msgstr "ხუთშაბათი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Thursday Afternoon"
+msgstr "ხუთშაბათი, შუადღის შემდეგ"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Thursday Lunch"
+msgstr "ხუთშაბათი, შესვენება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Thursday Morning"
+msgstr "ხუთშაბათი, დილა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__leave_ids model:ir.model.fields.selection,name:resource.selection__resource_calendar_leaves__time_type__leave
+msgid "Time Off"
+msgstr "შვებულება"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_leave_form model_terms:ir.ui.view,arch_db:resource.resource_calendar_leave_tree
+msgid "Time Off Detail"
+msgstr "შვებულების დეტალები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__time_type
+msgid "Time Type"
+msgstr "დროის ტიპი"
+
+#. module: resource
+#: model:ir.model.constraint,message:resource.constraint_resource_resource_check_time_efficiency
+msgid "Time efficiency must be strictly positive"
+msgstr "დროის ეფექტიანობა მკაცრად დადებითი უნდა იყოს"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__tz model:ir.model.fields,field_description:resource.field_resource_mixin__tz model:ir.model.fields,field_description:resource.field_resource_resource__tz
+msgid "Timezone"
+msgstr "დროის სარტყელი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__tz_offset
+msgid "Timezone offset"
+msgstr "დროის სარტყლის წანაცვლება"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Total"
+msgstr "სულ"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__1
+msgid "Tuesday"
+msgstr "სამშაბათი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Tuesday Afternoon"
+msgstr "სამშაბათი, შუადღის შემდეგ"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Tuesday Lunch"
+msgstr "სამშაბათი, შესვენება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Tuesday Morning"
+msgstr "სამშაბათი, დილა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_resource__resource_type model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Type"
+msgstr "ტიპი"
+
+#. module: resource
+#: model:ir.model,name:resource.model_res_users model:ir.model.fields,field_description:resource.field_resource_resource__user_id model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "User"
+msgstr "მომხმარებელი"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form model_terms:ir.ui.view,arch_db:resource.resource_resource_form
+msgid "Visible to all"
+msgstr "ხილულია ყველასთვის"
+
+#. module: resource
+#: model:ir.model.fields.selection,name:resource.selection__resource_calendar_attendance__dayofweek__2
+msgid "Wednesday"
+msgstr "ოთხშაბათი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Wednesday Afternoon"
+msgstr "ოთხშაბათი, შუადღის შემდეგ"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Wednesday Lunch"
+msgstr "ოთხშაბათი, შესვენება"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Wednesday Morning"
+msgstr "ოთხშაბათი, დილა"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Week 1 Working Hours"
+msgstr "1-ლი კვირის სამუშაო საათები"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Week 2 Working Hours"
+msgstr "მე-2 კვირის სამუშაო საათები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__week_type
+msgid "Week Number"
+msgstr "კვირის ნომერი"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__flexible_hours
+msgid "When enabled, it will allow employees to work flexibly, without relying on the company's working schedule (working hours)."
+msgstr "ჩართვის შემთხვევაში თანამშრომლებს შეეძლებათ მოქნილად მუშაობა კომპანიის სამუშაო გრაფიკისგან (სამუშაო საათებისგან) დამოუკიდებლად."
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar_leaves__time_type
+msgid "Whether this should be computed as a time off or as work time (eg: formation)"
+msgstr "უნდა ჩაითვალოს თუ არა ეს შვებულებად თუ სამუშაო დროდ (მაგ.: ტრენინგი)"
+
+#. module: resource
+#: model:ir.model,name:resource.model_resource_calendar_attendance
+msgid "Work Detail"
+msgstr "სამუშაოს დეტალები"
+
+#. module: resource
+#: model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Work Resources"
+msgstr "სამუშაო რესურსები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__work_resources_count
+msgid "Work Resources count"
+msgstr "სამუშაო რესურსების რაოდენობა"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__work_time_rate model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Work Time Rate"
+msgstr "სამუშაო დროის განაკვეთი"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__hour_from
+msgid "Work from"
+msgstr "მუშაობა დან"
+
+#. module: resource
+#: model:ir.model.fields,help:resource.field_resource_calendar__work_time_rate
+msgid "Work time rate versus full time working schedule, should be between 0 and 100 %."
+msgstr "სამუშაო დროის განაკვეთი სრულ სამუშაო გრაფიკთან მიმართებით, უნდა იყოს 0-დან 100 %-მდე."
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar_attendance__hour_to
+msgid "Work to"
+msgstr "მუშაობა მდე"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_res_company__resource_calendar_ids model:ir.model.fields,field_description:resource.field_resource_calendar_leaves__calendar_id model:ir.model.fields,field_description:resource.field_resource_mixin__resource_calendar_id model_terms:ir.ui.view,arch_db:resource.resource_calendar_form
+msgid "Working Hours"
+msgstr "სამუშაო საათები"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "Working Hours of %s"
+msgstr "%s-ის სამუშაო საათები"
+
+#. module: resource
+#: model:ir.actions.act_window,name:resource.action_resource_calendar_form model:ir.ui.menu,name:resource.menu_resource_calendar
+msgid "Working Schedules"
+msgstr "სამუშაო გრაფიკები"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__attendance_ids model:ir.model.fields,field_description:resource.field_resource_resource__calendar_id model_terms:ir.ui.view,arch_db:resource.resource_calendar_form model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_attendance_form model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_attendance_tree model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_search model_terms:ir.ui.view,arch_db:resource.view_resource_calendar_tree model_terms:ir.ui.view,arch_db:resource.view_resource_resource_search
+msgid "Working Time"
+msgstr "სამუშაო დრო"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__attendance_ids_1st_week
+msgid "Working Time 1st Week"
+msgstr "1-ლი კვირის სამუშაო დრო"
+
+#. module: resource
+#: model:ir.model.fields,field_description:resource.field_resource_calendar__attendance_ids_2nd_week
+msgid "Working Time 2nd Week"
+msgstr "მე-2 კვირის სამუშაო დრო"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "You can't delete section between weeks."
+msgstr "კვირებს შორის სექციის წაშლა შეუძლებელია."
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "even"
+msgstr "ლუწი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar.py:0
+msgid "odd"
+msgstr "კენტი"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_attendance.py:0
+msgid "other week"
+msgstr "მეორე კვირა"
+
+#. module: resource
+#. odoo-python
+#: code:addons/resource/models/resource_calendar_attendance.py:0
+msgid "this week"
+msgstr "ეს კვირა"

@@ -1,0 +1,79 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_needaction
+msgid "Action Needed"
+msgstr "საჭიროა მოქმედება"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_attachment_count
+msgid "Attachment Count"
+msgstr "მიმაგრებული ფაილების რაოდენობა"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_follower_ids
+msgid "Followers"
+msgstr "გამომწერები"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "გამომწერები (კონტაქტები)"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__has_message
+msgid "Has Message"
+msgstr "აქვს შეტყობინება"
+
+#. module: iap_mail
+#: model:ir.model.fields,help:iap_mail.field_iap_account__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "თუ მონიშნულია, ახალი შეტყობინებები თქვენს ყურადღებას საჭიროებს."
+
+#. module: iap_mail
+#: model:ir.model.fields,help:iap_mail.field_iap_account__message_has_error
+msgid "If checked, some messages have a delivery error."
+msgstr "თუ მონიშნულია, ზოგიერთი შეტყობინების მიწოდება ვერ მოხერხდა."
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_is_follower
+msgid "Is Follower"
+msgstr "არის გამომწერი"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_has_error
+msgid "Message Delivery error"
+msgstr "შეტყობინების მიწოდების შეცდომა"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_ids
+msgid "Messages"
+msgstr "შეტყობინებები"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_needaction_counter
+msgid "Number of Actions"
+msgstr "მოქმედებების რაოდენობა"
+
+#. module: iap_mail
+#: model:ir.model.fields,field_description:iap_mail.field_iap_account__message_has_error_counter
+msgid "Number of errors"
+msgstr "შეცდომების რაოდენობა"
+
+#. module: iap_mail
+#: model:ir.model.fields,help:iap_mail.field_iap_account__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "მოქმედების საჭიროების მქონე შეტყობინებების რაოდენობა"
+
+#. module: iap_mail
+#: model:ir.model.fields,help:iap_mail.field_iap_account__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "მიწოდების შეცდომის მქონე შეტყობინებების რაოდენობა"
