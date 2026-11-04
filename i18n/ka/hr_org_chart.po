@@ -75,7 +75,7 @@ msgstr "თანამშრომელი"
 #. module: hr_org_chart
 #: model_terms:ir.ui.view,arch_db:hr_org_chart.hr_department_hierarchy_view
 msgid "Employees"
-msgstr "თანამშრომლები"
+msgstr "თანამშრომელი"
 
 #. module: hr_org_chart
 #: model_terms:ir.actions.act_window,help:hr_org_chart.action_hr_employee_org_chart model_terms:ir.actions.act_window,help:hr_org_chart.action_hr_employee_public_org_chart
