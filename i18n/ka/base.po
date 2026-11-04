@@ -3578,3 +3578,14 @@ msgstr "მეორე"
 #: code:addons/base/models/ir_rule.py:0
 msgid "write"
 msgstr "წერა"
+
+#. module: base
+#. odoo-python
+#: code:addons/model.py:0
+msgid "The operation cannot be completed: %s"
+msgstr "ოპერაცია ვერ შესრულდა: %s"
+
+#. module: base
+#: model:ir.model.constraint,message:base.constraint_res_users_login_key
+msgid "You can not have two users with the same login!"
+msgstr "ერთი შესასვლელი სახელით (login) ორი მომხმარებელი ვერ იქნება!"
