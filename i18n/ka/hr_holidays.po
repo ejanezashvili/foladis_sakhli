@@ -1410,13 +1410,13 @@ msgstr "დღის პერიოდი"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__added_value_type__day
 msgid "Day(s)"
-msgstr "დღე (დღეები)"
+msgstr "დღე"
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0 model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__accrual_validity_type__day model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__start_type__day model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_plan__added_value_type__day model_terms:ir.ui.view,arch_db:hr_holidays.hr_employee_public_form_view_inherit model_terms:ir.ui.view,arch_db:hr_holidays.view_employee_form_leave_inherit
 msgid "Days"
-msgstr "დღეები"
+msgstr "დღე"
 
 #. module: hr_holidays
 #: model:hr.leave.type,name:hr_holidays.l10n_eg_leave_type_death
@@ -1923,7 +1923,7 @@ msgstr "საათამდე"
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__added_value_type__hour
 msgid "Hour(s)"
-msgstr "საათი (საათები)"
+msgstr "საათი"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__frequency__hourly
@@ -1934,7 +1934,7 @@ msgstr "საათობრივი"
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0 model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_plan__added_value_type__hour model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_allocation__type_request_unit__hour model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_type__request_unit__hour model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_form
 msgid "Hours"
-msgstr "საათები"
+msgstr "საათი"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_accrual_level_view_form
@@ -4428,7 +4428,7 @@ msgstr "დღე"
 #. odoo-python
 #: code:addons/hr_holidays/models/hr_leave.py:0 code:addons/hr_holidays/models/hr_leave_allocation.py:0 code:addons/hr_holidays/static/src/dashboard/time_off_card.xml:0 code:addons/hr_holidays/static/src/leave_stats/leave_stats.xml:0
 msgid "days"
-msgstr "დღეები"
+msgstr "დღე"
 
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_activity model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_activity
