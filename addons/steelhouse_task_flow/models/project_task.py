@@ -48,9 +48,11 @@ class ProjectTask(models.Model):
                     "ან სისტემის ადმინისტრატორს.",
                     stage=labels.get(kind, kind), reviewer=task.reviewer_id.name))
 
-    def _sh_check_evidence(self):
+    def _sh_check_evidence(self, new_flag=None):
+        """new_flag: value of evidence_required being written in the same save (if any)."""
         Attachment = self.env['ir.attachment'].sudo()
-        for task in self.filtered(lambda t: t.evidence_required and not t.is_template):
+        needs = (lambda t: new_flag) if new_flag is not None else (lambda t: t.evidence_required)
+        for task in self.filtered(lambda t: needs(t) and not t.is_template):
             if not Attachment.search_count([('res_model', '=', 'project.task'), ('res_id', '=', task.id)]):
                 raise UserError(_(
                     "„%s“-ს სჭირდება მტკიცებულება. ჯერ მიამაგრეთ ფაილი ან ფოტო (📎), "
@@ -72,7 +74,7 @@ class ProjectTask(models.Model):
                 if kind in REVIEWER_KINDS:
                     self._sh_check_reviewer(kind)
                 if kind == 'review':
-                    self._sh_check_evidence()
+                    self._sh_check_evidence(vals.get('evidence_required') if 'evidence_required' in vals else None)
                 if 'state' not in vals:
                     vals['state'] = KIND_STATE.get(kind, '01_in_progress')
         elif vals.get('state') in CLOSED:
