@@ -10,7 +10,7 @@ class SteelhouseLeaveDelegation(models.Model):
     leave_id = fields.Many2one('hr.leave', string='შვებულება', required=True, ondelete='cascade', index=True)
     employee_id = fields.Many2one(related='leave_id.employee_id', string='თანამშრომელი', store=True)
     department_id = fields.Many2one('hr.department', string='დეპარტამენტი', required=True)
-    deputy_id = fields.Many2one('hr.employee', string='შემცვლელი', required=True)
+    deputy_id = fields.Many2one('hr.employee', string='შემცვლელი')
 
     @api.constrains('deputy_id', 'employee_id')
     def _check_deputy_not_self(self):
@@ -35,15 +35,33 @@ class HrLeave(models.Model):
 
     @api.onchange('employee_id')
     def _onchange_employee_prefill_delegations(self):
-        """A department head gets one line per department they manage, with that department's deputy."""
+        """Prefill deputies: a department head gets one line per managed department
+        (with that department's deputy); others get one line for their own department."""
         for leave in self:
             if leave.delegation_ids or not leave.employee_id:
                 continue
-            managed = self.env['hr.department'].search([('manager_id', '=', leave.employee_id.id)])
-            leave.delegation_ids = [
-                (0, 0, {
-                    'department_id': dept.id,
-                    'deputy_id': dept.deputy_id.id if dept.deputy_id != leave.employee_id else False,
-                })
-                for dept in managed
-            ]
+            employee = leave.employee_id
+            managed = self.env['hr.department'].search([('manager_id', '=', employee.id)])
+            if managed:
+                lines = [{'department_id': d.id, 'deputy_id': d.deputy_id.id if d.deputy_id != employee else False}
+                         for d in managed]
+            elif employee.department_id:
+                lines = [{'department_id': employee.department_id.id}]
+            else:
+                lines = []
+            leave.delegation_ids = [(0, 0, vals) for vals in lines]
+
+    def _drop_empty_delegations(self):
+        self.delegation_ids.filtered(lambda l: not l.deputy_id).unlink()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        leaves = super().create(vals_list)
+        leaves._drop_empty_delegations()
+        return leaves
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'delegation_ids' in vals:
+            self._drop_empty_delegations()
+        return res
