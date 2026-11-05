@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="task_type_edit_steelhouse" model="ir.ui.view">
+        <field name="name">project.task.type.form.steelhouse</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_edit"/>
+        <field name="arch" type="xml">
+            <field name="fold" position="before">
+                <field name="sh_kind"/>
+            </field>
+        </field>
+    </record>
+    <record id="task_type_tree_steelhouse" model="ir.ui.view">
+        <field name="name">project.task.type.list.steelhouse</field>
+        <field name="model">project.task.type</field>
+        <field name="inherit_id" ref="project.task_type_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="sh_kind" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

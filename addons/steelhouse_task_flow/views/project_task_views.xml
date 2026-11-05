@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_task_form_steelhouse_flow" model="ir.ui.view">
+        <field name="name">project.task.form.steelhouse.flow</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="sh_kind" invisible="1"/>
+                <button name="action_sh_hold" type="object" string="შეჩერება"
+                        invisible="is_template or not project_id or sh_kind in ('on_hold', 'done', 'cancelled')"/>
+                <button name="action_sh_return" type="object" string="დაბრუნება"
+                        invisible="is_template or not project_id or sh_kind != 'review'"/>
+                <button name="action_sh_cancel" type="object" string="გაუქმება"
+                        invisible="is_template or not project_id or sh_kind in ('done', 'cancelled')"/>
+            </xpath>
+            <xpath expr="//t[@name='warning_section']" position="after">
+                <div class="alert alert-info mb-0" role="alert" invisible="sh_kind != 'on_hold'">
+                    <b>შეჩერებულია:</b> <field name="hold_reason" readonly="1" class="d-inline"/>
+                    <span invisible="not resume_date"> — განახლება: <field name="resume_date" readonly="1" class="d-inline"/></span>
+                </div>
+                <div class="alert alert-warning mb-0" role="alert" invisible="sh_kind != 'returned'">
+                    <b>დაბრუნდა შესასწორებლად:</b> <field name="return_reason" readonly="1" class="d-inline"/>
+                </div>
+                <div class="alert alert-secondary mb-0" role="alert" invisible="sh_kind != 'cancelled'">
+                    <b>გაუქმებულია:</b> <field name="cancel_reason" readonly="1" class="d-inline"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='user_ids']" position="after">
+                <field name="reviewer_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="evidence_required"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
