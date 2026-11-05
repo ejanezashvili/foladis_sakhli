@@ -3589,3 +3589,18 @@ msgstr "ოპერაცია ვერ შესრულდა: %s"
 #: model:ir.model.constraint,message:base.constraint_res_users_login_key
 msgid "You can not have two users with the same login!"
 msgstr "ერთი შესასვლელი სახელით (login) ორი მომხმარებელი ვერ იქნება!"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_master_data
+msgid "Master Data"
+msgstr "ძირითადი მონაცემები"
+
+#. module: base
+#: model:ir.module.category,name:base.module_category_services model:ir.module.category,name:base.module_category_theme_services model:res.partner.category,name:base.res_partner_category_11
+msgid "Services"
+msgstr "სერვისები"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_ir_exports_line__export_id model:res.groups.privilege,name:base.res_groups_privilege_export model_terms:ir.ui.view,arch_db:base.wizard_lang_export
+msgid "Export"
+msgstr "ექსპორტი"
