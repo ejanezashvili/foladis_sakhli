@@ -1,3 +1,5 @@
+from markupsafe import Markup
+
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
 
@@ -64,4 +66,49 @@ class HrLeave(models.Model):
         res = super().write(vals)
         if 'delegation_ids' in vals:
             self._drop_empty_delegations()
+        return res
+
+    # ------------------------------------------------------------------
+    # Notify deputies (inbox notification; email too once SMTP is set up)
+    # ------------------------------------------------------------------
+    def _steelhouse_notify_deputies(self, event):
+        titles = {
+            'approved': _("თქვენ ხართ შემცვლელი შვებულების დროს"),
+            'cancelled': _("შვებულება გაუქმდა — შემცვლელობა აღარ არის საჭირო"),
+        }
+        for leave in self:
+            period = "%s – %s" % (
+                leave.request_date_from and leave.request_date_from.strftime('%d/%m/%Y') or '',
+                leave.request_date_to and leave.request_date_to.strftime('%d/%m/%Y') or '')
+            by_partner = {}
+            for line in leave.delegation_ids.filtered(lambda l: l.deputy_id.user_id):
+                by_partner.setdefault(line.deputy_id.user_id.partner_id, []).append(line.department_id.display_name)
+            for partner, departments in by_partner.items():
+                if event == 'approved':
+                    text = _("%(employee)s შვებულებაში იქნება %(period)s. თქვენ ხართ მისი შემცვლელი: %(departments)s.",
+                             employee=leave.employee_id.name, period=period, departments=", ".join(departments))
+                else:
+                    text = _("%(employee)s-ის შვებულება (%(period)s) გაუქმდა. შემცვლელობა (%(departments)s) აღარ არის საჭირო.",
+                             employee=leave.employee_id.name, period=period, departments=", ".join(departments))
+                leave.message_notify(
+                    partner_ids=partner.ids,
+                    subject=titles[event],
+                    body=Markup("<p>%s</p>") % text,
+                )
+
+    def _action_validate(self, check_state=True):
+        res = super()._action_validate(check_state=check_state)
+        self.filtered(lambda l: l.state == 'validate')._steelhouse_notify_deputies('approved')
+        return res
+
+    def action_refuse(self):
+        was_approved = self.filtered(lambda l: l.state == 'validate')
+        res = super().action_refuse()
+        was_approved.filtered(lambda l: l.state != 'validate')._steelhouse_notify_deputies('cancelled')
+        return res
+
+    def _force_cancel(self, *args, **kwargs):
+        was_approved = self.filtered(lambda l: l.state == 'validate')
+        res = super()._force_cancel(*args, **kwargs)
+        was_approved.filtered(lambda l: l.state != 'validate')._steelhouse_notify_deputies('cancelled')
         return res
