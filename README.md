@@ -49,7 +49,7 @@ Odoo-ს ოფიციალური ქართული თარგმა
 სერვერზე ჩადება: `sudo sh deploy/apply_ka_translations.sh <i18n/ka საქაღალდე>` → Odoo-ს გადატვირთვა → პარამეტრები → ენები → ქართული → განახლება (overwrite).
 **Odoo-ს პაკეტის ყოველი განახლების შემდეგ ეს ხელახლა უნდა გაეშვას** (განახლება ფაილებს გადააწერს). ორიგინალები: `/var/backups/odoo/i18n_orig`.
 
-ბაზაში ხელით ჩაწერილი თარგმანები (ქართულის სრული ხელახალი ჩატვირთვის შემდეგ უნდა შემოწმდეს/განმეორდეს):
+ბაზაში ხელით ჩაწერილი თარგმანები — ქართულის ხელახალი ჩატვირთვა და ამ ჩასწორებების აღდგენა ერთად: `python deploy/reload_ka.py <admin პაროლი>`:
 - `hr.hr_department_view_kanban` — „Employees“ → „თანამშრომელი“ (რიცხვის შემდეგ მხოლობითი; `hr.po`-ში იგივე ტექსტი მენიუსაც ეკუთვნის)
 - `ir.model.constraint` `res_users_login_key` — დუბლირებული login-ის შეცდომა (იგივე `base.po`-შიცაა)
 - `hr_holidays.hr_leave_view_form` — „A supporting document is required for this type of time off.“ (ოფიციალურ .pot-ში არ არის)

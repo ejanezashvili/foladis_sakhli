@@ -836,7 +836,7 @@ msgstr "უკვე დარიცხული"
 #. module: hr_holidays
 #: model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_kanban model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_allocation_view_tree model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_view_kanban
 msgid "Amount"
-msgstr "თანხა"
+msgstr "რაოდენობა"
 
 #. module: hr_holidays
 #. odoo-python
