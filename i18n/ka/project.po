@@ -3750,7 +3750,7 @@ msgstr "მაისურების ბეჭდვა"
 #. module: project
 #: model:ir.actions.act_window,name:project.project_tags_action model:ir.model.fields,field_description:project.field_project_project__tag_ids model:ir.model.fields,field_description:project.field_project_task__tag_ids model:ir.model.fields,field_description:project.field_project_task_burndown_chart_report__tag_ids model:ir.model.fields,field_description:project.field_report_project_task_user__tag_ids model:ir.ui.menu,name:project.menu_project_tags_act model_terms:ir.ui.view,arch_db:project.project_tags_form_view model_terms:ir.ui.view,arch_db:project.project_tags_tree_view model_terms:ir.ui.view,arch_db:project.view_project_project_filter model_terms:ir.ui.view,arch_db:project.view_task_search_form_base
 msgid "Tags"
-msgstr "იარლიყები"
+msgstr "თეგები"
 
 #. module: project
 #: model:ir.model,name:project.model_project_task model:ir.model.fields,field_description:project.field_project_task_recurrence__task_ids model:ir.model.fields,field_description:project.field_report_project_task_user__task_id model:ir.model.fields,field_description:project.field_task_share_wizard__task_id model_terms:ir.ui.view,arch_db:project.portal_my_task model_terms:ir.ui.view,arch_db:project.project_sharing_project_task_view_form model_terms:ir.ui.view,arch_db:project.rating_rating_view_form_project model_terms:ir.ui.view,arch_db:project.rating_rating_view_search_project model_terms:ir.ui.view,arch_db:project.rating_rating_view_tree_project model_terms:ir.ui.view,arch_db:project.view_task_form2
