@@ -19,6 +19,8 @@ print('working-day calendar set on 4.2, 4.5, 4.6')
 # 4.1: activity for newly assigned users (also visible without e-mail)
 CODE_ASSIGN = '''
 for task in records:
+    stale = task.activity_ids.filtered(lambda a: a.user_id not in task.user_ids and (a.summary or '').startswith('თქვენ დაგენიშნათ'))
+    stale.unlink()
     for user in task.user_ids:
         if user == env.user:
             continue

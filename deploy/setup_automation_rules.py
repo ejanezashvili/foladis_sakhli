@@ -1,6 +1,7 @@
 """Create the deadline / escalation automation rules (requirements 4.2, 4.4, 4.5, 4.6).
 Usage: python deploy/setup_automation_rules.py <admin password>
-Safe to re-run: existing rules (same name) are skipped. Thresholds can be changed later in
+Safe to re-run: existing rules (same name) are skipped. Note: with a working-day calendar Odoo counts the current day, so 'before 2' = reminder on the previous working day.
+Thresholds can be changed later in
 Settings > Technical > Automation Rules."""
 import sys, xmlrpc.client as x
 sys.stdout.reconfigure(encoding='ascii', errors='backslashreplace')
@@ -45,7 +46,7 @@ for task in records:
                                summary='დასადასტურებელია (2 დღეა შემოწმებაზე): %s' % task.name)
 '''
 RULES = [
-    ('4.2 შეხსენება: ვადამდე 1 დღე', fld('date_deadline'), 1, 'before', OPEN, CODE_REMIND),
+    ('4.2 შეხსენება: ვადამდე 1 დღე', fld('date_deadline'), 2, 'before', OPEN, CODE_REMIND),
     ('4.4 ვადაგადაცილება: შემმოწმებელს', fld('date_deadline'), 0, 'after', OPEN, CODE_OVERDUE),
     ('4.5 ესკალაცია: ვადიდან 3 დღე', fld('date_deadline'), 3, 'after', OPEN, CODE_ESCALATE),
     ('4.6 დასადასტურებელი: შემოწმებაზე 2 დღე', fld('date_last_stage_update'), 2, 'after',
