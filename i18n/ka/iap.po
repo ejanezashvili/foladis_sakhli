@@ -67,3 +67,8 @@ msgstr "სახელი"
 #: model:ir.model.fields,field_description:iap.field_iap_account__state
 msgid "State"
 msgstr "სტატუსი"
+
+#. module: iap
+#: model:ir.model.fields,field_description:iap.field_iap_account__description model:ir.model.fields,field_description:iap.field_iap_service__description
+msgid "Description"
+msgstr "აღწერილობა"

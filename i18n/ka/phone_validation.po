@@ -159,3 +159,33 @@ msgstr "მომხმარებელი"
 #: model_terms:ir.ui.view,arch_db:phone_validation.phone_blacklist_remove_view_form
 msgid "e.g \"Asked to receive our next newsletters\""
 msgstr "მაგ. „სურს ჩვენი შემდეგი სიახლეების მიღება“"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__create_uid model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__create_date model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_mail_thread_phone__display_name model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__display_name model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__display_name model:ir.model.fields,field_description:phone_validation.field_res_partner__display_name model:ir.model.fields,field_description:phone_validation.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_mail_thread_phone__id model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__id model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__id model:ir.model.fields,field_description:phone_validation.field_res_partner__id model:ir.model.fields,field_description:phone_validation.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__write_uid model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: phone_validation
+#: model:ir.model.fields,field_description:phone_validation.field_phone_blacklist__write_date model:ir.model.fields,field_description:phone_validation.field_phone_blacklist_remove__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

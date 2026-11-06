@@ -367,3 +367,15 @@ msgstr "გაფრთხილება"
 #: code:addons/html_builder/static/src/snippets/snippet_service.js:0
 msgid "Yes"
 msgstr "დიახ"
+
+#. module: html_builder
+#. odoo-javascript
+#: code:addons/html_builder/static/src/plugins/image/image_tool_option.xml:0
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: html_builder
+#. odoo-javascript
+#: code:addons/html_builder/static/src/plugins/block_alignment_option.xml:0 code:addons/html_builder/static/src/plugins/image/image_tool_option.xml:0 code:addons/html_builder/static/src/plugins/rating_option.xml:0 code:addons/html_builder/static/src/plugins/separator_option.xml:0 code:addons/html_builder/static/src/plugins/text_alignment_option.xml:0
+msgid "Left"
+msgstr "დარჩენილი"

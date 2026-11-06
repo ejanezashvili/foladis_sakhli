@@ -62,3 +62,18 @@ msgstr ""
 "        !!! დავალებისთვის სასწრაფო პრიორიტეტის მინიჭება\n"
 "\n"
 "        დარწმუნდით, რომ იყენებთ სწორ ფორმატს და თანმიმდევრობას, მაგ. კონფიგურაციის ეკრანის გაუმჯობესება 5h #feature #v16 @Mitchell !"
+
+#. module: project_sms
+#: model:ir.model.fields,field_description:project_sms.field_project_project__display_name model:ir.model.fields,field_description:project_sms.field_project_project_stage__display_name model:ir.model.fields,field_description:project_sms.field_project_task__display_name model:ir.model.fields,field_description:project_sms.field_project_task_type__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: project_sms
+#: model:ir.model.fields,field_description:project_sms.field_project_project__id model:ir.model.fields,field_description:project_sms.field_project_project_stage__id model:ir.model.fields,field_description:project_sms.field_project_task__id model:ir.model.fields,field_description:project_sms.field_project_task_type__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: project_sms
+#: model:ir.model.fields,field_description:project_sms.field_project_project_stage__sms_template_id model:ir.model.fields,field_description:project_sms.field_project_task_type__sms_template_id
+msgid "SMS Template"
+msgstr "SMS შაბლონი"

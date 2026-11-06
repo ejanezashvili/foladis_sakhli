@@ -159,3 +159,13 @@ msgstr "თანამშრომლის ნახვა"
 #: code:addons/hr_org_chart/static/src/views/hr_employee_hierarchy/hr_employee_hierarchy_card.xml:0
 msgid "people"
 msgstr "ადამიანი"
+
+#. module: hr_org_chart
+#: model:ir.model.fields,field_description:hr_org_chart.field_hr_employee__display_name model:ir.model.fields,field_description:hr_org_chart.field_hr_employee_public__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: hr_org_chart
+#: model:ir.model.fields,field_description:hr_org_chart.field_hr_employee__id model:ir.model.fields,field_description:hr_org_chart.field_hr_employee_public__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

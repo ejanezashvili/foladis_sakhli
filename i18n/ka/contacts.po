@@ -82,3 +82,13 @@ msgstr "Odoo გეხმარებათ თვალი ადევნო�
 #: model:ir.model,name:contacts.model_res_users
 msgid "User"
 msgstr "მომხმარებელი"
+
+#. module: contacts
+#: model:ir.model.fields,field_description:contacts.field_res_partner__display_name model:ir.model.fields,field_description:contacts.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: contacts
+#: model:ir.model.fields,field_description:contacts.field_res_partner__id model:ir.model.fields,field_description:contacts.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

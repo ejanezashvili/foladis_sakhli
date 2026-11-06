@@ -3604,3 +3604,78 @@ msgstr "სერვისები"
 #: model:ir.model.fields,field_description:base.field_ir_exports_line__export_id model:res.groups.privilege,name:base.res_groups_privilege_export model_terms:ir.ui.view,arch_db:base.wizard_lang_export
 msgid "Export"
 msgstr "ექსპორტი"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.view_base_language_install
+msgid "Add"
+msgstr "დამატება"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__ir_asset__directive__after
+msgid "After"
+msgstr "შემდეგ"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.ir_logging_search_view
+msgid "Database"
+msgstr "მონაცემთა ბაზა"
+
+#. module: base
+#: model:ir.model,name:base.model_ir_filters model_terms:ir.ui.view,arch_db:base.ir_filters_view_form model_terms:ir.ui.view,arch_db:base.ir_filters_view_search model_terms:ir.ui.view,arch_db:base.ir_filters_view_tree model_terms:ir.ui.view,arch_db:base.view_window_action_form
+msgid "Filters"
+msgstr "ფილტრები"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_google_calendar
+msgid "Google Calendar"
+msgstr "Google კალენდარი"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__ir_actions_act_window_view__view_mode__graph model:ir.model.fields.selection,name:base.selection__ir_ui_view__type__graph
+msgid "Graph"
+msgstr "გრაფიკი"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.res_device_view_kanban
+msgid "Log out"
+msgstr "გასვლა"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__ir_cron__interval_type__minutes
+msgid "Minutes"
+msgstr "წუთი"
+
+#. module: base
+#: model:ir.model.fields,field_description:base.field_ir_model__name model_terms:ir.ui.view,arch_db:base.view_model_form model_terms:ir.ui.view,arch_db:base.view_model_search model_terms:ir.ui.view,arch_db:base.view_model_tree
+msgid "Model Description"
+msgstr "მოდელის აღწერა"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__ir_mail_server__smtp_encryption__none
+msgid "None"
+msgstr "არცერთი"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
+msgid "Object:"
+msgstr "ობიექტი:"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__base_partner_merge_automatic_wizard__state__option
+msgid "Option"
+msgstr "ვარიანტი"
+
+#. module: base
+#: model:ir.module.module,shortdesc:base.module_microsoft_calendar
+msgid "Outlook Calendar"
+msgstr "Outlook კალენდარი"
+
+#. module: base
+#: model:ir.model.fields.selection,name:base.selection__ir_actions_todo__state__open model:ir.model.fields.selection,name:base.selection__res_users_deletion__state__todo model_terms:ir.ui.view,arch_db:base.config_wizard_step_view_search
+msgid "To Do"
+msgstr "გასაკეთებელია"
+
+#. module: base
+#: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
+msgid "Type:"
+msgstr "სახეობა:"

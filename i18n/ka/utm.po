@@ -218,3 +218,19 @@ msgstr "ეს კვირა"
 #: model:ir.ui.menu,name:utm.marketing_utm
 msgid "UTMs"
 msgstr "UTM-ები"
+
+#. module: utm
+#: model_terms:ir.ui.view,arch_db:utm.utm_campaign_view_kanban
+msgid "Edit"
+msgstr "შეცვლა"
+
+#. module: utm
+#. odoo-javascript
+#: code:addons/utm/static/src/js/utm_campaign_kanban_examples.js:0
+msgid "Ideas"
+msgstr "აზრები"
+
+#. module: utm
+#: model:ir.model.fields,field_description:utm.field_utm_campaign__stage_id model_terms:ir.ui.view,arch_db:utm.view_utm_campaign_view_search
+msgid "Stage"
+msgstr "სტადია"

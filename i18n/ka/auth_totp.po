@@ -315,3 +315,38 @@ msgstr "თქვენი ანგარიშისთვის კოდი�
 #: model_terms:ir.ui.view,arch_db:auth_totp.auth_totp_form
 msgid "e.g. 123456"
 msgstr "მაგ. 123456"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__create_uid model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__create_date model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_device__name
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_device__display_name model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__display_name model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__display_name model:ir.model.fields,field_description:auth_totp.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_device__id model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__id model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__id model:ir.model.fields,field_description:auth_totp.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__write_uid model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: auth_totp
+#: model:ir.model.fields,field_description:auth_totp.field_auth_totp_rate_limit_log__write_date model:ir.model.fields,field_description:auth_totp.field_auth_totp_wizard__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

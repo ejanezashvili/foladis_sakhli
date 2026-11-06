@@ -4953,3 +4953,25 @@ msgstr "👤 მიუნიჭებელი"
 #: code:addons/project/models/project_task.py:0
 msgid "🔒 Private"
 msgstr "🔒 პირადი"
+
+#. module: project
+#. odoo-python
+#: code:addons/project/models/project_task.py:0 model:ir.model.fields.selection,name:project.selection__project_task__state__1_canceled model:ir.model.fields.selection,name:project.selection__project_task_burndown_chart_report__state__1_canceled model:ir.model.fields.selection,name:project.selection__report_project_task_user__state__1_canceled model:project.project.stage,name:project.project_project_stage_3 model:project.task.type,name:project.project_personal_stage_admin_6 model:project.task.type,name:project.project_personal_stage_demo_6 model:project.task.type,name:project.project_stage_3
+msgid "Cancelled"
+msgstr "გაუქმებულია"
+
+#. module: project
+#: model:ir.model.fields.selection,name:project.selection__project_share_collaborator_wizard__access_mode__edit model_terms:ir.ui.view,arch_db:project.project_role_view_kanban
+msgid "Edit"
+msgstr "შეცვლა"
+
+#. module: project
+#. odoo-python
+#: code:addons/project/controllers/portal.py:0
+msgid "None"
+msgstr "არცერთი"
+
+#. module: project
+#: model:ir.ui.menu,name:project.menu_project_report
+msgid "Reporting"
+msgstr "რეპორტინგი"

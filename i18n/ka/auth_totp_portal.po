@@ -22,3 +22,13 @@ msgstr "ორეტაპიანი ავტორიზაცია"
 #: model:ir.model,name:auth_totp_portal.model_res_users
 msgid "User"
 msgstr "მომხმარებელი"
+
+#. module: auth_totp_portal
+#: model:ir.model.fields,field_description:auth_totp_portal.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: auth_totp_portal
+#: model:ir.model.fields,field_description:auth_totp_portal.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

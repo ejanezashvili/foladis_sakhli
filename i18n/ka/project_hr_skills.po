@@ -57,3 +57,13 @@ msgstr ""
 #: model:ir.model,name:project_hr_skills.model_res_users
 msgid "User"
 msgstr "მომხმარებელი"
+
+#. module: project_hr_skills
+#: model:ir.model.fields,field_description:project_hr_skills.field_project_task__display_name model:ir.model.fields,field_description:project_hr_skills.field_report_project_task_user__display_name model:ir.model.fields,field_description:project_hr_skills.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: project_hr_skills
+#: model:ir.model.fields,field_description:project_hr_skills.field_project_task__id model:ir.model.fields,field_description:project_hr_skills.field_report_project_task_user__id model:ir.model.fields,field_description:project_hr_skills.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

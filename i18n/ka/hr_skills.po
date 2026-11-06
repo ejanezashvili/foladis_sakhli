@@ -2137,3 +2137,43 @@ msgstr "www.demo.com"
 #: code:addons/hr_skills/models/hr_individual_skill_mixin.py:0
 msgid "• %(skill_name)s from %(valid_from)s to %(valid_to)s"
 msgstr "• %(skill_name)s %(valid_from)s-დან %(valid_to)s-მდე"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee_certification_report__company_id model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_report__company_id model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__company_id
+msgid "Company"
+msgstr "კომპანია"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__create_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__create_date model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__create_date model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__create_date model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__create_date model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__create_date model:ir.model.fields,field_description:hr_skills.field_hr_skill__create_date model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__create_date model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__description model_terms:ir.ui.view,arch_db:hr_skills.resume_line_view_form
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_certification_report__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_public__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_history_report__display_name model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_report__display_name model:ir.model.fields,field_description:hr_skills.field_hr_individual_skill_mixin__display_name model:ir.model.fields,field_description:hr_skills.field_hr_job__display_name model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__display_name model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__display_name model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__display_name model:ir.model.fields,field_description:hr_skills.field_hr_skill__display_name model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__display_name model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__display_name model:ir.model.fields,field_description:hr_skills.field_report_hr_skills_report_employee_cv__display_name model:ir.model.fields,field_description:hr_skills.field_resource_resource__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_certification_report__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_public__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_history_report__id model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_report__id model:ir.model.fields,field_description:hr_skills.field_hr_individual_skill_mixin__id model:ir.model.fields,field_description:hr_skills.field_hr_job__id model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__id model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__id model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__id model:ir.model.fields,field_description:hr_skills.field_hr_skill__id model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__id model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__id model:ir.model.fields,field_description:hr_skills.field_report_hr_skills_report_employee_cv__id model:ir.model.fields,field_description:hr_skills.field_resource_resource__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__write_uid model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: hr_skills
+#: model:ir.model.fields,field_description:hr_skills.field_hr_employee_cv_wizard__write_date model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill__write_date model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__write_date model:ir.model.fields,field_description:hr_skills.field_hr_resume_line__write_date model:ir.model.fields,field_description:hr_skills.field_hr_resume_line_type__write_date model:ir.model.fields,field_description:hr_skills.field_hr_skill__write_date model:ir.model.fields,field_description:hr_skills.field_hr_skill_level__write_date model:ir.model.fields,field_description:hr_skills.field_hr_skill_type__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

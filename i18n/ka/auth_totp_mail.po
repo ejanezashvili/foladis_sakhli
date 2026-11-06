@@ -339,3 +339,13 @@ msgstr "თქვენი ორეტაპიანი ავტორიზ�
 #: model_terms:ir.ui.view,arch_db:auth_totp_mail.account_security_alert
 msgid "activating Two-factor Authentication"
 msgstr "ორეტაპიანი ავტორიზაციის გააქტიურება"
+
+#. module: auth_totp_mail
+#: model:ir.model.fields,field_description:auth_totp_mail.field_auth_totp_device__display_name model:ir.model.fields,field_description:auth_totp_mail.field_res_config_settings__display_name model:ir.model.fields,field_description:auth_totp_mail.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: auth_totp_mail
+#: model:ir.model.fields,field_description:auth_totp_mail.field_auth_totp_device__id model:ir.model.fields,field_description:auth_totp_mail.field_res_config_settings__id model:ir.model.fields,field_description:auth_totp_mail.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

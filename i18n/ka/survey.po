@@ -694,3 +694,29 @@ msgstr "დიახ"
 #: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
 msgid "minutes"
 msgstr "წუთი"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_kanban
+msgid "<span class=\"mx-1\">-</span>"
+msgstr "<span class=\"mx-1\">-</span>"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_user_input_view_search
+msgid "Participant"
+msgstr "მონაწილე"
+
+#. module: survey
+#. odoo-javascript
+#: code:addons/survey/static/src/interactions/survey_form.js:0 model_terms:ir.ui.view,arch_db:survey.survey_fill_form_in_progress model_terms:ir.ui.view,arch_db:survey.survey_navigation
+msgid "Submit"
+msgstr "გაგზავნა"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_progression
+msgid "of"
+msgstr "თვე:"
+
+#. module: survey
+#: model_terms:ir.ui.view,arch_db:survey.survey_survey_view_form
+msgid "to"
+msgstr "-მდე"

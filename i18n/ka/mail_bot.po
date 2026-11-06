@@ -252,3 +252,13 @@ msgstr "სიყვარული"
 #: code:addons/mail_bot/models/mail_bot.py:0
 msgid "start the tour"
 msgstr "ტურის დაწყება"
+
+#. module: mail_bot
+#: model:ir.model.fields,field_description:mail_bot.field_discuss_channel__display_name model:ir.model.fields,field_description:mail_bot.field_mail_bot__display_name model:ir.model.fields,field_description:mail_bot.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: mail_bot
+#: model:ir.model.fields,field_description:mail_bot.field_discuss_channel__id model:ir.model.fields,field_description:mail_bot.field_mail_bot__id model:ir.model.fields,field_description:mail_bot.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

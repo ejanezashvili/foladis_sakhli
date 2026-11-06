@@ -286,3 +286,33 @@ msgstr "№"
 #: code:addons/web_tour/static/src/js/tour_recorder/tour_recorder.xml:0
 msgid "trigger"
 msgstr "ტრიგერი"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_web_tour_tour__create_uid model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_web_tour_tour__create_date model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_ir_http__display_name model:ir.model.fields,field_description:web_tour.field_res_users__display_name model:ir.model.fields,field_description:web_tour.field_web_tour_tour__display_name model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_ir_http__id model:ir.model.fields,field_description:web_tour.field_res_users__id model:ir.model.fields,field_description:web_tour.field_web_tour_tour__id model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_web_tour_tour__write_uid model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: web_tour
+#: model:ir.model.fields,field_description:web_tour.field_web_tour_tour__write_date model:ir.model.fields,field_description:web_tour.field_web_tour_tour_step__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

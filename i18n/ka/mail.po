@@ -11677,3 +11677,51 @@ msgstr "„%(member_name)s“ არხში „%(channel_name)s“"
 #: code:addons/mail/static/src/core/web/activity.js:0
 msgid "“%s”"
 msgstr "„%s“"
+
+#. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_followers_edit__operation__add
+msgid "Add"
+msgstr "დამატება"
+
+#. module: mail
+#: model:ir.model,name:mail.model_res_company model:ir.model.fields,field_description:mail.field_mail_alias_domain__company_ids
+msgid "Companies"
+msgstr "კომპანიები"
+
+#. module: mail
+#: model:ir.model.fields,field_description:mail.field_mail_activity_plan__company_id model:ir.model.fields,field_description:mail.field_mail_activity_plan_template__company_id model:ir.model.fields,field_description:mail.field_mail_activity_schedule__company_id model:ir.model.fields,field_description:mail.field_mail_compose_message__record_company_id model:ir.model.fields,field_description:mail.field_mail_mail__record_company_id model:ir.model.fields,field_description:mail.field_mail_message__record_company_id model_terms:ir.ui.view,arch_db:mail.mail_alias_domain_view_search
+msgid "Company"
+msgstr "კომპანია"
+
+#. module: mail
+#: model:ir.model.fields,field_description:mail.field_mail_tracking_value__currency_id
+msgid "Currency"
+msgstr "ვალუტა"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/chatter/web/scheduled_message.xml:0 code:addons/mail/static/src/core/common/message_actions.js:0 code:addons/mail/static/src/core/web/activity.xml:0 code:addons/mail/static/src/core/web/activity_list_popover_item.xml:0
+msgid "Edit"
+msgstr "შეცვლა"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/core/web/message_patch.js:0 model:ir.model.fields.selection,name:mail.selection__mail_activity_type__category__default model_terms:ir.ui.view,arch_db:mail.email_template_form model_terms:ir.ui.view,arch_db:mail.mail_notification_layout
+msgid "None"
+msgstr "არცერთი"
+
+#. module: mail
+#: model:ir.model.fields,field_description:mail.field_discuss_channel_member__partner_id model:ir.model.fields,field_description:mail.field_discuss_channel_rtc_session__partner_id model:ir.model.fields,field_description:mail.field_ir_actions_server__partner_ids model:ir.model.fields,field_description:mail.field_ir_cron__partner_ids model:ir.model.fields,field_description:mail.field_mail_push_device__partner_id model:ir.model.fields,field_description:mail.field_res_users_settings_volumes__partner_id
+msgid "Partner"
+msgstr "პარტნიორი"
+
+#. module: mail
+#. odoo-javascript
+#: code:addons/mail/static/src/discuss/call/common/call_settings.xml:0
+msgid "Video"
+msgstr "ვიდეო"
+
+#. module: mail
+#: model:ir.model.fields.selection,name:mail.selection__mail_activity_plan_template__delay_unit__days model:ir.model.fields.selection,name:mail.selection__mail_activity_type__delay_unit__days
+msgid "days"
+msgstr "დღეები"

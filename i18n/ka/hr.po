@@ -4640,3 +4640,18 @@ msgstr "სამსახური"
 #: model:ir.model.fields,field_description:hr.field_hr_employee__work_permit_name
 msgid "work_permit_name"
 msgstr "work_permit_name"
+
+#. module: hr
+#: model:ir.model.fields,field_description:hr.field_hr_employee__currency_id model:ir.model.fields,field_description:hr.field_hr_version__currency_id
+msgid "Currency"
+msgstr "ვალუტა"
+
+#. module: hr
+#: model:ir.model.fields,field_description:hr.field_hr_employee__last_modified_date model:ir.model.fields,field_description:hr.field_hr_version__last_modified_date
+msgid "Last Modified on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: hr
+#: model:hr.department,name:hr.dep_sales
+msgid "Sales"
+msgstr "გაყიდვები"

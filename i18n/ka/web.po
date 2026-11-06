@@ -26135,3 +26135,74 @@ msgstr "秘"
 #: code:addons/web/static/src/core/emoji_picker/emoji_data.js:0
 msgid "空"
 msgstr "空"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/webclient/burger_menu/mobile_switch_company_menu/mobile_switch_company_menu.xml:0 model:ir.model,name:web.model_res_company
+msgid "Companies"
+msgstr "კომპანიები"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__company_id
+msgid "Company"
+msgstr "კომპანია"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__create_uid model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__create_date model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/views/fields/monetary/monetary_field.js:0
+msgid "Currency"
+msgstr "ვალუტა"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__display_name model:ir.model.fields,field_description:web.field_ir_http__display_name model:ir.model.fields,field_description:web.field_ir_model__display_name model:ir.model.fields,field_description:web.field_ir_qweb_field_image__display_name model:ir.model.fields,field_description:web.field_ir_qweb_field_image_url__display_name model:ir.model.fields,field_description:web.field_ir_ui_menu__display_name model:ir.model.fields,field_description:web.field_ir_ui_view__display_name model:ir.model.fields,field_description:web.field_properties_base_definition__display_name model:ir.model.fields,field_description:web.field_res_company__display_name model:ir.model.fields,field_description:web.field_res_config_settings__display_name model:ir.model.fields,field_description:web.field_res_partner__display_name model:ir.model.fields,field_description:web.field_res_users__display_name model:ir.model.fields,field_description:web.field_res_users_settings__display_name model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/core/emoji_picker/emoji_data.js:0 model:ir.model.fields,field_description:web.field_base_document_layout__id model:ir.model.fields,field_description:web.field_ir_http__id model:ir.model.fields,field_description:web.field_ir_model__id model:ir.model.fields,field_description:web.field_ir_qweb_field_image__id model:ir.model.fields,field_description:web.field_ir_qweb_field_image_url__id model:ir.model.fields,field_description:web.field_ir_ui_menu__id model:ir.model.fields,field_description:web.field_ir_ui_view__id model:ir.model.fields,field_description:web.field_properties_base_definition__id model:ir.model.fields,field_description:web.field_res_company__id model:ir.model.fields,field_description:web.field_res_config_settings__id model:ir.model.fields,field_description:web.field_res_partner__id model:ir.model.fields,field_description:web.field_res_users__id model:ir.model.fields,field_description:web.field_res_users_settings__id model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__write_uid model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__write_date model:ir.model.fields,field_description:web.field_res_users_settings_embedded_action__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/model/relational_model/utils.js:0 code:addons/web/static/src/views/graph/graph_model.js:0 code:addons/web/static/src/views/list/list_confirmation_dialog.xml:0 code:addons/web/static/src/views/pivot/pivot_model.js:0 code:addons/web/static/src/webclient/debug/profiling/profiling_item.xml:0
+msgid "None"
+msgstr "არცერთი"
+
+#. module: web
+#: model:ir.model.fields,field_description:web.field_base_document_layout__partner_id
+msgid "Partner"
+msgstr "პარტნიორი"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/views/fields/statusbar/statusbar_field.js:0
+msgid "Status"
+msgstr "სტატუსი"
+
+#. module: web
+#. odoo-javascript
+#: code:addons/web/static/src/core/file_viewer/file_viewer.xml:0
+msgid "Video"
+msgstr "ვიდეო"

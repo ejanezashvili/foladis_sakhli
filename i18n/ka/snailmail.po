@@ -158,3 +158,59 @@ msgstr ""
 #: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__zip
 msgid "Zip"
 msgstr "საფოსტო ინდექსი"
+
+#. module: snailmail
+#. odoo-javascript
+#: code:addons/snailmail/static/src/core/notification_model_patch.js:0 model:ir.model.fields.selection,name:snailmail.selection__snailmail_letter__state__canceled
+msgid "Cancelled"
+msgstr "გაუქმებულია"
+
+#. module: snailmail
+#: model:ir.model,name:snailmail.model_res_company
+msgid "Companies"
+msgstr "კომპანიები"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__company_id
+msgid "Company"
+msgstr "კომპანია"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_ir_actions_report__display_name model:ir.model.fields,field_description:snailmail.field_mail_message__display_name model:ir.model.fields,field_description:snailmail.field_mail_notification__display_name model:ir.model.fields,field_description:snailmail.field_mail_thread__display_name model:ir.model.fields,field_description:snailmail.field_res_company__display_name model:ir.model.fields,field_description:snailmail.field_res_config_settings__display_name model:ir.model.fields,field_description:snailmail.field_res_partner__display_name model:ir.model.fields,field_description:snailmail.field_snailmail_letter__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__res_id
+msgid "Document ID"
+msgstr "დოკუმენტის ID"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_ir_actions_report__id model:ir.model.fields,field_description:snailmail.field_mail_message__id model:ir.model.fields,field_description:snailmail.field_mail_notification__id model:ir.model.fields,field_description:snailmail.field_mail_thread__id model:ir.model.fields,field_description:snailmail.field_res_company__id model:ir.model.fields,field_description:snailmail.field_res_config_settings__id model:ir.model.fields,field_description:snailmail.field_res_partner__id model:ir.model.fields,field_description:snailmail.field_snailmail_letter__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: snailmail
+#: model:ir.model.fields,field_description:snailmail.field_snailmail_letter__state
+msgid "Status"
+msgstr "სტატუსი"

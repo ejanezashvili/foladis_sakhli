@@ -43,3 +43,18 @@ msgstr "ვალიდური"
 #: model:ir.model.fields,field_description:hr_skills_survey.field_survey_survey__certification_validity_months
 msgid "Validity"
 msgstr "მოქმედების ვადა"
+
+#. module: hr_skills_survey
+#: model:ir.model.fields,field_description:hr_skills_survey.field_hr_resume_line__display_name model:ir.model.fields,field_description:hr_skills_survey.field_survey_survey__display_name model:ir.model.fields,field_description:hr_skills_survey.field_survey_user_input__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: hr_skills_survey
+#: model:ir.model.fields,field_description:hr_skills_survey.field_hr_resume_line__id model:ir.model.fields,field_description:hr_skills_survey.field_survey_survey__id model:ir.model.fields,field_description:hr_skills_survey.field_survey_user_input__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: hr_skills_survey
+#: model:ir.model,name:hr_skills_survey.model_survey_survey
+msgid "Survey"
+msgstr "გამოკითხვა"

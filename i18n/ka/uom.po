@@ -53,3 +53,43 @@ msgstr "კმ"
 #: model:uom.uom,name:uom.product_uom_mile
 msgid "mi"
 msgstr "მილი"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: uom
+#: model:ir.model.fields,field_description:uom.field_uom_uom__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"
+
+#. module: uom
+#: model:uom.uom,name:uom.product_uom_minute
+msgid "Minutes"
+msgstr "წუთი"
+
+#. module: uom
+#: model_terms:ir.ui.view,arch_db:uom.product_uom_form_view
+msgid "Quantity"
+msgstr "რაოდენობა"

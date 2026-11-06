@@ -27,3 +27,33 @@ msgstr "აპლიკაციის დაინსტალირება"
 #: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__user_id
 msgid "User"
 msgstr "მომხმარებელი"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__create_uid model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__create_date model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__display_name model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__display_name model:ir.model.fields,field_description:base_install_request.field_ir_module_module__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__id model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__id model:ir.model.fields,field_description:base_install_request.field_ir_module_module__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__write_uid model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: base_install_request
+#: model:ir.model.fields,field_description:base_install_request.field_base_module_install_request__write_date model:ir.model.fields,field_description:base_install_request.field_base_module_install_review__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

@@ -1102,3 +1102,30 @@ msgstr "id"
 #: model_terms:ir.ui.view,arch_db:mass_mailing.view_mail_mass_mailing_form
 msgid "on"
 msgstr "-ზე"
+
+#. module: mass_mailing
+#. odoo-javascript
+#: code:addons/mass_mailing/static/src/xml/mailing_filter_widget.xml:0 model_terms:ir.ui.view,arch_db:mass_mailing.mailing_contact_to_list_view_form
+msgid "Add"
+msgstr "დამატება"
+
+#. module: mass_mailing
+#: model:ir.model.fields.selection,name:mass_mailing.selection__mailing_trace__trace_status__cancel model_terms:ir.ui.view,arch_db:mass_mailing.mailing_trace_view_search
+msgid "Cancelled"
+msgstr "გაუქმებულია"
+
+#. module: mass_mailing
+#: model:ir.model.fields,field_description:mass_mailing.field_mailing_trace__res_id
+msgid "Document ID"
+msgstr "დოკუმენტის ID"
+
+#. module: mass_mailing
+#. odoo-javascript
+#: code:addons/mass_mailing/static/src/builder/options/alignment_option.xml:0 code:addons/mass_mailing/static/src/builder/options/padding_option.xml:0
+msgid "Left"
+msgstr "დარჩენილი"
+
+#. module: mass_mailing
+#: model_terms:ir.ui.view,arch_db:mass_mailing.email_designer_snippets
+msgid "Video"
+msgstr "ვიდეო"

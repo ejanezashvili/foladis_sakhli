@@ -279,3 +279,33 @@ msgstr "სამუშაო ადგილი"
 #: code:addons/hr_homeworking/models/hr_work_location.py:0
 msgid "You cannot delete locations that are being used by your employees"
 msgstr "თანამშრომლების მიერ გამოყენებული მდებარეობების წაშლა შეუძლებელია"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee__display_name model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__display_name model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_public__display_name model:ir.model.fields,field_description:hr_homeworking.field_hr_work_location__display_name model:ir.model.fields,field_description:hr_homeworking.field_res_partner__display_name model:ir.model.fields,field_description:hr_homeworking.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee__id model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__id model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_public__id model:ir.model.fields,field_description:hr_homeworking.field_hr_work_location__id model:ir.model.fields,field_description:hr_homeworking.field_res_partner__id model:ir.model.fields,field_description:hr_homeworking.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: hr_homeworking
+#: model:ir.model.fields,field_description:hr_homeworking.field_hr_employee_location__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

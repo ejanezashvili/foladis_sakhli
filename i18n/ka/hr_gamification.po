@@ -230,3 +230,18 @@ msgstr "საკუთარი თავისთვის ბეიჯის 
 #: model_terms:ir.ui.view,arch_db:hr_gamification.view_current_badge_form
 msgid "on"
 msgstr "-ზე"
+
+#. module: hr_gamification
+#: model_terms:ir.ui.view,arch_db:hr_gamification.view_current_badge_form
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: hr_gamification
+#: model:ir.model.fields,field_description:hr_gamification.field_gamification_badge__display_name model:ir.model.fields,field_description:hr_gamification.field_gamification_badge_user__display_name model:ir.model.fields,field_description:hr_gamification.field_gamification_badge_user_wizard__display_name model:ir.model.fields,field_description:hr_gamification.field_hr_employee__display_name model:ir.model.fields,field_description:hr_gamification.field_hr_employee_public__display_name model:ir.model.fields,field_description:hr_gamification.field_res_users__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: hr_gamification
+#: model:ir.model.fields,field_description:hr_gamification.field_gamification_badge__id model:ir.model.fields,field_description:hr_gamification.field_gamification_badge_user__id model:ir.model.fields,field_description:hr_gamification.field_gamification_badge_user_wizard__id model:ir.model.fields,field_description:hr_gamification.field_hr_employee__id model:ir.model.fields,field_description:hr_gamification.field_hr_employee_public__id model:ir.model.fields,field_description:hr_gamification.field_res_users__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

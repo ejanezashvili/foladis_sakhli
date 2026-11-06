@@ -185,3 +185,19 @@ msgstr "კომენტარი"
 #: code:addons/portal_rating/static/src/xml/portal_tools.xml:0
 msgid "stars"
 msgstr "ვარსკვლავი"
+
+#. module: portal_rating
+#: model:ir.model.fields,field_description:portal_rating.field_ir_http__display_name model:ir.model.fields,field_description:portal_rating.field_mail_message__display_name model:ir.model.fields,field_description:portal_rating.field_rating_rating__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: portal_rating
+#. odoo-javascript
+#: code:addons/portal_rating/static/src/chatter/frontend/message_patch.xml:0
+msgid "Edit"
+msgstr "შეცვლა"
+
+#. module: portal_rating
+#: model:ir.model.fields,field_description:portal_rating.field_ir_http__id model:ir.model.fields,field_description:portal_rating.field_mail_message__id model:ir.model.fields,field_description:portal_rating.field_rating_rating__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

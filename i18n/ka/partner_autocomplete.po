@@ -27,3 +27,18 @@ msgstr "კლიენტის შექმნა"
 #: model:ir.model,name:partner_autocomplete.model_ir_http
 msgid "HTTP Routing"
 msgstr "HTTP მარშრუტიზაცია"
+
+#. module: partner_autocomplete
+#: model:ir.model,name:partner_autocomplete.model_res_company
+msgid "Companies"
+msgstr "კომპანიები"
+
+#. module: partner_autocomplete
+#: model:ir.model.fields,field_description:partner_autocomplete.field_iap_autocomplete_api__display_name model:ir.model.fields,field_description:partner_autocomplete.field_ir_http__display_name model:ir.model.fields,field_description:partner_autocomplete.field_res_company__display_name model:ir.model.fields,field_description:partner_autocomplete.field_res_config_settings__display_name model:ir.model.fields,field_description:partner_autocomplete.field_res_partner__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: partner_autocomplete
+#: model:ir.model.fields,field_description:partner_autocomplete.field_iap_autocomplete_api__id model:ir.model.fields,field_description:partner_autocomplete.field_ir_http__id model:ir.model.fields,field_description:partner_autocomplete.field_res_company__id model:ir.model.fields,field_description:partner_autocomplete.field_res_config_settings__id model:ir.model.fields,field_description:partner_autocomplete.field_res_partner__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"

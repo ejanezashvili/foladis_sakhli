@@ -2274,3 +2274,51 @@ msgstr "websocket შეტყობინებების დამუშა�
 #: code:addons/html_editor/static/src/main/table/table_picker.xml:0
 msgid "x"
 msgstr "x"
+
+#. module: html_editor
+#. odoo-javascript
+#: code:addons/html_editor/static/src/main/media/media_dialog/media_dialog.xml:0
+msgid "Add"
+msgstr "დამატება"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__create_uid
+msgid "Created by"
+msgstr "შემქმნელი"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__create_date
+msgid "Created on"
+msgstr "შექმნის თარიღი"
+
+#. module: html_editor
+#. odoo-javascript
+#: code:addons/html_editor/static/src/main/media/image_description.xml:0
+msgid "Description"
+msgstr "აღწერილობა"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__display_name model:ir.model.fields,field_description:html_editor.field_html_field_history_mixin__display_name model:ir.model.fields,field_description:html_editor.field_ir_attachment__display_name model:ir.model.fields,field_description:html_editor.field_ir_http__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_contact__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_date__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_datetime__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_duration__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_float__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_html__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_image__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_integer__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_many2one__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_monetary__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_qweb__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_relative__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_selection__display_name model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_text__display_name model:ir.model.fields,field_description:html_editor.field_ir_ui_view__display_name model:ir.model.fields,field_description:html_editor.field_ir_websocket__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: html_editor
+#. odoo-javascript
+#: code:addons/html_editor/static/src/fields/x2many_field/x2many_image_field.xml:0 code:addons/html_editor/static/src/main/link/link_popover.xml:0
+msgid "Edit"
+msgstr "შეცვლა"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__id model:ir.model.fields,field_description:html_editor.field_html_field_history_mixin__id model:ir.model.fields,field_description:html_editor.field_ir_attachment__id model:ir.model.fields,field_description:html_editor.field_ir_http__id model:ir.model.fields,field_description:html_editor.field_ir_qweb__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_contact__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_date__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_datetime__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_duration__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_float__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_html__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_image__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_integer__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_many2one__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_monetary__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_qweb__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_relative__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_selection__id model:ir.model.fields,field_description:html_editor.field_ir_qweb_field_text__id model:ir.model.fields,field_description:html_editor.field_ir_ui_view__id model:ir.model.fields,field_description:html_editor.field_ir_websocket__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__write_uid
+msgid "Last Updated by"
+msgstr "ბოლოს განაახლა"
+
+#. module: html_editor
+#: model:ir.model.fields,field_description:html_editor.field_html_editor_converter_test_sub__write_date
+msgid "Last Updated on"
+msgstr "ბოლოს განახლებულია"

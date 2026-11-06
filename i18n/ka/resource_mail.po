@@ -100,3 +100,13 @@ msgstr "მომხმარებელი ხაზგარეშეა"
 #: code:addons/resource_mail/static/src/components/avatar_card_resource/avatar_card_resource_popover.xml:0
 msgid "User is online"
 msgstr "მომხმარებელი ხაზზეა"
+
+#. module: resource_mail
+#: model:ir.model.fields,field_description:resource_mail.field_resource_resource__display_name
+msgid "Display Name"
+msgstr "სახელი"
+
+#. module: resource_mail
+#: model:ir.model.fields,field_description:resource_mail.field_resource_resource__id
+msgid "ID"
+msgstr "იდენტიფიკატორი"
