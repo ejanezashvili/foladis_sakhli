@@ -8,6 +8,7 @@ ex = lambda *a, **k: m.execute_kw('steelhouse', 2, sys.argv[1], *a, **k)
 DEF = [
     {'name': 'sh_responsible', 'string': 'მთავარი პასუხისმგებელი', 'type': 'many2one', 'comodel': 'res.users',
      'domain': "[('share', '=', False)]", 'view_in_cards': True},
+    {'name': 'sh_progress', 'string': 'პროგრესი (%)', 'type': 'integer', 'view_in_cards': True},
     {'name': 'sh_date_start', 'string': 'დაწყების თარიღი', 'type': 'date', 'view_in_cards': False},
     {'name': 'sh_category', 'string': 'კატეგორია', 'type': 'selection', 'view_in_cards': False, 'selection': [
         ['admin', 'ადმინისტრაციული'], ['sales', 'გაყიდვები'], ['stock', 'მარაგი და საწყობი'],
