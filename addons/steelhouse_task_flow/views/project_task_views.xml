@@ -31,6 +31,29 @@
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="evidence_required"/>
+                <field name="sh_progress" widget="progressbar" invisible="is_template"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_kanban_steelhouse_flow" model="ir.ui.view">
+        <field name="name">project.task.kanban.steelhouse.flow</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="sh_progress" widget="progressbar"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_task_list_steelhouse_flow" model="ir.ui.view">
+        <field name="name">project.task.list.steelhouse.flow</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.project_task_view_tree_main_base"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tag_ids']" position="after">
+                <field name="sh_progress" widget="progressbar" optional="show"/>
             </xpath>
         </field>
     </record>

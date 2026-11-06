@@ -1,6 +1,9 @@
+import re
+from collections.abc import Mapping
+
 from markupsafe import Markup, escape
 
-from odoo import fields, models, _
+from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 # Odoo task state that follows each stage kind.
@@ -10,6 +13,10 @@ CLOSED = ('1_done', '1_canceled')
 REASON_KINDS = ('on_hold', 'returned', 'cancelled')
 # Stage kinds only the reviewer (or a system admin) may set.
 REVIEWER_KINDS = ('done', 'returned', 'cancelled')
+# Progress by stage kind, used when the task has no subtasks, checklist or manual value.
+KIND_PROGRESS = {'new': 0, 'accepted': 10, 'in_progress': 50, 'on_hold': 50, 'returned': 50, 'review': 90}
+MANUAL_PROGRESS_PROP = 'sh_progress'
+CHECKLIST_ITEM = re.compile(r'<li\b([^>]*)>', re.I)
 
 
 class ProjectTask(models.Model):
@@ -27,6 +34,59 @@ class ProjectTask(models.Model):
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
+    sh_progress = fields.Integer(
+        'პროგრესი (%)', compute='_compute_sh_progress', store=True,
+        help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებების, საკონტროლო სიისა და "
+             "ხელით პროგრესის საშუალო; თუ არცერთი არ არის — სტადიით. „შემოწმებაზე“ — მინიმუმ 90%.")
+
+    # ------------------------------------------------------------------
+    # Automatic progress (requirement 3.3)
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _sh_checklist_percent(html):
+        """Share of checked items in the description's checklists, or None if there is no checklist."""
+        if not html or 'o_checklist' not in html:
+            return None
+        total = done = 0
+        for block in re.findall(r'<ul\b[^>]*o_checklist[^>]*>(.*?)</ul>', html, re.S | re.I):
+            for attrs in CHECKLIST_ITEM.findall(block):
+                total += 1
+                if 'o_checked' in attrs:
+                    done += 1
+        return round(100 * done / total) if total else None
+
+    def _sh_manual_percent(self):
+        props = self.task_properties
+        value = None
+        if isinstance(props, Mapping):  # Odoo 19 returns a Property mapping
+            value = props.get(MANUAL_PROGRESS_PROP)
+        elif isinstance(props, list):
+            value = next((p.get('value') for p in props if p.get('name') == MANUAL_PROGRESS_PROP), None)
+        if value in (None, False, ''):
+            return None
+        return max(0, min(100, int(value)))
+
+    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'task_properties')
+    def _compute_sh_progress(self):
+        for task in self:
+            kind = task.stage_id.sh_kind
+            if kind == 'done' or task.state == '1_done':
+                task.sh_progress = 100
+                continue
+            sources = []
+            subtasks = task.child_ids.filtered(lambda t: t.state != '1_canceled')
+            if subtasks:
+                sources.append(100 * len(subtasks.filtered(lambda t: t.state == '1_done')) / len(subtasks))
+            checklist = self._sh_checklist_percent(task.description and str(task.description))
+            if checklist is not None:
+                sources.append(checklist)
+            manual = task._sh_manual_percent()
+            if manual is not None:
+                sources.append(manual)
+            value = round(sum(sources) / len(sources)) if sources else KIND_PROGRESS.get(kind, 0)
+            if kind == 'review':
+                value = max(value, 90)
+            task.sh_progress = value
 
     # ------------------------------------------------------------------
     def _sh_stage_of_kind(self, kind):
