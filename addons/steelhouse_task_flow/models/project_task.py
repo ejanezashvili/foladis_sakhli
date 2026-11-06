@@ -59,7 +59,58 @@ class ProjectTask(models.Model):
                     "შემდეგ გადაიყვანეთ „შემოწმებაზე“.", task.name))
 
     # ------------------------------------------------------------------
+    # History of task properties (Odoo does not track them; requirement 3.8)
+    # ------------------------------------------------------------------
+    @staticmethod
+    def _sh_prop_display(prop):
+        value = prop.get('value')
+        if value in (False, None, '', []):
+            return '—'
+        ptype = prop.get('type')
+        if ptype == 'many2one':
+            return value[1] if isinstance(value, (list, tuple)) else str(value)
+        if ptype == 'many2many':
+            return ', '.join(v[1] if isinstance(v, (list, tuple)) else str(v) for v in value)
+        if ptype == 'selection':
+            return dict(prop.get('selection') or []).get(value, value)
+        if ptype == 'tags':
+            labels = {t[0]: t[1] for t in (prop.get('tags') or [])}
+            return ', '.join(labels.get(v, v) for v in value)
+        if ptype == 'boolean':
+            return _("დიახ") if value else _("არა")
+        if ptype == 'date' and isinstance(value, str):
+            y, m, d = value[:10].split('-')
+            return '%s/%s/%s' % (d, m, y)
+        return str(value)
+
+    def _sh_props_snapshot(self):
+        return {
+            rec['id']: {p['name']: (p.get('string') or p['name'], self._sh_prop_display(p))
+                        for p in (rec['task_properties'] or [])}
+            for rec in self.read(['task_properties'])
+        }
+
+    def _sh_log_property_changes(self, before):
+        after = self._sh_props_snapshot()
+        for task in self:
+            old, new = before.get(task.id, {}), after.get(task.id, {})
+            lines = []
+            for key, (label, value) in new.items():
+                old_value = old.get(key, (label, '—'))[1]
+                if old_value != value:
+                    lines.append(Markup("<li>%s: %s → <b>%s</b></li>") % (label, old_value, value))
+            if lines:
+                task.message_post(
+                    body=Markup("<ul class='mb-0'>%s</ul>") % Markup('').join(lines),
+                    message_type='notification', subtype_xmlid='mail.mt_note')
+
+    # ------------------------------------------------------------------
     def write(self, vals):
+        if 'task_properties' in vals and not self.env.context.get('sh_props_logging'):
+            before = self._sh_props_snapshot()
+            res = self.with_context(sh_props_logging=True).write(vals)
+            self._sh_log_property_changes(before)
+            return res
         if self.env.context.get('sh_flow_internal'):
             return super().write(vals)
         vals = dict(vals)
