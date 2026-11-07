@@ -22,8 +22,8 @@ $sh-frame: #4b3a5a;
     .o_sh_tree_frame {
         position: relative;
         width: max-content;
-        max-width: 100%;
-        grid-template-columns: repeat(var(--sh-cols, 2), 250px);
+        // columns grow when an opened card inside needs a wider frame
+        grid-template-columns: repeat(var(--sh-cols, 2), minmax(250px, auto));
         padding: 14px;
         border: 2px solid $sh-frame;
         border-radius: 6px;
@@ -45,6 +45,24 @@ $sh-frame: #4b3a5a;
     .o_sh_tree_card_open .o_hierarchy_node {
         border-color: $sh-frame !important;
         box-shadow: 0 0 0 1px $sh-frame;
+    }
+
+    // No empty row above cards, so cards and position boxes start at the same height.
+    .o_hierarchy_node_button_container:empty {
+        display: none !important;
+    }
+
+    // Cards grow with their content (several heads on one card).
+    .o_hierarchy_node_container {
+        height: auto !important;
+    }
+    .o_hierarchy_node {
+        height: auto !important;
+    }
+    .o_hierarchy_node_content,
+    .o_hierarchy_node_body {
+        height: auto !important;
+        flex-shrink: 0;
     }
 
     // Keep other cards fully visible (default view fades them).
@@ -77,6 +95,32 @@ $sh-frame: #4b3a5a;
                 height: 24px;
                 border-left: 2px solid $sh-line;
             }
+        }
+    }
+
+    // Position (job) inside an opened department: looks like a department card
+    // (title + people with avatars), but has no open button - nobody is under it.
+    .o_sh_position {
+        border: 1px solid var(--border-color, #dee2e6);
+        background-color: var(--o-view-background-color, #fff);
+        min-height: 64px;
+
+        .o_sh_position_title {
+            padding: 6px 8px;
+            text-align: center;
+            background-color: var(--gray-100, #f8f9fa);
+        }
+        .o_sh_position_body {
+            padding: 4px 8px 6px;
+        }
+        .o_sh_position_emp {
+            padding: 2px 0;
+            color: inherit;
+        }
+        img.o_avatar {
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
         }
     }
 }

@@ -1,0 +1,13 @@
+// Equal heads of one level side by side; only the first keeps the connector line.
+.o_org_chart_group_up .o_sh_org_level_multi {
+    display: flex;
+    gap: 8px;
+
+    > .o_org_chart_entry {
+        flex: 1 1 0;
+        min-width: 0;
+    }
+    > .o_org_chart_entry + .o_org_chart_entry::before {
+        display: none;
+    }
+}

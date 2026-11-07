@@ -43,7 +43,7 @@ class HrLeave(models.Model):
             if leave.delegation_ids or not leave.employee_id:
                 continue
             employee = leave.employee_id
-            managed = self.env['hr.department'].search([('manager_id', '=', employee.id)])
+            managed = self.env['hr.department'].search(['|', ('manager_id', '=', employee.id), ('manager_ids', 'in', employee.id)])
             if managed:
                 lines = [{'department_id': d.id, 'deputy_id': d.deputy_id.id if d.deputy_id != employee else False}
                          for d in managed]

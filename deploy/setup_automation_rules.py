@@ -32,8 +32,7 @@ CODE_ESCALATE = '''
 for task in records:
     boss = task.reviewer_id or task.create_uid
     emp = env['hr.employee'].search([('user_id', '=', boss.id)], limit=1) if boss else env['hr.employee']
-    top = emp.parent_id.user_id
-    if top:
+    for top in emp.sh_manager_ids.user_id:  # all equal heads of the reviewer
         task.activity_schedule('mail.mail_activity_data_todo', user_id=top.id,
                                summary='ესკალაცია — 3 დღით ვადაგადაცილებული: %s' % task.name,
                                note='შემმოწმებელი: %s; შემსრულებლები: %s' % (boss.name, ', '.join(task.user_ids.mapped('name'))))

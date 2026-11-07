@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- All heads go in "ხელმძღვანელები"; Odoo's single manager_id is filled automatically and hidden. -->
     <record id="view_department_form_steelhouse" model="ir.ui.view">
         <field name="name">hr.department.form.steelhouse</field>
         <field name="model">hr.department</field>
         <field name="inherit_id" ref="hr.view_department_form"/>
         <field name="arch" type="xml">
+            <field name="manager_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
             <field name="manager_id" position="after">
+                <field name="manager_ids" widget="many2many_avatar_employee"/>
+                <field name="sh_head_title"/>
                 <field name="deputy_id" widget="many2one_avatar_employee"/>
             </field>
         </field>
@@ -16,7 +22,11 @@
         <field name="model">hr.department</field>
         <field name="inherit_id" ref="hr.view_department_tree"/>
         <field name="arch" type="xml">
+            <field name="manager_id" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
             <field name="manager_id" position="after">
+                <field name="manager_ids" widget="many2many_avatar_employee"/>
                 <field name="deputy_id" widget="many2one_avatar_employee" optional="show"/>
             </field>
         </field>
@@ -27,7 +37,8 @@
         <field name="model">hr.department</field>
         <field name="inherit_id" ref="hr.view_department_filter"/>
         <field name="arch" type="xml">
-            <field name="manager_id" position="after">
+            <field name="manager_id" position="replace">
+                <field name="manager_ids"/>
                 <field name="deputy_id"/>
             </field>
         </field>

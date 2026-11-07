@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- When a department has several equal heads, show all of them instead of Odoo's single manager. -->
+    <record id="view_employee_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.form.steelhouse</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='o_work_information']//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">sh_co_manager_ids</attribute>
+            </xpath>
+            <xpath expr="//div[@id='o_work_information']//field[@name='job_title']" position="after">
+                <field name="sh_extra_job_ids" widget="many2many_tags" options="{'no_create': True}"/>
+            </xpath>
+            <xpath expr="//div[@id='o_work_information']//field[@name='parent_id']" position="after">
+                <field name="sh_co_manager_ids" invisible="1"/>
+                <field name="sh_manager_ids" widget="many2many_avatar_employee" readonly="1" invisible="not sh_co_manager_ids"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_employee_tree_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.list.steelhouse</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="parent_id" position="after">
+                <field name="sh_manager_ids" widget="many2many_avatar_employee" optional="show"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_view_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.public.form.steelhouse</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='o_work_employee_main']//field[@name='parent_id']" position="attributes">
+                <attribute name="invisible">sh_co_manager_ids</attribute>
+            </xpath>
+            <xpath expr="//div[@id='o_work_employee_main']//field[@name='parent_id']" position="after">
+                <field name="sh_co_manager_ids" invisible="1"/>
+                <field name="sh_manager_ids" widget="many2many_avatar_employee" readonly="1" invisible="not sh_co_manager_ids"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_view_tree_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.public.list.steelhouse</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </field>
+            <field name="parent_id" position="after">
+                <field name="sh_manager_ids" widget="many2many_avatar_employee"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- "My Team": every equal head sees the same team. -->
+    <record id="view_employee_filter_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.search.steelhouse</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <filter name="my_team" position="attributes">
+                <attribute name="domain">[('sh_my_team', '=', True)]</attribute>
+            </filter>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_view_search_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.public.search.steelhouse</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr.hr_employee_public_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="my_team" position="attributes">
+                <attribute name="domain">[('sh_my_team', '=', True)]</attribute>
+            </filter>
+        </field>
+    </record>
+</odoo>

@@ -8,6 +8,22 @@
             <hierarchy position="attributes">
                 <attribute name="js_class">steelhouse_department_hierarchy</attribute>
             </hierarchy>
+            <xpath expr="//hierarchy/field[@name='name']" position="after">
+                <field name="sh_head_title"/>
+                <field name="sh_headcount"/>
+            </xpath>
+            <!-- count = everyone under this unit's heads, sub-units included -->
+            <xpath expr="//button[@name='action_employee_from_department']" position="replace">
+                <button class="btn btn-link" name="sh_action_team" type="object">
+                    <t t-out="record.sh_headcount.raw_value"/> თანამშრომელი
+                </button>
+            </xpath>
+            <field name="manager_id" position="replace">
+                <field name="manager_ids" class="pt-1 ps-1" widget="many2many_avatar_employee"/>
+                <div t-if="!record.manager_ids.raw_value.length and record.sh_head_title.raw_value" class="ps-1 pt-1 text-muted fst-italic">
+                    ვაკანტური: <t t-out="record.sh_head_title.value"/>
+                </div>
+            </field>
         </field>
     </record>
 </odoo>

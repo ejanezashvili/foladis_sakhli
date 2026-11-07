@@ -6,7 +6,7 @@
             <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
                 <div class="o_sh_root_level">
                     <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
-                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo" isRoot="true"/>
+                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo" shared="shared" isRoot="true"/>
                     </t>
                 </div>
             </div>
@@ -14,14 +14,68 @@
     </t>
 
     <t t-name="steelhouse_hr.DepartmentTreeNode">
-        <div class="o_sh_tree_card" t-ref="card" t-att-class="{ 'o_sh_tree_card_open': props.node.nodes.length }">
-            <HierarchyCard node="props.node" openRecord="props.openRecord" archInfo="props.archInfo"/>
+        <div class="o_sh_tree_card" t-ref="card" t-att-class="{ 'o_sh_tree_card_open': isOpen }">
+            <DepartmentCard node="props.node" openRecord="props.openRecord" archInfo="props.archInfo"
+                            isOpen="isOpen" canOpen="canOpen" count="count" onToggle.bind="toggle"/>
         </div>
-        <div t-if="props.node.nodes.length" class="o_sh_tree_children" t-ref="panel">
+        <div t-if="isOpen" class="o_sh_tree_children" t-ref="panel">
             <div class="o_sh_tree_level" t-att-class="{ 'o_sh_tree_frame': !props.isRoot }">
-                <t t-foreach="props.node.nodes" t-as="child" t-key="child.id">
-                    <DepartmentTreeNode node="child" openRecord="props.openRecord" archInfo="props.archInfo"/>
+                <t t-foreach="positions" t-as="pos" t-key="pos.id">
+                    <div class="o_sh_position">
+                        <div class="o_sh_position_title" t-esc="pos.name"/>
+                        <div class="o_sh_position_body">
+                            <t t-foreach="pos.employees" t-as="emp" t-key="emp.id">
+                                <a href="#" class="o_sh_position_emp d-flex align-items-center text-truncate" t-on-click.prevent="() => this.openEmployee(emp.id)">
+                                    <img class="o_avatar rounded me-1" t-att-src="'/web/image/hr.employee.public/' + emp.id + '/avatar_128'" alt=""/>
+                                    <span class="text-truncate" t-esc="emp.name"/>
+                                </a>
+                            </t>
+                            <span t-if="!pos.employees.length" class="text-muted fst-italic">ვაკანტური</span>
+                        </div>
+                    </div>
                 </t>
+                <t t-foreach="props.node.nodes" t-as="child" t-key="child.id">
+                    <DepartmentTreeNode node="child" openRecord="props.openRecord" archInfo="props.archInfo" shared="props.shared"/>
+                </t>
+            </div>
+        </div>
+    </t>
+
+    <!-- Standard hierarchy card; the button also opens departments that only have positions. -->
+    <t t-name="steelhouse_hr.DepartmentCard">
+        <div class="o_hierarchy_node_container d-flex flex-column" t-att-class="classNames" t-att-data-node-id="props.node.id">
+            <div class="o_hierarchy_node_button_container w-100 d-flex justify-content-end">
+                <button t-if="props.node.canShowParentNode" name="hierarchy_search_parent_node" class="btn p-0"
+                        t-on-click.synthetic="onClickArrowUp">
+                    <i class="fa fa-chevron-up"/>
+                </button>
+            </div>
+            <div class="o_hierarchy_node w-100 h-100 d-flex flex-column justify-content-between border"
+                 t-att-class="{ 'border-bottom-0': props.canOpen }"
+                 t-att-data-node-id="props.node.id"
+                 t-custom-click.synthetic="onGlobalClick">
+                <div class="o_hierarchy_node_content">
+                    <Record resModel="props.node.model.resModel"
+                            resId="props.node.resId"
+                            fields="props.node.model.fields"
+                            activeFields="props.node.model.activeFields"
+                            values="props.node.data"
+                            t-slot-scope="data">
+                        <t t-call="{{ templates['hierarchy-box'] }}" t-call-context="getRenderingContext(data)"/>
+                    </Record>
+                </div>
+                <button t-if="props.canOpen" name="hierarchy_search_subsidiaries"
+                        class="o_hierarchy_node_button btn rounded-0 d-grid"
+                        t-att-class="{ 'btn-primary': !props.isOpen, 'btn-secondary': props.isOpen }"
+                        t-on-click.synthetic="() => props.onToggle()">
+                    <t t-if="!props.isOpen">
+                        <span style="grid-column: 2;">გაშლა</span>
+                        <span class="text-end" style="grid-column: 3;"><t t-out="props.count"/></span>
+                    </t>
+                    <t t-else="">
+                        <span style="grid-column: 2;">აკეცვა</span>
+                    </t>
+                </button>
             </div>
         </div>
     </t>
