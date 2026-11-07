@@ -1,0 +1,1 @@
+source: https://github.com/OCA/web branch 19.0 commit 80f85e9 (2026-11-03), license LGPL-3
