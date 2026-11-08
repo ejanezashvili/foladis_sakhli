@@ -3577,7 +3577,7 @@ msgstr "მეორე"
 #. odoo-python
 #: code:addons/base/models/ir_rule.py:0
 msgid "write"
-msgstr "წერა"
+msgstr "შეცვლა"
 
 #. module: base
 #. odoo-python
@@ -3679,3 +3679,131 @@ msgstr "გასაკეთებელია"
 #: model_terms:ir.ui.view,arch_db:base.report_irmodeloverview
 msgid "Type:"
 msgstr "სახეობა:"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid ""
+"Uh-oh! Looks like you have stumbled upon some top-secret records.\n"
+"\n"
+"Sorry, %(user)s doesn't have '%(operation)s' access to:"
+msgstr ""
+"წვდომა შეზღუდულია.\n"
+"\n"
+"უკაცრავად, მომხმარებელს %(user)s არ აქვს ამ მოქმედების („%(operation)s“) უფლება:"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid "If you really, really need access, perhaps you can win over your friendly administrator with a batch of freshly baked cookies."
+msgstr "თუ ეს წვდომა გჭირდებათ, მიმართეთ სისტემის ადმინისტრატორს."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid "read"
+msgstr "ნახვა"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid "create"
+msgstr "შექმნა"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid "unlink"
+msgstr "წაშლა"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "You are not allowed to access '%(document_kind)s' (%(document_model)s) records."
+msgstr "თქვენ არ გაქვთ „%(document_kind)s“ (%(document_model)s) ჩანაწერების ნახვის უფლება."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "You are not allowed to modify '%(document_kind)s' (%(document_model)s) records."
+msgstr "თქვენ არ გაქვთ „%(document_kind)s“ (%(document_model)s) ჩანაწერების შეცვლის უფლება."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "You are not allowed to create '%(document_kind)s' (%(document_model)s) records."
+msgstr "თქვენ არ გაქვთ „%(document_kind)s“ (%(document_model)s) ჩანაწერების შექმნის უფლება."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "You are not allowed to delete '%(document_kind)s' (%(document_model)s) records."
+msgstr "თქვენ არ გაქვთ „%(document_kind)s“ (%(document_model)s) ჩანაწერების წაშლის უფლება."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid ""
+"This operation is allowed for the following groups:\n"
+"%(groups_list)s"
+msgstr ""
+"ეს მოქმედება ნებადართულია შემდეგი ჯგუფებისთვის:\n"
+"%(groups_list)s"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "No group currently allows this operation."
+msgstr "ამჟამად ეს მოქმედება არცერთ ჯგუფს არ აქვს ნებადართული."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_model.py:0
+msgid "Contact your administrator to request access if necessary."
+msgstr "საჭიროების შემთხვევაში წვდომისთვის მიმართეთ სისტემის ადმინისტრატორს."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid ""
+"Blame the following rules:\n"
+"%s"
+msgstr ""
+"წვდომას ზღუდავს შემდეგი წესები:\n"
+"%s"
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid ""
+"\n"
+"\n"
+"Note: this might be a multi-company issue. Switching company may help - in Odoo, not in real life!"
+msgstr ""
+"\n"
+"\n"
+"შენიშვნა: შესაძლოა საქმე კომპანიის არჩევაშია. სცადეთ სხვა კომპანიაზე გადართვა."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid ""
+"\n"
+"\n"
+"This seems to be a multi-company issue, you might be able to access the record by switching to the company: %s."
+msgstr ""
+"\n"
+"\n"
+"ჩანაწერი სხვა კომპანიას ეკუთვნის. მის სანახავად გადაერთეთ კომპანიაზე: %s."
+
+#. module: base
+#. odoo-python
+#: code:addons/base/models/ir_rule.py:0
+msgid ""
+"\n"
+"\n"
+"This seems to be a multi-company issue, but you do not have access to the proper company to access the record anyhow."
+msgstr ""
+"\n"
+"\n"
+"ჩანაწერი სხვა კომპანიას ეკუთვნის, რომელზეც წვდომა არ გაქვთ."

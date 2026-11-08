@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Notifications: e-mail / Odoo / both (instead of Odoo's two-way choice) -->
+    <record id="view_users_form_simple_modif_steelhouse" model="ir.ui.view">
+        <field name="name">res.users.preferences.form.steelhouse</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="mail.view_users_form_simple_modif_mail"/>
+        <field name="arch" type="xml">
+            <field name="notification_type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="notification_type" position="after">
+                <field name="sh_notification_channel" widget="radio" readonly="0"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_users_form_steelhouse" model="ir.ui.view">
+        <field name="name">res.users.form.steelhouse</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="mail.view_users_form_mail"/>
+        <field name="arch" type="xml">
+            <field name="notification_type" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="notification_type" position="after">
+                <field name="sh_notification_channel" widget="radio" invisible="share"/>
+            </field>
+        </field>
+    </record>
+</odoo>

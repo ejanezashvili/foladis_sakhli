@@ -19,6 +19,10 @@ MANUAL_PROGRESS_PROP = 'sh_progress'
 CHECKLIST_ITEM = re.compile(r'<li\b([^>]*)>', re.I)
 
 
+INFO_PREFIXES = ('თქვენ დაგენიშნათ',)
+REMINDER_PREFIXES = INFO_PREFIXES + ('ვადა იწურება', 'ვადაგადაცილებულია', 'ესკალაცია', 'დასადასტურებელია')
+
+
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 
@@ -200,7 +204,24 @@ class ProjectTask(models.Model):
                 stage = task._sh_stage_of_kind(kind)
                 if stage and task.stage_id != stage:
                     task.with_context(sh_flow_internal=True).stage_id = stage
+        if 'state' in vals or 'stage_id' in vals:
+            self.filtered(lambda t: t.state in CLOSED)._sh_drop_reminders(REMINDER_PREFIXES)
         return res
+
+    # ------------------------------------------------------------------
+    # Reminders from the automation rules (block 4) are activities:
+    # - "assigned" notice is informational: gone once the assignee opens the task
+    # - deadline / overdue / escalation / review ones stay until done, or until the task is closed
+    def _sh_drop_reminders(self, prefixes, user=None):
+        acts = self.sudo().activity_ids.filtered(
+            lambda a: (a.summary or '').startswith(prefixes) and (user is None or a.user_id == user))
+        if acts:
+            acts.unlink()
+
+    def web_read(self, specification):
+        if len(self) == 1:
+            self._sh_drop_reminders(INFO_PREFIXES, user=self.env.user)
+        return super().web_read(specification)
 
     # ------------------------------------------------------------------
     def _sh_open_wizard(self, mode):

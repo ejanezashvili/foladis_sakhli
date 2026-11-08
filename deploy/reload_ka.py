@@ -1,7 +1,7 @@
 """Reload Georgian translations (overwrite) and re-apply DB-only translation fixes."""
 import sys, xmlrpc.client as x
 m = x.ServerProxy('http://146.255.249.126/xmlrpc/2/object', allow_none=True)
-ex = lambda *a, **k: m.execute_kw('steelhouse', 2, sys.argv[1]  # admin password, *a, **k)
+ex = lambda *a, **k: m.execute_kw('steelhouse', 2, sys.argv[1], *a, **k)  # argv[1] = admin password
 lid = ex('res.lang', 'search', [[['code', '=', 'ka_GE']]])[0]
 w = ex('base.language.install', 'create', [{'lang_ids': [(6, 0, [lid])], 'overwrite': True}])
 ex('base.language.install', 'lang_install', [[w]])

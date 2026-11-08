@@ -1,21 +1,27 @@
 {
     'name': 'Steelhouse HR',
-    'version': '19.0.1.8.1',
+    'version': '19.0.1.14.0',
     'category': 'Human Resources',
     'summary': 'ფოლადის სახლი: რამდენიმე თანაბარი ხელმძღვანელი, შემცვლელი, დეპარტამენტების იერარქია, შემცვლელები შვებულებისას',
     'author': 'Steelhouse',
     'license': 'LGPL-3',
-    'depends': ['hr', 'hr_org_chart', 'web_hierarchy', 'hr_holidays'],
+    'depends': ['hr', 'hr_org_chart', 'web_hierarchy', 'hr_holidays', 'mail'],
     'data': [
         'security/ir.model.access.csv',
+        'data/mail_activity_type_data.xml',
         'views/hr_department_views.xml',
         'views/hr_department_hierarchy_views.xml',
         'views/hr_leave_views.xml',
         'views/hr_employee_views.xml',
+        'views/res_users_views.xml',
     ],
     'assets': {
         'web.assets_backend': [
             'steelhouse_hr/static/src/org_chart/*',
+            'steelhouse_hr/static/src/leave_no_autosave/*',
+            'steelhouse_hr/static/src/time_off_dashboard/*',
+            'steelhouse_hr/static/src/push_prompt/*',
+            'steelhouse_hr/static/src/message_actions/*',
         ],
         'web.assets_backend_lazy': [
             'steelhouse_hr/static/src/department_hierarchy/*',

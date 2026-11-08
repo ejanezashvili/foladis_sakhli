@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="hr_holidays.TimeOffDashboard" t-inherit-mode="extension">
+        <xpath expr="//strong[hasclass('o_timeoff_name')]/../.." position="after">
+            <div t-if="state.shToApprove >= 0" class="o_timeoff_card d-flex flex-column justify-content-center align-items-center">
+                <strong class="o_timeoff_name">ჩემთან დასამტკიცებელი</strong>
+                <span t-on-click="openToApprove" class="o_timeoff_duration cursor-pointer"
+                      t-att-class="{ 'text-danger': state.shToApprove > 0 }">
+                    <t t-esc="state.shToApprove"/>
+                </span>
+                <a class="text-uppercase o_timeoff_details p-1" t-on-click="openToApprove">მოთხოვნების ნახვა</a>
+            </div>
+        </xpath>
+    </t>
+</templates>

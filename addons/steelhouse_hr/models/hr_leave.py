@@ -14,6 +14,17 @@ class SteelhouseLeaveDelegation(models.Model):
     department_id = fields.Many2one('hr.department', string='დეპარტამენტი', required=True)
     deputy_id = fields.Many2one('hr.employee', string='შემცვლელი')
 
+    deputy_department_id = fields.Many2one(related='deputy_id.department_id', string='შემცვლელის დეპარტამენტი')
+
+    @api.onchange('deputy_id')
+    def _onchange_deputy_department(self):
+        """A deputy can be picked from the whole company. If he is not in the chosen
+        department (or its sub-units), the line takes the deputy's department."""
+        for line in self:
+            dep = line.deputy_id.department_id
+            if dep and not (line.department_id and (dep.parent_path or '').startswith(line.department_id.parent_path or '-')):
+                line.department_id = dep
+
     @api.constrains('deputy_id', 'employee_id')
     def _check_deputy_not_self(self):
         for line in self:
@@ -30,6 +41,22 @@ class SteelhouseLeaveDelegation(models.Model):
 
 class HrLeave(models.Model):
     _inherit = 'hr.leave'
+
+    @api.model
+    def sh_waiting_for_me_count(self):
+        """Requests waiting for the current user's approval - same rule as Odoo's
+        "Waiting For Me" filter. -1 when the user approves nothing."""
+        user = self.env.user
+        if user.has_group('hr_holidays.group_hr_holidays_user'):
+            domain = [('state', 'in', ['confirm', 'validate1']), '|', ('employee_id.user_id', '!=', user.id),
+                      '|', '&', ('state', '=', 'confirm'), ('holiday_status_id.leave_validation_type', '=', 'hr'),
+                      ('state', '=', 'validate1')]
+        elif user.has_group('hr_holidays.group_hr_holidays_responsible'):
+            domain = [('state', '=', 'confirm'), ('employee_id.leave_manager_id', '=', user.id),
+                      ('employee_id.user_id', '!=', user.id)]
+        else:
+            return -1
+        return self.search_count(domain)
 
     delegation_ids = fields.One2many(
         'steelhouse.leave.delegation', 'leave_id', string='შემცვლელები', copy=False,
@@ -95,6 +122,18 @@ class HrLeave(models.Model):
                     subject=titles[event],
                     body=Markup("<p>%s</p>") % text,
                 )
+                # users get notifications by e-mail and there is no mail server yet:
+                # the same text also goes to the deputy's Odoo chat (from OdooBot)
+                leave._steelhouse_chat(partner, Markup("<p><b>%s</b></p><p>%s</p>") % (titles[event], text))
+
+    def _steelhouse_chat(self, partner, body):
+        bot = self.env.ref('base.user_root')
+        Channel = self.env['discuss.channel'].with_user(bot).sudo()
+        channel = Channel._get_or_create_chat([partner.id], pin=True)
+        if isinstance(channel, dict):
+            channel = Channel.browse(channel['id'])
+        channel.message_post(body=body, author_id=bot.partner_id.id,
+                             message_type='comment', subtype_xmlid='mail.mt_comment')
 
     def _action_validate(self, check_state=True):
         res = super()._action_validate(check_state=check_state)

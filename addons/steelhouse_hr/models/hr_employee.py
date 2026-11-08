@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.fields import Domain
 
 
 def _team_domain(employees, operator, value):
@@ -21,6 +22,14 @@ class HrEmployee(models.Model):
     sh_extra_job_ids = fields.Many2many(
         'hr.job', 'hr_employee_sh_extra_job_rel', 'employee_id', 'job_id', string='დამატებითი პოზიციები',
         help="სხვა დეპარტამენტის პოზიციები, რომლებსაც თანამშრომელი ძირითადი პოზიციის გარდა იკავებს.")
+
+    @api.model
+    def _search_display_name(self, operator, value):
+        """With context sh_search_department, typing a department name also finds its people."""
+        domain = super()._search_display_name(operator, value)
+        if self.env.context.get('sh_search_department') and isinstance(value, str) and value                 and operator in ('ilike', 'like', '=ilike'):
+            domain = Domain.OR([domain, Domain('department_id.name', operator, value)])
+        return domain
 
     def _compute_sh_my_team(self):
         team = self.env['hr.employee'].browse(self._sh_my_team_ids())
