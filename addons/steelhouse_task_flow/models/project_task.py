@@ -33,6 +33,30 @@ class ProjectTask(models.Model):
 
     partner_id = fields.Many2one(domain=SH_CUSTOMER_DOMAIN)
 
+    # project_id is shown as "დეპარტამენტი" (department project: stages / flow, rights);
+    # "პროექტი" is the concrete project the task also belongs to
+    sh_project_id = fields.Many2one(
+        'project.project', string='პროექტი', index=True, tracking=True,
+        domain="[('sh_is_department', '=', False), ('is_template', '=', False)]",
+        help="კონკრეტული პროექტი. დავალება ჩანს დეპარტამენტშიც და ამ პროექტშიც, ერთი ფლოუთი.")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # a sub-task belongs to the same concrete project as its parent
+        for vals in vals_list:
+            if vals.get('parent_id') and 'sh_project_id' not in vals:
+                vals['sh_project_id'] = self.browse(vals['parent_id']).sh_project_id.id
+        return super().create(vals_list)
+
+    @api.model
+    def _read_group_stage_ids(self, stages, domain):
+        """Kanban of a concrete project: show the department flow columns even when empty."""
+        stages = super()._read_group_stage_ids(stages, domain)
+        if self.env.context.get('sh_project_view'):
+            stages |= self.env['project.project'].search([('sh_is_department', '=', True)]).type_ids
+            stages = stages.sorted(lambda s: (s.sequence, s.id))
+        return stages
+
     sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი')
     reviewer_id = fields.Many2one(
         'res.users', string='შემმოწმებელი', tracking=True, index=True,

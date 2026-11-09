@@ -5,6 +5,15 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
+            <!-- project_id is the department (gives the flow); "პროექტი" is the concrete project -->
+            <xpath expr="//sheet//group/group/field[@name='project_id']" position="attributes">
+                <attribute name="string">დეპარტამენტი</attribute>
+                <attribute name="domain">[('active', '=', True), ('sh_is_department', '=', True), '|', ('company_id', '=', False), ('company_id', '=?', company_id)]</attribute>
+                <attribute name="required">not is_template</attribute>
+            </xpath>
+            <xpath expr="//sheet//group/group/field[@name='project_id']" position="after">
+                <field name="sh_project_id" options="{'no_create': True}" placeholder="არ ეკუთვნის პროექტს"/>
+            </xpath>
             <xpath expr="//header" position="inside">
                 <field name="sh_kind" invisible="1"/>
                 <button name="action_sh_hold" type="object" string="შეჩერება"
