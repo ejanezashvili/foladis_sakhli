@@ -72,6 +72,20 @@ class ProjectTask(models.Model):
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
+    # former task properties, now real fields (same in every department, searchable, tracked)
+    sh_responsible_id = fields.Many2one(
+        'res.users', string='მთავარი პასუხისმგებელი', tracking=True, index=True,
+        domain="[('share', '=', False)]")
+    sh_work_start = fields.Date('სამუშაოს დაწყება', tracking=True)
+    sh_category = fields.Selection([
+        ('admin', 'ადმინისტრაციული'), ('sales', 'გაყიდვები'), ('stock', 'მარაგი და საწყობი'),
+        ('finance', 'ფინანსური'), ('tech', 'ტექნიკური'), ('other', 'სხვა'),
+    ], string='კატეგორია', tracking=True)
+    sh_branch = fields.Selection([
+        ('main', 'ძირითადი ფილიალი'), ('vaziani3', 'ვაზიანი #3'), ('vaziani1', 'ვაზიანი 1'),
+        ('vaziani2', 'ვაზიანი 2'), ('batumi', 'ბათუმის ფილიალი'), ('lilo', 'ლილო'),
+    ], string='ფილიალი', tracking=True)
+    sh_manual_progress = fields.Integer('ხელით პროგრესი (%)', tracking=True)
     sh_progress = fields.Integer(
         'პროგრესი (%)', compute='_compute_sh_progress', store=True,
         help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებების, საკონტროლო სიისა და "
@@ -94,17 +108,10 @@ class ProjectTask(models.Model):
         return round(100 * done / total) if total else None
 
     def _sh_manual_percent(self):
-        props = self.task_properties
-        value = None
-        if isinstance(props, Mapping):  # Odoo 19 returns a Property mapping
-            value = props.get(MANUAL_PROGRESS_PROP)
-        elif isinstance(props, list):
-            value = next((p.get('value') for p in props if p.get('name') == MANUAL_PROGRESS_PROP), None)
-        if value in (None, False, ''):
-            return None
-        return max(0, min(100, int(value)))
+        value = self.sh_manual_progress
+        return max(0, min(100, value)) if value else None
 
-    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'task_properties')
+    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'sh_manual_progress')
     def _compute_sh_progress(self):
         for task in self:
             kind = task.stage_id.sh_kind
