@@ -38,7 +38,7 @@
             </kanban>
             <xpath expr="//kanban/*[1]" position="before">
                 <header>
-                    <button name="%(steelhouse_task_flow.action_sh_projects)d" type="action"
+                    <button name="%(steelhouse_task_flow.action_sh_all_tasks)d" type="action"
                             string="პროექტები" class="btn-secondary" display="always"/>
                 </header>
             </xpath>
@@ -53,7 +53,7 @@
         <field name="arch" type="xml">
             <xpath expr="//list/*[1]" position="before">
                 <header>
-                    <button name="%(steelhouse_task_flow.action_sh_projects)d" type="action"
+                    <button name="%(steelhouse_task_flow.action_sh_all_tasks)d" type="action"
                             string="პროექტები" class="btn-secondary" display="always"/>
                 </header>
             </xpath>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- "ყველა დავალება": all department tasks on one page, by stage.
+    <!-- "პროექტები" (button on the departments page): all department tasks on one page, by stage.
          No default filter; search only by employee / department / customer.
          Access rules still apply: employees see only their own tasks. -->
     <record id="view_sh_all_tasks_search" model="ir.ui.view">
@@ -17,7 +17,7 @@
     </record>
 
     <record id="action_sh_all_tasks" model="ir.actions.act_window">
-        <field name="name">ყველა დავალება</field>
+        <field name="name">პროექტები</field>
         <field name="path">sh-all-tasks</field>
         <field name="res_model">project.task</field>
         <field name="domain">[('project_id', '!=', False), ('is_template', '=', False)]</field>
@@ -38,22 +38,4 @@
         <field name="act_window_id" ref="action_sh_all_tasks"/>
     </record>
 
-    <!-- projects page: kanban by project stage + button "ყველა დავალება" -->
-    <record id="view_sh_projects_kanban" model="ir.ui.view">
-        <field name="name">project.project.kanban.sh.projects</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="project.project_kanban_view_group_stage"/>
-        <field name="mode">primary</field>
-        <field name="arch" type="xml">
-            <xpath expr="//kanban/*[1]" position="before">
-                <header>
-                    <button name="%(steelhouse_task_flow.action_sh_all_tasks)d" type="action"
-                            string="ყველა დავალება" class="btn-secondary" display="always"/>
-                </header>
-            </xpath>
-        </field>
-    </record>
-    <record id="steelhouse_task_flow.action_sh_projects" model="ir.actions.act_window">
-        <field name="view_id" ref="view_sh_projects_kanban"/>
-    </record>
 </odoo>
