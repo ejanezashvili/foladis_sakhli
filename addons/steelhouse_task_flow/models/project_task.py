@@ -267,6 +267,17 @@ class ProjectTask(models.Model):
             'context': {'default_task_id': self.id, 'default_mode': mode},
         }
 
+    def action_sh_mark_done(self):
+        """Assignee marks the task done: it goes to review, the reviewer confirms it."""
+        self.ensure_one()
+        if self.env.user not in self.user_ids and not self.env.user.has_group('project.group_project_manager'):
+            raise UserError(_("შესრულებულად მონიშვნა შეუძლია მხოლოდ დავალების შემსრულებელს."))
+        stage = self._sh_stage_of_kind('review')
+        if not stage:
+            raise UserError(_("ამ დეპარტამენტს არ აქვს „შემოწმებაზე“ სტადია."))
+        self.write({'stage_id': stage.id})
+        return True
+
     def action_sh_hold(self):
         return self._sh_open_wizard('on_hold')
 

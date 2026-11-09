@@ -12,7 +12,7 @@
         <field name="domain">[('is_template', '=', False), ('sh_is_department', '=', False)]</field>
         <field name="context">{'display_milestone_deadline': True, 'default_sh_is_department': False}</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="view_id" ref="project.view_project_kanban"/>
+        <field name="view_id" ref="project.project_kanban_view_group_stage"/>
         <field name="search_view_id" ref="project.view_project_project_filter"/>
     </record>
 
@@ -79,10 +79,19 @@
         <field name="view_id" ref="view_sh_department_project_list"/>
         <field name="act_window_id" ref="project.open_view_project_all"/>
     </record>
+    <!-- with project stages on, Odoo shows this menu/action: departments stay ungrouped, same views -->
     <record id="project.open_view_project_all_group_stage" model="ir.actions.act_window">
         <field name="name">დეპარტამენტები</field>
         <field name="domain">[('is_template', '=', False), ('sh_is_department', '=', True)]</field>
         <field name="context">{'display_milestone_deadline': True, 'default_sh_is_department': True}</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+    </record>
+    <record id="project.open_view_project_all_group_stage_kanban_view" model="ir.actions.act_window.view">
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+    </record>
+    <record id="project.open_view_project_all_group_stage_tree_view" model="ir.actions.act_window.view">
+        <field name="view_id" ref="view_sh_department_project_list"/>
     </record>
     <record id="project.menu_projects" model="ir.ui.menu">
         <field name="name">დეპარტამენტები</field>
