@@ -8,6 +8,9 @@ class ProjectProject(models.Model):
         string='დეპარტამენტი', default=False, index=True,
         help="დეპარტამენტის პროექტი (ჩანს „დეპარტამენტებში“). "
              "მოხსნილი — კონკრეტული პროექტი (ჩანს „პროექტებში“).")
+    sh_department_id = fields.Many2one(
+        'hr.department', string='HR დეპარტამენტი', index=True,
+        help="რომელ დეპარტამენტს შეესაბამება (წვდომის წესებისთვის): თანამშრომლები და ხელმძღვანელები.")
     sh_task_ids = fields.One2many('project.task', 'sh_project_id', string='პროექტის დავალებები')
 
     # A concrete project counts the tasks linked to it by "პროექტი" (sh_project_id);
