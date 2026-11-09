@@ -17,7 +17,7 @@
             '|', '|', '|', '|',
             ('project_id', '=', False),
             ('user_ids', 'in', user.id),
-            ('reviewer_id', '=', user.id),
+            ('reviewer_ids', 'in', user.id),
             ('create_uid', '=', user.id),
             ('project_id.sh_department_id.sh_all_manager_user_ids', 'in', user.id)]</field>
     </record>
@@ -31,9 +31,9 @@
             '|', '|', '|', '|', '|', '|', '|', '|',
             ('is_template', '=', True),
             ('task_ids.user_ids', 'in', user.id),
-            ('task_ids.reviewer_id', '=', user.id),
+            ('task_ids.reviewer_ids', 'in', user.id),
             ('sh_task_ids.user_ids', 'in', user.id),
-            ('sh_task_ids.reviewer_id', '=', user.id),
+            ('sh_task_ids.reviewer_ids', 'in', user.id),
             ('user_id', '=', user.id),
             ('sh_department_id.member_ids.user_id', '=', user.id),
             ('sh_department_id.sh_all_manager_user_ids', 'in', user.id),

@@ -61,10 +61,19 @@ class ProjectTask(models.Model):
         return stages
 
     sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი')
+    reviewer_ids = fields.Many2many(
+        'res.users', 'sh_task_reviewer_rel', 'task_id', 'user_id', string='შემმოწმებლები',
+        tracking=True, default=lambda self: self.env.user, domain="[('share', '=', False)]",
+        help="ადასტურებენ შესრულებას (დასრულება), აბრუნებენ ან აუქმებენ დავალებას — ნებისმიერი მათგანი.")
+    # first reviewer, kept for compatibility (reports, older automation code)
     reviewer_id = fields.Many2one(
-        'res.users', string='შემმოწმებელი', tracking=True, index=True,
-        default=lambda self: self.env.user, domain="[('share', '=', False)]",
-        help="ადასტურებს შესრულებას (დასრულება), აბრუნებს ან აუქმებს დავალებას.")
+        'res.users', string='შემმოწმებელი', compute='_compute_reviewer_id', store=True, index=True)
+
+    @api.depends('reviewer_ids')
+    def _compute_reviewer_id(self):
+        for task in self:
+            task.reviewer_id = task.reviewer_ids[:1]
+
     evidence_required = fields.Boolean(
         'საჭიროა მტკიცებულება', tracking=True,
         help="შემოწმებაზე გადაყვანამდე დავალებაზე ფაილი ან ფოტო უნდა იყოს მიმაგრებული.")
@@ -141,7 +150,7 @@ class ProjectTask(models.Model):
     def _sh_can_review(self):
         self.ensure_one()
         user = self.env.user
-        return (self.env.su or not self.reviewer_id or self.reviewer_id == user
+        return (self.env.su or not self.reviewer_ids or user in self.reviewer_ids
                 or user.has_group('base.group_system'))
 
     def _sh_check_reviewer(self, kind):
@@ -151,7 +160,7 @@ class ProjectTask(models.Model):
                 raise UserError(_(
                     "„%(stage)s“-ში გადაყვანა შეუძლია მხოლოდ შემმოწმებელს (%(reviewer)s) "
                     "ან სისტემის ადმინისტრატორს.",
-                    stage=labels.get(kind, kind), reviewer=task.reviewer_id.name))
+                    stage=labels.get(kind, kind), reviewer=', '.join(task.reviewer_ids.mapped('name'))))
 
     def _sh_check_evidence(self, new_flag=None):
         """new_flag: value of evidence_required being written in the same save (if any)."""

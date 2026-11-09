@@ -28,7 +28,7 @@
                                required="not project_id" widget="many2many_avatar_user"/>
                         <field name="role_ids" invisible="not has_project_template or is_template" widget="many2many_tags"
                                options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Assign at project creation"/>
-                        <field name="reviewer_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
+                        <field name="reviewer_ids" widget="many2many_avatar_user" options="{'no_create': True, 'no_quick_create': True}" invisible="is_template"/>
                     </group>
                 </group>
                 <separator string="როდის და სად დგას"/>
