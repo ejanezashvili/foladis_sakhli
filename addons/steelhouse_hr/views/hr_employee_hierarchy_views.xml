@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Employee org chart: same layout as the department hierarchy (team in a centered frame). -->
+    <record id="hr_employee_hierarchy_view_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.hierarchy.steelhouse</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_org_chart.hr_employee_hierarchy_view"/>
+        <field name="arch" type="xml">
+            <hierarchy position="attributes">
+                <attribute name="js_class">steelhouse_employee_hierarchy</attribute>
+            </hierarchy>
+        </field>
+    </record>
+
+    <record id="hr_employee_public_hierarchy_view_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.public.hierarchy.steelhouse</field>
+        <field name="model">hr.employee.public</field>
+        <field name="inherit_id" ref="hr_org_chart.hr_employee_public_hierarchy_view"/>
+        <field name="arch" type="xml">
+            <hierarchy position="attributes">
+                <attribute name="js_class">steelhouse_employee_hierarchy</attribute>
+            </hierarchy>
+        </field>
+    </record>
+</odoo>

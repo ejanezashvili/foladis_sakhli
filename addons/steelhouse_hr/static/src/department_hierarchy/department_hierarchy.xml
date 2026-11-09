@@ -2,11 +2,25 @@
 <templates xml:space="preserve">
 
     <t t-name="steelhouse_hr.DepartmentHierarchyRenderer">
-        <div class="o_hierarchy_renderer o_renderer o_sh_dept_tree w-100 d-flex justify-content-center" t-ref="renderer">
+        <div class="o_hierarchy_renderer o_renderer o_sh_tree o_sh_dept_tree w-100 d-flex justify-content-center" t-ref="renderer">
             <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
                 <div class="o_sh_root_level">
                     <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
                         <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo" shared="shared" isRoot="true"/>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Employees: the top people side by side; an opened person's team in a frame below. -->
+    <t t-name="steelhouse_hr.EmployeeHierarchyRenderer">
+        <div class="o_hierarchy_renderer o_renderer o_sh_tree o_sh_emp_tree w-100 d-flex justify-content-center" t-ref="renderer">
+            <div class="o_hierarchy_container d-flex flex-column w-100 h-100 p-2">
+                <div class="o_sh_emp_roots">
+                    <t t-foreach="props.model.root.rootNodes" t-as="node" t-key="node.id">
+                        <DepartmentTreeNode node="node" openRecord="props.openRecord" archInfo="props.archInfo"
+                                            shared="shared" siblings="props.model.root.rootNodes"/>
                     </t>
                 </div>
             </div>

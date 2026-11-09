@@ -21,7 +21,7 @@ export class DepartmentCard extends HierarchyCard {
 }
 
 /**
- * One department card. When opened, its positions (with the people holding them)
+ * One department (or employee) card. When opened, its positions (with the people holding them)
  * and its sub-departments are shown in a frame right under the row that contains
  * the card. The template has two roots (card + panel) so both sit in the parent grid.
  */
@@ -34,6 +34,8 @@ export class DepartmentTreeNode extends Component {
         archInfo: Object,
         shared: Object,
         isRoot: { type: Boolean, optional: true },
+        // cards of the top level (they have no parent node), for "one open card per level"
+        siblings: { type: Array, optional: true },
     };
 
     setup() {
@@ -44,6 +46,19 @@ export class DepartmentTreeNode extends Component {
         this.panelRef = useRef("panel");
         useEffect(() => this.placeArrow());
         useExternalListener(window, "resize", () => this.placeArrow());
+        // re-center when the frame changes size (e.g. a frame opened inside it)
+        useEffect(
+            (panel) => {
+                const frame = panel?.querySelector(":scope > .o_sh_tree_frame");
+                if (!frame || !window.ResizeObserver) {
+                    return;
+                }
+                const observer = new ResizeObserver(() => this.placeArrow());
+                observer.observe(frame);
+                return () => observer.disconnect();
+            },
+            () => [this.panelRef.el]
+        );
     }
 
     get positions() {
@@ -74,7 +89,8 @@ export class DepartmentTreeNode extends Component {
             return;
         }
         // one open card per level, like the standard view
-        for (const sibling of node.parentNode?.nodes || []) {
+        const siblings = node.parentNode ? node.parentNode.nodes : this.props.siblings || [];
+        for (const sibling of siblings) {
             if (sibling !== node) {
                 delete open[sibling.id];
                 if (sibling.nodes.length) {
@@ -93,8 +109,7 @@ export class DepartmentTreeNode extends Component {
         this.action.doAction(action);
     }
 
-    // Center the frame under the opened card (kept inside the page width)
-    // and point its arrow at the card.
+    // Center the frame in the page width and point its arrow at the opened card.
     placeArrow() {
         const card = this.cardRef.el;
         const panel = this.panelRef.el;
@@ -102,18 +117,23 @@ export class DepartmentTreeNode extends Component {
             return;
         }
         const frame = panel.querySelector(":scope > .o_sh_tree_frame");
+        if (!frame) {
+            return;
+        }
         const COL = 250, GAP = 12, PAD = 14;
         const items = this.props.node.nodes.length + this.positions.length;
         // nested frames may be wider than the frame they sit in (it grows), up to the page width
-        const tree = panel.closest(".o_sh_dept_tree");
+        const tree = panel.closest(".o_sh_tree");
         const avail = (tree ? tree.clientWidth - 40 : panel.clientWidth) - 2 * PAD - 4;
         const cols = Math.max(1, Math.min(items, Math.floor((avail + GAP) / (COL + GAP))));
         frame.style.setProperty("--sh-cols", cols);
-        const width = cols * COL + (cols - 1) * GAP + 2 * PAD + 4;
+        // real width: columns grow when a frame inside is opened
+        const width = Math.max(frame.offsetWidth, cols * COL + (cols - 1) * GAP + 2 * PAD + 4);
         const c = card.getBoundingClientRect();
         const p = panel.getBoundingClientRect();
         const center = c.left + c.width / 2 - p.left;
-        const left = Math.max(0, Math.min(center - width / 2, Math.max(panel.clientWidth, width) - width));
+        // the frame is centered in the page width; its arrow still points at the opened card
+        const left = Math.max(0, (Math.max(panel.clientWidth, width) - width) / 2);
         frame.style.marginLeft = `${left}px`;
         frame.style.setProperty("--sh-arrow-left", `${center - left}px`);
     }
@@ -145,3 +165,27 @@ export const departmentHierarchyView = {
 };
 
 registry.category("views").add("steelhouse_department_hierarchy", departmentHierarchyView);
+
+/**
+ * Employee org chart with the same layout: the people under an opened person are
+ * shown in a frame centered in the page, with an arrow pointing at that person.
+ */
+export class EmployeeHierarchyRenderer extends HierarchyRenderer {
+    static template = "steelhouse_hr.EmployeeHierarchyRenderer";
+    static components = { ...HierarchyRenderer.components, DepartmentTreeNode };
+
+    setup() {
+        super.setup();
+        this.shared = useState({ positions: {}, open: {} });
+    }
+
+    // Drag & drop of the default view works on rows; this layout has no rows.
+    get canDragAndDropRecord() {
+        return false;
+    }
+}
+
+registry.category("views").add("steelhouse_employee_hierarchy", {
+    ...hierarchyView,
+    Renderer: EmployeeHierarchyRenderer,
+});
