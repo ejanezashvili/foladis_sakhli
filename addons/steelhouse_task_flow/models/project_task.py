@@ -40,6 +40,9 @@ class ProjectTask(models.Model):
         domain="[('sh_is_department', '=', False), ('is_template', '=', False)]",
         help="კონკრეტული პროექტი. დავალება ჩანს დეპარტამენტშიც და ამ პროექტშიც, ერთი ფლოუთი.")
 
+    sh_department_id = fields.Many2one(
+        related='project_id.sh_department_id', string='HR დეპარტამენტი', store=True, index=True)
+
     @api.model_create_multi
     def create(self, vals_list):
         # a sub-task belongs to the same concrete project as its parent
@@ -52,7 +55,7 @@ class ProjectTask(models.Model):
     def _read_group_stage_ids(self, stages, domain):
         """Kanban of a concrete project: show the department flow columns even when empty."""
         stages = super()._read_group_stage_ids(stages, domain)
-        if self.env.context.get('sh_project_view'):
+        if self.env.context.get('sh_project_view') or self.env.context.get('sh_all_tasks'):
             stages |= self.env['project.project'].search([('sh_is_department', '=', True)]).type_ids
             stages = stages.sorted(lambda s: (s.sequence, s.id))
         return stages
