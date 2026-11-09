@@ -1,15 +1,36 @@
 $sh-line: #ababb1;
 $sh-frame: #4b3a5a;
 
-.o_sh_dept_tree {
+.o_sh_tree {
     // Cards of one level. "dense" lets the cards after an opened one fill its row,
     // so the opened panel lands right under that row.
     .o_sh_tree_level {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
         grid-auto-flow: row dense;
-        gap: 12px;
-        align-items: start;
+        gap: 18px;
+        // cards of one row get the same height, so the open buttons line up
+        align-items: stretch;
+    }
+
+    // A card fills its grid cell; the open button sits at the bottom.
+    .o_sh_tree_card {
+        display: flex;
+        flex-direction: column;
+
+        > .o_hierarchy_node_container {
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        .o_hierarchy_node {
+            flex: 1 1 auto;
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        .o_hierarchy_node_content {
+            flex: 1 0 auto;
+        }
     }
 
     // Row under the opened card (full width, transparent).
@@ -18,7 +39,7 @@ $sh-frame: #4b3a5a;
         margin-top: 4px;
     }
 
-    // Dark frame with the sub-departments, centered under the opened card (position set in JS).
+    // Dark frame with the sub-departments, centered in the page width (position set in JS).
     .o_sh_tree_frame {
         position: relative;
         width: max-content;
@@ -47,11 +68,6 @@ $sh-frame: #4b3a5a;
         box-shadow: 0 0 0 1px $sh-frame;
     }
 
-    // No empty row above cards, so cards and position boxes start at the same height.
-    .o_hierarchy_node_button_container:empty {
-        display: none !important;
-    }
-
     // Cards grow with their content (several heads on one card).
     .o_hierarchy_node_container {
         height: auto !important;
@@ -68,6 +84,22 @@ $sh-frame: #4b3a5a;
     // Keep other cards fully visible (default view fades them).
     .o_hierarchy_node_container {
         opacity: 1 !important;
+    }
+
+    // Employees: the top people side by side; an opened person's team below all of them.
+    .o_sh_emp_roots {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 18px;
+
+        > .o_sh_tree_card {
+            width: 250px;
+        }
+        > .o_sh_tree_children {
+            order: 1;
+            flex: 0 0 100%;
+        }
     }
 
     // Top level (company): card centered, departments below across the full width.
@@ -102,6 +134,8 @@ $sh-frame: #4b3a5a;
     // (title + people with avatars), but has no open button - nobody is under it.
     .o_sh_position {
         border: 1px solid var(--border-color, #dee2e6);
+        border-radius: 6px;
+        overflow: hidden;
         background-color: var(--o-view-background-color, #fff);
         min-height: 64px;
 
@@ -122,5 +156,28 @@ $sh-frame: #4b3a5a;
             height: 20px;
             object-fit: cover;
         }
+    }
+}
+
+// Department cards only (employee cards keep the photo sticking out above the card).
+.o_sh_dept_tree {
+    .o_sh_tree_card {
+        .o_hierarchy_node {
+            overflow: hidden;
+        }
+        // long names wrap inside the header instead of overflowing it
+        .o_hierarchy_node_header {
+            height: auto !important;
+            min-height: 30px;
+            padding: 4px 6px;
+            white-space: normal;
+            text-align: center;
+            line-height: 1.25;
+        }
+    }
+
+    // No empty row above cards, so cards and position boxes start at the same height.
+    .o_hierarchy_node_button_container:empty {
+        display: none !important;
     }
 }

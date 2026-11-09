@@ -11,9 +11,11 @@
         'data/mail_activity_type_data.xml',
         'views/hr_department_views.xml',
         'views/hr_department_hierarchy_views.xml',
+        'views/hr_employee_hierarchy_views.xml',
         'views/hr_leave_views.xml',
         'views/hr_employee_views.xml',
         'views/res_users_views.xml',
+        'views/mail_templates.xml',
     ],
     'assets': {
         'web.assets_backend': [
