@@ -23,8 +23,15 @@ INFO_PREFIXES = ('თქვენ დაგენიშნათ',)
 REMINDER_PREFIXES = INFO_PREFIXES + ('ვადა იწურება', 'ვადაგადაცილებულია', 'ესკალაცია', 'დასადასტურებელია')
 
 
+# "კლიენტი" (customer): employees and internal users are not customers
+SH_CUSTOMER_DOMAIN = ("['&', '|', ('company_id', '=?', company_id), ('company_id', '=', False), "
+                      "'&', ('employee_ids', '=', False), '|', ('user_ids', '=', False), ('user_ids.share', '=', True)]")
+
+
 class ProjectTask(models.Model):
     _inherit = 'project.task'
+
+    partner_id = fields.Many2one(domain=SH_CUSTOMER_DOMAIN)
 
     sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი')
     reviewer_id = fields.Many2one(
