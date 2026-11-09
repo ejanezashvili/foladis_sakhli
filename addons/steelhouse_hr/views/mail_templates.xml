@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "You have been assigned an activity" notice: also show the activity's note -->
+    <template id="message_activity_assigned_note" inherit_id="mail.message_activity_assigned">
+        <xpath expr="//ul" position="after">
+            <div t-if="activity.note and activity.note != '&lt;p&gt;&lt;br&gt;&lt;/p&gt;'" style="margin-top: 4px;">
+                <b>შენიშვნა:</b>
+                <t t-out="activity.note"/>
+            </div>
+        </xpath>
+    </template>
+</odoo>
