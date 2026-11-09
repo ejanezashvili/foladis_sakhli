@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="web.SearchBarMenu" t-inherit-mode="extension">
+        <!-- filters column: hidden on the picker page -->
+        <xpath expr="//div[hasclass('o_filter_menu')]" position="attributes">
+            <attribute name="t-if">!shPicker</attribute>
+        </xpath>
+        <!-- group by column: only the three pickers -->
+        <xpath expr="//div[hasclass('o_group_by_menu')]/t[@t-foreach='groupByItems']" position="before">
+            <t t-if="shPicker">
+                <t t-foreach="shPickers" t-as="picker" t-key="picker.key">
+                    <DropdownItem class="'o_menu_item o_sh_picker'" onSelected="() => this.onShPick(picker)">
+                        <t t-esc="picker.label"/>
+                    </DropdownItem>
+                </t>
+            </t>
+        </xpath>
+        <xpath expr="//div[hasclass('o_group_by_menu')]/t[@t-if='!hideCustomGroupBy and fields.length']" position="attributes">
+            <attribute name="t-if">!shPicker and !hideCustomGroupBy and fields.length</attribute>
+        </xpath>
+    </t>
+</templates>

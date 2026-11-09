@@ -21,7 +21,7 @@
         <field name="path">sh-all-tasks</field>
         <field name="res_model">project.task</field>
         <field name="domain">[('project_id', '!=', False), ('is_template', '=', False)]</field>
-        <field name="context">{'sh_all_tasks': True, 'default_group_by': 'stage_id'}</field>
+        <field name="context">{'sh_all_tasks': True, 'sh_picker': True, 'default_group_by': 'stage_id'}</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_sh_all_tasks_search"/>
     </record>
