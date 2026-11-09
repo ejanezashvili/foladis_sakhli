@@ -5,6 +5,11 @@
         <field name="model">hr.leave</field>
         <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
         <field name="arch" type="xml">
+            <!-- the employee can always be chosen while the request is not decided yet -->
+            <xpath expr="//field[@name='employee_id']" position="attributes">
+                <attribute name="readonly">state in ['validate', 'refuse', 'cancel']</attribute>
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
             <xpath expr="//field[@name='supported_attachment_ids']/.." position="after">
                 <field name="department_id" invisible="1"/>
                 <separator string="შემცვლელები"/>
@@ -14,10 +19,8 @@
                     <list editable="bottom" no_open="1">
                         <field name="department_id" options="{'no_create': True, 'no_open': True}"/>
                         <field name="deputy_id" widget="many2one_avatar_employee" options="{'no_create': True}"
-                               placeholder="სახელი ან დეპარტამენტი"
-                               domain="[('id', '!=', parent.employee_id)]"
-                               context="{'sh_search_department': True}"/>
-                        <field name="deputy_department_id" optional="show" options="{'no_open': True}"/>
+                               placeholder="აირჩიეთ თანამშრომელი"
+                               domain="[('id', '!=', parent.employee_id)]"/>
                     </list>
                 </field>
             </xpath>
