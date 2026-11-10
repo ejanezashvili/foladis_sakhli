@@ -81,6 +81,10 @@ class ProjectTask(models.Model):
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
+    priority = fields.Selection([
+        ('0', 'დაბალი'), ('1', 'საშუალო'), ('2', 'მაღალი'), ('3', 'კრიტიკული'),
+    ], string='პრიორიტეტი')
+
     # former task properties, now real fields (same in every department, searchable, tracked)
     sh_responsible_id = fields.Many2one(
         'res.users', string='მთავარი პასუხისმგებელი', tracking=True, index=True,
