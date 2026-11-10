@@ -102,6 +102,18 @@
                     <p class="text-muted">ყველა ცვლილების სრული ისტორია ჩანს მარჯვნივ, შეტყობინებებში.</p>
                 </page>
             </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_sh_save_template" type="object" class="oe_stat_button" icon="fa-floppy-o"
+                        invisible="is_template or not id or not project_id">
+                    <div class="o_stat_info"><span class="o_stat_text">შაბლონად შენახვა</span></div>
+                </button>
+                <button name="action_sh_open_templates" type="object" class="oe_stat_button" icon="fa-clipboard">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">შაბლონები</span>
+                        <field name="sh_template_count" class="o_stat_value"/>
+                    </div>
+                </button>
+            </xpath>
             <xpath expr="//header" position="inside">
                 <field name="sh_kind" invisible="1"/>
                 <button name="action_sh_mark_done" type="object" string="✔ შესრულებულია" class="btn-success"

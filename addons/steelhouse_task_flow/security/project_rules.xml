@@ -14,7 +14,8 @@
         <field name="global" eval="True"/>
         <field name="perm_create" eval="False"/>
         <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.share else [
-            '|', '|', '|', '|',
+            '|', '|', '|', '|', '|',
+            ('is_template', '=', True),
             ('project_id', '=', False),
             ('user_ids', 'in', user.id),
             ('reviewer_ids', 'in', user.id),
