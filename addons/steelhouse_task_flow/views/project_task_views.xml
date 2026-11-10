@@ -140,13 +140,15 @@
                 <field name="priority" widget="badge"
                        decoration-muted="priority == '0'" decoration-info="priority == '1'"
                        decoration-warning="priority == '2'" decoration-danger="priority == '3'"/>
+                <field name="sh_repeat" invisible="1"/>
+                <span class="badge rounded-pill text-bg-light border ms-1" invisible="not sh_repeat"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
             </xpath>
             <xpath expr="//field[@name='tag_ids'][@widget='many2many_tags']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
             <!-- card: creation date instead of "In 3 days" -->
             <xpath expr="//field[@name='date_deadline'][@widget='remaining_days']" position="replace">
-                <div class="text-muted small">შექმნა: <field name="create_date" widget="date"/></div>
+                <div class="text-muted small">შექმნა: <field name="sh_create_date_str"/></div>
             </xpath>
         </field>
     </record>
