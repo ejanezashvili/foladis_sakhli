@@ -97,12 +97,11 @@
             <xpath expr="//notebook" position="inside">
                 <page name="sh_reasons" string="მიზეზები">
                     <group>
-                        <field name="hold_reason" readonly="1"/>
-                        <field name="resume_date" readonly="1"/>
-                        <field name="return_reason" readonly="1"/>
-                        <field name="cancel_reason" readonly="1"/>
+                        <field name="hold_reason" placeholder="ჩაწერეთ შეჩერების მიზეზი..."/>
+                        <field name="resume_date"/>
+                        <field name="return_reason" placeholder="ჩაწერეთ დაბრუნების მიზეზი..."/>
+                        <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..."/>
                     </group>
-                    <p class="text-muted">ყველა ცვლილების სრული ისტორია ჩანს მარჯვნივ, შეტყობინებებში.</p>
                 </page>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
