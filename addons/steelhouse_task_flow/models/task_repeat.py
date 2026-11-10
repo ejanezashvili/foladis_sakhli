@@ -123,10 +123,16 @@ class ProjectTask(models.Model):
         tasks = self.search([('sh_repeat', '=', True), ('sh_repeat_next', '<=', today),
                              ('is_template', '=', False), ('project_id', '!=', False)])
         for task in tasks:
-            while task.sh_repeat and task.sh_repeat_next and task.sh_repeat_next <= today:
-                if task.sh_repeat_until_type == 'until' and task.sh_repeat_until and task.sh_repeat_next > task.sh_repeat_until:
-                    task.sh_repeat = False
-                    break
-                task._sh_repeat_once(task.sh_repeat_next)
-                task.sh_repeat_next = task.sh_repeat_next + task._sh_repeat_step()
+            if task.sh_repeat_until_type == 'until' and task.sh_repeat_until and task.sh_repeat_next > task.sh_repeat_until:
+                task.sh_repeat = False
+                continue
+            # one copy per run, even if days were missed (no pile of catch-up copies)
+            task._sh_repeat_once(today)
+            nxt = task.sh_repeat_next + task._sh_repeat_step()
+            while nxt <= today:
+                nxt += task._sh_repeat_step()
+            if task.sh_repeat_until_type == 'until' and task.sh_repeat_until and nxt > task.sh_repeat_until:
+                task.sh_repeat = False  # last occurrence done: the cycle stops
+            else:
+                task.sh_repeat_next = nxt
             self.env.cr.commit()
