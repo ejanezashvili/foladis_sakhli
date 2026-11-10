@@ -20,8 +20,14 @@ class ProjectTask(models.Model):
         ('day', 'დღეში'), ('week', 'კვირაში'), ('month', 'თვეში'), ('year', 'წელიწადში'),
     ], string='ერთეული', default='week', copy=False)
     sh_repeat_start = fields.Date(
-        'ციკლის დაწყება', copy=False, tracking=True,
-        help="საიდან დაიწყოს ათვლა. ცარიელი — დავალების შექმნის დღიდან.")
+        'ციკლის დაწყება', copy=False, tracking=True, default=fields.Date.context_today,
+        help="საიდან დაიწყოს ათვლა (ნაგულისხმევად — დღევანდელი დღე). ცარიელი — დავალების შექმნის დღიდან.")
+
+    @api.onchange('sh_repeat')
+    def _onchange_sh_repeat_start(self):
+        for task in self:
+            if task.sh_repeat and not task.sh_repeat_start:
+                task.sh_repeat_start = fields.Date.context_today(task)
     sh_repeat_next = fields.Date('შემდეგი განმეორება', copy=False, readonly=True,
                                  help="ითვლება ავტომატურად: ციკლის დაწყება (ან შექმნის დღე) + ინტერვალი.")
     sh_repeat_until_type = fields.Selection([
