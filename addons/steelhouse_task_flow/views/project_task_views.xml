@@ -87,6 +87,9 @@
                 <field name="sh_progress" widget="progressbar" nolabel="1" class="me-3" style="min-width: 160px;" invisible="is_template"/>
                 <span class="fw-bold me-2">პრიორიტეტი</span>
                 <field name="priority" widget="selection" class="o_sh_priority" style="min-width: 130px;"/>
+                <button name="action_sh_save_template" type="object" icon="fa-floppy-o" class="btn btn-link fs-4 ms-2 p-0"
+                        title="შაბლონად შენახვა" aria-label="შაბლონად შენახვა"
+                        invisible="is_template or not id or not project_id"/>
             </xpath>
             <xpath expr="//div[hasclass('o_state_container')]" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -103,10 +106,6 @@
                 </page>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
-                <button name="action_sh_save_template" type="object" class="oe_stat_button" icon="fa-floppy-o"
-                        invisible="is_template or not id or not project_id">
-                    <div class="o_stat_info"><span class="o_stat_text">შაბლონად შენახვა</span></div>
-                </button>
                 <button name="action_sh_open_templates" type="object" class="oe_stat_button" icon="fa-clipboard">
                     <div class="o_stat_info">
                         <span class="o_stat_text">შაბლონები</span>
