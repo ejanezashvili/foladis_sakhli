@@ -58,7 +58,8 @@
                             <field name="sh_repeat_interval" class="me-2" style="max-width: 3rem;" required="sh_repeat"/>
                             <field name="sh_repeat_unit" required="sh_repeat" style="max-width: 9rem;"/>
                         </div>
-                        <field name="sh_repeat_next" invisible="not sh_repeat" required="sh_repeat"/>
+                        <field name="sh_repeat_start" invisible="not sh_repeat" placeholder="შექმნის დღიდან"/>
+                        <field name="sh_repeat_next" invisible="not sh_repeat or not sh_repeat_next"/>
                         <label for="sh_repeat_until_type" invisible="not sh_repeat"/>
                         <div class="d-flex" invisible="not sh_repeat">
                             <field name="sh_repeat_until_type" class="me-2" style="max-width: 9rem;" required="sh_repeat"/>

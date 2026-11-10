@@ -15,11 +15,15 @@ class ProjectTask(models.Model):
     # Repeat on a date: on "შემდეგი განმეორება" a copy of the task is created in the first
     # stage ("ახალი"), whether or not the previous one is finished (daily scheduled action).
     sh_repeat = fields.Boolean('განმეორებადი', tracking=True, copy=False)
-    sh_repeat_interval = fields.Integer('გამეორდეს ყოველ', default=1, copy=False)
+    sh_repeat_interval = fields.Integer('განმეორდეს ყოველ', default=1, copy=False)
     sh_repeat_unit = fields.Selection([
         ('day', 'დღეში'), ('week', 'კვირაში'), ('month', 'თვეში'), ('year', 'წელიწადში'),
     ], string='ერთეული', default='week', copy=False)
-    sh_repeat_next = fields.Date('შემდეგი განმეორება', tracking=True, copy=False)
+    sh_repeat_start = fields.Date(
+        'ციკლის დაწყება', copy=False, tracking=True,
+        help="საიდან დაიწყოს ათვლა. ცარიელი — დავალების შექმნის დღიდან.")
+    sh_repeat_next = fields.Date('შემდეგი განმეორება', copy=False, readonly=True,
+                                 help="ითვლება ავტომატურად: ციკლის დაწყება (ან შექმნის დღე) + ინტერვალი.")
     sh_repeat_until_type = fields.Selection([
         ('forever', 'სამუდამოდ'), ('until', 'თარიღამდე'),
     ], string='ვადამდე', default='forever', copy=False)
@@ -37,10 +41,36 @@ class ProjectTask(models.Model):
         for task in self.filtered('sh_repeat'):
             if task.sh_repeat_interval < 1:
                 raise ValidationError(_("„გამეორდეს ყოველ“ უნდა იყოს 1 ან მეტი."))
-            if not task.sh_repeat_next:
-                raise ValidationError(_("მიუთითეთ „შემდეგი განმეორების“ თარიღი."))
             if task.sh_repeat_until_type == 'until' and not task.sh_repeat_until:
                 raise ValidationError(_("მიუთითეთ ბოლო თარიღი."))
+
+    _SH_REPEAT_FIELDS = ('sh_repeat', 'sh_repeat_start', 'sh_repeat_interval', 'sh_repeat_unit')
+
+    def _sh_plan_next(self):
+        """Next occurrence = start of the cycle (or the creation day) + one step,
+        moved forward to today or later."""
+        today = fields.Date.context_today(self)
+        for task in self:
+            if not task.sh_repeat:
+                task.sh_repeat_next = False
+                continue
+            base = task.sh_repeat_start or (task.create_date and task.create_date.date()) or today
+            nxt = base + task._sh_repeat_step()
+            while nxt < today:
+                nxt += task._sh_repeat_step()
+            task.sh_repeat_next = nxt
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        tasks = super().create(vals_list)
+        tasks.filtered('sh_repeat')._sh_plan_next()
+        return tasks
+
+    def write(self, vals):
+        res = super().write(vals)
+        if any(f in vals for f in self._SH_REPEAT_FIELDS) and 'sh_repeat_next' not in vals:
+            self._sh_plan_next()
+        return res
 
     def _sh_repeat_step(self):
         return relativedelta(**{UNITS[self.sh_repeat_unit or 'week']: self.sh_repeat_interval or 1})
