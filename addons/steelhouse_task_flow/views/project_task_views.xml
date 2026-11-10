@@ -63,7 +63,7 @@
                         <label for="sh_repeat_until_type" invisible="not sh_repeat"/>
                         <div class="d-flex" invisible="not sh_repeat">
                             <field name="sh_repeat_until_type" class="me-2" style="max-width: 9rem;" required="sh_repeat"/>
-                            <field name="sh_repeat_until" invisible="sh_repeat_until_type != 'until'" required="sh_repeat and sh_repeat_until_type == 'until'"/>
+                            <field name="sh_repeat_until" invisible="sh_repeat_until_type != 'until'"/>
                         </div>
                     </group>
                 </group>

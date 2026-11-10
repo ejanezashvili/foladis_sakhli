@@ -41,8 +41,6 @@ class ProjectTask(models.Model):
         for task in self.filtered('sh_repeat'):
             if task.sh_repeat_interval < 1:
                 raise ValidationError(_("„გამეორდეს ყოველ“ უნდა იყოს 1 ან მეტი."))
-            if task.sh_repeat_until_type == 'until' and not task.sh_repeat_until:
-                raise ValidationError(_("მიუთითეთ ბოლო თარიღი."))
 
     _SH_REPEAT_FIELDS = ('sh_repeat', 'sh_repeat_start', 'sh_repeat_interval', 'sh_repeat_unit')
 
@@ -60,16 +58,31 @@ class ProjectTask(models.Model):
                 nxt += task._sh_repeat_step()
             task.sh_repeat_next = nxt
 
+    @api.onchange('sh_repeat_until_type')
+    def _onchange_sh_repeat_until_type(self):
+        """„თარიღამდე“: by default the cycle stops after the next occurrence."""
+        for task in self:
+            if task.sh_repeat_until_type == 'until' and not task.sh_repeat_until:
+                task.sh_repeat_until = task.sh_repeat_next or (
+                    (task.sh_repeat_start or fields.Date.context_today(task)) + task._sh_repeat_step())
+
+    def _sh_fill_until(self):
+        for task in self.filtered(lambda t: t.sh_repeat and t.sh_repeat_until_type == 'until' and not t.sh_repeat_until):
+            task.sh_repeat_until = task.sh_repeat_next
+
     @api.model_create_multi
     def create(self, vals_list):
         tasks = super().create(vals_list)
         tasks.filtered('sh_repeat')._sh_plan_next()
+        tasks._sh_fill_until()
         return tasks
 
     def write(self, vals):
         res = super().write(vals)
         if any(f in vals for f in self._SH_REPEAT_FIELDS) and 'sh_repeat_next' not in vals:
             self._sh_plan_next()
+        if 'sh_repeat_until_type' in vals or 'sh_repeat' in vals:
+            self._sh_fill_until()
         return res
 
     def _sh_repeat_step(self):
