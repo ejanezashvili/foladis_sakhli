@@ -149,6 +149,7 @@
             </xpath>
             <!-- card: creation date instead of "In 3 days" -->
             <xpath expr="//field[@name='date_deadline'][@widget='remaining_days']" position="replace">
+                <div class="small" invisible="not sh_branch"><i class="fa fa-map-marker text-danger me-1"/><field name="sh_branch"/></div>
                 <div class="text-muted small">შექმნა: <field name="sh_create_date_str"/></div>
             </xpath>
         </field>
