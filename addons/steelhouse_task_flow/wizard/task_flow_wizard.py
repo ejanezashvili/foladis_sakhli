@@ -19,7 +19,5 @@ class TaskFlowWizard(models.TransientModel):
         self.ensure_one()
         if not (self.reason or '').strip():
             raise UserError(_("მიუთითეთ მიზეზი."))
-        if self.mode == 'on_hold' and not self.resume_date:
-            raise UserError(_("მიუთითეთ განახლების თარიღი."))
         self.task_id._sh_apply_reason(self.mode, self.reason.strip(), self.resume_date)
         return {'type': 'ir.actions.act_window_close'}

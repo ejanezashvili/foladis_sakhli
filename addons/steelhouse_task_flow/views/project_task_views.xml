@@ -95,12 +95,12 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//notebook" position="inside">
-                <page name="sh_reasons" string="მიზეზები">
+                <page name="sh_reasons" string="მიზეზები" invisible="sh_kind not in ('on_hold', 'returned', 'cancelled')">
                     <group>
-                        <field name="hold_reason" placeholder="ჩაწერეთ შეჩერების მიზეზი..."/>
-                        <field name="resume_date"/>
-                        <field name="return_reason" placeholder="ჩაწერეთ დაბრუნების მიზეზი..."/>
-                        <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..."/>
+                        <field name="hold_reason" placeholder="ჩაწერეთ შეჩერების მიზეზი..." invisible="sh_kind != 'on_hold'"/>
+                        <field name="resume_date" invisible="sh_kind != 'on_hold'"/>
+                        <field name="return_reason" placeholder="ჩაწერეთ დაბრუნების მიზეზი..." invisible="sh_kind != 'returned'"/>
+                        <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..." invisible="sh_kind != 'cancelled'"/>
                     </group>
                 </page>
                 <page name="sh_final" string="საბოლოო პროექტი" invisible="sh_kind not in ('review', 'done')">

@@ -8,8 +8,11 @@
                 <field name="task_id" invisible="1"/>
                 <field name="mode" invisible="1"/>
                 <group>
-                    <field name="reason" placeholder="მოკლედ დაწერეთ მიზეზი"/>
-                    <field name="resume_date" invisible="mode != 'on_hold'" required="mode == 'on_hold'"/>
+                    <label for="reason" string="შეჩერების მიზეზი" invisible="mode != 'on_hold'"/>
+                    <label for="reason" string="დაბრუნების მიზეზი" invisible="mode != 'returned'"/>
+                    <label for="reason" string="გაუქმების მიზეზი" invisible="mode != 'cancelled'"/>
+                    <field name="reason" nolabel="1" placeholder="მოკლედ დაწერეთ მიზეზი"/>
+                    <field name="resume_date" invisible="mode != 'on_hold'"/>
                 </group>
                 <footer>
                     <button name="action_confirm" type="object" string="დადასტურება" class="btn-primary"/>
@@ -20,6 +23,24 @@
     </record>
     <record id="action_sh_task_flow_wizard" model="ir.actions.act_window">
         <field name="name">მიზეზი</field>
+        <field name="res_model">steelhouse.task.flow.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="action_sh_task_hold_wizard" model="ir.actions.act_window">
+        <field name="name">შეჩერება</field>
+        <field name="res_model">steelhouse.task.flow.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="action_sh_task_return_wizard" model="ir.actions.act_window">
+        <field name="name">დაბრუნება</field>
+        <field name="res_model">steelhouse.task.flow.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="action_sh_task_cancel_wizard" model="ir.actions.act_window">
+        <field name="name">გაუქმება</field>
         <field name="res_model">steelhouse.task.flow.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>

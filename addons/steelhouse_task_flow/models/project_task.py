@@ -245,7 +245,9 @@ class ProjectTask(models.Model):
                               'returned': _("დაბრუნებისთვის მიუთითეთ მიზეზი."),
                               'cancelled': _("გაუქმებისთვის მიუთითეთ მიზეზი.")}
                     raise RedirectWarning(
-                        labels[kind], self.env.ref('steelhouse_task_flow.action_sh_task_flow_wizard').id,
+                        labels[kind], self.env.ref({'on_hold': 'steelhouse_task_flow.action_sh_task_hold_wizard',
+                                                    'returned': 'steelhouse_task_flow.action_sh_task_return_wizard',
+                                                    'cancelled': 'steelhouse_task_flow.action_sh_task_cancel_wizard'}[kind]).id,
                         _("გაგრძელება"), {'default_task_id': self.id, 'default_mode': kind})
                 if kind == 'accepted':
                     self._sh_check_assignee()
