@@ -86,6 +86,10 @@ export class TaskSteps extends Component {
         this.state.loaded = true;
     }
 
+    get showDone() {
+        // "დაასრულა" column appears only once a stage has all its sub-tasks done
+        return this.state.sections.some((s) => s.items.length && this.doneCount(s) === s.items.length);
+    }
     doneCount(section) {
         return section.items.filter((i) => i.done).length;
     }

@@ -31,7 +31,7 @@
                         <th style="width: 40%">ეტაპი / ქვედავალება</th>
                         <th style="width: 220px">შემსრულებელი</th>
                         <th style="width: 140px">ვადა</th>
-                        <th>დაასრულა</th>
+                        <th t-if="showDone">დაასრულა</th>
                         <th class="text-end" style="width: 160px">მზადაა</th>
                         <th style="width: 30px"/>
                     </tr>
@@ -62,7 +62,7 @@
                                 <input t-if="section.id" type="date" class="form-control form-control-sm" t-att-value="section.deadline"
                                        t-on-change="(ev) => this.onSectionDeadline(section, ev)"/>
                             </td>
-                            <td>
+                            <td t-if="showDone">
                                 <span t-if="section.done_date and sectionState(section) === 'done'" class="text-success fw-bold small">
                                     <i class="fa fa-check me-1"/><t t-esc="section.done_date"/>
                                 </span>
@@ -90,7 +90,7 @@
                                     <input type="date" class="form-control form-control-sm" t-att-value="item.deadline"
                                            t-on-change="(ev) => this.onDeadline(item, ev)"/>
                                 </td>
-                                <td class="text-muted small">
+                                <td t-if="showDone" class="text-muted small">
                                     <t t-if="item.done" t-esc="item.done_by + (item.done_date ? ' · ' + item.done_date : '')"/>
                                 </td>
                                 <td class="text-end">
@@ -105,14 +105,14 @@
                                 </td>
                             </tr>
                             <tr class="o_sh_add">
-                                <td colspan="6" class="ps-5">
+                                <td t-att-colspan="showDone ? 6 : 5" class="ps-5">
                                     <a href="#" t-on-click.prevent="() => this.addItem(section)">+ ქვედავალების დამატება</a>
                                 </td>
                             </tr>
                         </t>
                     </t>
                     <tr class="o_sh_add">
-                        <td colspan="6"><a href="#" t-on-click.prevent="addSection">+ ეტაპის დამატება</a></td>
+                        <td t-att-colspan="showDone ? 6 : 5"><a href="#" t-on-click.prevent="addSection">+ ეტაპის დამატება</a></td>
                     </tr>
                 </tbody>
             </table>
