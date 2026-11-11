@@ -118,6 +118,14 @@ class HrLeave(models.Model):
                 result['refuse'].add('validate')
         return result
 
+    # No "Refuse" button on an approved request (Odoo's own automatic refusals,
+    # e.g. a public holiday added later, still work); if plans change, the employee
+    # cancels it, or HR sends it back to approval.
+    def _compute_can_refuse(self):
+        super()._compute_can_refuse()
+        for holiday in self.filtered(lambda h: h.state == 'validate'):
+            holiday.can_refuse = False
+
     def _check_double_validation_rules(self, employees, state):
         # the first approval of a double-validation request: any equal head may give it
         if state == 'validate1':
