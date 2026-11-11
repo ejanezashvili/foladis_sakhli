@@ -79,6 +79,17 @@ class ProjectTask(models.Model):
         help="შემოწმებაზე გადაყვანამდე დავალებაზე ფაილი ან ფოტო უნდა იყოს მიმაგრებული.")
     hold_reason = fields.Text('შეჩერების მიზეზი', copy=False, tracking=True)
     hold_date = fields.Date('შეჩერების თარიღი', copy=False, tracking=True)
+    sh_hold_info = fields.Char(compute='_compute_sh_hold_info')
+
+    @api.depends('hold_reason', 'hold_date', 'resume_date')
+    def _compute_sh_hold_info(self):
+        for task in self:
+            parts = [task.hold_reason or '']
+            if task.hold_date:
+                parts.append(_("შეჩერდა: %s", task.hold_date.strftime('%d.%m.%Y')))
+            if task.resume_date:
+                parts.append(_("განახლება: %s", task.resume_date.strftime('%d.%m.%Y')))
+            task.sh_hold_info = ' — '.join(p for p in parts if p)
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
