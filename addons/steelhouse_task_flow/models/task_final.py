@@ -12,6 +12,20 @@ class ProjectTask(models.Model):
     sh_done_user_id = fields.Many2one('res.users', 'დაასრულა', readonly=True, copy=False)
     sh_done_date = fields.Datetime('დასრულების დრო', readonly=True, copy=False)
 
+    sh_is_admin = fields.Boolean(compute='_compute_sh_is_admin')
+
+    def _compute_sh_is_admin(self):
+        user = self.env.user
+        value = user.has_group('project.group_project_manager') or user.has_group('base.group_system')
+        for task in self:
+            task.sh_is_admin = value
+
+    def action_sh_review_ok(self):
+        """Reviewer confirms (after "დარწმუნებული ხარ?"): final project dialog -> done."""
+        self.ensure_one()
+        self._sh_check_reviewer('done')
+        return self.action_sh_open_final()
+
     def action_sh_open_final(self):
         self.ensure_one()
         return {

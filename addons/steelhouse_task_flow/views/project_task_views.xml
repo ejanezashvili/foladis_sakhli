@@ -129,9 +129,17 @@
             </xpath>
             <xpath expr="//header" position="inside">
                 <field name="sh_kind" invisible="1"/>
+                <field name="sh_is_admin" invisible="1"/>
                 <button name="action_sh_accept" type="object" string="✋ მიღება" class="btn-primary"
                         invisible="is_template or not project_id or uid not in user_ids or sh_kind != 'new'"/>
+                <button name="action_sh_review_ok" type="object" string="☐ შემოწმებულია" class="o_sh_btn_review"
+                        confirm="დავალება დადასტურდება და გადავა დასრულებულში." confirm-title="დარწმუნებული ხარ?"
+                        confirm-label="კი, დადასტურდეს" cancel-label="არა"
+                        invisible="is_template or not project_id or sh_kind != 'review' or (uid not in reviewer_ids and not sh_is_admin)"/>
+                <span class="badge text-bg-success fs-6 px-3 py-2" invisible="sh_kind != 'done'">✔ შემოწმებულია</span>
                 <button name="action_sh_mark_done" type="object" string="✔ შესრულებულია" class="btn-success"
+                        confirm="დავალება გადავა შემოწმებაზე." confirm-title="დარწმუნებული ხარ?"
+                        confirm-label="კი, შესრულდა" cancel-label="არა"
                         invisible="is_template or not project_id or uid not in user_ids or sh_kind not in ('accepted', 'in_progress', 'returned')"/>
             </xpath>
             <xpath expr="//t[@name='warning_section']" position="after">
