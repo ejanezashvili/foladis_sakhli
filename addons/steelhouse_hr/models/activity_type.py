@@ -64,7 +64,7 @@ class MailActivityDoneNotice(models.Model):
         return res
 
 
-SH_LEAVE_STATUS = {'confirm': 'დასამტკიცებელი', 'validate1': 'მეორე დამტკიცება'}
+SH_LEAVE_STATUS = {'confirm': 'დასამტკიცებელი', 'validate1': 'მეორე დამტკიცება', 'validate': 'დამტკიცებული'}
 
 
 class ResUsersActivityMenu(models.Model):

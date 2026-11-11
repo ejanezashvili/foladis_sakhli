@@ -17,7 +17,6 @@
                                placeholder="დეპარტამენტის თანამშრომლები ან ნებისმიერი სახელი"
                                domain="[('id', '!=', parent.employee_id)]"
                                context="{'sh_search_department': True, 'sh_deputy_department_id': department_id}"/>
-                        <field name="deputy_department_id" optional="show" options="{'no_open': True}"/>
                     </list>
                 </field>
             </xpath>

@@ -5,9 +5,8 @@
 
 .o_field_widget[name="delegation_ids"] {
     // fixed shares, so a long department name does not squeeze the chosen deputy
-    th[data-name="department_id"] { width: 36% !important; }
-    th[data-name="deputy_id"] { width: 28% !important; }
-    th[data-name="deputy_department_id"] { width: 32% !important; }
+    th[data-name="department_id"] { width: 55% !important; }
+    th[data-name="deputy_id"] { width: 40% !important; }
     // long department names wrap instead of being cut with "..."
     td.o_data_cell,
     td.o_data_cell .o_field_widget,
