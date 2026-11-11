@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Georgian names of the renamed Project menus/actions: a module upgrade resets them,
+         so they are written again on every install/upgrade -->
+    <function model="project.project" name="_sh_set_ka_names"/>
+</odoo>

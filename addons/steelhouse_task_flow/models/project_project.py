@@ -36,6 +36,21 @@ class ProjectProject(models.Model):
         super()._compute_closed_task_count()
         self._sh_count('closed_task_count', [('state', 'not in', self.env['project.task'].OPEN_STATES)])
 
+    @api.model
+    def _sh_set_ka_names(self):
+        names = {
+            'project.open_view_project_all': 'დეპარტამენტები',
+            'project.open_view_project_all_group_stage': 'დეპარტამენტები',
+            'project.menu_projects': 'დეპარტამენტები',
+            'project.menu_projects_group_stage': 'დეპარტამენტები',
+            'steelhouse_task_flow.action_sh_all_tasks': 'პროექტები',
+            'steelhouse_task_flow.action_sh_create_department': 'დეპარტამენტის შექმნა',
+        }
+        for xmlid, name in names.items():
+            record = self.env.ref(xmlid, raise_if_not_found=False)
+            if record:
+                record.with_context(lang='ka_GE').name = name
+
     def action_view_tasks(self):
         """Concrete project: its tasks are the ones whose "პროექტი" is this project;
         each task keeps the flow (stages) of its department (project_id)."""
