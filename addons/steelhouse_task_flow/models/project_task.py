@@ -240,6 +240,8 @@ class ProjectTask(models.Model):
                     raise UserError(_(
                         "ამ სტადიაზე გადასაყვანად გამოიყენეთ ღილაკი ფორმის თავზე "
                         "(„შეჩერება“, „დაბრუნება“ ან „გაუქმება“) — საჭიროა მიზეზი."))
+                if kind == 'accepted':
+                    self._sh_check_assignee()
                 if kind in REVIEWER_KINDS:
                     self._sh_check_reviewer(kind)
                 if kind == 'review':
@@ -289,6 +291,28 @@ class ProjectTask(models.Model):
             'name': names[mode],
             'context': {'default_task_id': self.id, 'default_mode': mode},
         }
+
+    def _sh_check_assignee(self):
+        """Requirement 3.2: only an assignee (or an admin) accepts a task."""
+        user = self.env.user
+        if self.env.su or user.has_group('project.group_project_manager') or user.has_group('base.group_system'):
+            return
+        for task in self.filtered(lambda t: not t.is_template and t.stage_id.sh_kind != 'accepted'):
+            if user not in task.user_ids:
+                raise UserError(_(
+                    "დავალების მიღება შეუძლია მხოლოდ შემსრულებელს (%s) ან ადმინს.",
+                    ', '.join(task.user_ids.mapped('name')) or '—'))
+
+    def action_sh_accept(self):
+        """Assignee confirms they accept the task: ახალი -> მიღებული."""
+        self.ensure_one()
+        stage = self._sh_stage_of_kind('accepted')
+        if not stage:
+            raise UserError(_("ამ დეპარტამენტს არ აქვს „მიღებული“ სტადია."))
+        self.write({'stage_id': stage.id})
+        self.message_post(body=Markup(_("✋ <b>დავალება მიღებულია</b> შემსრულებლის მიერ")),
+                          message_type='comment', subtype_xmlid='mail.mt_note')
+        return True
 
     def action_sh_mark_done(self):
         """Assignee marks the task done: it goes to review, the reviewer confirms it."""

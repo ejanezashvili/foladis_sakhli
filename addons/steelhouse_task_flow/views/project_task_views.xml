@@ -114,8 +114,10 @@
             </xpath>
             <xpath expr="//header" position="inside">
                 <field name="sh_kind" invisible="1"/>
+                <button name="action_sh_accept" type="object" string="✋ მიღება" class="btn-primary"
+                        invisible="is_template or not project_id or uid not in user_ids or sh_kind != 'new'"/>
                 <button name="action_sh_mark_done" type="object" string="✔ შესრულებულია" class="btn-success"
-                        invisible="is_template or not project_id or uid not in user_ids or sh_kind not in ('new', 'accepted', 'in_progress', 'returned')"/>
+                        invisible="is_template or not project_id or uid not in user_ids or sh_kind not in ('accepted', 'in_progress', 'returned')"/>
                 <button name="action_sh_hold" type="object" string="შეჩერება"
                         invisible="is_template or not project_id or sh_kind in ('on_hold', 'done', 'cancelled')"/>
                 <button name="action_sh_return" type="object" string="დაბრუნება"
