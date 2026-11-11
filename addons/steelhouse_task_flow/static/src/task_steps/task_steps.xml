@@ -91,7 +91,7 @@
                                            t-on-change="(ev) => this.onDeadline(item, ev)"/>
                                 </td>
                                 <td t-if="showDone" class="text-muted small">
-                                    <t t-if="item.done" t-esc="item.done_by + (item.done_date ? ' · ' + item.done_date : '')"/>
+                                    <t t-if="item.done and sectionState(section) === 'done'" t-esc="item.done_by + (item.done_date ? ' · ' + item.done_date : '')"/>
                                 </td>
                                 <td class="text-end">
                                     <div class="form-check form-switch d-inline-block mb-0">
