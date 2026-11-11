@@ -1404,7 +1404,7 @@ msgstr "კლიენტის შექმნა"
 #. module: hr
 #: model:ir.actions.act_window,name:hr.action_create_job_position
 msgid "Create a Job Position"
-msgstr "თანამდებობის შექმნა"
+msgstr "პოზიციის შექმნა"
 
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.hr_department_kanban_action model_terms:ir.actions.act_window,help:hr.hr_department_tree_action
@@ -1944,7 +1944,7 @@ msgstr "სხვადასხვა ბიზნეს-დარგის ც
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job__expected_employees
 msgid "Expected number of employees for this job position after new recruitment."
-msgstr "ამ თანამდებობაზე თანამშრომლების მოსალოდნელი რაოდენობა ახალი დაქირავების შემდეგ."
+msgstr "ამ პოზიციაზე თანამშრომლების მოსალოდნელი რაოდენობა ახალი დაქირავების შემდეგ."
 
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.hr_employee_public_action model_terms:ir.actions.act_window,help:hr.open_view_employee_list_my
@@ -2391,7 +2391,7 @@ msgstr "მიმდინარეა"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__is_custom_job_title model:ir.model.fields,field_description:hr.field_hr_version__is_custom_job_title
 msgid "Is Custom Job Title"
-msgstr "მორგებული პოზიციაა"
+msgstr "მორგებული თანამდებობაა"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__is_flexible model:ir.model.fields,field_description:hr.field_hr_version__is_flexible
@@ -2456,7 +2456,7 @@ msgstr "პრიორიტეტს მონაცემებზე და�
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__job_id model:ir.model.fields,field_description:hr.field_hr_employee_public__job_id model:ir.model.fields,field_description:hr.field_hr_version__job_id model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_search model_terms:ir.ui.view,arch_db:hr.view_hr_job_form model_terms:ir.ui.view,arch_db:hr.view_hr_job_tree
 msgid "Job"
-msgstr "სამუშაო"
+msgstr "პოზიცია"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_job__description
@@ -2466,12 +2466,12 @@ msgstr "სამუშაოს აღწერა"
 #. module: hr
 #: model:ir.model,name:hr.model_hr_job model:ir.model.fields,field_description:hr.field_hr_job__name model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_form model_terms:ir.ui.view,arch_db:hr.hr_version_search_view model_terms:ir.ui.view,arch_db:hr.view_employee_filter model_terms:ir.ui.view,arch_db:hr.view_employee_form model_terms:ir.ui.view,arch_db:hr.view_job_filter
 msgid "Job Position"
-msgstr "თანამდებობა"
+msgstr "პოზიცია"
 
 #. module: hr
 #: model:ir.actions.act_window,name:hr.action_hr_job model:ir.ui.menu,name:hr.menu_view_hr_job
 msgid "Job Positions"
-msgstr "თანამდებობები"
+msgstr "პოზიციები"
 
 #. module: hr
 #: model_terms:ir.ui.view,arch_db:hr.view_hr_job_form
@@ -2481,12 +2481,12 @@ msgstr "ვაკანსიის გამოქვეყნება"
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_employee__job_title model:ir.model.fields,field_description:hr.field_hr_employee_public__job_title model:ir.model.fields,field_description:hr.field_hr_version__job_title model:ir.model.fields,field_description:hr.field_res_users__job_title model:ir.model.fields,field_description:hr.field_resource_resource__job_title model_terms:ir.ui.view,arch_db:hr.hr_employee_public_view_form
 msgid "Job Title"
-msgstr "პოზიცია"
+msgstr "თანამდებობა"
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__jobs_ids model_terms:ir.ui.view,arch_db:hr.view_job_filter
 msgid "Jobs"
-msgstr "სამუშაოები"
+msgstr "პოზიციები"
 
 #. module: hr
 #: model_terms:hr.job,website_description:hr.job_hrm
@@ -2562,7 +2562,7 @@ msgstr "იურიდიული სახელი"
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.action_hr_job
 msgid "Let's create a job position"
-msgstr "შევქმნათ თანამდებობა"
+msgstr "შევქმნათ პოზიცია"
 
 #. module: hr
 #: model_terms:ir.actions.act_window,help:hr.action_hr_contract_templates
@@ -2897,7 +2897,7 @@ msgstr "დღეების რაოდენობა სამუშაო 
 #. module: hr
 #: model:ir.model.fields,help:hr.field_hr_job__no_of_employee
 msgid "Number of employees currently occupying this job position."
-msgstr "ამ თანამდებობაზე ამჟამად მომუშავე თანამშრომლების რაოდენობა."
+msgstr "ამ პოზიციაზე ამჟამად მომუშავე თანამშრომლების რაოდენობა."
 
 #. module: hr
 #: model:ir.model.fields,field_description:hr.field_hr_department__message_has_error_counter model:ir.model.fields,field_description:hr.field_hr_employee__message_has_error_counter model:ir.model.fields,field_description:hr.field_hr_job__message_has_error_counter model:ir.model.fields,field_description:hr.field_hr_version__message_has_error_counter
@@ -3899,7 +3899,7 @@ msgstr "%s-ის ხელმძღვანელი დაკავშირ�
 #. module: hr
 #: model:ir.model.constraint,message:hr.constraint_hr_job_name_company_uniq
 msgid "The name of the job position must be unique per department in company!"
-msgstr "თანამდებობის დასახელება უნიკალური უნდა იყოს კომპანიის თითოეულ დეპარტამენტში!"
+msgstr "პოზიციის დასახელება უნიკალური უნდა იყოს კომპანიის თითოეულ დეპარტამენტში!"
 
 #. module: hr
 #. odoo-python

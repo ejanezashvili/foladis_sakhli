@@ -219,13 +219,13 @@ msgstr "&lt;th class=\"text-center\" colspan="
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/leave_stats/leave_stats.xml:0
 msgid "'s summary ("
-msgstr "-ის შეჯამება ("
+msgstr " — დამტკიცებული შვებულებები ("
 
 #. module: hr_holidays
 #. odoo-javascript
 #: code:addons/hr_holidays/static/src/leave_stats/leave_stats.xml:0
 msgid "'s summary in this period"
-msgstr "-ის შეჯამება ამ პერიოდში"
+msgstr " — ამავე დღეებში შვებულებაში არიან"
 
 #. module: hr_holidays
 #. odoo-javascript
@@ -2112,12 +2112,12 @@ msgstr "იანვარი"
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_report_calendar__job_id model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_mandatory_day_view_search
 msgid "Job"
-msgstr "სამუშაო"
+msgstr "პოზიცია"
 
 #. module: hr_holidays
 #: model:ir.model.fields,field_description:hr_holidays.field_hr_leave_mandatory_day__job_ids model_terms:ir.ui.view,arch_db:hr_holidays.hr_leave_report_calendar_view_search
 msgid "Job Position"
-msgstr "თანამდებობა"
+msgstr "პოზიცია"
 
 #. module: hr_holidays
 #: model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__second_month__7 model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_level__yearly_month__7 model:ir.model.fields.selection,name:hr_holidays.selection__hr_leave_accrual_plan__carryover_month__7

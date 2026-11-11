@@ -896,12 +896,12 @@ msgstr "საიუველირო დიზაინერი"
 #. module: hr_skills
 #: model:ir.model.fields,field_description:hr_skills.field_hr_employee_skill_report__job_id model:ir.model.fields,field_description:hr_skills.field_hr_job_skill__job_id
 msgid "Job"
-msgstr "სამუშაო"
+msgstr "პოზიცია"
 
 #. module: hr_skills
 #: model:ir.model,name:hr_skills.model_hr_job
 msgid "Job Position"
-msgstr "თანამდებობა"
+msgstr "პოზიცია"
 
 #. module: hr_skills
 #: model_terms:hr.resume.line,description:hr_skills.employee_resume_line_admin_4
@@ -911,7 +911,7 @@ msgid ""
 "- Led quality assurance planning for multiple concurrent projects relative to overall system architecture or trading system changes/new developments.\n"
 "- Configured and released business critical alpha and risk models using MATLAB and SQL with inputs from Portfolio Managers."
 msgstr ""
-"თანამდებობა: დეველოპმენტის გუნდის ლიდერი\n"
+"პოზიცია: დეველოპმენტის გუნდის ლიდერი\n"
 "- ტექნიკური ოპერაციების მხარდაჭერა წარმოების სხვადასხვა პრობლემის გამოკვლევითა და გამოსწორებით (Java, Perl, Shell სკრიპტები, SQL).\n"
 "- ხარისხის უზრუნველყოფის დაგეგმვის ხელმძღვანელობა რამდენიმე პარალელური პროექტისთვის, სისტემის საერთო არქიტექტურის ან სავაჭრო სისტემის ცვლილებების/ახალი განვითარების გათვალისწინებით.\n"
 "- ბიზნესისთვის კრიტიკული ალფა- და რისკ-მოდელების კონფიგურაცია და გამოშვება MATLAB-ისა და SQL-ის გამოყენებით, პორტფელის მენეჯერების მონაცემების საფუძველზე."
@@ -924,7 +924,7 @@ msgid ""
 "- Developed stored procedures to assist Java level programming efforts.\n"
 "- Developed multiple renewable energy plant architectures, both commercial installations and defense-related."
 msgstr ""
-"თანამდებობა: პროდუქტის მენეჯერი\n"
+"პოზიცია: პროდუქტის მენეჯერი\n"
 "- პროგრამული უზრუნველყოფის დანერგვის კოორდინაცია და მართვა ხუთ სისტემურ გარემოში, დეველოპმენტიდან წარმოებამდე.\n"
 "- შენახული პროცედურების შემუშავება Java-ზე პროგრამირების ხელშესაწყობად.\n"
 "- განახლებადი ენერგიის სადგურების რამდენიმე არქიტექტურის შემუშავება, როგორც კომერციული, ისე თავდაცვითი დანიშნულების ობიექტებისთვის."
@@ -932,7 +932,7 @@ msgstr ""
 #. module: hr_skills
 #: model_terms:ir.ui.view,arch_db:hr_skills.hr_employee_skill_report_view_search
 msgid "Jobs"
-msgstr "სამუშაოები"
+msgstr "პოზიციები"
 
 #. module: hr_skills
 #: model:hr.resume.line,name:hr_skills.employee_resume_fme_johnson_shaw_and_carroll
@@ -1690,7 +1690,7 @@ msgstr "უნარების ანგარიში"
 #. module: hr_skills
 #: model:ir.model,name:hr_skills.model_hr_job_skill
 msgid "Skills for job positions"
-msgstr "თანამდებობების უნარები"
+msgstr "პოზიციების უნარები"
 
 #. module: hr_skills
 #: model:ir.actions.server,name:hr_skills.hr_job_skills_cron_add_certification_activity_to_employees_ir_actions_server

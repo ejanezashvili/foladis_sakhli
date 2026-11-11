@@ -1639,12 +1639,12 @@ msgstr "იაპონია"
 #. module: base
 #: model:ir.model.fields,field_description:base.field_res_partner__function model:ir.model.fields,field_description:base.field_res_users__function
 msgid "Job Position"
-msgstr "თანამდებობა"
+msgstr "პოზიცია"
 
 #. module: base
 #: model_terms:ir.ui.view,arch_db:base.view_partner_form
 msgid "Job title"
-msgstr "პოზიცია"
+msgstr "თანამდებობა"
 
 #. module: base
 #. odoo-python
