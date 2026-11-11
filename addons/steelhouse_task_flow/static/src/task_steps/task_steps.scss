@@ -52,6 +52,9 @@
             border-radius: 4px;
         }
     }
+    select.form-select {
+        min-width: 200px;
+    }
     .o_sh_item_done .o_sh_item_name {
         color: #6c757d;
     }

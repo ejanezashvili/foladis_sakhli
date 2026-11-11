@@ -44,13 +44,16 @@ class ProjectTask(models.Model):
     def sh_steps_data(self):
         self.ensure_one()
         subs = self.child_ids.filtered(lambda t: t.state != '1_canceled').sorted(lambda t: (t.sequence, t.id))
+        # sub-tasks without a stage (older ones): put them into a real, editable stage
+        loose_subs = subs.filtered(lambda s: not s.sh_section_id or s.sh_section_id.task_id != self)
+        if loose_subs:
+            section = self.env['steelhouse.task.section'].create({'task_id': self.id, 'name': '', 'sequence': 0})
+            loose_subs.with_context(sh_flow_internal=True).write({'sh_section_id': section.id})
+            self.invalidate_recordset(['sh_section_ids'])
         sections = []
         for section in self.sh_section_ids:
             items = [self._sh_item(s) for s in subs if s.sh_section_id == section]
             sections.append({'id': section.id, 'name': section.name or '', 'items': items})
-        loose = [self._sh_item(s) for s in subs if not s.sh_section_id or s.sh_section_id.task_id != self]
-        if loose:
-            sections.append({'id': False, 'name': _('სხვა ქვედავალებები'), 'items': loose})
         users = self.env['res.users'].search([('share', '=', False)], order='name')
         return {
             'sections': sections,

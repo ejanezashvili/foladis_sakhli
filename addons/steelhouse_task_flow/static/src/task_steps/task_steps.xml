@@ -7,7 +7,7 @@
                 <thead>
                     <tr>
                         <th style="width: 40%">ეტაპი / ქვედავალება</th>
-                        <th>შემსრულებელი</th>
+                        <th style="width: 220px">შემსრულებელი</th>
                         <th style="width: 140px">ვადა</th>
                         <th>დაასრულა</th>
                         <th class="text-end" style="width: 160px">მზადაა</th>
