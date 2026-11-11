@@ -143,14 +143,66 @@ class HrLeave(models.Model):
             employees = employees.filtered(lambda e: user not in e.sudo().sh_head_user_ids)
         return super()._check_double_validation_rules(employees, state)
 
+    def _sh_deputy_for(self, employee):
+        """self = a head's time off. Who stands in for that head for this employee:
+        the deputy line of the most specific department containing the employee,
+        else the department's deputy (hr.department.deputy_id)."""
+        self.ensure_one()
+        dept = employee.sudo().department_id
+        path = dept.parent_path or '-'
+        best = None
+        for line in self.sudo().delegation_ids.filtered('deputy_id'):
+            line_path = line.department_id.parent_path or ''
+            if line_path and path.startswith(line_path) and (
+                    not best or len(line_path) > len(best.department_id.parent_path or '')):
+                best = line
+        if best:
+            return best.deputy_id
+        while dept:
+            if self.employee_id in dept.manager_ids and dept.deputy_id:
+                return dept.deputy_id
+            dept = dept.parent_id
+        return self.env['hr.employee']
+
     def _get_responsible_for_approval(self):
         responsible = super()._get_responsible_for_approval()
         if self.validation_type == 'manager' or (self.validation_type == 'both' and self.state == 'confirm'):
             employee = self.employee_id.sudo()
-            heads = employee.sh_head_user_ids
+            heads = employee._sh_heads().user_id
             if employee.leave_manager_id in heads:
                 responsible |= heads
+            # a head on leave today: his deputy approves instead (back to him when he returns)
+            result = self.env['res.users']
+            for user in responsible:
+                head = user.sudo().employee_id
+                absence = head and head._sh_current_absence()
+                deputy = absence and absence._sh_deputy_for(employee)
+                if deputy and deputy.user_id and deputy != employee:
+                    result |= deputy.user_id
+                else:
+                    result |= user
+            responsible = result
         return responsible
+
+    @api.model
+    def _sh_sync_approval_activities(self, exclude=None):
+        """Approval to-dos of requests waiting at the head's step follow who can approve now:
+        a head who went on leave hands them to the deputy, and gets them back on return."""
+        act_type = self.env.ref('hr_holidays.mail_act_leave_approval')
+        leaves = self.sudo().search([('state', '=', 'confirm'), ('validation_type', 'in', ['manager', 'both'])])
+        if exclude:
+            leaves -= exclude
+        for leave in leaves:
+            wanted = leave._get_responsible_for_approval()
+            todos = leave.activity_ids.filtered(lambda a: a.activity_type_id == act_type)
+            obsolete = todos.filtered(lambda a: a.user_id not in wanted)
+            kept_users = (todos - obsolete).user_id
+            obsolete.unlink()
+            for user in wanted - kept_users:
+                leave.activity_schedule(
+                    'hr_holidays.mail_act_leave_approval', user_id=user.id,
+                    note=_("ახალი მოთხოვნა: %(type)s — %(employee)s",
+                           type=leave.holiday_status_id.name, employee=leave.employee_id.name))
 
     @api.model
     def sh_waiting_for_me_count(self):
@@ -210,6 +262,9 @@ class HrLeave(models.Model):
         res = super().write(vals)
         if 'delegation_ids' in vals:
             self._drop_empty_delegations()
+        if 'state' in vals:
+            # someone's time off started/stopped counting: re-route other requests' approvals
+            self.env['hr.leave']._sh_sync_approval_activities(exclude=self)
         return res
 
     # ------------------------------------------------------------------

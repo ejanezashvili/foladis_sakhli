@@ -126,9 +126,28 @@ class HrEmployee(models.Model):
             result += others
         return result
 
+    def _sh_current_absence(self):
+        """Approved time off of this employee covering the current moment (or empty)."""
+        self.ensure_one()
+        now = fields.Datetime.now()
+        return self.env['hr.leave'].sudo().search([
+            ('employee_id', '=', self.id), ('state', '=', 'validate'),
+            ('date_from', '<=', now), ('date_to', '>=', now)], limit=1)
+
+    def _sh_acting_deputy_users(self):
+        """Users standing in today for this employee's heads who are on leave."""
+        self.ensure_one()
+        users = self.env['res.users']
+        for head in self.sudo()._sh_heads():
+            absence = head._sh_current_absence()
+            deputy = absence and absence._sh_deputy_for(self)
+            if deputy and deputy.user_id and deputy != self:
+                users |= deputy.user_id
+        return users
+
     def _compute_sh_head_user_ids(self):
         for emp in self:
-            emp.sh_head_user_ids = emp.sudo()._sh_heads().user_id
+            emp.sh_head_user_ids = emp.sudo()._sh_heads().user_id | emp._sh_acting_deputy_users()
 
     def _search_sh_head_user_ids(self, operator, value):
         """Employees for whom the given user(s) are one of the equal heads (used in record rules)."""
@@ -137,9 +156,18 @@ class HrEmployee(models.Model):
         # Odoo 19 gives 'in' values as a set
         user_ids = [value] if isinstance(value, int) else list(value or [])
         ids = set()
+        now = fields.Datetime.now()
         for user in self.env['res.users'].sudo().browse([u for u in user_ids if u]):
             for me in user.employee_ids:
                 ids.update(me._sh_direct_reports().ids)
+                # standing in for a head who is on leave today
+                absences = self.env['hr.leave'].sudo().search([
+                    ('state', '=', 'validate'), ('date_from', '<=', now), ('date_to', '>=', now),
+                    ('delegation_ids.deputy_id', '=', me.id)])
+                for absence in absences:
+                    for report in absence.employee_id._sh_direct_reports():
+                        if absence._sh_deputy_for(report) == me:
+                            ids.add(report.id)
         return [('id', 'in', list(ids))]
 
     def _sh_under_me_ids(self):

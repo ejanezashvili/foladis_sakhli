@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hourly: approval to-dos follow heads going on leave and coming back -->
+    <record id="cron_sync_leave_approvals" model="ir.cron">
+        <field name="name">შვებულება: დამტკიცების ამოცანები შემცვლელზე / უკან</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+        <field name="state">code</field>
+        <field name="code">model._sh_sync_approval_activities()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+</odoo>
