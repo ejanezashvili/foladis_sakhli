@@ -45,4 +45,16 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Overview: "My Team" = me and everyone under me, for every equal head (Odoo: only the first head's direct reports) -->
+    <record id="hr_leave_report_calendar_view_search_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.report.calendar.search.steelhouse</field>
+        <field name="model">hr.leave.report.calendar</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_report_calendar_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="my_team" position="attributes">
+                <attribute name="domain">['|', ('employee_id.user_id', '=', uid), ('employee_id.sh_under_me', '=', True)]</attribute>
+            </filter>
+        </field>
+    </record>
 </odoo>

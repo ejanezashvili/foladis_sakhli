@@ -23,6 +23,9 @@ class HrEmployee(models.Model):
     sh_co_manager_ids = fields.Many2many(
         'hr.employee', compute='_compute_sh_manager_ids', string='სხვა თანაბარი ხელმძღვანელები')
     sh_my_team = fields.Boolean(compute='_compute_sh_my_team', search='_search_sh_my_team', string='ჩემი გუნდი')
+    sh_under_me = fields.Boolean(
+        compute='_compute_sh_under_me', search='_search_sh_under_me', string='ჩემ ქვეშ',
+        help="ყველა, ვინც მიმდინარე მომხმარებლის ქვეშაა (ყველა დონე, ყველა თანაბარი ხელმძღვანელისთვის).")
     sh_extra_job_ids = fields.Many2many(
         'hr.job', 'hr_employee_sh_extra_job_rel', 'employee_id', 'job_id', string='დამატებითი პოზიციები',
         help="სხვა დეპარტამენტის პოზიციები, რომლებსაც თანამშრომელი ძირითადი პოზიციის გარდა იკავებს.")
@@ -119,6 +122,23 @@ class HrEmployee(models.Model):
                                          operator, limit - len(result))
             result += others
         return result
+
+    def _sh_under_me_ids(self):
+        ids = set()
+        for me in self.env.user.employee_ids.sudo():
+            ids.update(me._sh_all_reports().ids)
+        return list(ids)
+
+    def _compute_sh_under_me(self):
+        under = set(self._sh_under_me_ids())
+        for emp in self:
+            emp.sh_under_me = emp.id in under
+
+    def _search_sh_under_me(self, operator, value):
+        positive = bool(value[0] if isinstance(value, (list, tuple)) and value else value)
+        if operator in ('!=', 'not in'):
+            positive = not positive
+        return [('id', 'in' if positive else 'not in', self._sh_under_me_ids())]
 
     def _compute_sh_my_team(self):
         team = self.env['hr.employee'].browse(self._sh_my_team_ids())
