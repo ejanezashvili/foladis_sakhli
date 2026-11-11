@@ -26,12 +26,17 @@
             background: #d4edda;
         }
     }
+    .o_sh_section_name {
+        width: calc(100% - 90px);
+    }
+    .o_sh_item_name {
+        width: 90%;
+    }
     .o_sh_section_name,
     .o_sh_item_name {
         border: 0;
         border-bottom: 1px dashed transparent;
         background: transparent;
-        width: 70%;
         &:hover,
         &:focus {
             border-bottom-color: #999;

@@ -11,6 +11,8 @@ class TaskSection(models.Model):
     task_id = fields.Many2one('project.task', required=True, ondelete='cascade', index=True)
     name = fields.Char('ეტაპი', default='')
     sequence = fields.Integer(default=10)
+    user_id = fields.Many2one('res.users', 'პასუხისმგებელი', domain="[('share', '=', False)]")
+    date_deadline = fields.Date('ვადა')
     subtask_ids = fields.One2many('project.task', 'sh_section_id', string='ქვედავალებები')
 
 
@@ -53,7 +55,9 @@ class ProjectTask(models.Model):
         sections = []
         for section in self.sh_section_ids:
             items = [self._sh_item(s) for s in subs if s.sh_section_id == section]
-            sections.append({'id': section.id, 'name': section.name or '', 'items': items})
+            sections.append({'id': section.id, 'name': section.name or '', 'items': items,
+                             'user_id': section.user_id.id or False,
+                             'deadline': section.date_deadline and section.date_deadline.strftime('%Y-%m-%d') or ''})
         users = self.env['res.users'].search([('share', '=', False)], order='name')
         return {
             'sections': sections,
@@ -69,6 +73,16 @@ class ProjectTask(models.Model):
     def sh_steps_rename_section(self, section_id, name):
         self.ensure_one()
         self.sh_section_ids.filtered(lambda s: s.id == section_id).write({'name': (name or '').strip()})
+        return True
+
+    def sh_steps_write_section(self, section_id, vals):
+        self.ensure_one()
+        clean = {}
+        if 'user_id' in vals:
+            clean['user_id'] = vals['user_id'] or False
+        if 'deadline' in vals:
+            clean['date_deadline'] = vals['deadline'] or False
+        self.sh_section_ids.filtered(lambda s: s.id == section_id).write(clean)
         return True
 
     def sh_steps_delete_section(self, section_id):

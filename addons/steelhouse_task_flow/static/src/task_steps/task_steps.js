@@ -70,6 +70,16 @@ export class TaskSteps extends Component {
         await this.call("sh_steps_rename_section", [section.id, name]);
         section.name = name;
     }
+    async writeSection(section, vals) {
+        await this.call("sh_steps_write_section", [section.id, vals]);
+        await this.load();
+    }
+    onSectionUser(section, ev) {
+        this.writeSection(section, { user_id: parseInt(ev.target.value) || false });
+    }
+    onSectionDeadline(section, ev) {
+        this.writeSection(section, { deadline: ev.target.value || false });
+    }
     deleteSection(section) {
         this.dialog.add(ConfirmationDialog, {
             title: "დარწმუნებული ხარ?",

@@ -17,7 +17,7 @@
                 <tbody>
                     <t t-foreach="state.sections" t-as="section" t-key="section.id or 'loose'">
                         <tr class="o_sh_section">
-                            <td class="fw-bold">
+                            <td class="fw-bold text-nowrap">
                                 <span class="o_sh_fold me-1" t-on-click="() => this.toggleFold(section)">
                                     <i t-att-class="state.folded[section.id] ? 'fa fa-caret-right' : 'fa fa-caret-down'"/>
                                 </span>
@@ -32,8 +32,20 @@
                                 <button class="btn btn-link p-0 ms-2 fw-bold fs-5 o_sh_plus" title="ქვედავალების დამატება"
                                         t-on-click="() => this.addItem(section)">+</button>
                             </td>
-                            <td/><td/><td/>
-                            <td class="text-end">
+                            <td>
+                                <select t-if="section.id" class="form-select form-select-sm" t-on-change="(ev) => this.onSectionUser(section, ev)">
+                                    <option value="">—</option>
+                                    <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                        <option t-att-value="u.id" t-att-selected="u.id === section.user_id" t-esc="u.name"/>
+                                    </t>
+                                </select>
+                            </td>
+                            <td>
+                                <input t-if="section.id" type="date" class="form-control form-control-sm" t-att-value="section.deadline"
+                                       t-on-change="(ev) => this.onSectionDeadline(section, ev)"/>
+                            </td>
+                            <td/>
+                            <td class="text-end text-nowrap">
                                 <span class="o_sh_bar me-2"><i t-att-style="'width:' + percent(section) + '%'"/></span>
                                 <span t-esc="doneCount(section) + '/' + section.items.length"/>
                             </td>
