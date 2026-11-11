@@ -1,0 +1,58 @@
+.o_sh_steps {
+    .o_sh_section td {
+        background: #f3f4f6;
+    }
+    .o_sh_fold {
+        cursor: pointer;
+    }
+    .o_sh_dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #adb5bd;
+        font-size: 9px;
+        vertical-align: middle;
+        &.o_sh_dot_current {
+            border-color: #3d85c6;
+            color: #3d85c6;
+            background: #dbe7f7;
+        }
+        &.o_sh_dot_done {
+            border-color: #28a745;
+            color: #28a745;
+            background: #d4edda;
+        }
+    }
+    .o_sh_section_name,
+    .o_sh_item_name {
+        border: 0;
+        border-bottom: 1px dashed transparent;
+        background: transparent;
+        width: 70%;
+        &:hover,
+        &:focus {
+            border-bottom-color: #999;
+            outline: none;
+        }
+    }
+    .o_sh_bar {
+        display: inline-block;
+        width: 100px;
+        height: 8px;
+        background: #e5e5e5;
+        border-radius: 4px;
+        vertical-align: middle;
+        i {
+            display: block;
+            height: 100%;
+            background: #71639e;
+            border-radius: 4px;
+        }
+    }
+    .o_sh_item_done .o_sh_item_name {
+        color: #6c757d;
+    }
+}

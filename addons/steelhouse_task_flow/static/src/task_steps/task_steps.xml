@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskSteps">
+        <div class="o_sh_steps">
+            <div t-if="!taskId" class="text-muted p-3">ქვედავალებების დასამატებლად ჯერ შეინახეთ დავალება.</div>
+            <table t-else="" class="table table-sm align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 40%">ეტაპი / ქვედავალება</th>
+                        <th>შემსრულებელი</th>
+                        <th style="width: 140px">ვადა</th>
+                        <th>დაასრულა</th>
+                        <th class="text-end" style="width: 160px">მზადაა</th>
+                        <th style="width: 30px"/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="state.sections" t-as="section" t-key="section.id or 'loose'">
+                        <tr class="o_sh_section">
+                            <td class="fw-bold">
+                                <span class="o_sh_fold me-1" t-on-click="() => this.toggleFold(section)">
+                                    <i t-att-class="state.folded[section.id] ? 'fa fa-caret-right' : 'fa fa-caret-down'"/>
+                                </span>
+                                <span t-att-class="'o_sh_dot me-2 o_sh_dot_' + sectionState(section)">
+                                    <i t-if="sectionState(section) === 'done'" class="fa fa-check"/>
+                                    <i t-elif="sectionState(section) === 'current'" class="fa fa-circle"/>
+                                </span>
+                                <input t-if="section.id" type="text" class="o_sh_section_name fw-bold"
+                                       placeholder="ჩაწერეთ ეტაპის სახელი..."
+                                       t-att-value="section.name" t-on-change="(ev) => this.renameSection(section, ev)"/>
+                                <span t-else="" t-esc="section.name"/>
+                                <button class="btn btn-link p-0 ms-2 fw-bold fs-5 o_sh_plus" title="ქვედავალების დამატება"
+                                        t-on-click="() => this.addItem(section)">+</button>
+                            </td>
+                            <td/><td/><td/>
+                            <td class="text-end">
+                                <span class="o_sh_bar me-2"><i t-att-style="'width:' + percent(section) + '%'"/></span>
+                                <span t-esc="doneCount(section) + '/' + section.items.length"/>
+                            </td>
+                            <td>
+                                <button t-if="section.id" class="btn btn-link p-0 text-muted" title="ეტაპის წაშლა"
+                                        t-on-click="() => this.deleteSection(section)"><i class="fa fa-trash-o"/></button>
+                            </td>
+                        </tr>
+                        <t t-if="!state.folded[section.id]">
+                            <tr t-foreach="section.items" t-as="item" t-key="item.id" t-att-class="item.done ? 'o_sh_item_done' : ''">
+                                <td class="ps-5">
+                                    <input type="text" class="o_sh_item_name" t-att-value="item.name"
+                                           t-on-change="(ev) => this.onName(item, ev)"/>
+                                </td>
+                                <td>
+                                    <select class="form-select form-select-sm" t-on-change="(ev) => this.onUser(item, ev)">
+                                        <option value="">—</option>
+                                        <t t-foreach="state.users" t-as="u" t-key="u.id">
+                                            <option t-att-value="u.id" t-att-selected="u.id === item.user_id" t-esc="u.name"/>
+                                        </t>
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="date" class="form-control form-control-sm" t-att-value="item.deadline"
+                                           t-on-change="(ev) => this.onDeadline(item, ev)"/>
+                                </td>
+                                <td class="text-muted small">
+                                    <t t-if="item.done" t-esc="item.done_by + (item.done_date ? ' · ' + item.done_date : '')"/>
+                                </td>
+                                <td class="text-end">
+                                    <div class="form-check form-switch d-inline-block mb-0">
+                                        <input class="form-check-input" type="checkbox" t-att-checked="item.done"
+                                               t-on-click.prevent="() => this.toggle(item)"/>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-link p-0 text-muted" title="წაშლა"
+                                            t-on-click="() => this.deleteItem(item)"><i class="fa fa-trash-o"/></button>
+                                </td>
+                            </tr>
+                            <tr class="o_sh_add">
+                                <td colspan="6" class="ps-5">
+                                    <a href="#" t-on-click.prevent="() => this.addItem(section)">+ ქვედავალების დამატება</a>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                    <tr class="o_sh_add">
+                        <td colspan="6"><a href="#" t-on-click.prevent="addSection">+ ეტაპის დამატება</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </t>
+</templates>
