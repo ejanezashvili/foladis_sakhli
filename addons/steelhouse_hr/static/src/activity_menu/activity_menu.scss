@@ -1,0 +1,7 @@
+// A bit wider, so the time off lines (name, status, type, dates) are readable.
+.o-mail-ActivityMenu:has(.o_sh_activity_lines) {
+    min-width: 380px;
+}
+.o_sh_activity_line + .o_sh_activity_line {
+    margin-top: 4px;
+}

@@ -1,3 +1,7 @@
+from datetime import datetime, time
+
+from pytz import UTC
+
 from odoo import api, fields, models
 from odoo.fields import Domain
 
@@ -30,6 +34,91 @@ class HrEmployee(models.Model):
         if self.env.context.get('sh_search_department') and isinstance(value, str) and value                 and operator in ('ilike', 'like', '=ilike'):
             domain = Domain.OR([domain, Domain('department_id.name', operator, value)])
         return domain
+
+    # Direct manager (parent_id) follows the structure: the first head of the nearest unit
+    # (own unit, then the units above it) that has a head other than the employee.
+    def _sh_structure_manager(self):
+        self.ensure_one()
+        me = self._origin or self  # in a form, self is a draft copy of the record
+        dept = self.department_id
+        while dept and (not dept.manager_ids or me in dept.manager_ids):
+            dept = dept.parent_id
+        if not dept:
+            return self.browse()
+        return dept.manager_id if dept.manager_id in dept.manager_ids else dept.manager_ids[:1]
+
+    def _sh_set_structure_manager(self):
+        for emp in self.sudo():
+            boss = emp._sh_structure_manager()
+            if emp.parent_id != boss:
+                super(HrEmployee, emp).write({'parent_id': boss.id})
+
+    @api.onchange('department_id')
+    def _onchange_sh_department_manager(self):
+        for emp in self:
+            if emp.department_id:
+                emp.parent_id = emp._sh_structure_manager()
+
+    @api.onchange('job_id')
+    def _onchange_sh_job_department(self):
+        """Choosing a position of a sub-unit moves the employee to that sub-unit."""
+        for emp in self:
+            job_dept = emp.job_id.department_id
+            dept = emp.department_id
+            inside = not dept or (job_dept.parent_path or '').startswith(dept.parent_path or '-')
+            if job_dept and job_dept != dept and inside:
+                emp.department_id = job_dept
+                emp.parent_id = emp._sh_structure_manager()
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        employees = super().create(vals_list)
+        # manager from the structure, unless one was given explicitly
+        auto = self.browse([emp.id for emp, vals in zip(employees, vals_list)
+                            if emp.department_id and not vals.get('parent_id')])
+        auto._sh_set_structure_manager()
+        return employees
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'department_id' in vals and 'parent_id' not in vals:
+            self._sh_set_structure_manager()
+        return res
+
+    def _get_unusual_days(self, date_from, date_to=None):
+        """Weekends and public holidays in the time off calendar. Odoo takes them only from a
+        contract with a start date; our employees have no contract data, so their work schedule
+        (or the company's) is used instead."""
+        if self and self.env['hr.version'].sudo().search_count(
+                [('employee_id', '=', self.id), ('contract_date_start', '!=', False)]):
+            return super()._get_unusual_days(date_from, date_to)
+        company = self.company_id or self.env.company
+        calendar = self.resource_calendar_id or company.resource_calendar_id
+        start = datetime.strptime(date_from, '%Y-%m-%d %H:%M:%S').date()
+        end = datetime.strptime(date_to, '%Y-%m-%d %H:%M:%S').date() if date_to else start
+        return calendar.sudo()._get_unusual_days(
+            datetime.combine(start, time.min).replace(tzinfo=UTC),
+            datetime.combine(end, time.max).replace(tzinfo=UTC), company)
+
+    @api.model
+    def name_search(self, name='', domain=None, operator='ilike', limit=100):
+        """Deputy on a time off request (context sh_deputy_department_id): people of that
+        department (and its sub-units) come first; any employee can still be found by typing."""
+        dept_id = self.env.context.get('sh_deputy_department_id')
+        if not dept_id:
+            return super().name_search(name, domain, operator, limit)
+        members = self.search(Domain.AND([domain or [], [('department_id', 'child_of', dept_id)]]),
+                              order='name')
+        if name:
+            found = super().name_search(name, domain, operator, limit)
+            first = [r for r in found if r[0] in members.ids]
+            return first + [r for r in found if r[0] not in members.ids]
+        result = [(e.id, e.display_name) for e in members[:limit]]
+        if limit and len(result) < limit:
+            others = super().name_search('', Domain.AND([domain or [], [('id', 'not in', members.ids)]]),
+                                         operator, limit - len(result))
+            result += others
+        return result
 
     def _compute_sh_my_team(self):
         team = self.env['hr.employee'].browse(self._sh_my_team_ids())

@@ -25,6 +25,45 @@ class SteelhouseLeaveDelegation(models.Model):
             if dep and not (line.department_id and (dep.parent_path or '').startswith(line.department_id.parent_path or '-')):
                 line.department_id = dep
 
+    def _sh_deputy_absence(self):
+        """The deputy's own time off (approved or waiting) overlapping this request, if any."""
+        self.ensure_one()
+        leave = self.leave_id
+        deputy = self.deputy_id._origin or self.deputy_id
+        if not (deputy and leave.date_from and leave.date_to) or leave.state in ('cancel', 'refuse'):
+            return self.env['hr.leave']
+        domain = [('employee_id', '=', deputy.id), ('state', 'in', ['confirm', 'validate1', 'validate']),
+                  ('date_from', '<', leave.date_to), ('date_to', '>', leave.date_from)]
+        if isinstance(leave._origin.id, int):
+            domain.append(('id', '!=', leave._origin.id))
+        return self.env['hr.leave'].sudo().search(domain, limit=1)
+
+    def _sh_absence_message(self, absence):
+        status = {'confirm': 'დასამტკიცებელი', 'validate1': 'მეორე დამტკიცება', 'validate': 'დამტკიცებული'}
+        dates = absence.request_date_from.strftime('%d.%m.%Y')
+        if absence.request_date_to and absence.request_date_to != absence.request_date_from:
+            dates += ' – ' + absence.request_date_to.strftime('%d.%m.%Y')
+        return _("„%(name)s“ ამ დღეებში თვითონ არის შვებულებაში: %(type)s, %(dates)s (%(status)s). "
+                 "აირჩიეთ სხვა შემცვლელი.",
+                 name=absence.employee_id.name, type=absence.holiday_status_id.name, dates=dates,
+                 status=status.get(absence.state, absence.state))
+
+    @api.onchange('deputy_id')
+    def _onchange_deputy_absent(self):
+        for line in self:
+            absence = line._sh_deputy_absence()
+            if absence:
+                message = line._sh_absence_message(absence)
+                line.deputy_id = False
+                return {'warning': {'title': _("შემცვლელი შვებულებაშია"), 'message': message}}
+
+    @api.constrains('deputy_id', 'leave_id')
+    def _check_deputy_available(self):
+        for line in self:
+            absence = line._sh_deputy_absence()
+            if absence:
+                raise ValidationError(line._sh_absence_message(absence))
+
     @api.constrains('deputy_id', 'employee_id')
     def _check_deputy_not_self(self):
         for line in self:
@@ -79,6 +118,11 @@ class HrLeave(models.Model):
             else:
                 lines = []
             leave.delegation_ids = [(0, 0, vals) for vals in lines]
+
+    @api.constrains('date_from', 'date_to')
+    def _check_deputies_available(self):
+        """New dates of a request: its deputies must not be on leave themselves then."""
+        self.delegation_ids._check_deputy_available()
 
     def _drop_empty_delegations(self):
         self.delegation_ids.filtered(lambda l: not l.deputy_id).unlink()

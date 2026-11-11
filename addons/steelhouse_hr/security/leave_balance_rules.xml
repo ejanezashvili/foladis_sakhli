@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Days balance: everyone sees their own; time off officers see everyone's. -->
+    <record id="rule_leave_balance_own" model="ir.rule">
+        <field name="name">დღეების ნაშთი: საკუთარი</field>
+        <field name="model_id" ref="model_steelhouse_leave_balance"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <record id="rule_leave_balance_officer" model="ir.rule">
+        <field name="name">დღეების ნაშთი: შვებულების ოფიცერი</field>
+        <field name="model_id" ref="model_steelhouse_leave_balance"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('hr_holidays.group_hr_holidays_user'))]"/>
+    </record>
+</odoo>

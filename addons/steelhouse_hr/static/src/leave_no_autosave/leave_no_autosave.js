@@ -1,10 +1,10 @@
 import { patch } from "@web/core/utils/patch";
 import { FormController } from "@web/views/form/form_controller";
 
-// Time off requests are saved only with the Save button: closing/reloading the page,
-// switching the browser tab or leaving the form drops unsaved changes
-// (Odoo saves them automatically by default).
-const NO_AUTOSAVE_MODELS = ["hr.leave"];
+// Time off requests, employees and departments are saved only with the Save button:
+// closing/reloading the page, switching the browser tab or leaving the form drops
+// unsaved changes (Odoo saves them automatically by default).
+const NO_AUTOSAVE_MODELS = ["hr.leave", "hr.employee", "hr.department"];
 
 patch(FormController.prototype, {
     get shNoAutosave() {

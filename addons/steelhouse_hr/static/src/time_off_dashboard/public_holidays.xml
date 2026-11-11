@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Legend: public holiday color -->
+    <t t-inherit="hr_holidays.TimeOffCalendarSidePanel" t-inherit-mode="extension">
+        <xpath expr="//img[hasclass('o_calendar_filter_line')]/.." position="after">
+            <span class="align-middle d-flex align-items-center"><span class="o_sh_holiday_swatch me-1"/> უქმე დღე</span>
+        </xpath>
+    </t>
+</templates>

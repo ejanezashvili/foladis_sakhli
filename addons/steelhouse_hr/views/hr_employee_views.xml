@@ -9,6 +9,11 @@
             <xpath expr="//div[@id='o_work_information']//field[@name='parent_id']" position="attributes">
                 <attribute name="invisible">sh_co_manager_ids</attribute>
             </xpath>
+            <!-- positions with the same name: show their unit; offer the employee's unit and its sub-units -->
+            <xpath expr="//div[@id='o_work_information']//field[@name='job_id']" position="attributes">
+                <attribute name="context">{'default_no_of_recruitment': 0, 'default_is_favorite': False, 'sh_job_department': True, 'default_department_id': department_id}</attribute>
+                <attribute name="domain">department_id and ['|', ('department_id', '=', False), ('department_id', 'child_of', department_id)] or []</attribute>
+            </xpath>
             <xpath expr="//div[@id='o_work_information']//field[@name='job_title']" position="after">
                 <field name="sh_extra_job_ids" widget="many2many_tags" options="{'no_create': True}"/>
             </xpath>
@@ -24,6 +29,13 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_tree"/>
         <field name="arch" type="xml">
+            <!-- job title is filled for everyone (heads have no position), position stays as an optional column -->
+            <field name="job_id" position="before">
+                <field name="job_title" optional="show"/>
+            </field>
+            <field name="job_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
             <field name="parent_id" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </field>
@@ -53,6 +65,13 @@
         <field name="model">hr.employee.public</field>
         <field name="inherit_id" ref="hr.hr_employee_public_view_tree"/>
         <field name="arch" type="xml">
+            <!-- job title is filled for everyone (heads have no position), position stays as an optional column -->
+            <field name="job_id" position="before">
+                <field name="job_title" optional="show"/>
+            </field>
+            <field name="job_id" position="attributes">
+                <attribute name="optional">hide</attribute>
+            </field>
             <field name="parent_id" position="attributes">
                 <attribute name="column_invisible">1</attribute>
             </field>

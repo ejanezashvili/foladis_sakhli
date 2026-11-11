@@ -14,12 +14,20 @@
                     <list editable="bottom" no_open="1">
                         <field name="department_id" options="{'no_create': True, 'no_open': True}"/>
                         <field name="deputy_id" widget="many2one_avatar_employee" options="{'no_create': True}"
-                               placeholder="სახელი ან დეპარტამენტი"
+                               placeholder="დეპარტამენტის თანამშრომლები ან ნებისმიერი სახელი"
                                domain="[('id', '!=', parent.employee_id)]"
-                               context="{'sh_search_department': True}"/>
+                               context="{'sh_search_department': True, 'sh_deputy_department_id': department_id}"/>
                         <field name="deputy_department_id" optional="show" options="{'no_open': True}"/>
                     </list>
                 </field>
+            </xpath>
+            <!-- only the request itself: the employee's approved time off is in "My Time Off";
+                 the request uses the full width (deputies table readable) -->
+            <xpath expr="//div[hasclass('col_right')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//div[hasclass('col_left')]" position="attributes">
+                <attribute name="class">o_hr_leave_column col_left col-12</attribute>
             </xpath>
         </field>
     </record>

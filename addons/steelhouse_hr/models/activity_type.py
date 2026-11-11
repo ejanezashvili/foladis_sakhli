@@ -62,3 +62,35 @@ class MailActivityDoneNotice(models.Model):
             record.message_notify(partner_ids=[partner_id], author_id=self.env.user.partner_id.id,
                                   subject="შესრულდა: %s" % what, body=body)
         return res
+
+
+SH_LEAVE_STATUS = {'confirm': 'დასამტკიცებელი', 'validate1': 'მეორე დამტკიცება'}
+
+
+class ResUsersActivityMenu(models.Model):
+    """Activities menu (clock icon): under "Time Off" show whose request it is, the dates
+    and its status, so it is clear without opening it."""
+    _inherit = 'res.users'
+
+    @api.model
+    def _get_activity_groups(self):
+        groups = super()._get_activity_groups()
+        for group in groups:
+            if group.get('model') != 'hr.leave':
+                continue
+            acts = self.env['mail.activity'].search(
+                [('user_id', '=', self.env.uid), ('res_model', '=', 'hr.leave')], order='date_deadline, id')
+            leaves = self.env['hr.leave'].browse(dict.fromkeys(acts.mapped('res_id'))).exists()._filtered_access('read')
+            lines = []
+            for leave in leaves.sudo():
+                dates = leave.request_date_from.strftime('%d.%m')
+                if leave.request_date_to and leave.request_date_to != leave.request_date_from:
+                    dates += '–' + leave.request_date_to.strftime('%d.%m')
+                status = SH_LEAVE_STATUS.get(leave.state) or dict(
+                    leave._fields['state']._description_selection(self.env)).get(leave.state, '')
+                lines.append({'id': leave.id, 'employee': leave.employee_id.name,
+                              'text': f"{leave.holiday_status_id.name} · {dates}", 'status': status})
+            group['sh_lines'] = lines[:5]
+            group['sh_more'] = max(0, len(lines) - 5)
+        return groups
+

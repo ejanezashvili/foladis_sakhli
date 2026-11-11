@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Time off in the activities menu: whose request, its status (to approve / second approval), type and dates. -->
+    <t t-inherit="mail.ActivityMenu" t-inherit-mode="extension">
+        <xpath expr="//div[@name='activityTitle']" position="after">
+            <div t-if="group.sh_lines and group.sh_lines.length" class="px-2 pb-1 o_sh_activity_lines">
+                <div t-foreach="group.sh_lines" t-as="line" t-key="line.id" class="o_sh_activity_line">
+                    <div class="d-flex align-items-center gap-1">
+                        <b class="text-truncate" t-esc="line.employee"/>
+                        <span class="badge text-bg-warning flex-shrink-0" t-esc="line.status"/>
+                    </div>
+                    <div class="small text-muted" t-esc="line.text"/>
+                </div>
+                <div t-if="group.sh_more" class="small text-muted">და კიდევ <t t-esc="group.sh_more"/></div>
+            </div>
+        </xpath>
+    </t>
+</templates>

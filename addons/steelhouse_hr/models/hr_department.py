@@ -66,10 +66,30 @@ class HrDepartment(models.Model):
                 result[str(dept.id)] = positions  # string keys: JSON and XML-RPC
         return result
 
+    def _sh_top_department(self, company_id=False):
+        """The company's top unit ("ფოლადის სახლი"): the oldest department without a parent."""
+        company_id = company_id or self.env.company.id
+        return self.sudo().search([('parent_id', '=', False), ('company_id', 'in', [company_id, False])],
+                                  order='id', limit=1)
+
+    # A new department goes under the company's top unit unless another parent is chosen,
+    # so it does not appear as a second top level next to the company.
+    @api.model
+    def default_get(self, fields):
+        res = super().default_get(fields)
+        if 'parent_id' in fields and not res.get('parent_id'):
+            res['parent_id'] = self._sh_top_department(res.get('company_id')).id or False
+        return res
+
     # Odoo needs a single manager_id (employee managers, approvals). It is kept in sync
     # with manager_ids and hidden in the views, so all heads look the same.
     @api.model_create_multi
     def create(self, vals_list):
+        top = self._sh_top_department()
+        if top:
+            for vals in vals_list:
+                if not vals.get('parent_id') and 'parent_id' not in vals:
+                    vals['parent_id'] = self._sh_top_department(vals.get('company_id')).id
         departments = super().create(vals_list)
         for dept, vals in zip(departments, vals_list):
             dept._sh_sync_heads(list_changed=bool(vals.get('manager_ids')))
@@ -79,6 +99,10 @@ class HrDepartment(models.Model):
         res = super().write(vals)
         if 'manager_ids' in vals or 'manager_id' in vals:
             self._sh_sync_heads(list_changed='manager_ids' in vals)
+        if {'manager_ids', 'manager_id', 'parent_id'} & set(vals):
+            # heads or place in the structure changed: direct managers below follow
+            self.env['hr.employee'].sudo().search(
+                [('department_id', 'child_of', self.ids)])._sh_set_structure_manager()
         return res
 
     def _sh_sync_heads(self, list_changed):
@@ -87,3 +111,18 @@ class HrDepartment(models.Model):
                 super(HrDepartment, dept).write({'manager_ids': [(4, dept.manager_id.id)]})
             elif dept.manager_id not in dept.manager_ids or (not dept.manager_id and dept.manager_ids):
                 super(HrDepartment, dept).write({'manager_id': dept.manager_ids[:1].id})
+
+
+class HrJob(models.Model):
+    _inherit = 'hr.job'
+
+    # Many positions share a name ("ასისტენტი" in 7 units): when choosing one, show its unit.
+    @api.depends_context('sh_job_department')
+    @api.depends('department_id')
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        if self.env.context.get('sh_job_department'):
+            for job in self.filtered('department_id'):
+                unit = job.department_id.sudo().complete_name.split(' / ', 1)[-1]
+                job.display_name = f'{job.name} ({unit})'
+

@@ -1,0 +1,20 @@
+// Time off request dialog: wide enough to read the deputies table (department + who was chosen).
+.modal-dialog:has(.o_field_widget[name="delegation_ids"]) {
+    max-width: unquote("min(1200px, 96vw)");
+}
+
+.o_field_widget[name="delegation_ids"] {
+    // fixed shares, so a long department name does not squeeze the chosen deputy
+    th[data-name="department_id"] { width: 36% !important; }
+    th[data-name="deputy_id"] { width: 28% !important; }
+    th[data-name="deputy_department_id"] { width: 32% !important; }
+    // long department names wrap instead of being cut with "..."
+    td.o_data_cell,
+    td.o_data_cell .o_field_widget,
+    td.o_data_cell .o_field_widget span,
+    td.o_data_cell .o_field_widget a {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+    }
+}
