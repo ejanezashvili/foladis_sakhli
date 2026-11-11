@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from markupsafe import Markup, escape
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import RedirectWarning, UserError
 
 # Odoo task state that follows each stage kind.
 KIND_STATE = {'done': '1_done', 'cancelled': '1_canceled', 'returned': '02_changes_requested'}
@@ -244,6 +244,11 @@ class ProjectTask(models.Model):
                     self._sh_check_assignee()
                 if kind in REVIEWER_KINDS:
                     self._sh_check_reviewer(kind)
+                if (kind == 'done' and len(self) == 1 and not self.is_template and not self.env.su
+                        and not self.env.context.get('sh_final_given') and self.stage_id.sh_kind != 'done'):
+                    raise RedirectWarning(
+                        _("დასრულებამდე შეავსეთ „საბოლოო პროექტი“: აღწერა და ფოტოები/ფაილები (არასავალდებულო)."),
+                        self.action_sh_open_final(), _("გაგრძელება"))
                 if kind == 'review':
                     self._sh_check_evidence(vals.get('evidence_required') if 'evidence_required' in vals else None)
                 if 'state' not in vals:

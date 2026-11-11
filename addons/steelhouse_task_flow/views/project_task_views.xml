@@ -103,6 +103,14 @@
                         <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..."/>
                     </group>
                 </page>
+                <page name="sh_final" string="საბოლოო პროექტი">
+                    <group>
+                        <field name="sh_final_note" placeholder="რა გაკეთდა, შედეგი, შენიშვნები..."/>
+                        <field name="sh_final_attachment_ids" widget="many2many_binary"/>
+                        <field name="sh_done_user_id" invisible="not sh_done_user_id"/>
+                        <field name="sh_done_date" invisible="not sh_done_date"/>
+                    </group>
+                </page>
             </xpath>
             <xpath expr="//div[@name='button_box']" position="inside">
                 <button name="action_sh_open_templates" type="object" class="oe_stat_button" icon="fa-clipboard">
