@@ -18,4 +18,10 @@
             </form>
         </field>
     </record>
+    <record id="action_sh_task_flow_wizard" model="ir.actions.act_window">
+        <field name="name">მიზეზი</field>
+        <field name="res_model">steelhouse.task.flow.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 </odoo>

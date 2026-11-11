@@ -237,9 +237,16 @@ class ProjectTask(models.Model):
             kind = self.env['project.task.type'].browse(vals['stage_id']).sh_kind
             if kind:
                 if kind in REASON_KINDS and not self.env.context.get('sh_reason_given'):
-                    raise UserError(_(
-                        "ამ სტადიაზე გადასაყვანად გამოიყენეთ ღილაკი ფორმის თავზე "
-                        "(„შეჩერება“, „დაბრუნება“ ან „გაუქმება“) — საჭიროა მიზეზი."))
+                    if kind in REVIEWER_KINDS:
+                        self._sh_check_reviewer(kind)
+                    if len(self) != 1 or self.env.su:
+                        raise UserError(_("ამ სტადიაზე გადასაყვანად საჭიროა მიზეზი — გადაიყვანეთ თითო დავალება."))
+                    labels = {'on_hold': _("შეჩერებისთვის მიუთითეთ მიზეზი და განახლების თარიღი."),
+                              'returned': _("დაბრუნებისთვის მიუთითეთ მიზეზი."),
+                              'cancelled': _("გაუქმებისთვის მიუთითეთ მიზეზი.")}
+                    raise RedirectWarning(
+                        labels[kind], self.env.ref('steelhouse_task_flow.action_sh_task_flow_wizard').id,
+                        _("გაგრძელება"), {'default_task_id': self.id, 'default_mode': kind})
                 if kind == 'accepted':
                     self._sh_check_assignee()
                 if kind in REVIEWER_KINDS:
