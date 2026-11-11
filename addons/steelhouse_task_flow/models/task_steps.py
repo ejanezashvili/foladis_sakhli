@@ -13,6 +13,16 @@ class TaskSection(models.Model):
     sequence = fields.Integer(default=10)
     user_id = fields.Many2one('res.users', 'პასუხისმგებელი', domain="[('share', '=', False)]")
     date_deadline = fields.Date('ვადა')
+    done_date = fields.Datetime('დასრულდა', help="როცა ეტაპის ყველა ქვედავალება შესრულდა.")
+
+    def _sh_update_done(self):
+        for section in self:
+            items = section.subtask_ids.filtered(lambda t: t.state != '1_canceled')
+            all_done = items and all(t.state == '1_done' for t in items)
+            if all_done and not section.done_date:
+                section.done_date = fields.Datetime.now()
+            elif not all_done and section.done_date:
+                section.done_date = False
     subtask_ids = fields.One2many('project.task', 'sh_section_id', string='ქვედავალებები')
 
 
@@ -40,7 +50,7 @@ class ProjectTask(models.Model):
             'deadline': sub.date_deadline and fields.Datetime.context_timestamp(sub, sub.date_deadline).strftime('%Y-%m-%d') or '',
             'done': sub.state == '1_done',
             'done_by': sub.sh_done_user_id.name or '',
-            'done_date': sub.sh_done_date and fields.Datetime.context_timestamp(sub, sub.sh_done_date).strftime('%d.%m.%Y') or '',
+            'done_date': sub.sh_done_date and fields.Datetime.context_timestamp(sub, sub.sh_done_date).strftime('%d.%m.%Y, %H:%M') or '',
         }
 
     def sh_steps_data(self):
@@ -57,6 +67,7 @@ class ProjectTask(models.Model):
             items = [self._sh_item(s) for s in subs if s.sh_section_id == section]
             sections.append({'id': section.id, 'name': section.name or '', 'items': items,
                              'user_id': section.user_id.id or False,
+                             'done_date': section.done_date and fields.Datetime.context_timestamp(section, section.done_date).strftime('%d.%m.%Y, %H:%M') or '',
                              'deadline': section.date_deadline and section.date_deadline.strftime('%Y-%m-%d') or ''})
         users = self.env['res.users'].search([('share', '=', False)], order='name')
         return {
@@ -108,7 +119,9 @@ class ProjectTask(models.Model):
         }
         if first:
             vals['stage_id'] = first.id
-        return self.env['project.task'].with_context(sh_flow_internal=True).create(vals).id
+        new = self.env['project.task'].with_context(sh_flow_internal=True).create(vals)
+        new.sh_section_id._sh_update_done()
+        return new.id
 
     def _sh_my_sub(self, sub_id):
         sub = self.child_ids.filtered(lambda t: t.id == sub_id)
@@ -137,11 +150,15 @@ class ProjectTask(models.Model):
         else:
             vals = {'state': '01_in_progress', 'sh_done_user_id': False, 'sh_done_date': False}
         sub.with_context(sh_flow_internal=True).write(vals)
+        sub.sh_section_id._sh_update_done()
         sub.message_post(body=_("შესრულებულად მოინიშნა") if done else _("დაბრუნდა შეუსრულებელში"),
                          message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
     def sh_steps_delete_item(self, sub_id):
         self.ensure_one()
-        self._sh_my_sub(sub_id).unlink()
+        sub = self._sh_my_sub(sub_id)
+        section = sub.sh_section_id
+        sub.unlink()
+        section._sh_update_done()
         return True

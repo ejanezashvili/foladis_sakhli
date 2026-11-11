@@ -62,7 +62,11 @@
                                 <input t-if="section.id" type="date" class="form-control form-control-sm" t-att-value="section.deadline"
                                        t-on-change="(ev) => this.onSectionDeadline(section, ev)"/>
                             </td>
-                            <td/>
+                            <td>
+                                <span t-if="section.done_date and sectionState(section) === 'done'" class="text-success fw-bold small">
+                                    <i class="fa fa-check me-1"/><t t-esc="section.done_date"/>
+                                </span>
+                            </td>
                             <td class="text-end text-nowrap">
                                 <span class="o_sh_bar me-2"><i t-att-style="'width:' + percent(section) + '%'"/></span>
                                 <span t-esc="doneCount(section) + '/' + section.items.length"/>
