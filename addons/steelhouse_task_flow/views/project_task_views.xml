@@ -9,6 +9,7 @@
             <xpath expr="//sheet/group[group/field[@name='project_id']]" position="replace">
                 <field name="active" invisible="1"/>
                 <field name="allocated_hours" invisible="1"/>
+                <div class="fw-semibold fs-5 mb-2" style="color:#71639e" invisible="not sh_number">№ <field name="sh_number" class="d-inline"/></div>
                 <separator string="ვინ"/>
                 <group name="sh_who">
                     <group>
@@ -176,6 +177,12 @@
             <xpath expr="//field[@name='tag_ids'][@widget='many2many_tags']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//t[@t-name='card']//field[@name='name']" position="replace">
+                <div class="d-flex justify-content-between align-items-start">
+                    <field name="name" class="fw-bold fs-5"/>
+                    <field name="sh_number" class="badge rounded-pill ms-2 mt-1" style="background:#f1edf8;color:#71639e"/>
+                </div>
+            </xpath>
             <!-- card: creation date instead of "In 3 days" -->
             <xpath expr="//field[@name='date_deadline'][@widget='remaining_days']" position="replace">
                 <div class="small" invisible="not sh_branch"><i class="fa fa-map-marker text-danger me-1"/><field name="sh_branch"/></div>
@@ -191,6 +198,16 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="sh_progress" widget="progressbar" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_task_search_steelhouse_number" model="ir.ui.view">
+        <field name="name">project.task.search.steelhouse.number</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search/field[1]" position="before">
+                <field name="sh_number" string="ნომერი"/>
             </xpath>
         </field>
     </record>

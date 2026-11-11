@@ -114,6 +114,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='user_id']" position="after">
                 <field name="sh_is_department"/>
+                <field name="sh_code" invisible="not sh_is_department"/>
                 <field name="sh_department_id" invisible="not sh_is_department" options="{'no_create': True}"/>
             </xpath>
         </field>
