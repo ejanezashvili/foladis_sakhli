@@ -103,7 +103,7 @@
                         <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..."/>
                     </group>
                 </page>
-                <page name="sh_final" string="საბოლოო პროექტი">
+                <page name="sh_final" string="საბოლოო პროექტი" invisible="sh_kind not in ('review', 'done')">
                     <group>
                         <field name="sh_final_note" placeholder="რა გაკეთდა, შედეგი, შენიშვნები..."/>
                         <field name="sh_final_attachment_ids" widget="many2many_binary"/>
