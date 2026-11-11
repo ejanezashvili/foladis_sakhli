@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.ShUserPicker">
+        <div class="o_sh_user_picker position-relative">
+            <div class="d-flex align-items-center">
+                <img t-if="current" t-att-src="avatar(current.id)" class="rounded me-2 o_sh_avatar"/>
+                <input type="text" class="o_sh_user_input" placeholder="აირჩიეთ..."
+                       t-att-value="current ? current.name : ''"
+                       t-on-focus="onFocus" t-on-input="onInput" t-on-blur="onBlur"/>
+                <i class="fa fa-caret-down text-muted ms-1"/>
+            </div>
+            <div t-if="state.open" class="o_sh_user_menu dropdown-menu show">
+                <a t-foreach="matches" t-as="u" t-key="u.id" href="#" class="dropdown-item d-flex align-items-center"
+                   t-on-mousedown.prevent="() => this.pick(u)">
+                    <img t-att-src="avatar(u.id)" class="rounded me-2 o_sh_avatar"/>
+                    <span t-esc="u.name"/>
+                </a>
+                <a t-if="hasMore" href="#" class="dropdown-item text-primary" t-on-mousedown.prevent="() => this.state.all = true">მეტის ძიება...</a>
+                <a t-if="current" href="#" class="dropdown-item text-muted" t-on-mousedown.prevent="() => this.pick(false)">მოხსნა</a>
+                <div t-if="!matches.length" class="dropdown-item text-muted">ვერ მოიძებნა</div>
+            </div>
+        </div>
+    </t>
+
     <t t-name="steelhouse_task_flow.TaskSteps">
         <div class="o_sh_steps">
             <div t-if="!taskId" class="text-muted p-3">ქვედავალებების დასამატებლად ჯერ შეინახეთ დავალება.</div>
@@ -33,12 +55,8 @@
                                         t-on-click="() => this.addItem(section)">+</button>
                             </td>
                             <td>
-                                <select t-if="section.id" class="form-select form-select-sm" t-on-change="(ev) => this.onSectionUser(section, ev)">
-                                    <option value="">—</option>
-                                    <t t-foreach="state.users" t-as="u" t-key="u.id">
-                                        <option t-att-value="u.id" t-att-selected="u.id === section.user_id" t-esc="u.name"/>
-                                    </t>
-                                </select>
+                                <ShUserPicker t-if="section.id" users="state.users" value="section.user_id"
+                                              onChange="(id) => this.onSectionUser(section, id)"/>
                             </td>
                             <td>
                                 <input t-if="section.id" type="date" class="form-control form-control-sm" t-att-value="section.deadline"
@@ -61,12 +79,8 @@
                                            t-on-change="(ev) => this.onName(item, ev)"/>
                                 </td>
                                 <td>
-                                    <select class="form-select form-select-sm" t-on-change="(ev) => this.onUser(item, ev)">
-                                        <option value="">—</option>
-                                        <t t-foreach="state.users" t-as="u" t-key="u.id">
-                                            <option t-att-value="u.id" t-att-selected="u.id === item.user_id" t-esc="u.name"/>
-                                        </t>
-                                    </select>
+                                    <ShUserPicker users="state.users" value="item.user_id"
+                                                  onChange="(id) => this.onUser(item, id)"/>
                                 </td>
                                 <td>
                                     <input type="date" class="form-control form-control-sm" t-att-value="item.deadline"

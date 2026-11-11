@@ -57,8 +57,32 @@
             border-radius: 4px;
         }
     }
-    select.form-select {
+    .o_sh_user_picker {
         min-width: 200px;
+        .o_sh_avatar {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+        }
+        .o_sh_user_input {
+            border: 0;
+            border-bottom: 1px solid #ccc;
+            background: transparent;
+            width: 100%;
+            padding: 2px 0;
+            &:focus {
+                outline: none;
+                border-bottom-color: #71639e;
+            }
+        }
+        .o_sh_user_menu {
+            top: 100%;
+            left: 0;
+            min-width: 280px;
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 1050;
+        }
     }
     .o_sh_item_done .o_sh_item_name {
         color: #6c757d;

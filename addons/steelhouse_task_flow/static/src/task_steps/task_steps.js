@@ -4,10 +4,55 @@ import { useService } from "@web/core/utils/hooks";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
 
+// Search box with avatars, like Odoo's many2one user field
+export class ShUserPicker extends Component {
+    static template = "steelhouse_task_flow.ShUserPicker";
+    static props = { users: Array, value: { optional: true }, onChange: Function };
+
+    setup() {
+        this.state = useState({ open: false, term: "", all: false });
+    }
+    get current() {
+        return this.props.users.find((u) => u.id === this.props.value);
+    }
+    get matches() {
+        const term = this.state.term.trim().toLowerCase();
+        const list = term ? this.props.users.filter((u) => u.name.toLowerCase().includes(term)) : this.props.users;
+        return this.state.all ? list : list.slice(0, 8);
+    }
+    get hasMore() {
+        const term = this.state.term.trim().toLowerCase();
+        const n = term ? this.props.users.filter((u) => u.name.toLowerCase().includes(term)).length : this.props.users.length;
+        return !this.state.all && n > 8;
+    }
+    avatar(id) {
+        return `/web/image/res.users/${id}/avatar_128`;
+    }
+    onFocus(ev) {
+        this.state.open = true;
+        this.state.all = false;
+        this.state.term = "";
+        ev.target.select();
+    }
+    onInput(ev) {
+        this.state.term = ev.target.value;
+        this.state.open = true;
+    }
+    onBlur(ev) {
+        this.state.open = false;
+        ev.target.value = this.current ? this.current.name : "";
+    }
+    pick(user) {
+        this.state.open = false;
+        this.props.onChange(user ? user.id : false);
+    }
+}
+
 // "ქვედავალებები" tab: sub-tasks grouped by work stages (sections), like a checklist.
 export class TaskSteps extends Component {
     static template = "steelhouse_task_flow.TaskSteps";
     static props = { ...standardFieldProps };
+    static components = { ShUserPicker };
 
     setup() {
         this.orm = useService("orm");
@@ -74,8 +119,8 @@ export class TaskSteps extends Component {
         await this.call("sh_steps_write_section", [section.id, vals]);
         await this.load();
     }
-    onSectionUser(section, ev) {
-        this.writeSection(section, { user_id: parseInt(ev.target.value) || false });
+    onSectionUser(section, userId) {
+        this.writeSection(section, { user_id: userId || false });
     }
     onSectionDeadline(section, ev) {
         this.writeSection(section, { deadline: ev.target.value || false });
@@ -108,8 +153,8 @@ export class TaskSteps extends Component {
             this.writeItem(item, { name: ev.target.value });
         }
     }
-    onUser(item, ev) {
-        this.writeItem(item, { user_id: parseInt(ev.target.value) || false });
+    onUser(item, userId) {
+        this.writeItem(item, { user_id: userId || false });
     }
     onDeadline(item, ev) {
         this.writeItem(item, { deadline: ev.target.value || false });
