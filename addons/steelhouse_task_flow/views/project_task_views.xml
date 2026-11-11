@@ -5,14 +5,134 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_form2"/>
         <field name="arch" type="xml">
+            <!-- Task form layout: blocks "ვინ" / "როდის და სად დგას" / "დამატებით" -->
+            <xpath expr="//sheet/group[group/field[@name='project_id']]" position="replace">
+                <field name="active" invisible="1"/>
+                <field name="allocated_hours" invisible="1"/>
+                <separator string="ვინ"/>
+                <group name="sh_who">
+                    <group>
+                        <!-- project_id is the department (gives the flow); "პროექტი" is the concrete project -->
+                        <field name="project_id" string="დეპარტამენტი" widget="project"
+                               domain="[('active', '=', True), ('sh_is_department', '=', True), '|', ('company_id', '=', False), ('company_id', '=?', company_id)]"
+                               required="not is_template"/>
+                        <field name="sh_project_id" options="{'no_create': True}" placeholder="არ ეკუთვნის პროექტს"/>
+                        <field name="milestone_id" placeholder="e.g. Product Launch" context="{'default_project_id': project_id}"
+                               invisible="not project_id or not allow_milestones"/>
+                        <field name="partner_id" widget="res_partner_many2one" class="o_task_customer_field"
+                               invisible="not project_id or has_template_ancestor or has_project_template"/>
+                    </group>
+                    <group>
+                        <field name="sh_responsible_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
+                        <field name="user_ids" class="o_task_user_field" options="{'no_open': True, 'no_quick_create': True}"
+                               required="not project_id" widget="many2many_avatar_user"/>
+                        <field name="role_ids" invisible="not has_project_template or is_template" widget="many2many_tags"
+                               options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Assign at project creation"/>
+                        <field name="reviewer_ids" widget="many2many_avatar_user" options="{'no_create': True, 'no_quick_create': True}" invisible="is_template"/>
+                    </group>
+                </group>
+                <separator string="როდის და სად დგას"/>
+                <group name="sh_when">
+                    <group>
+                        <field name="sh_create_datetime_str" invisible="not id"/>
+                        <field name="sh_work_start"/>
+                        <label for="date_deadline" string="დასრულების თარიღი"/>
+                        <div id="date_deadline_and_recurring_task" class="d-inline-flex w-100">
+                            <field name="date_deadline" nolabel="1" decoration-danger="date_deadline and date_deadline &lt; current_date and state not in ['1_done', '1_canceled']"/>
+                            <field name="recurring_task" invisible="1"/>
+                        </div>
+                        <label for="repeat_interval" invisible="1"/>
+                        <div invisible="1" class="d-flex" name="repeat_intervals">
+                            <field name="repeat_interval" required="recurring_task" class="me-2" style="max-width: 2rem !important;"/>
+                            <field name="repeat_unit" required="recurring_task" class="me-2" style="max-width: 4rem !important;"/>
+                            <field name="repeat_type" required="recurring_task" class="me-2" style="max-width: 15rem !important;"/>
+                            <field name="repeat_until" invisible="repeat_type != 'until'" required="repeat_type == 'until'" class="me-2"/>
+                        </div>
+                    </group>
+                    <group>
+                        <field name="sh_manual_progress" invisible="is_template"/>
+                        <field name="evidence_required" invisible="1"/>
+                        <field name="sh_repeat" invisible="is_template or parent_id"/>
+                        <label for="sh_repeat_interval" invisible="not sh_repeat"/>
+                        <div class="d-flex" invisible="not sh_repeat">
+                            <field name="sh_repeat_interval" class="me-2" style="max-width: 3rem;" required="sh_repeat"/>
+                            <field name="sh_repeat_unit" required="sh_repeat" style="max-width: 9rem;"/>
+                        </div>
+                        <field name="sh_repeat_start" invisible="not sh_repeat"/>
+                        <field name="sh_repeat_next" invisible="not sh_repeat or not sh_repeat_next"/>
+                        <label for="sh_repeat_until_type" invisible="not sh_repeat"/>
+                        <div class="d-flex" invisible="not sh_repeat">
+                            <field name="sh_repeat_until_type" class="me-2" style="max-width: 9rem;" required="sh_repeat"/>
+                            <field name="sh_repeat_until" invisible="sh_repeat_until_type != 'until'"/>
+                        </div>
+                    </group>
+                </group>
+                <separator string="დამატებით"/>
+                <group name="sh_more">
+                    <group>
+                        <field name="sh_category"/>
+                        <field name="sh_branch"/>
+                    </group>
+                    <group>
+                        <field name="tag_ids" invisible="1"/>
+                    </group>
+                </group>
+            </xpath>
+            <!-- task properties are replaced by the fields above -->
+            <xpath expr="//field[@name='task_properties']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- title row: progress left of the stars; the status button is hidden (the stage bar shows it) -->
+            <xpath expr="(//field[@name='priority'])[1]" position="replace">
+                <field name="sh_progress" widget="progressbar" nolabel="1" class="me-3" style="min-width: 160px;" invisible="is_template"/>
+                <span class="fw-bold me-2">პრიორიტეტი</span>
+                <field name="priority" widget="selection" class="o_sh_priority" style="min-width: 130px;"/>
+                <button name="action_sh_save_template" type="object" icon="fa-floppy-o" class="btn btn-link fs-4 ms-2 p-0"
+                        title="შაბლონად შენახვა" aria-label="შაბლონად შენახვა"
+                        invisible="is_template or not id or not project_id"/>
+            </xpath>
+            <xpath expr="//div[hasclass('o_state_container')]" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- sub-tasks grouped by work stages (static/src/task_steps) -->
+            <xpath expr="//page[@name='sub_tasks_page']/field[@name='child_ids']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='sub_tasks_page']" position="inside">
+                <field name="sh_steps" widget="sh_task_steps" nolabel="1"/>
+            </xpath>
+            <xpath expr="//notebook" position="inside">
+                <page name="sh_reasons" string="მიზეზები" invisible="sh_kind not in ('on_hold', 'returned', 'cancelled')">
+                    <group>
+                        <field name="hold_reason" placeholder="ჩაწერეთ შეჩერების მიზეზი..." invisible="sh_kind != 'on_hold'"/>
+                        <field name="resume_date" invisible="sh_kind != 'on_hold'"/>
+                        <field name="return_reason" placeholder="ჩაწერეთ დაბრუნების მიზეზი..." invisible="sh_kind != 'returned'"/>
+                        <field name="cancel_reason" placeholder="ჩაწერეთ გაუქმების მიზეზი..." invisible="sh_kind != 'cancelled'"/>
+                    </group>
+                </page>
+                <page name="sh_final" string="საბოლოო პროექტი" invisible="sh_kind not in ('review', 'done')">
+                    <group>
+                        <field name="sh_final_note" placeholder="რა გაკეთდა, შედეგი, შენიშვნები..."/>
+                        <field name="sh_final_attachment_ids" widget="many2many_binary"/>
+                        <field name="sh_done_user_id" invisible="not sh_done_user_id"/>
+                        <field name="sh_done_date" invisible="not sh_done_date"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_sh_open_templates" type="object" class="oe_stat_button" icon="fa-clipboard">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">შაბლონები</span>
+                        <field name="sh_template_count" class="o_stat_value"/>
+                    </div>
+                </button>
+            </xpath>
             <xpath expr="//header" position="inside">
                 <field name="sh_kind" invisible="1"/>
-                <button name="action_sh_hold" type="object" string="შეჩერება"
-                        invisible="is_template or not project_id or sh_kind in ('on_hold', 'done', 'cancelled')"/>
-                <button name="action_sh_return" type="object" string="დაბრუნება"
-                        invisible="is_template or not project_id or sh_kind != 'review'"/>
-                <button name="action_sh_cancel" type="object" string="გაუქმება"
-                        invisible="is_template or not project_id or sh_kind in ('done', 'cancelled')"/>
+                <button name="action_sh_accept" type="object" string="✋ მიღება" class="btn-primary"
+                        invisible="is_template or not project_id or uid not in user_ids or sh_kind != 'new'"/>
+                <button name="action_sh_mark_done" type="object" string="✔ შესრულებულია" class="btn-success"
+                        invisible="is_template or not project_id or uid not in user_ids or sh_kind not in ('accepted', 'in_progress', 'returned')"/>
             </xpath>
             <xpath expr="//t[@name='warning_section']" position="after">
                 <div class="alert alert-info mb-0" role="alert" invisible="sh_kind != 'on_hold'">
@@ -26,13 +146,6 @@
                     <b>გაუქმებულია:</b> <field name="cancel_reason" readonly="1" class="d-inline"/>
                 </div>
             </xpath>
-            <xpath expr="//field[@name='user_ids']" position="after">
-                <field name="reviewer_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
-            </xpath>
-            <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="evidence_required"/>
-                <field name="sh_progress" widget="progressbar" invisible="is_template"/>
-            </xpath>
         </field>
     </record>
 
@@ -43,6 +156,22 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="sh_progress" widget="progressbar"/>
+                <field name="sh_responsible_id" widget="many2one_avatar_user" invisible="not sh_responsible_id"/>
+            </xpath>
+            <xpath expr="//field[@name='priority'][@widget='priority']" position="replace">
+                <field name="priority" widget="badge"
+                       decoration-muted="priority == '0'" decoration-info="priority == '1'"
+                       decoration-warning="priority == '2'" decoration-danger="priority == '3'"/>
+                <field name="sh_repeat" invisible="1"/>
+                <span class="badge rounded-pill text-bg-light border ms-1" invisible="not sh_repeat"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
+            </xpath>
+            <xpath expr="//field[@name='tag_ids'][@widget='many2many_tags']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <!-- card: creation date instead of "In 3 days" -->
+            <xpath expr="//field[@name='date_deadline'][@widget='remaining_days']" position="replace">
+                <div class="small" invisible="not sh_branch"><i class="fa fa-map-marker text-danger me-1"/><field name="sh_branch"/></div>
+                <div class="text-muted small">შექმნა: <field name="sh_create_date_str"/></div>
             </xpath>
         </field>
     </record>

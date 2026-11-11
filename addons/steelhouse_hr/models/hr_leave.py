@@ -18,12 +18,23 @@ class SteelhouseLeaveDelegation(models.Model):
 
     @api.onchange('deputy_id')
     def _onchange_deputy_department(self):
-        """A deputy can be picked from the whole company. If he is not in the chosen
-        department (or its sub-units), the line takes the deputy's department."""
+        """A deputy can be picked from the whole company (people of the line's department
+        are offered first). If he is not in that department (or its sub-units), the line
+        takes the deputy's department."""
         for line in self:
             dep = line.deputy_id.department_id
             if dep and not (line.department_id and (dep.parent_path or '').startswith(line.department_id.parent_path or '-')):
                 line.department_id = dep
+
+    @api.onchange('department_id')
+    def _onchange_department_clear_deputy(self):
+        """The deputy is chosen among the employees of the line's department
+        (sub-units included): changing the department drops a deputy from elsewhere."""
+        for line in self:
+            dep = line.deputy_id.department_id
+            if line.deputy_id and not (dep and line.department_id
+                                       and (dep.parent_path or '').startswith(line.department_id.parent_path or '-')):
+                line.deputy_id = False
 
     def _sh_deputy_absence(self):
         """The deputy's own time off (approved or waiting) overlapping this request, if any."""

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sh_task_final_wizard_form" model="ir.ui.view">
+        <field name="name">steelhouse.task.final.wizard.form</field>
+        <field name="model">steelhouse.task.final.wizard</field>
+        <field name="arch" type="xml">
+            <form string="საბოლოო პროექტი">
+                <field name="task_id" invisible="1"/>
+                <group>
+                    <field name="note" placeholder="რა გაკეთდა, შედეგი, შენიშვნები..."/>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </group>
+                <p class="text-muted">„დასრულება“ დავალებას „დასრულებულში“ გადაიყვანს. ორივე ველი არასავალდებულოა.</p>
+                <footer>
+                    <button name="action_confirm" type="object" string="დასრულება" class="btn-primary"/>
+                    <button special="cancel" string="გაუქმება"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_task_final_wizard" model="ir.actions.act_window">
+        <field name="name">საბოლოო პროექტი</field>
+        <field name="res_model">steelhouse.task.final.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

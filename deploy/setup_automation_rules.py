@@ -22,25 +22,23 @@ for task in records:
 '''
 CODE_OVERDUE = '''
 for task in records:
-    boss = task.reviewer_id or task.create_uid
-    if boss:
+    for boss in (task.reviewer_ids or task.create_uid):
         task.activity_schedule('mail.mail_activity_data_todo', user_id=boss.id,
                                summary='ვადაგადაცილებულია: %s' % task.name,
                                note='შემსრულებლები: %s' % ', '.join(task.user_ids.mapped('name')))
 '''
 CODE_ESCALATE = '''
 for task in records:
-    boss = task.reviewer_id or task.create_uid
-    emp = env['hr.employee'].search([('user_id', '=', boss.id)], limit=1) if boss else env['hr.employee']
-    for top in emp.sh_manager_ids.user_id:  # all equal heads of the reviewer
+    bosses = task.reviewer_ids or task.create_uid
+    emps = env['hr.employee'].search([('user_id', 'in', bosses.ids)]) if bosses else env['hr.employee']
+    for top in emps.sh_manager_ids.user_id:  # all equal heads of the reviewers
         task.activity_schedule('mail.mail_activity_data_todo', user_id=top.id,
                                summary='ესკალაცია — 3 დღით ვადაგადაცილებული: %s' % task.name,
-                               note='შემმოწმებელი: %s; შემსრულებლები: %s' % (boss.name, ', '.join(task.user_ids.mapped('name'))))
+                               note='შემმოწმებელი: %s; შემსრულებლები: %s' % (', '.join(bosses.mapped('name')), ', '.join(task.user_ids.mapped('name'))))
 '''
 CODE_REVIEW = '''
 for task in records:
-    boss = task.reviewer_id or task.create_uid
-    if boss:
+    for boss in (task.reviewer_ids or task.create_uid):
         task.activity_schedule('mail.mail_activity_data_todo', user_id=boss.id,
                                summary='დასადასტურებელია (2 დღეა შემოწმებაზე): %s' % task.name)
 '''

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sh_task_template_wizard_form" model="ir.ui.view">
+        <field name="name">steelhouse.task.template.wizard.form</field>
+        <field name="model">steelhouse.task.template.wizard</field>
+        <field name="arch" type="xml">
+            <form string="შაბლონად შენახვა">
+                <group>
+                    <field name="task_id" invisible="1"/>
+                    <field name="name" placeholder="მაგ. თვიური მარაგების დათვლა"/>
+                </group>
+                <p class="text-muted">შეინახება: აღწერა, ქვედავალებები, შემსრულებლები, შემმოწმებლები,
+                    პრიორიტეტი, კატეგორია, ფილიალი, მტკიცებულება. დავალება თავად არ იცვლება.</p>
+                <footer>
+                    <button name="action_confirm" type="object" string="შენახვა" class="btn-primary"/>
+                    <button special="cancel" string="გაუქმება"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sh_task_templates_list" model="ir.ui.view">
+        <field name="name">project.task.list.sh.templates</field>
+        <field name="model">project.task</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list string="შაბლონები" create="0">
+                <field name="name" string="შაბლონის სახელი"/>
+                <field name="project_id" string="დეპარტამენტი"/>
+                <field name="user_ids" widget="many2many_avatar_user" string="შემსრულებლები"/>
+                <field name="priority"/>
+                <button name="action_sh_use_template" type="object" string="გამოყენება" class="btn-success btn-sm"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_sh_task_templates" model="ir.actions.act_window">
+        <field name="name">შაბლონები</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_template', '=', True)]</field>
+        <field name="context">{'active_test': True}</field>
+        <field name="view_id" ref="view_sh_task_templates_list"/>
+    </record>
+</odoo>

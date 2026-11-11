@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "პროექტები" (button on the departments page): all department tasks on one page, by stage.
+         No default filter; search only by employee / department / customer.
+         Access rules still apply: employees see only their own tasks. -->
+    <record id="view_sh_all_tasks_search" model="ir.ui.view">
+        <field name="name">project.task.search.sh.all</field>
+        <field name="model">project.task</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <search string="ყველა დავალება">
+                <field name="user_ids" string="თანამშრომელი"/>
+                <field name="sh_department_id" string="დეპარტამენტი" operator="child_of"/>
+                <field name="partner_id" string="კლიენტი"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sh_all_tasks" model="ir.actions.act_window">
+        <field name="name">პროექტები</field>
+        <field name="path">sh-all-tasks</field>
+        <field name="res_model">project.task</field>
+        <field name="domain">[('project_id', '!=', False), ('is_template', '=', False)]</field>
+        <field name="context">{'sh_all_tasks': True, 'sh_picker': True, 'default_group_by': 'stage_id'}</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_sh_all_tasks_search"/>
+    </record>
+    <record id="action_sh_all_tasks_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="project.view_task_kanban"/>
+        <field name="act_window_id" ref="action_sh_all_tasks"/>
+    </record>
+    <record id="action_sh_all_tasks_list" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="project.view_task_tree2"/>
+        <field name="act_window_id" ref="action_sh_all_tasks"/>
+    </record>
+
+</odoo>

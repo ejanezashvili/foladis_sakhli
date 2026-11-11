@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Project app is split in two:
+         "დეპარტამენტები" - department projects (sh_is_department), opened by default;
+         "პროექტები" - concrete projects, opened by the button next to the title. -->
+
+    <!-- concrete projects -->
+    <record id="action_sh_projects" model="ir.actions.act_window">
+        <field name="name">პროექტები</field>
+        <field name="path">sh-projects</field>
+        <field name="res_model">project.project</field>
+        <field name="domain">[('is_template', '=', False), ('sh_is_department', '=', False)]</field>
+        <field name="context">{'display_milestone_deadline': True, 'default_sh_is_department': False}</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="project.project_kanban_view_group_stage"/>
+        <field name="search_view_id" ref="project.view_project_project_filter"/>
+    </record>
+
+    <!-- "create" dialog of the departments page: the new project is a department -->
+    <record id="action_sh_create_department" model="ir.actions.act_window">
+        <field name="name">დეპარტამენტის შექმნა</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="project.project_project_view_form_simplified_footer"/>
+        <field name="target">new</field>
+        <field name="context">{'default_sh_is_department': True}</field>
+    </record>
+
+    <!-- departments page: kanban / list with the "პროექტები" button -->
+    <record id="view_sh_department_project_kanban" model="ir.ui.view">
+        <field name="name">project.project.kanban.sh.department</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_kanban"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <kanban position="attributes">
+                <attribute name="on_create">steelhouse_task_flow.action_sh_create_department</attribute>
+            </kanban>
+            <xpath expr="//kanban/*[1]" position="before">
+                <header>
+                    <button name="%(steelhouse_task_flow.action_sh_all_tasks)d" type="action"
+                            string="პროექტები" class="btn-secondary" display="always"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sh_department_project_list" model="ir.ui.view">
+        <field name="name">project.project.list.sh.department</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list/*[1]" position="before">
+                <header>
+                    <button name="%(steelhouse_task_flow.action_sh_all_tasks)d" type="action"
+                            string="პროექტები" class="btn-secondary" display="always"/>
+                </header>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Odoo's "Projects" actions/menus become "დეპარტამენტები" -->
+    <record id="project.open_view_project_all" model="ir.actions.act_window">
+        <field name="name">დეპარტამენტები</field>
+        <field name="domain">[('is_template', '=', False), ('sh_is_department', '=', True)]</field>
+        <field name="context">{'display_milestone_deadline': True, 'default_sh_is_department': True}</field>
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+    </record>
+    <record id="action_sh_department_kanban_view" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+        <field name="act_window_id" ref="project.open_view_project_all"/>
+    </record>
+    <record id="action_sh_department_list_view" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sh_department_project_list"/>
+        <field name="act_window_id" ref="project.open_view_project_all"/>
+    </record>
+    <!-- with project stages on, Odoo shows this menu/action: departments stay ungrouped, same views -->
+    <record id="project.open_view_project_all_group_stage" model="ir.actions.act_window">
+        <field name="name">დეპარტამენტები</field>
+        <field name="domain">[('is_template', '=', False), ('sh_is_department', '=', True)]</field>
+        <field name="context">{'display_milestone_deadline': True, 'default_sh_is_department': True}</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+    </record>
+    <record id="project.open_view_project_all_group_stage_kanban_view" model="ir.actions.act_window.view">
+        <field name="view_id" ref="view_sh_department_project_kanban"/>
+    </record>
+    <record id="project.open_view_project_all_group_stage_tree_view" model="ir.actions.act_window.view">
+        <field name="view_id" ref="view_sh_department_project_list"/>
+    </record>
+    <record id="project.menu_projects" model="ir.ui.menu">
+        <field name="name">დეპარტამენტები</field>
+        <field name="active" eval="False"/>
+    </record>
+    <record id="project.menu_projects_group_stage" model="ir.ui.menu">
+        <field name="name">დეპარტამენტები</field>
+        <field name="active" eval="False"/>
+    </record>
+    <!-- the top menu item is hidden: the app itself opens the departments -->
+    <record id="project.menu_main_pm" model="ir.ui.menu">
+        <field name="action" ref="project.open_view_project_all_group_stage"/>
+    </record>
+
+    <!-- project form: the flag can be changed (settings tab) -->
+    <record id="view_sh_project_form" model="ir.ui.view">
+        <field name="name">project.project.form.sh.department</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="sh_is_department"/>
+                <field name="sh_department_id" invisible="not sh_is_department" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

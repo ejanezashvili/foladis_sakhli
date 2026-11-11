@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Access by department (global rules: they apply on top of Odoo's own rules).
+         Project administrators (and the system admin) see everything.
+         Others see:
+         - tasks: assigned to them, where they are the reviewer, created by them,
+           and all tasks of the departments they head (sub-departments included);
+         - department projects: their own department, the ones they head, the ones with their tasks;
+         - concrete projects: where they are assignee / reviewer of a task, the project manager,
+           or head of a department working in it. -->
+    <record id="rule_sh_task_department" model="ir.rule">
+        <field name="name">Steelhouse: დავალებები დეპარტამენტის მიხედვით</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="global" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.share else [
+            '|', '|', '|', '|', '|',
+            ('is_template', '=', True),
+            ('project_id', '=', False),
+            ('user_ids', 'in', user.id),
+            ('reviewer_ids', 'in', user.id),
+            ('create_uid', '=', user.id),
+            ('project_id.sh_department_id.sh_all_manager_user_ids', 'in', user.id)]</field>
+    </record>
+
+    <record id="rule_sh_project_department" model="ir.rule">
+        <field name="name">Steelhouse: პროექტები დეპარტამენტის მიხედვით</field>
+        <field name="model_id" ref="project.model_project_project"/>
+        <field name="global" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.share else [
+            '|', '|', '|', '|', '|', '|', '|', '|',
+            ('is_template', '=', True),
+            ('task_ids.user_ids', 'in', user.id),
+            ('task_ids.reviewer_ids', 'in', user.id),
+            ('sh_task_ids.user_ids', 'in', user.id),
+            ('sh_task_ids.reviewer_ids', 'in', user.id),
+            ('user_id', '=', user.id),
+            ('sh_department_id.member_ids.user_id', '=', user.id),
+            ('sh_department_id.sh_all_manager_user_ids', 'in', user.id),
+            ('sh_task_ids.project_id.sh_department_id.sh_all_manager_user_ids', 'in', user.id)]</field>
+    </record>
+</odoo>

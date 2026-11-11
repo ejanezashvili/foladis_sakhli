@@ -4,7 +4,7 @@ from collections.abc import Mapping
 from markupsafe import Markup, escape
 
 from odoo import api, fields, models, _
-from odoo.exceptions import UserError
+from odoo.exceptions import RedirectWarning, UserError
 
 # Odoo task state that follows each stage kind.
 KIND_STATE = {'done': '1_done', 'cancelled': '1_canceled', 'returned': '02_changes_requested'}
@@ -23,14 +23,57 @@ INFO_PREFIXES = ('თქვენ დაგენიშნათ',)
 REMINDER_PREFIXES = INFO_PREFIXES + ('ვადა იწურება', 'ვადაგადაცილებულია', 'ესკალაცია', 'დასადასტურებელია')
 
 
+# "კლიენტი" (customer): employees and internal users are not customers
+SH_CUSTOMER_DOMAIN = ("['&', '|', ('company_id', '=?', company_id), ('company_id', '=', False), "
+                      "'&', ('employee_ids', '=', False), '|', ('user_ids', '=', False), ('user_ids.share', '=', True)]")
+
+
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 
+    partner_id = fields.Many2one(domain=SH_CUSTOMER_DOMAIN)
+
+    # project_id is shown as "დეპარტამენტი" (department project: stages / flow, rights);
+    # "პროექტი" is the concrete project the task also belongs to
+    sh_project_id = fields.Many2one(
+        'project.project', string='პროექტი', index=True, tracking=True,
+        domain="[('sh_is_department', '=', False), ('is_template', '=', False)]",
+        help="კონკრეტული პროექტი. დავალება ჩანს დეპარტამენტშიც და ამ პროექტშიც, ერთი ფლოუთი.")
+
+    sh_department_id = fields.Many2one(
+        related='project_id.sh_department_id', string='HR დეპარტამენტი', store=True, index=True)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        # a sub-task belongs to the same concrete project as its parent
+        for vals in vals_list:
+            if vals.get('parent_id') and 'sh_project_id' not in vals:
+                vals['sh_project_id'] = self.browse(vals['parent_id']).sh_project_id.id
+        return super().create(vals_list)
+
+    @api.model
+    def _read_group_stage_ids(self, stages, domain):
+        """Kanban of a concrete project: show the department flow columns even when empty."""
+        stages = super()._read_group_stage_ids(stages, domain)
+        if self.env.context.get('sh_project_view') or self.env.context.get('sh_all_tasks'):
+            stages |= self.env['project.project'].search([('sh_is_department', '=', True)]).type_ids
+            stages = stages.sorted(lambda s: (s.sequence, s.id))
+        return stages
+
     sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი')
+    reviewer_ids = fields.Many2many(
+        'res.users', 'sh_task_reviewer_rel', 'task_id', 'user_id', string='შემმოწმებლები',
+        tracking=True, default=lambda self: self.env.user, domain="[('share', '=', False)]",
+        help="ადასტურებენ შესრულებას (დასრულება), აბრუნებენ ან აუქმებენ დავალებას — ნებისმიერი მათგანი.")
+    # first reviewer, kept for compatibility (reports, older automation code)
     reviewer_id = fields.Many2one(
-        'res.users', string='შემმოწმებელი', tracking=True, index=True,
-        default=lambda self: self.env.user, domain="[('share', '=', False)]",
-        help="ადასტურებს შესრულებას (დასრულება), აბრუნებს ან აუქმებს დავალებას.")
+        'res.users', string='შემმოწმებელი', compute='_compute_reviewer_id', store=True, index=True)
+
+    @api.depends('reviewer_ids')
+    def _compute_reviewer_id(self):
+        for task in self:
+            task.reviewer_id = task.reviewer_ids[:1]
+
     evidence_required = fields.Boolean(
         'საჭიროა მტკიცებულება', tracking=True,
         help="შემოწმებაზე გადაყვანამდე დავალებაზე ფაილი ან ფოტო უნდა იყოს მიმაგრებული.")
@@ -38,6 +81,24 @@ class ProjectTask(models.Model):
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
+    priority = fields.Selection([
+        ('0', 'დაბალი'), ('1', 'საშუალო'), ('2', 'მაღალი'), ('3', 'კრიტიკული'),
+    ], string='პრიორიტეტი')
+
+    # former task properties, now real fields (same in every department, searchable, tracked)
+    sh_responsible_id = fields.Many2one(
+        'res.users', string='მთავარი პასუხისმგებელი', tracking=True, index=True,
+        domain="[('share', '=', False)]")
+    sh_work_start = fields.Date('სამუშაოს დაწყება', tracking=True)
+    sh_category = fields.Selection([
+        ('admin', 'ადმინისტრაციული'), ('sales', 'გაყიდვები'), ('stock', 'მარაგი და საწყობი'),
+        ('finance', 'ფინანსური'), ('tech', 'ტექნიკური'), ('other', 'სხვა'),
+    ], string='კატეგორია', tracking=True)
+    sh_branch = fields.Selection([
+        ('main', 'ძირითადი ფილიალი'), ('vaziani3', 'ვაზიანი #3'), ('vaziani1', 'ვაზიანი 1'),
+        ('vaziani2', 'ვაზიანი 2'), ('batumi', 'ბათუმის ფილიალი'), ('lilo', 'ლილო'),
+    ], string='ფილიალი', tracking=True)
+    sh_manual_progress = fields.Integer('ხელით პროგრესი (%)', tracking=True)
     sh_progress = fields.Integer(
         'პროგრესი (%)', compute='_compute_sh_progress', store=True,
         help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებების, საკონტროლო სიისა და "
@@ -60,17 +121,10 @@ class ProjectTask(models.Model):
         return round(100 * done / total) if total else None
 
     def _sh_manual_percent(self):
-        props = self.task_properties
-        value = None
-        if isinstance(props, Mapping):  # Odoo 19 returns a Property mapping
-            value = props.get(MANUAL_PROGRESS_PROP)
-        elif isinstance(props, list):
-            value = next((p.get('value') for p in props if p.get('name') == MANUAL_PROGRESS_PROP), None)
-        if value in (None, False, ''):
-            return None
-        return max(0, min(100, int(value)))
+        value = self.sh_manual_progress
+        return max(0, min(100, value)) if value else None
 
-    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'task_properties')
+    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'sh_manual_progress')
     def _compute_sh_progress(self):
         for task in self:
             kind = task.stage_id.sh_kind
@@ -100,7 +154,7 @@ class ProjectTask(models.Model):
     def _sh_can_review(self):
         self.ensure_one()
         user = self.env.user
-        return (self.env.su or not self.reviewer_id or self.reviewer_id == user
+        return (self.env.su or not self.reviewer_ids or user in self.reviewer_ids
                 or user.has_group('base.group_system'))
 
     def _sh_check_reviewer(self, kind):
@@ -110,7 +164,7 @@ class ProjectTask(models.Model):
                 raise UserError(_(
                     "„%(stage)s“-ში გადაყვანა შეუძლია მხოლოდ შემმოწმებელს (%(reviewer)s) "
                     "ან სისტემის ადმინისტრატორს.",
-                    stage=labels.get(kind, kind), reviewer=task.reviewer_id.name))
+                    stage=labels.get(kind, kind), reviewer=', '.join(task.reviewer_ids.mapped('name'))))
 
     def _sh_check_evidence(self, new_flag=None):
         """new_flag: value of evidence_required being written in the same save (if any)."""
@@ -183,13 +237,29 @@ class ProjectTask(models.Model):
             kind = self.env['project.task.type'].browse(vals['stage_id']).sh_kind
             if kind:
                 if kind in REASON_KINDS and not self.env.context.get('sh_reason_given'):
-                    raise UserError(_(
-                        "ამ სტადიაზე გადასაყვანად გამოიყენეთ ღილაკი ფორმის თავზე "
-                        "(„შეჩერება“, „დაბრუნება“ ან „გაუქმება“) — საჭიროა მიზეზი."))
+                    if kind in REVIEWER_KINDS:
+                        self._sh_check_reviewer(kind)
+                    if len(self) != 1 or self.env.su:
+                        raise UserError(_("ამ სტადიაზე გადასაყვანად საჭიროა მიზეზი — გადაიყვანეთ თითო დავალება."))
+                    labels = {'on_hold': _("შეჩერებისთვის მიუთითეთ მიზეზი და განახლების თარიღი."),
+                              'returned': _("დაბრუნებისთვის მიუთითეთ მიზეზი."),
+                              'cancelled': _("გაუქმებისთვის მიუთითეთ მიზეზი.")}
+                    raise RedirectWarning(
+                        labels[kind], self.env.ref({'on_hold': 'steelhouse_task_flow.action_sh_task_hold_wizard',
+                                                    'returned': 'steelhouse_task_flow.action_sh_task_return_wizard',
+                                                    'cancelled': 'steelhouse_task_flow.action_sh_task_cancel_wizard'}[kind]).id,
+                        _("გაგრძელება"), {'default_task_id': self.id, 'default_mode': kind})
+                if kind == 'accepted':
+                    self._sh_check_assignee()
                 if kind in REVIEWER_KINDS:
                     self._sh_check_reviewer(kind)
-                if kind == 'review':
-                    self._sh_check_evidence(vals.get('evidence_required') if 'evidence_required' in vals else None)
+                if (kind == 'done' and len(self) == 1 and not self.is_template and not self.env.su
+                        and not self.env.context.get('sh_final_given') and self.stage_id.sh_kind != 'done'):
+                    raise RedirectWarning(
+                        _("დასრულებამდე შეავსეთ „საბოლოო პროექტი“: აღწერა და ფოტოები/ფაილები (არასავალდებულო)."),
+                        self.env.ref('steelhouse_task_flow.action_sh_task_final_wizard').id, _("გაგრძელება"),
+                        {'default_task_id': self.id, 'default_note': self.sh_final_note or False})
+                # evidence (3.4) is now collected in the "საბოლოო პროექტი" dialog — no blocking check here
                 if 'state' not in vals:
                     vals['state'] = KIND_STATE.get(kind, '01_in_progress')
         elif vals.get('state') in CLOSED:
@@ -198,7 +268,26 @@ class ProjectTask(models.Model):
             if kind == 'cancelled' and not self.env.context.get('sh_reason_given'):
                 raise UserError(_("გასაუქმებლად გამოიყენეთ ღილაკი „გაუქმება“ — საჭიროა მიზეზი."))
             self._sh_check_reviewer(kind)
+        # leaving "შეჩერებული": the actual resume date is today
+        resumed = self.browse()
+        if vals.get('stage_id') and kind != 'on_hold':
+            resumed = self.filtered(lambda t: t.stage_id.sh_kind == 'on_hold')
+            held_since = {t.id: t.date_last_stage_update for t in resumed}
+            planned = {t.id: t.resume_date for t in resumed}
+            if resumed:
+                vals['resume_date'] = fields.Date.context_today(self)
         res = super().write(vals)
+        for task in resumed:
+            since = held_since.get(task.id)
+            days = since and (fields.Date.context_today(task) - since.date()).days
+            body = Markup("▶ <b>%s</b> — %s: <b>%s</b>") % (
+                _("დავალება განახლდა"), _("განახლების თარიღი"), task.resume_date.strftime('%d.%m.%Y'))
+            if since:
+                body += Markup("<br/>%s") % _("შეჩერებული იყო %(since)s-დან (%(days)s დღე)",
+                                              since=since.strftime('%d.%m.%Y'), days=days)
+            if planned.get(task.id) and planned[task.id] != task.resume_date:
+                body += Markup("<br/>%s: %s") % (_("გეგმიური განახლება"), planned[task.id].strftime('%d.%m.%Y'))
+            task.message_post(body=body, message_type='notification', subtype_xmlid='mail.mt_note')
         if not vals.get('stage_id') and vals.get('state') in CLOSED:
             for task in self:
                 stage = task._sh_stage_of_kind(kind)
@@ -235,6 +324,39 @@ class ProjectTask(models.Model):
             'name': names[mode],
             'context': {'default_task_id': self.id, 'default_mode': mode},
         }
+
+    def _sh_check_assignee(self):
+        """Requirement 3.2: only an assignee (or an admin) accepts a task."""
+        user = self.env.user
+        if self.env.su or user.has_group('project.group_project_manager') or user.has_group('base.group_system'):
+            return
+        for task in self.filtered(lambda t: not t.is_template and t.stage_id.sh_kind != 'accepted'):
+            if user not in task.user_ids:
+                raise UserError(_(
+                    "დავალების მიღება შეუძლია მხოლოდ შემსრულებელს (%s) ან ადმინს.",
+                    ', '.join(task.user_ids.mapped('name')) or '—'))
+
+    def action_sh_accept(self):
+        """Assignee confirms they accept the task: ახალი -> მიღებული."""
+        self.ensure_one()
+        stage = self._sh_stage_of_kind('accepted')
+        if not stage:
+            raise UserError(_("ამ დეპარტამენტს არ აქვს „მიღებული“ სტადია."))
+        self.write({'stage_id': stage.id})
+        self.message_post(body=Markup(_("✋ <b>დავალება მიღებულია</b> შემსრულებლის მიერ")),
+                          message_type='comment', subtype_xmlid='mail.mt_note')
+        return True
+
+    def action_sh_mark_done(self):
+        """Assignee marks the task done: it goes to review, the reviewer confirms it."""
+        self.ensure_one()
+        if self.env.user not in self.user_ids and not self.env.user.has_group('project.group_project_manager'):
+            raise UserError(_("შესრულებულად მონიშვნა შეუძლია მხოლოდ დავალების შემსრულებელს."))
+        stage = self._sh_stage_of_kind('review')
+        if not stage:
+            raise UserError(_("ამ დეპარტამენტს არ აქვს „შემოწმებაზე“ სტადია."))
+        self.write({'stage_id': stage.id})
+        return True
 
     def action_sh_hold(self):
         return self._sh_open_wizard('on_hold')

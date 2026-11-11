@@ -31,4 +31,18 @@
             </xpath>
         </field>
     </record>
+
+    <!-- "New time off" dialog of the dashboard: Odoo shows the employee read-only there;
+         it can be chosen while the request is not decided yet -->
+    <record id="hr_leave_view_form_dashboard_new_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.form.dashboard.new.steelhouse</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form_dashboard_new_time_off"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@widget='many2one_avatar_employee']" position="attributes">
+                <attribute name="readonly">state in ['validate', 'validate1', 'refuse', 'cancel']</attribute>
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
