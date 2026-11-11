@@ -105,6 +105,11 @@ class HrLeave(models.Model):
 
     def _get_next_states_by_state(self):
         result = super()._get_next_states_by_state()
+        # a refused request can be sent back to approval (instead of creating it again)
+        # by its approver or any equal head; HR officers already can
+        if self.validation_type != 'hr' and (self.employee_id.sudo().leave_manager_id == self.env.user
+                                             or self._sh_user_is_co_head()):
+            result['refuse'].add('confirm')
         if not self.env.user.has_group('hr_holidays.group_hr_holidays_user') and self._sh_user_is_co_head():
             validation_type = self.validation_type
             if validation_type != 'hr':
@@ -125,6 +130,11 @@ class HrLeave(models.Model):
         super()._compute_can_refuse()
         for holiday in self.filtered(lambda h: h.state == 'validate'):
             holiday.can_refuse = False
+
+    def _compute_can_back_to_approve(self):
+        super()._compute_can_back_to_approve()
+        for holiday in self.filtered(lambda h: h.state == 'refuse'):
+            holiday.can_back_to_approve = holiday._check_approval_update('confirm', raise_if_not_possible=False)
 
     def _check_double_validation_rules(self, employees, state):
         # the first approval of a double-validation request: any equal head may give it
