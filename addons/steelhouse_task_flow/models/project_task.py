@@ -269,7 +269,26 @@ class ProjectTask(models.Model):
             if kind == 'cancelled' and not self.env.context.get('sh_reason_given'):
                 raise UserError(_("გასაუქმებლად გამოიყენეთ ღილაკი „გაუქმება“ — საჭიროა მიზეზი."))
             self._sh_check_reviewer(kind)
+        # leaving "შეჩერებული": the actual resume date is today
+        resumed = self.browse()
+        if vals.get('stage_id') and kind != 'on_hold':
+            resumed = self.filtered(lambda t: t.stage_id.sh_kind == 'on_hold')
+            held_since = {t.id: t.date_last_stage_update for t in resumed}
+            planned = {t.id: t.resume_date for t in resumed}
+            if resumed:
+                vals['resume_date'] = fields.Date.context_today(self)
         res = super().write(vals)
+        for task in resumed:
+            since = held_since.get(task.id)
+            days = since and (fields.Date.context_today(task) - since.date()).days
+            body = Markup("▶ <b>%s</b> — %s: <b>%s</b>") % (
+                _("დავალება განახლდა"), _("განახლების თარიღი"), task.resume_date.strftime('%d.%m.%Y'))
+            if since:
+                body += Markup("<br/>%s") % _("შეჩერებული იყო %(since)s-დან (%(days)s დღე)",
+                                              since=since.strftime('%d.%m.%Y'), days=days)
+            if planned.get(task.id) and planned[task.id] != task.resume_date:
+                body += Markup("<br/>%s: %s") % (_("გეგმიური განახლება"), planned[task.id].strftime('%d.%m.%Y'))
+            task.message_post(body=body, message_type='notification', subtype_xmlid='mail.mt_note')
         if not vals.get('stage_id') and vals.get('state') in CLOSED:
             for task in self:
                 stage = task._sh_stage_of_kind(kind)
