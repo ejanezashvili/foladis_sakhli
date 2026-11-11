@@ -259,8 +259,7 @@ class ProjectTask(models.Model):
                         _("დასრულებამდე შეავსეთ „საბოლოო პროექტი“: აღწერა და ფოტოები/ფაილები (არასავალდებულო)."),
                         self.env.ref('steelhouse_task_flow.action_sh_task_final_wizard').id, _("გაგრძელება"),
                         {'default_task_id': self.id, 'default_note': self.sh_final_note or False})
-                if kind == 'review':
-                    self._sh_check_evidence(vals.get('evidence_required') if 'evidence_required' in vals else None)
+                # evidence (3.4) is now collected in the "საბოლოო პროექტი" dialog — no blocking check here
                 if 'state' not in vals:
                     vals['state'] = KIND_STATE.get(kind, '01_in_progress')
         elif vals.get('state') in CLOSED:
