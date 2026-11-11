@@ -8,6 +8,7 @@
                 <field name="task_id" invisible="1"/>
                 <field name="mode" invisible="1"/>
                 <group>
+                    <field name="hold_date" invisible="mode != 'on_hold'"/>
                     <label for="reason" string="შეჩერების მიზეზი" invisible="mode != 'on_hold'"/>
                     <label for="reason" string="დაბრუნების მიზეზი" invisible="mode != 'returned'"/>
                     <label for="reason" string="გაუქმების მიზეზი" invisible="mode != 'cancelled'"/>

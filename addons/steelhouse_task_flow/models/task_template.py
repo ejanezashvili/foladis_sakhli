@@ -1,3 +1,4 @@
+from markupsafe import Markup
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
@@ -65,6 +66,7 @@ class TaskTemplateWizard(models.TransientModel):
             'date_deadline': False,
         })
         template._sh_checklist_to_steps()
+        task._sh_log('files', [Markup('💾 შაბლონად შეინახა: <b>%s</b>') % template.name])
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
