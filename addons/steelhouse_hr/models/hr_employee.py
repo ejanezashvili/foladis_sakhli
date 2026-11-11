@@ -23,6 +23,9 @@ class HrEmployee(models.Model):
     sh_co_manager_ids = fields.Many2many(
         'hr.employee', compute='_compute_sh_manager_ids', string='სხვა თანაბარი ხელმძღვანელები')
     sh_my_team = fields.Boolean(compute='_compute_sh_my_team', search='_search_sh_my_team', string='ჩემი გუნდი')
+    sh_head_user_ids = fields.Many2many(
+        'res.users', compute='_compute_sh_head_user_ids', search='_search_sh_head_user_ids',
+        string='ხელმძღვანელების მომხმარებლები', help="ყველა თანაბარი ხელმძღვანელის მომხმარებელი.")
     sh_under_me = fields.Boolean(
         compute='_compute_sh_under_me', search='_search_sh_under_me', string='ჩემ ქვეშ',
         help="ყველა, ვინც მიმდინარე მომხმარებლის ქვეშაა (ყველა დონე, ყველა თანაბარი ხელმძღვანელისთვის).")
@@ -122,6 +125,22 @@ class HrEmployee(models.Model):
                                          operator, limit - len(result))
             result += others
         return result
+
+    def _compute_sh_head_user_ids(self):
+        for emp in self:
+            emp.sh_head_user_ids = emp.sudo()._sh_heads().user_id
+
+    def _search_sh_head_user_ids(self, operator, value):
+        """Employees for whom the given user(s) are one of the equal heads (used in record rules)."""
+        if operator not in ('in', '='):
+            raise NotImplementedError(operator)
+        # Odoo 19 gives 'in' values as a set
+        user_ids = [value] if isinstance(value, int) else list(value or [])
+        ids = set()
+        for user in self.env['res.users'].sudo().browse([u for u in user_ids if u]):
+            for me in user.employee_ids:
+                ids.update(me._sh_direct_reports().ids)
+        return [('id', 'in', list(ids))]
 
     def _sh_under_me_ids(self):
         ids = set()

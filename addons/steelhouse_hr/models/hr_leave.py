@@ -92,6 +92,48 @@ class SteelhouseLeaveDelegation(models.Model):
 class HrLeave(models.Model):
     _inherit = 'hr.leave'
 
+    # ------------------------------------------------------------------
+    # Equal heads: every head of the employee approves like Odoo's single
+    # "time off approver" (first step); the first one to decide closes it.
+    # ------------------------------------------------------------------
+    def _sh_user_is_co_head(self):
+        self.ensure_one()
+        user = self.env.user
+        employee = self.employee_id.sudo()
+        return (employee.leave_manager_id != user and employee.user_id != user
+                and user in employee.sh_head_user_ids)
+
+    def _get_next_states_by_state(self):
+        result = super()._get_next_states_by_state()
+        if not self.env.user.has_group('hr_holidays.group_hr_holidays_user') and self._sh_user_is_co_head():
+            validation_type = self.validation_type
+            if validation_type != 'hr':
+                result['confirm'].add('refuse')
+                result['validate'].add('refuse')
+            if validation_type == 'both':
+                result['confirm'].add('validate1')
+                result['validate1'].add('refuse')
+            elif validation_type == 'manager':
+                result['confirm'].add('validate')
+                result['refuse'].add('validate')
+        return result
+
+    def _check_double_validation_rules(self, employees, state):
+        # the first approval of a double-validation request: any equal head may give it
+        if state == 'validate1':
+            user = self.env.user
+            employees = employees.filtered(lambda e: user not in e.sudo().sh_head_user_ids)
+        return super()._check_double_validation_rules(employees, state)
+
+    def _get_responsible_for_approval(self):
+        responsible = super()._get_responsible_for_approval()
+        if self.validation_type == 'manager' or (self.validation_type == 'both' and self.state == 'confirm'):
+            employee = self.employee_id.sudo()
+            heads = employee.sh_head_user_ids
+            if employee.leave_manager_id in heads:
+                responsible |= heads
+        return responsible
+
     @api.model
     def sh_waiting_for_me_count(self):
         """Requests waiting for the current user's approval - same rule as Odoo's
@@ -101,8 +143,10 @@ class HrLeave(models.Model):
             domain = [('state', 'in', ['confirm', 'validate1']), '|', ('employee_id.user_id', '!=', user.id),
                       '|', '&', ('state', '=', 'confirm'), ('holiday_status_id.leave_validation_type', '=', 'hr'),
                       ('state', '=', 'validate1')]
-        elif user.has_group('hr_holidays.group_hr_holidays_responsible'):
-            domain = [('state', '=', 'confirm'), ('employee_id.leave_manager_id', '=', user.id),
+        elif user.has_group('hr_holidays.group_hr_holidays_responsible') or                 self.env['hr.employee'].sudo().search_count([('sh_head_user_ids', 'in', [user.id])]):
+            domain = [('state', '=', 'confirm'), ('validation_type', '!=', 'hr'),
+                      '|', ('employee_id.leave_manager_id', '=', user.id),
+                      ('employee_id.sh_head_user_ids', 'in', [user.id]),
                       ('employee_id.user_id', '!=', user.id)]
         else:
             return -1
