@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskChain">
+        <div class="o_sh_chain">
+            <div t-if="!taskId" class="text-muted p-3">თანმიმდევრობის დასაწერად ჯერ შეინახეთ დავალება.</div>
+            <t t-elif="state.loaded">
+                <div class="text-muted small mb-2">
+                    <i class="fa fa-info-circle me-1"/>
+                    შემდეგი დავალება აქტიური ხდება მხოლოდ მაშინ, როცა მის წინა დავალებები შესრულდება (🔒 — ელოდება).
+                </div>
+
+                <!-- diagram -->
+                <div t-if="hasChain" class="o_sh_chain_scroll">
+                    <t t-set="lay" t-value="layout"/>
+                    <div class="o_sh_chain_canvas" t-att-style="'width:' + lay.width + 'px;height:' + lay.height + 'px;'">
+                        <svg class="o_sh_chain_svg" t-att-width="lay.width" t-att-height="lay.height">
+                            <defs>
+                                <marker id="o_sh_arrow_done" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#28a745"/>
+                                </marker>
+                                <marker id="o_sh_arrow_wait" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#8f86b5"/>
+                                </marker>
+                            </defs>
+                            <path t-foreach="arrows()" t-as="a" t-key="a.key" t-att-d="a.d" fill="none"
+                                  t-att-stroke="a.done ? '#28a745' : '#8f86b5'" stroke-width="2"
+                                  t-att-stroke-dasharray="a.done ? '' : '6 4'"
+                                  t-att-marker-end="a.done ? 'url(#o_sh_arrow_done)' : 'url(#o_sh_arrow_wait)'"/>
+                        </svg>
+                        <div t-foreach="state.nodes" t-as="node" t-key="node.id"
+                             t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '')"
+                             t-att-style="cardStyle(node)" t-on-click="() => this.openTask(node)"
+                             t-att-title="node.current ? 'ეს დავალება' : 'გახსნა'">
+                            <div class="d-flex justify-content-between align-items-center small">
+                                <span class="o_sh_chain_num" t-esc="node.number"/>
+                                <span class="o_sh_chain_status">
+                                    <i t-att-class="'fa me-1 ' + statusIcon(node)"/><t t-esc="statusLabel(node)"/>
+                                </span>
+                            </div>
+                            <div class="o_sh_chain_name" t-esc="node.name"/>
+                            <div class="o_sh_chain_dept text-truncate"><i class="fa fa-sitemap me-1"/><t t-esc="node.department"/></div>
+                            <div class="d-flex justify-content-between align-items-center small mt-auto">
+                                <span class="text-truncate d-flex align-items-center">
+                                    <t t-if="node.user_id">
+                                        <img t-att-src="avatar(node.user_id)" class="rounded me-1 o_sh_avatar"/>
+                                        <span class="text-truncate" t-esc="node.user_name"/>
+                                    </t>
+                                    <span t-else="" class="text-muted">პასუხისმგებელი —</span>
+                                </span>
+                                <span t-if="node.deadline" t-att-class="'text-nowrap ms-1 ' + (node.overdue ? 'text-danger fw-bold' : 'text-muted')">
+                                    <i class="fa fa-clock-o me-1"/><t t-esc="node.deadline"/>
+                                </span>
+                            </div>
+                            <div class="o_sh_chain_bar"><i t-att-style="'width:' + node.progress + '%'"/></div>
+                        </div>
+                    </div>
+                </div>
+                <div t-else="" class="o_sh_chain_empty text-muted">
+                    ეს დავალება ჯერ არცერთ დავალებასთან არ არის დაკავშირებული.
+                </div>
+                <div t-if="state.truncated" class="text-warning small mt-1">ნაჩვენებია მხოლოდ პირველი 80 დავალება.</div>
+
+                <!-- direct previous / next -->
+                <div class="row mt-3 g-3">
+                    <t t-foreach="[['prev', 'წინა დავალებები', 'ჯერ ეს უნდა შესრულდეს'], ['next', 'შემდეგი დავალებები', 'დაიწყება ამის შესრულების შემდეგ']]" t-as="side" t-key="side[0]">
+                        <div class="col-md-6">
+                            <div class="o_sh_chain_side">
+                                <div class="fw-bold">
+                                    <i t-att-class="'fa me-1 ' + (side[0] === 'prev' ? 'fa-arrow-left' : 'fa-arrow-right')"/>
+                                    <t t-esc="side[1]"/> <span class="text-muted fw-normal small">— <t t-esc="side[2]"/></span>
+                                </div>
+                                <div t-foreach="nodesOf(state[side[0]])" t-as="n" t-key="n.id" class="d-flex align-items-center py-1 border-bottom">
+                                    <i t-att-class="'fa me-2 o_sh_status_icon_' + n.status + ' ' + statusIcon(n)"/>
+                                    <a href="#" class="text-truncate flex-grow-1" t-on-click.prevent="() => this.openTask(n)">
+                                        <t t-if="n.number"><t t-esc="n.number"/> · </t><t t-esc="n.name"/>
+                                    </a>
+                                    <span class="text-muted small ms-2 text-truncate" style="max-width: 35%" t-esc="n.department"/>
+                                    <button t-if="!state.readonly" class="btn btn-link p-0 ms-2 text-muted" title="კავშირის მოხსნა"
+                                            t-on-click="() => this.unlink(side[0], n)"><i class="fa fa-chain-broken"/></button>
+                                </div>
+                                <div t-if="!nodesOf(state[side[0]]).length" class="text-muted small py-1">—</div>
+                                <div t-if="!state.readonly" class="mt-2 d-flex gap-3">
+                                    <a href="#" t-on-click.prevent="() => this.openForm(side[0])">
+                                        + ახალი <t t-esc="side[0] === 'prev' ? 'წინა' : 'შემდეგი'"/> დავალება
+                                    </a>
+                                    <a href="#" class="text-muted" t-on-click.prevent="() => this.openLink(side[0])">+ არსებულის მიბმა</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- link an existing task -->
+                <div t-if="state.link" class="o_sh_chain_box mt-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <b><t t-esc="state.link.direction === 'next' ? 'შემდეგად' : 'წინად'"/> არსებული დავალების მიბმა</b>
+                        <button class="btn-close" t-on-click="() => this.state.link = null"/>
+                    </div>
+                    <input type="text" class="form-control form-control-sm mb-2" placeholder="ძიება სახელით ან ნომრით..."
+                           t-att-value="state.link.term" t-on-input="onLinkTerm"/>
+                    <div t-foreach="state.link.results" t-as="r" t-key="r.id" class="o_sh_chain_result d-flex justify-content-between py-1 px-2"
+                         t-on-click="() => this.pickLink(r)">
+                        <span t-esc="r.label"/>
+                        <span class="text-muted small ms-2" t-esc="r.department"/>
+                    </div>
+                    <div t-if="!state.link.results.length" class="text-muted small">ვერ მოიძებნა</div>
+                </div>
+
+                <!-- new task -->
+                <div t-if="state.form" class="o_sh_chain_box mt-3">
+                    <t t-set="f" t-value="state.form"/>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <b>ახალი <t t-esc="f.direction === 'next' ? 'შემდეგი' : 'წინა'"/> დავალება</b>
+                        <button class="btn-close" t-on-click="cancelForm"/>
+                    </div>
+                    <div class="row g-2 align-items-end">
+                        <div class="col-md-12">
+                            <label class="form-label small mb-0">დავალება</label>
+                            <input type="text" class="form-control" placeholder="რა უნდა გაკეთდეს..."
+                                   t-att-value="f.name" t-on-input="(ev) => f.name = ev.target.value"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small mb-0">დეპარტამენტი</label>
+                            <select class="form-select form-select-sm" t-on-change="onDepartment">
+                                <option value="">— აირჩიეთ —</option>
+                                <option t-foreach="state.departments" t-as="d" t-key="d.id" t-att-value="d.id"
+                                        t-att-selected="d.id === f.project_id" t-esc="d.name"/>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small mb-0">პასუხისმგებელი</label>
+                            <div class="form-control form-control-sm">
+                                <ShUserPicker users="state.users" value="f.user_id" onChange="(id) => f.user_id = id"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small mb-0">ვადა</label>
+                            <input type="date" class="form-control form-control-sm" t-att-value="f.deadline"
+                                   t-on-change="(ev) => f.deadline = ev.target.value"/>
+                        </div>
+                    </div>
+                    <div class="row g-2 mt-1">
+                        <div class="col-md-12">
+                            <label class="form-label small mb-0">შემმოწმებელი <span class="text-muted">(ადასტურებს შესრულებას; შეიძლება რამდენიმე)</span></label>
+                            <div class="form-control form-control-sm d-flex flex-wrap align-items-center gap-2">
+                                <span t-foreach="f.reviewer_ids" t-as="rid" t-key="rid" class="badge rounded-pill o_sh_chain_chip d-inline-flex align-items-center">
+                                    <img t-att-src="avatar(rid)" class="rounded-circle me-1 o_sh_avatar"/>
+                                    <t t-esc="userName(rid)"/>
+                                    <i class="fa fa-times ms-2 o_sh_chip_x" title="მოხსნა" t-on-click="() => this.removeReviewer(rid)"/>
+                                </span>
+                                <div class="flex-grow-1" style="min-width: 180px">
+                                    <ShUserPicker t-key="'rp' + (f.reviewerPick or 0)" users="state.users" value="false"
+                                                  onChange="(id) => this.addReviewer(id)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="small fw-bold mb-1">ქვედავალებები</div>
+                        <div t-foreach="f.subtasks" t-as="s" t-key="s.key" class="row g-2 mb-1 align-items-center">
+                            <div class="col-md-5">
+                                <input type="text" class="form-control form-control-sm" placeholder="ქვედავალება..."
+                                       t-att-value="s.name" t-on-input="(ev) => s.name = ev.target.value"/>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-control form-control-sm">
+                                    <ShUserPicker users="state.users" value="s.user_id" onChange="(id) => s.user_id = id"/>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <input type="date" class="form-control form-control-sm" t-att-value="s.deadline"
+                                       t-on-change="(ev) => s.deadline = ev.target.value"/>
+                            </div>
+                            <div class="col-md-1">
+                                <button class="btn btn-link p-0 text-muted" title="წაშლა" t-on-click="() => this.removeSub(s)"><i class="fa fa-trash-o"/></button>
+                            </div>
+                        </div>
+                        <a href="#" class="small" t-on-click.prevent="addSub">+ ქვედავალების დამატება</a>
+                    </div>
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm">შექმნა და დაკავშირება</button>
+                        <button class="btn btn-secondary btn-sm" t-on-click="cancelForm">გაუქმება</button>
+                    </div>
+                    <div class="text-muted small mt-2">
+                        პასუხისმგებლების სიაში ჯერ არჩეული დეპარტამენტის თანამშრომლები ჩანს, შემდეგ — დანარჩენები.
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>
