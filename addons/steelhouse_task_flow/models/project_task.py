@@ -289,17 +289,6 @@ class ProjectTask(models.Model):
             if resumed:
                 vals['resume_date'] = fields.Date.context_today(self)
         res = super().write(vals)
-        for task in resumed:
-            since = held_since.get(task.id)
-            days = since and (fields.Date.context_today(task) - since.date()).days
-            body = Markup("▶ <b>%s</b> — %s: <b>%s</b>") % (
-                _("დავალება განახლდა"), _("განახლების თარიღი"), task.resume_date.strftime('%d.%m.%Y'))
-            if since:
-                body += Markup("<br/>%s") % _("შეჩერებული იყო %(since)s-დან (%(days)s დღე)",
-                                              since=since.strftime('%d.%m.%Y'), days=days)
-            if planned.get(task.id) and planned[task.id] != task.resume_date:
-                body += Markup("<br/>%s: %s") % (_("გეგმიური განახლება"), planned[task.id].strftime('%d.%m.%Y'))
-            task.message_post(body=body, message_type='notification', subtype_xmlid='mail.mt_note')
         if not vals.get('stage_id') and vals.get('state') in CLOSED:
             for task in self:
                 stage = task._sh_stage_of_kind(kind)
@@ -355,8 +344,6 @@ class ProjectTask(models.Model):
         if not stage:
             raise UserError(_("ამ დეპარტამენტს არ აქვს „მიღებული“ სტადია."))
         self.write({'stage_id': stage.id})
-        self.message_post(body=Markup(_("✋ <b>დავალება მიღებულია</b> შემსრულებლის მიერ")),
-                          message_type='comment', subtype_xmlid='mail.mt_note')
         return True
 
     def action_sh_mark_done(self):
@@ -399,7 +386,3 @@ class ProjectTask(models.Model):
         else:
             vals['cancel_reason'] = reason
         self.with_context(sh_reason_given=True).write(vals)
-        body = Markup("<b>%s</b><br/>%s") % (titles[kind], escape(reason))
-        if resume_date:
-            body += Markup("<br/>%s: %s") % (_("განახლების თარიღი"), resume_date.strftime('%d/%m/%Y'))
-        self.message_post(body=body, message_type='comment', subtype_xmlid='mail.mt_note')
