@@ -126,8 +126,6 @@
                         invisible="is_template or not project_id or uid not in user_ids or sh_kind != 'new'"/>
                 <button name="action_sh_mark_done" type="object" string="✔ შესრულებულია" class="btn-success"
                         invisible="is_template or not project_id or uid not in user_ids or sh_kind not in ('accepted', 'in_progress', 'returned')"/>
-                <button name="action_sh_return" type="object" string="დაბრუნება"
-                        invisible="is_template or not project_id or sh_kind != 'review'"/>
             </xpath>
             <xpath expr="//t[@name='warning_section']" position="after">
                 <div class="alert alert-info mb-0" role="alert" invisible="sh_kind != 'on_hold'">
