@@ -14,7 +14,17 @@ FIXES = [
 ]
 for mod, name, terms in FIXES:
     ex('ir.ui.view', 'update_field_translations', [[xid(mod, name)], 'arch_db', {'ka_GE': terms}])
+# menu names that differ from the shared .po text ("Employees" is also the app name)
+MENU_FIXES = [
+    ('hr', 'menu_hr_employee_payroll', 'თანამშრომლების სია'),
+    ('hr_holidays', 'menu_hr_holidays_my_leaves', 'ჩემი შვებულება'),
+    ('hr_holidays', 'hr_leave_menu_new_request', 'კალენდარი'),
+    ('hr_holidays', 'hr_leave_menu_my', 'ჩემი მოთხოვნები'),
+    ('hr_holidays', 'menu_open_allocation', 'დღეების ნაშთი'),
+]
+for mod, name, label in MENU_FIXES:
+    ex('ir.ui.menu', 'update_field_translations', [[xid(mod, name)], 'name', {'ka_GE': label}])
 priv = ex('res.groups.privilege', 'search', [[['placeholder', '=', 'No']]])
 if priv:
     ex('res.groups.privilege', 'write', [priv, {'placeholder': 'არა'}])
-print('reloaded; view fixes', len(FIXES), '; privileges fixed', len(priv))
+print('reloaded; view fixes', len(FIXES), '; menu fixes', len(MENU_FIXES), '; privileges fixed', len(priv))
