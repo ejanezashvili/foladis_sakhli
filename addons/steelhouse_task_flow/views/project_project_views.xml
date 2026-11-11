@@ -95,9 +95,15 @@
     </record>
     <record id="project.menu_projects" model="ir.ui.menu">
         <field name="name">დეპარტამენტები</field>
+        <field name="active" eval="False"/>
     </record>
     <record id="project.menu_projects_group_stage" model="ir.ui.menu">
         <field name="name">დეპარტამენტები</field>
+        <field name="active" eval="False"/>
+    </record>
+    <!-- the top menu item is hidden: the app itself opens the departments -->
+    <record id="project.menu_main_pm" model="ir.ui.menu">
+        <field name="action" ref="project.open_view_project_all_group_stage"/>
     </record>
 
     <!-- project form: the flag can be changed (settings tab) -->
