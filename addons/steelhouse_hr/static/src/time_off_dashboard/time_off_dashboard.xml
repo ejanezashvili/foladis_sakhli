@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-inherit="hr_holidays.TimeOffDashboard" t-inherit-mode="extension">
+        <!-- the "Pending Requests" card counts own allocation requests = compensatory days here -->
+        <xpath expr="//strong[hasclass('o_timeoff_name')][not(@t-esc)]" position="replace">
+            <strong class="o_timeoff_name">საკომპენსაციო შვებულება</strong>
+        </xpath>
+        <xpath expr="//span[@t-on-click='openPendingRequests']" position="after">
+            <small class="text-muted">მოლოდინში მყოფი მოთხოვნები</small>
+        </xpath>
+        <xpath expr="//a[@t-on-click='newAllocationRequest']/t[@t-else='']" position="replace">
+            <t t-else="">ახალი მოთხოვნა</t>
+        </xpath>
         <xpath expr="//strong[hasclass('o_timeoff_name')]/../.." position="after">
             <div t-if="state.shToApprove >= 0" class="o_timeoff_card d-flex flex-column justify-content-center align-items-center">
                 <strong class="o_timeoff_name">ჩემთან დასამტკიცებელი</strong>
