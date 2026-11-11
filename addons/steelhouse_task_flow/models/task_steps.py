@@ -34,6 +34,44 @@ class ProjectTask(models.Model):
     sh_section_ids = fields.One2many('steelhouse.task.section', 'task_id', string='ეტაპები')
     sh_steps = fields.Char(compute='_compute_sh_steps', string='ქვედავალებები')
 
+    def copy(self, default=None):
+        """Copies (templates, tasks from templates, repeats) keep the stages and sub-tasks
+        exactly; only dates and "done" marks are reset."""
+        olds = list(self)
+        news = super().copy(default)
+        for old, new in zip(olds, news):
+            old._sh_copy_steps_to(new)
+        return news
+
+    def _sh_copy_steps_to(self, new):
+        if not self.sh_section_ids and not self.child_ids:
+            return
+        Section = self.env['steelhouse.task.section']
+        mapping = {}
+        for section in self.sh_section_ids:
+            mapping[section.id] = Section.create({
+                'task_id': new.id, 'name': section.name, 'sequence': section.sequence,
+                'user_id': section.user_id.id,
+            }).id
+        old_children = self.with_context(active_test=False).child_ids.sorted(lambda t: (t.sequence, t.id))
+        new_children = new.with_context(active_test=False).child_ids.sorted(lambda t: (t.sequence, t.id))
+        used = set()
+        for nc in new_children:
+            match = next((oc for oc in old_children if oc.id not in used
+                          and nc.name in (oc.name, _('%s (copy)', oc.name), oc.name + ' (ასლი)')), None)
+            if not match:
+                continue
+            used.add(match.id)
+            nc.with_context(sh_flow_internal=True, mail_notrack=True).write({
+                'name': match.name,
+                'sh_section_id': mapping.get(match.sh_section_id.id, False),
+                'user_ids': [(6, 0, match.user_ids.ids)],
+                'date_deadline': False,
+                'state': '01_in_progress',
+                'sh_done_user_id': False,
+                'sh_done_date': False,
+            })
+
     def _compute_sh_steps(self):
         for task in self:
             task.sh_steps = ''
