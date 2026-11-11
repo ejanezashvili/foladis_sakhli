@@ -248,7 +248,8 @@ class ProjectTask(models.Model):
                         and not self.env.context.get('sh_final_given') and self.stage_id.sh_kind != 'done'):
                     raise RedirectWarning(
                         _("დასრულებამდე შეავსეთ „საბოლოო პროექტი“: აღწერა და ფოტოები/ფაილები (არასავალდებულო)."),
-                        self.action_sh_open_final(), _("გაგრძელება"))
+                        self.env.ref('steelhouse_task_flow.action_sh_task_final_wizard').id, _("გაგრძელება"),
+                        {'default_task_id': self.id, 'default_note': self.sh_final_note or False})
                 if kind == 'review':
                     self._sh_check_evidence(vals.get('evidence_required') if 'evidence_required' in vals else None)
                 if 'state' not in vals:
