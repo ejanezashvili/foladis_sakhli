@@ -6,14 +6,17 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { user } from "@web/core/user";
 import { ShUserPicker } from "../task_steps/task_steps";
 
-// card size and gaps of the chain diagram (px)
-const W = 236;
+// sizes of the step diagram (px)
+const W = 236; // card
 const H = 124;
-const GX = 70;
+const GX = 74; // gap between steps (arrows)
 const GY = 18;
-const PAD = 10;
+const PAD = 12;
+const HEAD = 44; // row with the step numbers
+const SLOT = 150; // "+ previous step" / "+ step N" boxes
 
-// "თანმიმდევრობა" tab: tasks that follow one another (any department), joined by arrows.
+// "თანმიმდევრობა" tab: tasks as numbered steps 1 → 2 → 3 ... (any department), joined by arrows.
+// Tasks of the same step run in parallel; a step starts when its previous tasks are finished.
 export class TaskChain extends Component {
     static template = "steelhouse_task_flow.TaskChain";
     static props = { ...standardFieldProps };
@@ -26,12 +29,11 @@ export class TaskChain extends Component {
         this.notification = useService("notification");
         this.W = W;
         this.H = H;
+        this.SLOT = SLOT;
         this.state = useState({
             loaded: false,
             nodes: [],
             edges: [],
-            prev: [],
-            next: [],
             readonly: false,
             truncated: false,
             departments: [],
@@ -65,8 +67,6 @@ export class TaskChain extends Component {
         Object.assign(this.state, {
             nodes: data.nodes,
             edges: data.edges,
-            prev: data.prev || [],
-            next: data.next || [],
             readonly: data.readonly,
             truncated: data.truncated,
             loaded: true,
@@ -79,28 +79,51 @@ export class TaskChain extends Component {
     }
 
     // ---------------------------------------------------------- layout
+    colX(level) {
+        return PAD + SLOT + GX + level * (W + GX);
+    }
+    get steps() {
+        const levels = [...new Set(this.state.nodes.map((n) => n.level))].sort((a, b) => a - b);
+        return levels.map((l) => ({ level: l, number: l + 1, x: this.colX(l) + W / 2 }));
+    }
     get layout() {
         const pos = {};
         const rows = {};
         for (const n of this.state.nodes) {
             const row = rows[n.level] || 0;
             rows[n.level] = row + 1;
-            pos[n.id] = { x: PAD + n.level * (W + GX), y: PAD + row * (H + GY) };
+            pos[n.id] = { x: this.colX(n.level), y: PAD + HEAD + row * (H + GY) };
         }
-        const cols = Math.max(0, ...Object.keys(rows).map((l) => Number(l) + 1));
-        const maxRows = Math.max(0, ...Object.values(rows));
+        const cols = Math.max(1, ...Object.keys(rows).map((l) => Number(l) + 1));
+        const maxRows = Math.max(1, ...Object.values(rows));
+        const lastX = this.colX(cols - 1) + W;
         return {
             pos,
-            width: PAD * 2 + cols * W + Math.max(0, cols - 1) * GX,
-            height: PAD * 2 + maxRows * H + Math.max(0, maxRows - 1) * GY,
+            cols,
+            endX: lastX + GX,
+            width: lastX + GX + SLOT + PAD,
+            height: PAD * 2 + HEAD + maxRows * H + (maxRows - 1) * GY,
         };
-    }
-    get hasChain() {
-        return this.state.nodes.length > 1;
     }
     cardStyle(node) {
         const p = this.layout.pos[node.id];
         return `left:${p.x}px;top:${p.y}px;width:${W}px;height:${H}px;`;
+    }
+    get startSlotStyle() {
+        return `left:${PAD}px;top:${PAD + HEAD}px;width:${SLOT}px;height:${H}px;`;
+    }
+    get endSlotStyle() {
+        return `left:${this.layout.endX}px;top:${PAD + HEAD}px;width:${SLOT}px;height:${H}px;`;
+    }
+    // the first step's first task gets "+ previous step"; the last step's first task gets "+ step N"
+    get firstNode() {
+        const first = this.state.nodes.filter((n) => n.level === 0);
+        return first.find((n) => n.current) || first[0];
+    }
+    get lastNode() {
+        const maxLevel = Math.max(...this.state.nodes.map((n) => n.level));
+        const last = this.state.nodes.filter((n) => n.level === maxLevel);
+        return last.find((n) => n.current) || last[0];
     }
     arrows() {
         const pos = this.layout.pos;
@@ -114,10 +137,32 @@ export class TaskChain extends Component {
                 const dx = Math.max(30, (x2 - x1) / 2);
                 return {
                     key: `${a}-${b}`,
+                    from: a,
+                    to: b,
                     d: `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`,
                     done,
+                    // ✕ button in the middle of the arrow
+                    mx: (x1 + x2) / 2,
+                    my: (y1 + y2) / 2,
                 };
             });
+    }
+    // dashed hint arrows to the "+" boxes
+    get hints() {
+        const pos = this.layout.pos;
+        const res = [];
+        const f = this.firstNode && pos[this.firstNode.id];
+        if (f) {
+            const y = PAD + HEAD + H / 2;
+            res.push({ key: "s", d: `M ${PAD + SLOT} ${y} C ${PAD + SLOT + GX / 2} ${y}, ${f.x - GX / 2} ${f.y + H / 2}, ${f.x - 3} ${f.y + H / 2}` });
+        }
+        const l = this.lastNode && pos[this.lastNode.id];
+        if (l) {
+            const x2 = this.layout.endX - 3;
+            const y2 = PAD + HEAD + H / 2;
+            res.push({ key: "e", d: `M ${l.x + W} ${l.y + H / 2} C ${l.x + W + GX / 2} ${l.y + H / 2}, ${x2 - GX / 2} ${y2}, ${x2} ${y2}` });
+        }
+        return res;
     }
     statusLabel(node) {
         return {
@@ -135,11 +180,19 @@ export class TaskChain extends Component {
             active: "fa-play-circle",
         }[node.status];
     }
+    stepState(level) {
+        const nodes = this.state.nodes.filter((n) => n.level === level && n.status !== "cancelled");
+        if (nodes.length && nodes.every((n) => n.status === "done")) {
+            return "done";
+        }
+        return nodes.some((n) => n.status === "active") ? "active" : "waiting";
+    }
     avatar(id) {
         return `/web/image/res.users/${id}/avatar_128`;
     }
-    nodesOf(ids) {
-        return this.state.nodes.filter((n) => ids.includes(n.id));
+    nodeName(id) {
+        const n = this.state.nodes.find((x) => x.id === id);
+        return n ? n.name : "";
     }
 
     async openTask(node) {
@@ -160,18 +213,24 @@ export class TaskChain extends Component {
         }
     }
 
-    // ---------------------------------------------------------- new task
-    async openForm(direction) {
+    // ---------------------------------------------------------- new step
+    // anchor: the task the new one goes before ('prev') or after ('next')
+    async openForm(direction, anchor) {
         this.state.link = null;
         if (!this.state.departments.length) {
             this.state.departments = await this.orm.call("project.task", "sh_chain_departments", []);
         }
+        const level = anchor ? anchor.level : 0;
         this.state.form = {
             direction,
+            anchor_id: anchor ? anchor.id : this.taskId,
+            anchor_name: anchor ? anchor.name : "",
+            step: direction === "next" ? level + 2 : Math.max(1, level),
             name: "",
             project_id: this.currentProjectId,
             user_id: false,
             reviewer_ids: [user.userId],
+            reviewerPick: 0,
             deadline: "",
             subtasks: [],
         };
@@ -185,8 +244,7 @@ export class TaskChain extends Component {
     async onDepartment(ev) {
         this.state.form.project_id = Number(ev.target.value) || false;
         await this.loadUsers();
-        // keep the chosen people only if they work in the new department
-        const dept = this.state.deptUserIds || [];
+        const dept = this.state.deptUserIds;
         if (this.state.form.user_id && dept.length && !dept.includes(this.state.form.user_id)) {
             this.state.form.user_id = false;
         }
@@ -200,7 +258,7 @@ export class TaskChain extends Component {
         if (id && !f.reviewer_ids.includes(id)) {
             f.reviewer_ids.push(id);
         }
-        f.reviewerPick = (f.reviewerPick || 0) + 1; // reset the picker
+        f.reviewerPick++; // reset the picker
     }
     removeReviewer(id) {
         this.state.form.reviewer_ids = this.state.form.reviewer_ids.filter((r) => r !== id);
@@ -240,12 +298,10 @@ export class TaskChain extends Component {
                     deadline: f.deadline || false,
                     subtasks: f.subtasks.map((s) => ({ name: s.name, user_id: s.user_id || false, deadline: s.deadline || false })),
                 },
+                f.anchor_id,
             ]);
             this.state.form = null;
-            this.notification.add(
-                f.direction === "next" ? "შემდეგი დავალება შეიქმნა." : "წინა დავალება შეიქმნა.",
-                { type: "success" }
-            );
+            this.notification.add("ნაბიჯი დაემატა.", { type: "success" });
             await this.refresh();
         } finally {
             this.state.busy = false;
@@ -253,9 +309,10 @@ export class TaskChain extends Component {
     }
 
     // ---------------------------------------------------------- link existing
-    async openLink(direction) {
+    async openLinkFromForm() {
+        const f = this.state.form;
         this.state.form = null;
-        this.state.link = { direction, term: "", results: [] };
+        this.state.link = { direction: f.direction, anchor_id: f.anchor_id, anchor_name: f.anchor_name, step: f.step, term: "", results: [] };
         await this.search();
     }
     async search() {
@@ -268,18 +325,19 @@ export class TaskChain extends Component {
         this._searchTimer = setTimeout(() => this.search(), 250);
     }
     async pickLink(item) {
-        await this.call("sh_chain_link", [this.state.link.direction, item.id]);
+        const link = this.state.link;
+        await this.call("sh_chain_link", [link.direction, item.id, link.anchor_id]);
         this.state.link = null;
         await this.refresh();
     }
-    unlink(direction, node) {
+    unlinkEdge(arrow) {
         this.dialog.add(ConfirmationDialog, {
             title: "დარწმუნებული ხარ?",
-            body: `„${node.name}“ აღარ იქნება ${direction === "next" ? "შემდეგი" : "წინა"} დავალება (თვითონ დავალება არ წაიშლება).`,
+            body: `„${this.nodeName(arrow.from)}“ → „${this.nodeName(arrow.to)}“ — კავშირი მოიხსნება (დავალებები არ წაიშლება).`,
             confirmLabel: "კი, მოიხსნას",
             cancelLabel: "არა",
             confirm: async () => {
-                await this.call("sh_chain_unlink", [direction, node.id]);
+                await this.call("sh_chain_unlink_edge", [arrow.from, arrow.to]);
                 await this.refresh();
             },
             cancel: () => {},

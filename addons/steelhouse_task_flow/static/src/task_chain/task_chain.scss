@@ -1,7 +1,17 @@
+.o_field_sh_task_chain {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    // the wide diagram scrolls inside; it must not widen the form
+    contain: inline-size;
+}
 .o_sh_chain {
     padding: 4px 0;
+    max-width: 100%;
+    min-width: 0;
     .o_sh_chain_scroll {
         overflow-x: auto;
+        max-width: 100%;
         border: 1px solid #e6e3ef;
         border-radius: 8px;
         background: #faf9fc;
@@ -123,6 +133,91 @@
         cursor: pointer;
         border-radius: 4px;
         &:hover { background: #ece8f6; }
+    }
+    .o_sh_step_num {
+        position: absolute;
+        top: 12px;
+        width: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #6c757d;
+        &.o_sh_step_active { color: #71639e; }
+        &.o_sh_step_done { color: #28a745; }
+    }
+    .o_sh_step_circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #adb5bd;
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .o_sh_step_active .o_sh_step_circle { background: #71639e; }
+    .o_sh_step_done .o_sh_step_circle { background: #28a745; }
+    .o_sh_chain_box .o_sh_step_circle { background: #71639e; }
+    .o_sh_chain_slot {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 2px dashed #cfc8e4;
+        border-radius: 8px;
+        color: #8f86b5;
+        cursor: pointer;
+        font-weight: 600;
+        &:hover {
+            border-color: #71639e;
+            color: #71639e;
+            background: #f3f0fa;
+        }
+    }
+    .o_sh_this {
+        background: #71639e;
+        color: #fff;
+        font-weight: 500;
+    }
+    .o_sh_card_plus {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        line-height: 18px;
+        border-radius: 50%;
+        border: 1px solid #cfc8e4;
+        background: #fff;
+        color: #71639e;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.15s;
+    }
+    .o_sh_chain_card:hover .o_sh_card_plus { opacity: 1; }
+    .o_sh_edge_x {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        line-height: 15px;
+        border-radius: 50%;
+        border: 1px solid #d9d5e6;
+        background: #fff;
+        color: #999;
+        font-size: 13px;
+        opacity: 0.35;
+        &:hover {
+            opacity: 1;
+            color: #dc3545;
+            border-color: #dc3545;
+        }
     }
     .o_sh_chain_chip {
         background: #ece8f6;

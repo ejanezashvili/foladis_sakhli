@@ -226,12 +226,37 @@ class ProjectTask(models.Model):
             me.write({'depend_on_ids': [(4, other.id)]})
         self._sh_chain_log(direction, other)
 
-    def sh_chain_link(self, direction, task_id):
+    def _sh_anchor(self, anchor_id):
+        """The chain task a new step is added before/after (this task by default).
+        Rights: the user must be able to edit the task the tab is opened on."""
         self._sh_chain_check_rights()
+        if not anchor_id or anchor_id == self.id:
+            return self
+        anchor = self._sh_chain_tasks().filtered(lambda t: t.id == anchor_id)
+        if not anchor:
+            raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
+        return anchor
+
+    def sh_chain_link(self, direction, task_id, anchor_id=False):
+        anchor = self._sh_anchor(anchor_id)
         other = self.env['project.task'].browse(task_id).exists()
-        if not other or other == self:
+        if not other or other == anchor:
             raise UserError(_("დავალება ვერ მოიძებნა."))
-        self._sh_chain_connect(direction, other)
+        anchor._sh_chain_connect(direction, other)
+        return True
+
+    def sh_chain_unlink_edge(self, prev_id, next_id):
+        """Remove one arrow of the chain (prev_id -> next_id)."""
+        self._sh_chain_check_rights()
+        chain = self._sh_chain_tasks()
+        prev = chain.filtered(lambda t: t.id == prev_id)
+        nxt = chain.filtered(lambda t: t.id == next_id)
+        if not prev or not nxt:
+            raise UserError(_("კავშირი ვერ მოიძებნა."))
+        nxt.write({'depend_on_ids': [(3, prev.id)]})
+        for task, other in ((prev, nxt), (nxt, prev)):
+            task.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("კავშირი მოიხსნა"), self._sh_label(other)),
+                              message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
     def sh_chain_unlink(self, direction, task_id):
@@ -258,10 +283,10 @@ class ProjectTask(models.Model):
         local = tz.localize(datetime.combine(fields.Date.to_date(day), time(23, 59)))
         return local.astimezone(pytz.utc).replace(tzinfo=None)
 
-    def sh_chain_create(self, direction, vals):
-        """New task before/after this one, in any department, with its responsible person,
-        deadline and sub-tasks."""
-        self._sh_chain_check_rights()
+    def sh_chain_create(self, direction, vals, anchor_id=False):
+        """New task before/after this one (or another task of the chain), in any department,
+        with its responsible person, reviewers, deadline and sub-tasks."""
+        anchor = self._sh_anchor(anchor_id)
         name = (vals.get('name') or '').strip()
         if not name:
             raise UserError(_("ჩაწერეთ დავალების სახელი."))
@@ -293,5 +318,5 @@ class ProjectTask(models.Model):
                 sub_id = new.sh_steps_add_item(section.id)
                 new.sh_steps_write_item(sub_id, {
                     'name': s['name'], 'user_id': s.get('user_id') or False, 'deadline': s.get('deadline') or False})
-        self._sh_chain_connect(direction, new)
+        anchor._sh_chain_connect(direction, new)
         return new.id
