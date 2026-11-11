@@ -35,12 +35,14 @@ class ProjectTask(models.Model):
     ], string='ვადამდე', default='forever', copy=False)
     sh_repeat_until = fields.Date('ბოლო თარიღი', copy=False)
     sh_create_date_str = fields.Char(compute='_compute_sh_create_date_str', string='შექმნის თარიღი')
+    sh_create_datetime_str = fields.Char(compute='_compute_sh_create_date_str', string='შექმნის თარიღი')
     sh_repeat_origin_id = fields.Many2one('project.task', string='განმეორების წყარო', copy=False, index=True)
 
     def _compute_sh_create_date_str(self):
         for task in self:
             dt = task.create_date and fields.Datetime.context_timestamp(task, task.create_date)
             task.sh_create_date_str = dt.strftime('%d.%m.%Y') if dt else ''
+            task.sh_create_datetime_str = dt.strftime('%d.%m.%Y, %H:%M') if dt else ''
 
     @api.constrains('sh_repeat', 'sh_repeat_interval', 'sh_repeat_next', 'sh_repeat_until_type', 'sh_repeat_until')
     def _check_sh_repeat(self):

@@ -34,7 +34,7 @@
                 <separator string="როდის და სად დგას"/>
                 <group name="sh_when">
                     <group>
-                        <field name="create_date" string="შექმნის თარიღი" readonly="1" invisible="not id"/>
+                        <field name="sh_create_datetime_str" invisible="not id"/>
                         <field name="sh_work_start"/>
                         <label for="date_deadline" string="დასრულების თარიღი"/>
                         <div id="date_deadline_and_recurring_task" class="d-inline-flex w-100">
