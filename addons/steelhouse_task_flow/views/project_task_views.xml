@@ -104,6 +104,7 @@
             <xpath expr="//notebook" position="inside">
                 <page name="sh_reasons" string="მიზეზები" invisible="sh_kind not in ('on_hold', 'returned', 'cancelled')">
                     <group>
+                        <field name="hold_date" readonly="1" invisible="sh_kind != 'on_hold'"/>
                         <field name="hold_reason" placeholder="ჩაწერეთ შეჩერების მიზეზი..." invisible="sh_kind != 'on_hold'"/>
                         <field name="resume_date" invisible="sh_kind != 'on_hold'"/>
                         <field name="return_reason" placeholder="ჩაწერეთ დაბრუნების მიზეზი..." invisible="sh_kind != 'returned'"/>
@@ -145,6 +146,7 @@
             <xpath expr="//t[@name='warning_section']" position="after">
                 <div class="alert alert-info mb-0" role="alert" invisible="sh_kind != 'on_hold'">
                     <b>შეჩერებულია:</b> <field name="hold_reason" readonly="1" class="d-inline"/>
+                    <span invisible="not hold_date"> — <b>შეჩერდა:</b> <field name="hold_date" readonly="1" class="d-inline"/></span>
                     <span invisible="not resume_date"> — განახლება: <field name="resume_date" readonly="1" class="d-inline"/></span>
                 </div>
                 <div class="alert alert-warning mb-0" role="alert" invisible="sh_kind != 'returned'">

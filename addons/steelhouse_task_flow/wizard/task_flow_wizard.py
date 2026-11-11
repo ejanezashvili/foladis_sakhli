@@ -14,6 +14,7 @@ class TaskFlowWizard(models.TransientModel):
     ], required=True)
     reason = fields.Text('მიზეზი', required=True)
     resume_date = fields.Date('განახლების თარიღი')
+    hold_date = fields.Date('შეჩერების თარიღი', default=fields.Date.context_today, readonly=True)
 
     def action_confirm(self):
         self.ensure_one()

@@ -78,6 +78,7 @@ class ProjectTask(models.Model):
         'საჭიროა მტკიცებულება', tracking=True,
         help="შემოწმებაზე გადაყვანამდე დავალებაზე ფაილი ან ფოტო უნდა იყოს მიმაგრებული.")
     hold_reason = fields.Text('შეჩერების მიზეზი', copy=False, tracking=True)
+    hold_date = fields.Date('შეჩერების თარიღი', copy=False, tracking=True)
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
@@ -381,7 +382,7 @@ class ProjectTask(models.Model):
             'cancelled': _("დავალება გაუქმდა"),
         }
         if kind == 'on_hold':
-            vals.update(hold_reason=reason, resume_date=resume_date)
+            vals.update(hold_reason=reason, resume_date=resume_date, hold_date=fields.Date.context_today(self))
         elif kind == 'returned':
             vals['return_reason'] = reason
         else:
