@@ -72,6 +72,29 @@ class ProjectTask(models.Model):
                 'sh_done_date': False,
             })
 
+    def _sh_checklist_to_steps(self):
+        """Checklist in the description -> sub-tasks in a stage (used when saving a template)."""
+        import re
+        from markupsafe import Markup
+        for task in self:
+            desc = str(task.description or '')
+            items = []
+            for block in re.findall(r'<ul[^>]*o_checklist[^>]*>(.*?)</ul>', desc, re.S):
+                for li in re.findall(r'<li[^>]*>(.*?)</li>', block, re.S):
+                    text = re.sub(r'<[^>]+>', '', li).strip()
+                    if text:
+                        items.append(text)
+            new_desc = re.sub(r'<ul[^>]*o_checklist[^>]*>.*?</ul>', '', desc, flags=re.S)
+            if items:
+                section = self.env['steelhouse.task.section'].create({
+                    'task_id': task.id, 'name': '', 'sequence': (task.sh_section_ids[-1:].sequence or 0) + 10})
+                for name in items:
+                    self.with_context(sh_flow_internal=True).create({
+                        'name': name, 'parent_id': task.id, 'project_id': task.project_id.id,
+                        'sh_section_id': section.id, 'user_ids': [(6, 0, [])], 'display_in_project': False})
+            if new_desc != desc:
+                task.with_context(sh_flow_internal=True).description = Markup(new_desc)
+
     def _compute_sh_steps(self):
         for task in self:
             task.sh_steps = ''

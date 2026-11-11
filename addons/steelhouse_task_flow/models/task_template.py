@@ -64,6 +64,7 @@ class TaskTemplateWizard(models.TransientModel):
             'sh_repeat': False,
             'date_deadline': False,
         })
+        template._sh_checklist_to_steps()
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
