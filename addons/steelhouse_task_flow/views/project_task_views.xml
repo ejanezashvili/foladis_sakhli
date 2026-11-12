@@ -197,11 +197,11 @@
                     <field name="message_attachment_count" invisible="1"/>
                     <field name="project_id" invisible="1"/>
                     <div class="o_sh_card_top">
-                        <span t-if="record.sh_is_overdue.raw_value" class="o_sh_pill o_sh_pill_late o_sh_overdue_mark">
-                            <i class="o_sh_pill_dot"/>ვადაგადაცილებული
+                        <span t-if="record.sh_is_overdue.raw_value" class="o_sh_tpill o_sh_tpill_late o_sh_overdue_mark">
+                            <i class="o_sh_tpill_dot"/>ვადაგადაცილებული
                         </span>
-                        <span t-else="" t-att-class="'o_sh_pill o_sh_pill_' + (record.sh_kind.raw_value or 'new')">
-                            <i class="o_sh_pill_dot"/><t t-esc="record.stage_id.value"/>
+                        <span t-else="" t-att-class="'o_sh_tpill o_sh_tpill_' + (record.sh_kind.raw_value or 'new')">
+                            <i class="o_sh_tpill_dot"/><t t-esc="record.stage_id.value"/>
                         </span>
                         <field name="sh_number" class="o_sh_card_num"/>
                     </div>
@@ -221,7 +221,7 @@
                     <div class="o_sh_card_row">
                         <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold' : '')">
                             <i class="fa fa-flag-o me-1" title="ვადა"/>
-                            <t t-if="record.date_deadline.raw_value"><field name="date_deadline" widget="date"/></t>
+                            <t t-if="record.date_deadline.raw_value" t-esc="record.date_deadline.raw_value.toFormat('dd.MM.yyyy')"/>
                             <t t-else="">ვადა არ აქვს</t>
                         </span>
                         <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>

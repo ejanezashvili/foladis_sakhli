@@ -35,7 +35,7 @@
         &:hover { box-shadow: 0 6px 16px rgba(30, 20, 60, 0.10); }
     }
     // overdue: white card, red stripe + red pill (lighter than the old full red tint)
-    .o_kanban_record:has(.o_sh_pill_late) {
+    .o_kanban_record:has(.o_sh_tpill_late) {
         background: #fff !important;
         border-left: 4px solid #dc3545 !important;
     }
@@ -81,7 +81,7 @@
 }
 
 // status pill (stage kind)
-.o_sh_pill {
+.o_sh_tpill {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -93,17 +93,17 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    .o_sh_pill_dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+    .o_sh_tpill_dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
 }
-.o_sh_pill_new { background: #eef0ff; color: #4f46e5; }
-.o_sh_pill_accepted { background: #e8f1ff; color: #2563eb; }
-.o_sh_pill_in_progress { background: #f1edf8; color: #71639e; }
-.o_sh_pill_on_hold { background: #fff4e0; color: #b7791f; }
-.o_sh_pill_review { background: #fff1e6; color: #e8590c; }
-.o_sh_pill_returned { background: #fdecf3; color: #c0577c; }
-.o_sh_pill_done { background: #e7f6ec; color: #1e7e34; }
-.o_sh_pill_cancelled { background: #f1f1f1; color: #6c757d; }
-.o_sh_pill_late { background: #fdecea; color: #dc3545; }
+.o_sh_tpill_new { background: #eef0ff; color: #4f46e5; }
+.o_sh_tpill_accepted { background: #e8f1ff; color: #2563eb; }
+.o_sh_tpill_in_progress { background: #f1edf8; color: #71639e; }
+.o_sh_tpill_on_hold { background: #fff4e0; color: #b7791f; }
+.o_sh_tpill_review { background: #fff1e6; color: #e8590c; }
+.o_sh_tpill_returned { background: #fdecf3; color: #c0577c; }
+.o_sh_tpill_done { background: #e7f6ec; color: #1e7e34; }
+.o_sh_tpill_cancelled { background: #f1f1f1; color: #6c757d; }
+.o_sh_tpill_late { background: #fdecea; color: #dc3545; }
 
 // priority pill
 .o_sh_prio { font-size: 0.78rem; font-weight: 500; padding: 2px 11px; border-radius: 11px; white-space: nowrap; }
