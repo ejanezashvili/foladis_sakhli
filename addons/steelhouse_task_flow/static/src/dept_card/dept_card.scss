@@ -1,0 +1,40 @@
+// Departments page: rounded cards with a coloured top stripe and a tinted task-count pill (style only)
+.o_sh_dept_kanban {
+    &.o_kanban_renderer, .o_kanban_renderer { background: #f6f5fb; }
+    .o_kanban_record {
+        position: relative;
+        border: 1px solid #ecebf3 !important;
+        border-radius: 18px !important;
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(40, 30, 80, 0.05);
+        overflow: hidden;
+        padding-top: 6px;
+        transition: box-shadow 0.15s, transform 0.15s;
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 5px;
+            background: #71639e;
+        }
+        &:hover { box-shadow: 0 10px 22px rgba(40, 30, 80, 0.12); transform: translateY(-2px); }
+        .o_project_kanban_main .fs-4 { font-size: 1.12rem !important; color: #1f1d2b; }
+        footer a {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    }
+    .o_kanban_record:nth-child(6n + 1) { &::before { background: #d6336c; } footer a { background: #fde8ee; color: #d6336c; } }
+    .o_kanban_record:nth-child(6n + 2) { &::before { background: #7048e8; } footer a { background: #efe9fb; color: #7048e8; } }
+    .o_kanban_record:nth-child(6n + 3) { &::before { background: #1c7ed6; } footer a { background: #e7f0ff; color: #1c7ed6; } }
+    .o_kanban_record:nth-child(6n + 4) { &::before { background: #e8590c; } footer a { background: #fff1e0; color: #e8590c; } }
+    .o_kanban_record:nth-child(6n + 5) { &::before { background: #2b8a3e; } footer a { background: #e6f7ec; color: #2b8a3e; } }
+    .o_kanban_record:nth-child(6n + 6) { &::before { background: #0c8599; } footer a { background: #e3f6f8; color: #0c8599; } }
+}

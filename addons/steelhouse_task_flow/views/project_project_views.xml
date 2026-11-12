@@ -35,6 +35,7 @@
         <field name="arch" type="xml">
             <kanban position="attributes">
                 <attribute name="on_create">steelhouse_task_flow.action_sh_create_department</attribute>
+                <attribute name="class" add="o_sh_dept_kanban" separator=" "/>
             </kanban>
             <xpath expr="//kanban/*[1]" position="before">
                 <header>

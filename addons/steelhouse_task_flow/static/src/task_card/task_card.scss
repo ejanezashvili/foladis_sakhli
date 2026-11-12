@@ -114,7 +114,7 @@
 .o_sh_prio_2 { background: #fff1e6; color: #e8590c; }
 .o_sh_prio_3 { background: #fdecea; color: #dc3545; }
 
-// column headers as soft coloured rounded boxes (colour by column position)
+// column headers as soft coloured rounded boxes (colour by stage, set in column_colors.js)
 .o_kanban_project_tasks {
     .o_kanban_group .o_kanban_header {
         border-radius: 12px;
@@ -124,11 +124,19 @@
     .o_kanban_group .o_kanban_header .o_column_title { font-size: 0.95rem; }
     .o_kanban_group .o_kanban_counter { padding: 0 !important; }
     .o_kanban_group .o_kanban_counter .progress { height: 4px; }
-    .o_kanban_group:nth-child(7n + 1) .o_kanban_header { background: #fde8ee; .o_column_title { color: #d6336c; &::before { background: #d6336c; } } }
-    .o_kanban_group:nth-child(7n + 2) .o_kanban_header { background: #efe9fb; .o_column_title { color: #7048e8; &::before { background: #7048e8; } } }
-    .o_kanban_group:nth-child(7n + 3) .o_kanban_header { background: #e7f0ff; .o_column_title { color: #1c7ed6; &::before { background: #1c7ed6; } } }
-    .o_kanban_group:nth-child(7n + 4) .o_kanban_header { background: #fff1e0; .o_column_title { color: #e8590c; &::before { background: #e8590c; } } }
-    .o_kanban_group:nth-child(7n + 5) .o_kanban_header { background: #e6f7ec; .o_column_title { color: #2b8a3e; &::before { background: #2b8a3e; } } }
-    .o_kanban_group:nth-child(7n + 6) .o_kanban_header { background: #e3f6f8; .o_column_title { color: #0c8599; &::before { background: #0c8599; } } }
-    .o_kanban_group:nth-child(7n + 7) .o_kanban_header { background: #f1f1f4; .o_column_title { color: #5c5f66; &::before { background: #5c5f66; } } }
+    .o_kanban_group .o_kanban_header { background: #f1f1f4; }  // until the colour is set (column_colors.js)
+    .o_kanban_group[data-sh-stage="new"] .o_kanban_header { background: #eef0ff; .o_column_title { color: #4f46e5; &::before { background: #4f46e5; } } }
+    .o_kanban_group[data-sh-stage="accepted"] .o_kanban_header { background: #e7f0ff; .o_column_title { color: #1c7ed6; &::before { background: #1c7ed6; } } }
+    .o_kanban_group[data-sh-stage="in_progress"] .o_kanban_header { background: #efe9fb; .o_column_title { color: #7048e8; &::before { background: #7048e8; } } }
+    .o_kanban_group[data-sh-stage="on_hold"] .o_kanban_header { background: #fff4dc; .o_column_title { color: #b7791f; &::before { background: #b7791f; } } }
+    .o_kanban_group[data-sh-stage="review"] .o_kanban_header { background: #fff1e0; .o_column_title { color: #e8590c; &::before { background: #e8590c; } } }
+    .o_kanban_group[data-sh-stage="returned"] .o_kanban_header { background: #fde8ee; .o_column_title { color: #d6336c; &::before { background: #d6336c; } } }
+    .o_kanban_group[data-sh-stage="done"] .o_kanban_header { background: #e6f7ec; .o_column_title { color: #2b8a3e; &::before { background: #2b8a3e; } } }
+    .o_kanban_group[data-sh-stage="cancelled"] .o_kanban_header { background: #fdecea; .o_column_title { color: #c92a2a; &::before { background: #c92a2a; } } }
+    .o_kanban_group[data-sh-stage="c0"] .o_kanban_header { background: #fde8ee; .o_column_title { color: #d6336c; &::before { background: #d6336c; } } }
+    .o_kanban_group[data-sh-stage="c1"] .o_kanban_header { background: #efe9fb; .o_column_title { color: #7048e8; &::before { background: #7048e8; } } }
+    .o_kanban_group[data-sh-stage="c2"] .o_kanban_header { background: #e7f0ff; .o_column_title { color: #1c7ed6; &::before { background: #1c7ed6; } } }
+    .o_kanban_group[data-sh-stage="c3"] .o_kanban_header { background: #fff1e0; .o_column_title { color: #e8590c; &::before { background: #e8590c; } } }
+    .o_kanban_group[data-sh-stage="c4"] .o_kanban_header { background: #e6f7ec; .o_column_title { color: #2b8a3e; &::before { background: #2b8a3e; } } }
+    .o_kanban_group[data-sh-stage="c5"] .o_kanban_header { background: #e3f6f8; .o_column_title { color: #0c8599; &::before { background: #0c8599; } } }
 }
