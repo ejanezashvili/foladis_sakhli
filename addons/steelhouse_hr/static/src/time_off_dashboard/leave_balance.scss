@@ -27,6 +27,23 @@ table.o_sh_card_list,
         color: #8c838b;
     }
 
+    // number columns: roomy, titles shown in full (not cut with "...")
+    th.o_list_number_th,
+    td.o_list_number {
+        width: 140px !important;
+        min-width: 130px !important;
+        padding-left: 16px !important;
+        padding-right: 22px !important;
+        white-space: nowrap;
+    }
+    thead th.o_list_number_th {
+        .text-truncate,
+        span {
+            overflow: visible !important;
+            text-overflow: clip !important;
+        }
+    }
+
     tbody tr.o_data_row {
         background-color: #fff;
         box-shadow: 0 1px 6px rgba(40, 20, 40, 0.06);
