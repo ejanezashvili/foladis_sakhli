@@ -1,0 +1,114 @@
+// Time Off > Reporting (pivot tables): table in a white rounded card, light header,
+// "Total" row in light plum, grand total in solid plum, empty cells hatched.
+// Look only - numbers, grouping and filters unchanged. Only inside the Time Off app.
+$sh-plum: #714b67;
+$sh-plum-soft: #f6eef3;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+
+body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) {
+    .o_action:has(.o_pivot) .o_content {
+        background-color: $sh-page;
+    }
+
+    // toolbar: "Measures" plum pill, the other buttons white and rounded
+    .o_pivot_buttons {
+        gap: 10px !important;
+        margin-top: 16px !important;
+
+        .btn-group {
+            gap: 8px;
+        }
+        .btn {
+            border-radius: 10px !important;
+            box-shadow: 0 1px 4px rgba(40, 20, 40, 0.08);
+        }
+        .btn-secondary {
+            border: 1px solid $sh-line;
+            background-color: #fff;
+        }
+        .btn-primary {
+            border-color: $sh-plum;
+            background-color: $sh-plum;
+            border-radius: 999px !important;
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
+
+    .o_pivot {
+        table {
+            width: auto;
+            overflow: hidden;
+            border-collapse: separate !important;
+            border-spacing: 0;
+            border-radius: 16px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(40, 20, 40, 0.07);
+        }
+
+        th,
+        td {
+            padding: 12px 18px !important;
+            border: 0 !important;
+            border-bottom: 1px solid $sh-line !important;
+            border-right: 1px solid $sh-line !important;
+        }
+        tr > :last-child {
+            border-right: 0 !important;
+        }
+        tbody tr:last-child > * {
+            border-bottom: 0 !important;
+        }
+
+        // header
+        thead th {
+            font-weight: 600 !important;
+            background-color: #faf8fa !important;
+        }
+        thead th.o_pivot_measure_row {
+            font-size: 12px;
+            font-weight: 500 !important;
+            color: $sh-muted !important;
+        }
+
+        // row titles: groups bold
+        tbody th.o_pivot_header_cell_opened {
+            font-weight: 700 !important;
+        }
+        tbody th {
+            background-color: #fff !important;
+        }
+
+        // values
+        td.o_pivot_cell_value {
+            min-width: 150px;
+            background-color: #fff !important;
+            text-align: right;
+        }
+        // "Total" column bold
+        tbody td.o_pivot_cell_value:last-child {
+            font-weight: 700;
+        }
+        // empty cells hatched
+        td.o_empty {
+            background: repeating-linear-gradient(135deg, #fbfafb 0, #fbfafb 6px, #f1eef1 6px, #f1eef1 7px) !important;
+        }
+
+        // "Total" row: light plum, plum numbers; grand total solid plum
+        tbody tr:first-child {
+            > th,
+            > td.o_pivot_cell_value {
+                font-weight: 700;
+                color: $sh-plum;
+                background-color: $sh-plum-soft !important;
+            }
+            > td.o_pivot_cell_value:last-child {
+                font-size: 16px;
+                color: #fff;
+                background-color: $sh-plum !important;
+            }
+        }
+    }
+}
