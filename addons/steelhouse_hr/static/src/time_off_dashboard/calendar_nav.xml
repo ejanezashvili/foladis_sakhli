@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Time off calendars: navigation (previous / next / scale / today / period) on the
+         same line as the search field, in the top bar; the separate navigation row is hidden. -->
+    <t t-inherit="hr_holidays.CalendarController" t-inherit-mode="extension">
+        <xpath expr="//t[@t-set-slot='layout-buttons']" position="inside">
+            <div t-if="!ui.isSmall" class="o_sh_cal_nav d-flex align-items-center gap-1">
+                <div class="btn-group">
+                    <button class="btn btn-secondary" title="Previous" aria-label="Previous"
+                            t-on-click.stop="() => this.setDate('previous')"><i class="oi oi-arrow-left"/></button>
+                    <button class="btn btn-secondary" title="Next" aria-label="Next"
+                            t-on-click.stop="() => this.setDate('next')"><i class="oi oi-arrow-right"/></button>
+                </div>
+                <ViewScaleSelector scales="scales" currentScale="model.scale" isWeekendVisible="state.isWeekendVisible"
+                                   setScale.bind="setScale" toggleWeekendVisibility.bind="toggleWeekendVisibility"/>
+                <button class="btn btn-secondary" t-on-click.stop="() => this.setDate('today')">დღეს</button>
+                <h5 class="mb-0 ps-2">
+                    <t t-if="model.meta.scale === 'year'"><t t-esc="currentYear"/></t>
+                    <t t-elif="model.meta.scale === 'month'"><t t-esc="currentMonth"/></t>
+                    <t t-elif="model.meta.scale === 'week'"><t t-esc="weekHeader"/></t>
+                    <t t-else=""><t t-esc="dayHeader"/></t>
+                </h5>
+            </div>
+        </xpath>
+    </t>
+</templates>
