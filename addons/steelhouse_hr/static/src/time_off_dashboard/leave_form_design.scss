@@ -95,7 +95,8 @@ $sh-green-soft: #e8f7ee;
 
 // ---------- the forms themselves (dialog and page)
 .o_hr_leave_form,
-.o_hr_leave_allocation_form {
+.o_hr_leave_allocation_form,
+.o_sh_type_form {
     // labels: small, muted
     .o_form_label,
     .o_wrap_label label {
@@ -252,7 +253,7 @@ $sh-green-soft: #e8f7ee;
 }
 
 // ---------- dropdown lists: every field list of the forms above and of the whole Time Off app
-:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--dropdown-menu,
+:is(.o_hr_leave_form, .o_hr_leave_allocation_form, .o_sh_type_form) .o-autocomplete--dropdown-menu,
 body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-autocomplete--dropdown-menu {
     padding: 8px;
     border: 0;
@@ -410,5 +411,112 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
     }
     .dropdown-divider {
         border-top-style: dashed;
+    }
+}
+
+// ---------- Time off type form: sheet as a card, big name field, radio options as cards,
+// switches in plum, section titles with a plum mark (style only)
+.o_sh_type_form {
+    .o_form_sheet_bg {
+        background-color: #f6f5f7;
+    }
+    .o_form_sheet {
+        position: relative;
+        overflow: hidden;
+        border: 0 !important;
+        border-radius: 18px;
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // name: big filled box
+    .o_field_widget[name="name"] input {
+        padding: 12px 16px;
+        font-size: 24px;
+    }
+
+    // radio options: horizontal ones as a segmented pill, vertical ones as cards
+    .o_field_radio .o_radio_item {
+        margin: 0 0 8px 0 !important;
+        padding: 9px 14px;
+        border: 1px solid $sh-field-border;
+        border-radius: 10px;
+        background-color: $sh-field-bg;
+
+        &:has(input:checked) {
+            border-color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        label {
+            font-weight: 500;
+            color: #2b2430;
+        }
+    }
+    .o_field_radio .o_horizontal {
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 12px;
+        background-color: $sh-field-bg;
+
+        .o_radio_item {
+            margin: 0 !important;
+            border: 0;
+            background: none;
+
+            &:has(input:checked) {
+                background-color: #fff;
+                box-shadow: 0 1px 4px rgba(40, 20, 40, 0.1);
+            }
+        }
+    }
+    .o_radio_input:checked,
+    .form-check-input:checked {
+        border-color: $sh-plum;
+        background-color: $sh-plum;
+    }
+
+    // "Taken as": soft blue pill
+    .o_field_widget[name="time_type"] select,
+    .o_field_widget[name="time_type"] > span {
+        width: auto;
+        padding: 5px 28px 5px 14px;
+        border-color: transparent !important;
+        border-radius: 999px;
+        font-weight: 600;
+        color: #2f6fd6;
+        background-color: #e8f0fe;
+    }
+
+    // checkboxes shown as plum switches
+    .o_field_widget[name="requires_allocation"],
+    .o_field_widget[name="employee_requests"] {
+        .form-check-input {
+            width: 2.4em;
+            height: 1.3em;
+            border-radius: 999px;
+            border-color: #d9d3d8;
+            background-color: #e9e5e8;
+            background-image: radial-gradient(circle, #fff 45%, transparent 47%);
+            background-position: left center;
+            background-size: 1.3em 1.3em;
+            background-repeat: no-repeat;
+            transition: background-position 0.15s;
+
+            &:checked {
+                border-color: $sh-plum;
+                background-color: $sh-plum;
+                background-position: right center;
+            }
+        }
     }
 }
