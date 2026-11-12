@@ -22,7 +22,7 @@ $sh-holiday-fg: #1f8a57;
     .o_timeoff_card {
         position: relative;
         overflow: hidden;
-        align-items: flex-start;
+        align-items: flex-start !important;
         justify-content: flex-start !important;
         padding: 22px 24px 20px !important;
         text-align: left;
@@ -268,4 +268,13 @@ $sh-holiday-fg: #1f8a57;
     margin: 0 3px;
     border-radius: 50%;
     background-color: $sh-plum;
+}
+
+// the dashboard page has its own "+ new request" buttons on the cards:
+// no "New" button and no "Dashboard" title in the control panel there
+.o_action:has(.o_timeoff_dashboard) .o_control_panel {
+    .o_control_panel_main_buttons,
+    .o_breadcrumb {
+        display: none !important;
+    }
 }
