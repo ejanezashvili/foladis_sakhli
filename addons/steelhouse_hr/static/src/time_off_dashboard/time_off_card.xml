@@ -2,7 +2,7 @@
 <templates xml:space="preserve">
     <!-- Time off type card: "available N days of M" as a caption, and a "+ new request" button -->
     <t t-inherit="hr_holidays.TimeOffCard" t-inherit-mode="extension">
-        <xpath expr="//span[hasclass('o_timeoff_details')]" position="replace">
+        <xpath expr="//span[contains(@t-att-class, 'o_timeoff_details')]" position="replace">
             <span t-att-class="'o_timeoff_details o_sh_caption' + (warning ? ' alert alert-warning' : '')"
                   t-on-click.stop="(ev) => (show_popover &amp;&amp; this.onClickInfo(ev))">
                 <t t-if="props.requires_allocation">
