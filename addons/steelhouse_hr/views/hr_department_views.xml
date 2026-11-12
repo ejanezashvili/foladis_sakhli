@@ -58,8 +58,10 @@
             <xpath expr="//kanban" position="attributes">
                 <attribute name="class">o_hr_department_kanban o_kanban_small_column o_sh_dept_kanban</attribute>
             </xpath>
-            <xpath expr="//t[@t-name='card']//field[@name='manager_id']" position="after">
-                <div t-if="!record.manager_id.raw_value" class="o_sh_no_head ms-2">ხელმძღვანელი არ არის</div>
+            <!-- all equal heads, each with photo and name (Odoo's card shows only the first one) -->
+            <xpath expr="//t[@t-name='card']//field[@name='manager_id']" position="replace">
+                <field name="manager_ids" widget="many2many_tags_avatar" readonly="1" class="o_sh_heads ms-2"/>
+                <div t-if="!record.manager_ids.raw_value.length" class="o_sh_no_head ms-2">ხელმძღვანელი არ არის</div>
             </xpath>
             <xpath expr="//t[@t-name='card']//button[@name='action_employee_from_department']" position="attributes">
                 <attribute name="class">btn btn-primary o_sh_emp_btn</attribute>
