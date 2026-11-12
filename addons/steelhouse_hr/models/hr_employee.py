@@ -1,9 +1,42 @@
+import base64
+import re
 from datetime import datetime, time
 
 from pytz import UTC
 
 from odoo import api, fields, models
 from odoo.fields import Domain
+
+
+# Default photo by gender: a white man / woman silhouette on the colour Odoo picked for the
+# letter avatar. Only Odoo's own generated pictures are replaced, never a real photo.
+_SH_SILHOUETTE = {
+    'male': (
+        '<circle cx="90" cy="70" r="32" fill="#ffffff"/>'
+        '<path d="M28 180c0-40 28-64 62-64s62 24 62 64z" fill="#ffffff"/>'
+    ),
+    'female': (
+        '<path d="M50 96c0-38 17-62 40-62s40 24 40 62c0 16-5 27-10 32H60c-5-5-10-16-10-32z" '
+        'fill="#ffffff" fill-opacity="0.6"/>'
+        '<circle cx="90" cy="72" r="28" fill="#ffffff"/>'
+        '<path d="M36 180c0-38 24-60 54-60s54 22 54 60z" fill="#ffffff"/>'
+    ),
+}
+
+
+def _sh_generated_svg(data):
+    """Odoo's generated letter picture or one of our silhouettes (not a real photo)."""
+    head = (data or b'')[:400].lstrip()
+    return head.startswith((b'<svg', b'<?xml')) and (b'<text' in data or b'sh-silhouette' in data)
+
+
+def _sh_silhouette(data, sex):
+    color = re.search(rb'<rect fill="([^"]+)"', data or b'')
+    fill = color.group(1).decode() if color else 'hsl(300, 20%, 40%)'
+    svg = ('<?xml version="1.0" encoding="UTF-8" ?><svg class="sh-silhouette" height="180" width="180" '
+           'xmlns="http://www.w3.org/2000/svg"><rect fill="%s" height="180" width="180"/>%s</svg>'
+           % (fill, _SH_SILHOUETTE[sex]))
+    return base64.b64encode(svg.encode())
 
 
 def _team_domain(employees, operator, value):
@@ -83,12 +116,22 @@ class HrEmployee(models.Model):
         auto = self.browse([emp.id for emp, vals in zip(employees, vals_list)
                             if emp.department_id and not vals.get('parent_id')])
         auto._sh_set_structure_manager()
+        employees.filtered('sex')._sh_set_silhouette()
         return employees
+
+    def _sh_set_silhouette(self):
+        """Gender picture for employees that still have Odoo's generated picture."""
+        for emp in self:
+            data = base64.b64decode(emp.image_1920) if emp.image_1920 else b''
+            if emp.sex in _SH_SILHOUETTE and (not data or _sh_generated_svg(data)):
+                emp.image_1920 = _sh_silhouette(data, emp.sex)
 
     def write(self, vals):
         res = super().write(vals)
         if 'department_id' in vals and 'parent_id' not in vals:
             self._sh_set_structure_manager()
+        if 'sex' in vals and 'image_1920' not in vals:
+            self._sh_set_silhouette()
         return res
 
     def _get_unusual_days(self, date_from, date_to=None):
