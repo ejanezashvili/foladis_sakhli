@@ -8,10 +8,10 @@
                 <field name="employee_id" widget="many2one_avatar_employee" column_invisible="context.get('sh_my_balance')"/>
                 <field name="department_id" optional="hide"/>
                 <field name="leave_type_id" class="fw-bold o_sh_type_cell"/>
-                <field name="allocated" invisible="not requires_allocation"/>
-                <field name="used" sum="სულ"/>
-                <field name="pending" decoration-warning="pending &gt; 0"/>
-                <field name="remaining" invisible="not requires_allocation" class="fw-bold o_sh_remaining"
+                <field name="allocated" widget="float_without_trailing_zeros" invisible="not requires_allocation"/>
+                <field name="used" widget="float_without_trailing_zeros" sum="სულ"/>
+                <field name="pending" widget="float_without_trailing_zeros" decoration-warning="pending &gt; 0"/>
+                <field name="remaining" widget="float_without_trailing_zeros" invisible="not requires_allocation" class="fw-bold o_sh_remaining"
                        decoration-danger="remaining &lt; 0" decoration-success="remaining &gt; 0"/>
                 <field name="requires_allocation" column_invisible="1"/>
             </list>
@@ -225,6 +225,34 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_accrual_plan_form o_sh_accrual_plan_form</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- approval / allocation cards: balance "24 / 24", not "24,00 / 24,00" -->
+    <record id="hr_leave_view_kanban_days_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.kanban.days.steelhouse</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='virtual_remaining_leaves'][@widget='float']" position="attributes">
+                <attribute name="widget">float_without_trailing_zeros</attribute>
+            </xpath>
+            <xpath expr="//field[@name='max_leaves'][@widget='float']" position="attributes">
+                <attribute name="widget">float_without_trailing_zeros</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_leave_allocation_view_kanban_days_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.kanban.days.steelhouse</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='virtual_remaining_leaves'][@widget='float']" position="attributes">
+                <attribute name="widget">float_without_trailing_zeros</attribute>
+            </xpath>
+            <xpath expr="//field[@name='max_leaves'][@widget='float']" position="attributes">
+                <attribute name="widget">float_without_trailing_zeros</attribute>
             </xpath>
         </field>
     </record>
