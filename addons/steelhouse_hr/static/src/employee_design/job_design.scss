@@ -1,0 +1,231 @@
+// Configuration > Job positions: list rows as cards (briefcase badge), form in the new look. Look only.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+
+.o_action:has(.o_sh_job_list, .o_sh_job_form) .o_content {
+    background-color: $sh-page;
+}
+
+.o_sh_job_list {
+    max-width: 960px;
+
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+    td[name="name"] {
+        color: $sh-text;
+    }
+}
+
+.o_sh_job_form {
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbf3f7 0, #fff 140px);
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // head: briefcase badge, small plum label, big name box
+    .oe_title {
+        display: grid;
+        grid-template-columns: 64px 1fr;
+        column-gap: 18px;
+        align-items: end;
+        margin: 4px 0 18px;
+
+        &::before {
+            content: "\f0b1";
+            grid-row: 1 / span 2;
+            align-self: center;
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            font-family: FontAwesome;
+            font-size: 24px;
+            line-height: 64px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            box-shadow: 0 6px 16px rgba(113, 75, 103, 0.12);
+        }
+        > label,
+        > .o_form_label {
+            grid-column: 2;
+            margin-bottom: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: $sh-plum;
+        }
+        h1 {
+            grid-column: 2;
+            margin: 0;
+        }
+        h1 textarea,
+        h1 input {
+            padding: 10px 16px !important;
+            border: 1px solid $sh-line !important;
+            border-radius: 14px;
+            font-size: 22px;
+            background-color: #f6f3f6;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+            }
+        }
+    }
+
+    // tabs
+    .o_notebook .nav-tabs {
+        border-bottom: 1px solid $sh-line;
+
+        .nav-link {
+            padding: 8px 16px;
+            border: 0 !important;
+            border-radius: 10px 10px 0 0;
+            color: $sh-muted;
+
+            &.active {
+                font-weight: 600;
+                color: $sh-plum;
+                background-color: $sh-plum-soft;
+                box-shadow: inset 0 -2px 0 $sh-plum;
+            }
+        }
+    }
+
+    // section titles: plum bar, then a light line
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        padding-left: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: none;
+        color: $sh-text;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 4px;
+            border-radius: 2px;
+            background-color: $sh-plum;
+        }
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            height: 1px;
+            background-color: $sh-line;
+        }
+    }
+
+    .o_inner_group .o_form_label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $sh-text;
+    }
+    .o_inner_group .o_field_widget input:not(.form-check-input) {
+        padding: 8px 12px;
+        border: 1px solid transparent !important;
+        border-radius: 10px;
+        background-color: #f4f1f4;
+
+        &:focus {
+            border-color: $sh-plum !important;
+            background-color: #fff;
+        }
+    }
+
+    // recruiter: avatar + name as a soft pill
+    .o_field_widget[name="user_id"] {
+        .o_field_many2one_avatar,
+        > div {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 10px 2px 3px;
+            border-radius: 999px;
+            background-color: #f4f1f4;
+        }
+        img {
+            border-radius: 6px !important;
+        }
+        input {
+            padding: 2px 4px !important;
+            background: none !important;
+        }
+    }
+
+    // target: number box + "new employees" as a soft pill with a dot
+    div[name="recruitment_target"] {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .o_field_widget input {
+            width: 64px;
+            font-weight: 700;
+            text-align: center;
+        }
+        > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin: 0 !important;
+            padding: 3px 12px;
+            border-radius: 999px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+
+            &::before {
+                content: "";
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: currentColor;
+            }
+        }
+    }
+
+    // expected skills: "add" as a soft plum pill
+    .o_field_many2one_tags_skills,
+    .o_field_widget[name="current_job_skill_ids"] {
+        .btn,
+        .o_field_x2many_list_row_add a,
+        input {
+            border-radius: 999px !important;
+        }
+        .btn {
+            padding: 3px 12px;
+            border: 0;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+}

@@ -168,4 +168,29 @@
             </field>
         </field>
     </record>
+
+    <!-- Configuration > Job positions: card rows; form in the new look (style only) -->
+    <record id="view_hr_job_tree_steelhouse" model="ir.ui.view">
+        <field name="name">hr.job.list.steelhouse</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_job_list</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+        </field>
+    </record>
+    <record id="view_hr_job_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.job.form.steelhouse</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_job_form</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
