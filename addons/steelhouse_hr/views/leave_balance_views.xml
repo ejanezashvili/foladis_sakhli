@@ -95,4 +95,16 @@
             </xpath>
         </field>
     </record>
+
+    <!-- group allocation (Management > Allocations): same look as the days request form; fields unchanged -->
+    <record id="hr_leave_allocation_generate_multi_wizard_view_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.generate.multi.wizard.form.steelhouse</field>
+        <field name="model">hr.leave.allocation.generate.multi.wizard</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_generate_multi_wizard_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_hr_leave_allocation_form o_sh_group_allocation</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

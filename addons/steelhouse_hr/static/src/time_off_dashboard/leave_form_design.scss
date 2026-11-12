@@ -312,3 +312,76 @@ $sh-green-soft: #e8f7ee;
         }
     }
 }
+
+// ---------- group allocation form (extra elements)
+.o_sh_group_allocation {
+    // granted days: same big plum box as the days request
+    .o_field_widget[name="duration"] {
+        width: 96px !important;
+        flex: 0 0 96px;
+
+        input {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            color: $sh-plum;
+        }
+    }
+
+    // "Grant" mode as a soft blue pill
+    .o_field_widget[name="allocation_mode"] select {
+        width: auto;
+        padding: 6px 30px 6px 14px;
+        border-color: transparent !important;
+        border-radius: 999px;
+        font-weight: 600;
+        color: #2f6fd6;
+        background-color: #e8f0fe;
+    }
+
+    // allocation type: two option cards, the chosen one in plum
+    .o_field_widget[name="allocation_type"] .o_field_radio,
+    .o_field_radio[name="allocation_type"],
+    .o_field_widget[name="allocation_type"] > div {
+        display: flex;
+        gap: 10px;
+    }
+    .o_field_widget[name="allocation_type"] .o_radio_item {
+        flex: 1 1 0;
+        margin: 0 !important;
+        padding: 10px 14px;
+        border: 1px solid $sh-field-border;
+        border-radius: 10px;
+        background-color: $sh-field-bg;
+
+        &:has(input:checked) {
+            border-color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        label {
+            font-weight: 600;
+            color: #2b2430;
+        }
+    }
+
+    // validity: date boxes centred, arrow in a small plum circle
+    div[name="validity"] {
+        gap: 10px;
+
+        input {
+            text-align: center;
+            font-weight: 600;
+        }
+        .fa-long-arrow-right {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            line-height: 26px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+}
