@@ -323,3 +323,17 @@ class HrLeave(models.Model):
         res = super()._force_cancel(*args, **kwargs)
         was_approved.filtered(lambda l: l.state != 'validate')._steelhouse_notify_deputies('cancelled')
         return res
+
+
+class HrLeaveType(models.Model):
+    _inherit = 'hr.leave.type'
+
+    # Asking for extra days (allocation request): only the type name,
+    # no "(N remaining out of M days)" - it means something else there.
+    @api.depends_context('request_type')
+    def _compute_display_name(self):
+        super()._compute_display_name()
+        if self.env.context.get('request_type') == 'allocation':
+            for leave_type in self:
+                leave_type.display_name = leave_type.name
+
