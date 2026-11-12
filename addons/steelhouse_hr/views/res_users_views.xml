@@ -32,4 +32,22 @@
             </field>
         </field>
     </record>
+
+    <!-- "My activities" list: rows as cards, "linked to" in parts (style only) -->
+    <record id="mail_activity_view_tree_steelhouse" model="ir.ui.view">
+        <field name="name">mail.activity.list.steelhouse</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_activity_list</attribute>
+            </xpath>
+            <field name="activity_type_id" position="attributes">
+                <attribute name="class">o_sh_act_type</attribute>
+            </field>
+            <field name="res_name" position="attributes">
+                <attribute name="widget">sh_activity_link</attribute>
+            </field>
+        </field>
+    </record>
 </odoo>

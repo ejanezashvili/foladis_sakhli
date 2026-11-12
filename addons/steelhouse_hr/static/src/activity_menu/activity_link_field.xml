@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="steelhouse_hr.ActivityLinkField">
+        <span t-if="props.readonly and shParts" class="o_sh_act_link">
+            <span class="o_sh_act_link_title" t-esc="shParts.title"/>
+            <span class="o_sh_act_link_amount" t-esc="shParts.amount"/>
+            <span class="o_sh_act_link_dash">—</span>
+            <span class="o_sh_act_link_person" t-esc="shParts.person"/>
+        </span>
+        <t t-else="" t-call="web.CharField"/>
+    </t>
+
+</templates>

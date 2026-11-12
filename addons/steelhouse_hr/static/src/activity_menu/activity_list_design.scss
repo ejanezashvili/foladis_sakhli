@@ -1,0 +1,153 @@
+// "My activities" list: rows as cards (red left edge when late, orange when due today),
+// type as a pill, deadline as a pill with a clock, actions as pill buttons. Look only.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-text: #2b2430;
+$sh-green: #1f8a57;
+$sh-red: #d64550;
+
+.o_action:has(.o_sh_activity_list) .o_content {
+    background-color: #f6f5f7;
+}
+
+.o_sh_activity_list {
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+
+    // late: red edge; today: orange edge
+    tbody tr.o_data_row:has(td[name="date_deadline"] .text-danger) > td:first-child {
+        box-shadow: inset 3px 0 0 $sh-red;
+    }
+    tbody tr.o_data_row:has(td[name="date_deadline"] .text-warning) > td:first-child {
+        box-shadow: inset 3px 0 0 #e0912f;
+    }
+
+    // type: soft pill with a shield
+    td.o_sh_act_type > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: $sh-plum;
+        background-color: $sh-plum-soft;
+
+        &::before {
+            content: "\f132";
+            font-family: FontAwesome;
+            font-weight: normal;
+        }
+    }
+
+    // assigned to: avatar as a rounded square, name bold
+    .o_field_many2one_avatar_user {
+        font-weight: 600;
+
+        img {
+            border-radius: 6px !important;
+        }
+    }
+
+    // linked to: muted title, green amount pill, bold person
+    .o_sh_act_link {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+    }
+    .o_sh_act_link_title {
+        color: #8c838b;
+    }
+    .o_sh_act_link_amount {
+        padding: 1px 9px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+        color: $sh-green;
+        background-color: #e8f7ee;
+    }
+    .o_sh_act_link_dash {
+        color: #c3bac0;
+    }
+    .o_sh_act_link_person {
+        font-weight: 700;
+        color: $sh-text;
+    }
+
+    // deadline: pill with a clock (red when late, orange today)
+    td[name="date_deadline"] .o_field_widget > div,
+    td[name="date_deadline"] .o_field_widget > span {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        background-color: #f4f1f4;
+
+        &::before {
+            content: "\f017";
+            font-family: FontAwesome;
+            font-weight: normal;
+        }
+        &.text-danger {
+            background-color: #fdecec;
+        }
+        &.text-warning {
+            background-color: #fff4e0;
+        }
+    }
+
+    // actions: reschedule (white), done (green), cancel (red outline)
+    td.o_data_cell .o_dropdown_title,
+    td.o_data_cell button.btn-link.text-dark {
+        font-weight: 600;
+    }
+    td.o_data_cell .dropdown > button.btn-link,
+    td.o_data_cell .o-dropdown > button.btn-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px !important;
+        border: 1px solid #eee8ec;
+        border-radius: 10px;
+        text-decoration: none;
+        color: $sh-text !important;
+        background-color: #fff;
+    }
+    button[name="action_done"].btn,
+    td.o_list_button button[name="action_done"] {
+        padding: 5px 12px;
+        border: 0;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #fff !important;
+        background-color: $sh-green;
+    }
+    td.o_list_button button[name="unlink"] {
+        padding: 5px 12px;
+        border: 1px solid #f1b7bc;
+        border-radius: 10px;
+        font-weight: 600;
+        color: $sh-red !important;
+        background-color: #fff;
+    }
+    td.o_list_button {
+        white-space: nowrap;
+
+        // icon buttons also show their name
+        button[name="action_done"]::after,
+        button[name="unlink"]::after {
+            content: attr(title);
+            margin-left: 6px;
+        }
+
+        button + button {
+            margin-left: 6px;
+        }
+    }
+}
