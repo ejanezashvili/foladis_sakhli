@@ -33,6 +33,38 @@
                 <field name="manager_ids" widget="many2many_avatar_employee"/>
                 <field name="deputy_id" widget="many2one_avatar_employee" optional="show"/>
             </field>
+            <!-- new look (style only): rows as cards, building badge, count pill, parent as a path of chips -->
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_dept_list</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+            <field name="total_employee" position="attributes">
+                <attribute name="class">o_sh_count_cell</attribute>
+            </field>
+            <field name="parent_id" position="attributes">
+                <attribute name="widget">sh_dept_path</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- department cards: new look (style only); "no head" note when a unit has no head -->
+    <record id="hr_department_view_kanban_steelhouse" model="ir.ui.view">
+        <field name="name">hr.department.kanban.steelhouse</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.hr_department_view_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="class">o_hr_department_kanban o_kanban_small_column o_sh_dept_kanban</attribute>
+            </xpath>
+            <xpath expr="//t[@t-name='card']//field[@name='manager_id']" position="after">
+                <div t-if="!record.manager_id.raw_value" class="o_sh_no_head ms-2">ხელმძღვანელი არ არის</div>
+            </xpath>
+            <xpath expr="//t[@t-name='card']//button[@name='action_employee_from_department']" position="attributes">
+                <attribute name="class">btn btn-primary o_sh_emp_btn</attribute>
+                <attribute name="t-att-class">{'o_sh_zero': !record.total_employee.raw_value}</attribute>
+            </xpath>
         </field>
     </record>
 

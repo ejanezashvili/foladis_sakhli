@@ -212,7 +212,7 @@ body:has(.o_menu_brand[data-menu-xmlid="hr.menu_hr_root"]) .o_control_panel {
 
 // ---------- org chart (hierarchy): white rounded cards, small square photo on top,
 // "Open / Close" as pills, teams in frames with a "X's team" label
-.o_sh_emp_tree {
+.o_sh_tree.o_sh_emp_tree {
     background-color: $sh-page;
 
     .o_hierarchy_node {

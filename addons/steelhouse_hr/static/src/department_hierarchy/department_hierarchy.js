@@ -78,17 +78,23 @@ export class DepartmentTreeNode extends Component {
         return this.props.node.childResIds.length + this.positions.length;
     }
 
-    // Org chart of employees: "<name>'s team" label on the frame (Georgian genitive: + "ს" after a vowel, else + "ის")
+    // Label on the frame of an opened card:
+    // departments: "<unit> › ქვედეპარტამენტები"; employees: "<name>'s team · N"
+    // (Georgian genitive: + "ს" after a vowel, else + "ის")
     get teamLabel() {
         const node = this.props.node;
-        if (this.props.isRoot || !node.model.resModel.startsWith("hr.employee")) {
-            return "";
-        }
         const name = (node.data.name || "").trim();
         if (!name) {
             return "";
         }
-        return `${"აეიოუ".includes(name.slice(-1)) ? name + "ს" : name + "ის"} გუნდი`;
+        if (node.model.resModel === "hr.department") {
+            return `${name} › ქვედეპარტამენტები`;
+        }
+        if (this.props.isRoot || !node.model.resModel.startsWith("hr.employee")) {
+            return "";
+        }
+        const genitive = "აეიოუ".includes(name.slice(-1)) ? name + "ს" : name + "ის";
+        return `${genitive} გუნდი · ${this.count}`;
     }
 
     async toggle() {

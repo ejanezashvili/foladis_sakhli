@@ -1,0 +1,336 @@
+// Departments: list, cards and org chart in the new look. Look only - data unchanged.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+
+.o_action:has(.o_sh_dept_list, .o_sh_dept_kanban, .o_sh_dept_tree) .o_content {
+    background-color: $sh-page;
+}
+
+// ---------- list
+.o_sh_dept_list {
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+    td.o_sh_type_cell::before {
+        content: "\f0f7";
+    }
+    td[name="name"] {
+        color: $sh-text;
+    }
+    // employees: grey pill with a people icon
+    td.o_sh_count_cell > * {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: $sh-text;
+        background-color: #f1eef1;
+
+        &::before {
+            content: "\f0c0";
+            font-family: FontAwesome;
+            font-weight: normal;
+            font-size: 11px;
+            color: $sh-muted;
+        }
+    }
+    .o_field_many2many_avatar_employee img,
+    .o_field_many2one_avatar_employee img {
+        border-radius: 6px !important;
+    }
+    .o_field_color_picker .o_colorlist_toggler,
+    .o_field_color_picker .o_colorlist > button {
+        width: 18px;
+        height: 18px;
+        border-radius: 50% !important;
+    }
+}
+
+// ---------- cards
+.o_sh_dept_kanban.o_kanban_renderer,
+.o_sh_dept_kanban .o_kanban_renderer {
+    padding: 18px 16px !important;
+    background-color: $sh-page;
+}
+.o_sh_dept_kanban .o_kanban_record:not(.o_kanban_ghost) {
+    padding: 14px 16px !important;
+    border: 1px solid transparent !important;
+    border-top: 3px solid #e8d3e1 !important;
+    border-radius: 16px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(40, 20, 40, 0.07);
+
+    &::after {
+        display: none !important;
+    }
+    &:hover {
+        border-color: #e2d5de !important;
+        border-top-color: $sh-plum !important;
+    }
+
+    // name with a building badge
+    a[type="open"] {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: $sh-text;
+
+        &::before {
+            content: "\f0f7";
+            flex: 0 0 28px;
+            height: 28px;
+            border-radius: 8px;
+            font-family: FontAwesome;
+            font-size: 13px;
+            line-height: 28px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        .o_field_widget {
+            margin: 0 !important;
+            font-size: 15px !important;
+        }
+    }
+
+    // head: avatar + name as a soft pill
+    .o_field_many2one_avatar_employee {
+        display: inline-flex;
+        margin-top: 10px;
+        padding: 2px 10px 2px 3px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        color: $sh-text !important;
+        background-color: #f4f1f4;
+
+        img {
+            border-radius: 6px !important;
+        }
+    }
+    .o_sh_no_head {
+        margin-top: 10px;
+        font-size: 12.5px;
+        color: #b9afb6;
+    }
+
+    // "N employees": plum pill with a people icon; grey outline when nobody is there
+    .o_sh_emp_btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        border-color: $sh-plum;
+        background-color: $sh-plum;
+
+        &::before {
+            content: "\f0c0";
+            font-family: FontAwesome;
+            font-weight: normal;
+        }
+        &.o_sh_zero {
+            border: 1px solid $sh-line;
+            color: #b9afb6;
+            background-color: #fff;
+        }
+    }
+
+    // time off / allocation requests: orange pill with a clock
+    [name="kanban_primary_right"] a {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #b26a00;
+        background-color: #fff4e0;
+
+        &::before {
+            content: "\f017";
+            font-family: FontAwesome;
+            font-weight: normal;
+        }
+    }
+}
+
+// ---------- org chart (hierarchy)
+.o_sh_tree.o_sh_dept_tree {
+    background-color: $sh-page;
+
+    .o_sh_tree_card .o_hierarchy_node {
+        overflow: hidden;
+        border: 1px solid $sh-line !important;
+        border-radius: 12px !important;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(40, 20, 40, 0.07) !important;
+    }
+    .o_sh_tree_card_open .o_hierarchy_node {
+        border: 1.5px solid $sh-plum !important;
+        box-shadow: 0 6px 18px rgba(113, 75, 103, 0.18) !important;
+    }
+
+    // header: building badge + name on white, a thin line below (no coloured strip)
+    .o_sh_tree_card .o_hierarchy_node_header {
+        justify-content: flex-start !important;
+        gap: 10px;
+        padding: 10px 12px !important;
+        border-bottom: 1px solid $sh-line;
+        font-weight: 700;
+        text-align: left !important;
+        color: $sh-text;
+        background: none !important;
+
+        &::before {
+            content: "\f0f7";
+            flex: 0 0 26px;
+            height: 26px;
+            border-radius: 7px;
+            font-family: FontAwesome;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 26px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+    .o_hierarchy_node_body {
+        padding: 8px 10px 4px;
+        font-size: 12.5px;
+
+        .o_field_many2many_avatar_employee img {
+            border-radius: 6px !important;
+        }
+        // "N employees": muted with a people icon
+        button[name="sh_action_team"] {
+            padding: 4px 2px;
+            font-size: 12px;
+            text-decoration: none;
+            color: $sh-muted;
+
+            &::before {
+                content: "\f0c0";
+                margin-right: 6px;
+                font-family: FontAwesome;
+            }
+        }
+    }
+
+    // open: plum bar inside the card; close: soft pink
+    .o_hierarchy_node_button {
+        margin: 6px 8px 8px;
+        border: 0;
+        border-radius: 8px !important;
+        font-weight: 600;
+
+        > span.text-end {
+            justify-self: start;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 999px;
+            font-size: 11px;
+            line-height: 18px;
+            text-align: center !important;
+            color: $sh-plum;
+            background-color: rgba(255, 255, 255, 0.85);
+        }
+        &.btn-secondary {
+            border: 1px solid #ead8e3;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // sub-units of the company: one big white frame with a label
+    .o_sh_root_level > .o_sh_tree_children {
+        margin-top: 18px;
+        padding-top: 0;
+        border-top: 0;
+
+        &:before {
+            top: -20px;
+            height: 18px;
+        }
+        > .o_sh_tree_level {
+            position: relative;
+            padding: 32px 16px 16px;
+            border-radius: 18px;
+            background-color: #fff;
+            box-shadow: 0 2px 14px rgba(40, 20, 40, 0.07);
+        }
+    }
+
+    // nested frames: dashed pink instead of the dark border
+    .o_sh_tree_frame {
+        padding-top: 30px;
+        border: 1.5px dashed #dcbfd2;
+        border-radius: 14px;
+        background-color: #fbf5f9;
+
+        &:before {
+            display: none;
+        }
+    }
+
+    // labels: plum on the company frame, white inside
+    .o_sh_team_label {
+        position: absolute;
+        top: -11px;
+        left: 18px;
+        z-index: 2;
+        padding: 3px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        color: #fff;
+        background-color: $sh-plum;
+    }
+    .o_sh_tree_frame > .o_sh_team_label {
+        color: $sh-text;
+        background-color: #fff;
+        border: 1px solid #e2cbd9;
+    }
+
+    // positions inside a unit: same white card; "vacant" as an orange pill
+    .o_sh_position {
+        border: 1px solid $sh-line;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(40, 20, 40, 0.06);
+
+        .o_sh_position_title {
+            padding: 10px 12px;
+            border-bottom: 1px solid $sh-line;
+            font-weight: 700;
+            text-align: left;
+            background: none;
+        }
+        .o_sh_position_body {
+            padding: 8px 12px 10px;
+        }
+        .o_sh_position_body > span.fst-italic {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-style: normal !important;
+            font-weight: 600;
+            color: #b26a00 !important;
+            background-color: #fff4e0;
+        }
+        img.o_avatar {
+            border-radius: 6px !important;
+        }
+    }
+}
