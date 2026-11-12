@@ -1,22 +1,22 @@
-// "Time off balance" list: every type as a rounded card row, icon badge,
-// pending in orange, remaining in green.
+// Card-style lists ("Time off balance", "My requests"): rounded card rows,
+// icon badge before the type, pills for durations and statuses.
 $sh-plum: #714b67;
 $sh-plum-soft: #f3eaf0;
 $sh-page: #f6f5f7;
 
-.o_list_renderer:has(.o_sh_balance_list),
-.o_sh_balance_list {
+.o_list_renderer:has(.o_sh_card_list),
+.o_sh_card_list {
     background-color: $sh-page;
 }
 
 // the class may land on the table or on its wrapper
-table.o_sh_balance_list,
-.o_sh_balance_list table {
+table.o_sh_card_list,
+.o_sh_card_list table {
     border-collapse: separate !important;
     border-spacing: 0 10px;
 }
 
-.o_sh_balance_list {
+.o_sh_card_list {
     padding: 0 16px;
 
     thead th {
@@ -78,4 +78,47 @@ table.o_sh_balance_list,
     border-radius: 999px !important;
     background-color: $sh-plum !important;
     border-color: $sh-plum !important;
+}
+
+// duration as a grey pill
+.o_sh_card_list td.o_sh_duration > * {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    background-color: #efedf0;
+}
+
+// status badges: soft colour with a dot
+.o_sh_card_list .o_field_badge .badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-weight: 500;
+    border: 1px solid transparent;
+
+    &::before {
+        content: "";
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin-right: 6px;
+        border-radius: 50%;
+        vertical-align: middle;
+        background-color: currentColor;
+    }
+    &.text-bg-warning {
+        color: #b26a00 !important;
+        background-color: #fff4e0 !important;
+        border-color: #f5d9a8;
+    }
+    &.text-bg-success {
+        color: #1f8a57 !important;
+        background-color: #e8f7ee !important;
+        border-color: #b5e3c8;
+    }
+    &.text-bg-danger {
+        color: #c8323a !important;
+        background-color: #fdecec !important;
+        border-color: #f4c1c3;
+    }
 }

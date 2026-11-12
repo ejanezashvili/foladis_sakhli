@@ -4,7 +4,7 @@
         <field name="name">steelhouse.leave.balance.list</field>
         <field name="model">steelhouse.leave.balance</field>
         <field name="arch" type="xml">
-            <list string="შვებულების ბალანსი" create="0" edit="0" delete="0" class="o_sh_balance_list">
+            <list string="შვებულების ბალანსი" create="0" edit="0" delete="0" class="o_sh_balance_list o_sh_card_list">
                 <header>
                     <button type="action" name="%(hr_holidays.hr_leave_allocation_action_my)d"
                             string="დამატებითი დღეების მოთხოვნა" class="btn btn-primary o_sh_pill" display="always"/>
