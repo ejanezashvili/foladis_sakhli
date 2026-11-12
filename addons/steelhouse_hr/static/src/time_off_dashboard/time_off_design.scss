@@ -24,7 +24,7 @@ $sh-holiday-fg: #1f8a57;
         overflow: hidden;
         align-items: flex-start !important;
         justify-content: flex-start !important;
-        padding: 22px 24px 20px !important;
+        padding: 16px 20px 14px !important;
         text-align: left;
         border: 0;
         border-radius: 16px;
@@ -50,8 +50,8 @@ $sh-holiday-fg: #1f8a57;
         }
 
         .o_timeoff_name {
-            margin-bottom: 10px;
-            font-size: 17px;
+            margin-bottom: 6px;
+            font-size: 15px;
             font-weight: 600;
             color: #2b2430;
             text-decoration: none;
@@ -59,7 +59,7 @@ $sh-holiday-fg: #1f8a57;
 
         .o_timeoff_duration {
             margin-bottom: 4px;
-            font-size: 44px;
+            font-size: 38px;
             font-weight: 700;
             line-height: 1.05;
             color: $sh-plum;
@@ -277,4 +277,93 @@ $sh-holiday-fg: #1f8a57;
     .o_breadcrumb {
         display: none !important;
     }
+}
+
+// ---------- year view layout: 4 compact month cards per row, aligned with the cards
+.o_timeoff_calendar .fc-dayGridYear-view {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: start;
+
+    > .fc-month-container {
+        width: auto !important;
+        min-width: 0;
+        padding: 14px 10px 8px !important;
+
+        > .fc-month {
+            width: 100% !important;
+        }
+    }
+    .fc-toolbar-title {
+        font-size: 15px !important;
+    }
+    .fc-daygrid-body tr .fc-day .fc-daygrid-day-number {
+        width: 28px !important;
+        height: 28px !important;
+        line-height: 28px !important;
+        font-size: 13px;
+    }
+}
+@media (max-width: 1500px) {
+    .o_timeoff_calendar .fc-dayGridYear-view { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 1100px) {
+    .o_timeoff_calendar .fc-dayGridYear-view { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+    .o_timeoff_calendar .fc-dayGridYear-view { grid-template-columns: minmax(0, 1fr); }
+}
+
+// ---------- side panel: legend card + public holidays card
+.o_timeoff_calendar .o_calendar_sidebar .o_calendar_filter {
+    margin: 16px !important;
+    padding: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+
+    > h5,
+    > h5 + div,
+    > div.mt-4 {
+        background-color: #fff;
+        border: 1px solid #ece8ec;
+    }
+    > h5 {
+        margin: 0;
+        padding: 16px 18px 10px;
+        border-bottom: 0;
+        border-radius: 16px 16px 0 0;
+    }
+    > h5 + div {
+        padding: 6px 18px 16px;
+        border-top: 0;
+        border-radius: 0 0 16px 16px;
+        gap: 6px;
+    }
+    > div.mt-4 {
+        margin-top: 16px !important;
+        padding: 16px 18px;
+        border-radius: 16px;
+
+        h5 {
+            margin-bottom: 8px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee8ec;
+            font-size: 15px;
+            font-weight: 700;
+        }
+        li {
+            font-size: 13px;
+        }
+    }
+}
+.o_sh_hday_pill {
+    display: inline-block;
+    min-width: 44px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    color: $sh-holiday-fg;
+    background-color: $sh-holiday-bg;
 }

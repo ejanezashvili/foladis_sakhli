@@ -6,5 +6,15 @@
             <span class="align-middle d-flex align-items-center"><span class="o_sh_holiday_swatch me-1"/> უქმე დღე</span>
             <span class="align-middle d-flex align-items-center"><span class="o_sh_today_swatch me-2"/> დღეს</span>
         </xpath>
+        <xpath expr="//div[@t-if='leaveState.bankHolidays.length']/h5" position="replace">
+            <h5>უქმე დღეები<t t-if="leaveState.bankHolidays.length"> · <t t-esc="leaveState.bankHolidays[0].start.year"/></t></h5>
+        </xpath>
+        <xpath expr="//li[@t-as='bankHoliday']" position="replace">
+            <li t-foreach="leaveState.bankHolidays" t-as="bankHoliday" t-key="bankHoliday.id"
+                class="mt-2 list-unstyled d-flex align-items-center gap-2">
+                <span class="o_sh_hday_pill" t-esc="bankHoliday.start.toFormat('dd.MM')"/>
+                <span t-esc="bankHoliday.title"/>
+            </li>
+        </xpath>
     </t>
 </templates>

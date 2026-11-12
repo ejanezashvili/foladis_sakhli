@@ -35,7 +35,20 @@ function holidayClass(renderer, info) {
     return days && days.has(date) ? ["o_sh_public_holiday"] : [];
 }
 
+const SH_MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი",
+    "ივლისი", "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
+const SH_WEEKDAYS = ["კვ", "ორ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"]; // Date.getDay(): 0 = Sunday
+
 patch(TimeOffCalendarYearRenderer.prototype, {
+    // Georgian month titles ("იანვარი 2026") and weekday labels, whatever the browser locale
+    get options() {
+        return {
+            ...super.options,
+            titleFormat: (info) => `${SH_MONTHS[info.date.month]} ${info.date.year}`,
+            dayHeaderContent: (arg) => SH_WEEKDAYS[arg.date.getDay()],
+        };
+    },
+
     getDayCellClassNames(info) {
         return [...super.getDayCellClassNames(info), ...holidayClass(this, info)];
     },

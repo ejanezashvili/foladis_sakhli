@@ -7,7 +7,7 @@
                   t-on-click.stop="(ev) => (show_popover &amp;&amp; this.onClickInfo(ev))">
                 <t t-if="props.requires_allocation">
                     ხელმისაწვდომი <t t-if="data.request_unit == 'hour'">საათი</t><t t-else="">დღე</t>
-                    <t t-esc="formatNumber(this.lang, data.max_leaves)"/>-დან
+                    <t t-esc="' ' + formatNumber(this.lang, data.max_leaves)"/>-დან
                 </t>
                 <t t-else="">
                     გამოყენებული <t t-if="data.request_unit == 'hour'">საათი</t><t t-else="">დღე</t>
