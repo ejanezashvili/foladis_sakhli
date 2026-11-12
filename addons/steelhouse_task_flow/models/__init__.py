@@ -12,5 +12,6 @@ from . import task_chat
 from . import task_notify
 from . import task_timeline
 from . import task_card
+from . import task_dashboard
 from . import project_project
 from . import hr_department

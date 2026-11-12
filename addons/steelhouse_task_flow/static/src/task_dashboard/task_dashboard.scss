@@ -1,0 +1,207 @@
+// "მთავარი" - personal dashboard (colourful take on the reference design)
+$db-ink: #1f1d2b;
+$db-muted: #7a7790;
+$db-purple: #6b4fd8;
+
+.o_sh_db {
+    height: 100%;
+    overflow: auto;
+    padding: 24px 28px 40px;
+    background: radial-gradient(1200px 500px at 10% -10%, #efe9ff 0%, transparent 60%),
+        radial-gradient(900px 500px at 110% 10%, #e3f4ff 0%, transparent 60%), #f6f5fb;
+    color: $db-ink;
+
+    .o_sh_db_top {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+    .o_sh_db_hi { font-size: 1.9rem; font-weight: 700; margin: 0; }
+    .o_sh_db_date { color: $db-muted; margin-top: 2px; }
+    .o_sh_db_actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .o_sh_db_btn {
+        border: 0;
+        border-radius: 999px;
+        padding: 10px 20px;
+        font-weight: 600;
+        color: #fff;
+        background: linear-gradient(135deg, #6b4fd8, #9a6cf0);
+        box-shadow: 0 6px 16px rgba(107, 79, 216, 0.3);
+        &:hover { filter: brightness(1.05); }
+    }
+    .o_sh_db_btn_light { color: $db-purple; background: #fff; box-shadow: 0 2px 8px rgba(40, 30, 80, 0.08); }
+
+    .o_sh_db_row { display: grid; gap: 18px; margin-bottom: 18px; }
+    .o_sh_db_row1 { grid-template-columns: 1.15fr 1fr 1fr; }
+    .o_sh_db_row2 { grid-template-columns: 1fr 2fr; }
+
+    .o_sh_db_card {
+        background: #fff;
+        border-radius: 26px;
+        padding: 22px 24px;
+        box-shadow: 0 4px 20px rgba(40, 30, 80, 0.06);
+        min-width: 0;
+    }
+    .o_sh_db_head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .o_sh_db_title { font-size: 1.15rem; font-weight: 700; }
+    .o_sh_db_title_lg { font-size: 1.3rem; }
+    .o_sh_db_icon { font-size: 1.2rem; color: $db-muted; }
+    .o_sh_db_sub { color: $db-muted; font-size: 0.88rem; margin-bottom: 6px; }
+    .o_sh_db_badge { background: #f1edfd; color: $db-purple; border-radius: 999px; padding: 3px 12px; font-weight: 700; font-size: 0.85rem; }
+    .o_sh_db_link { color: $db-purple; font-weight: 600; font-size: 0.9rem; }
+    .o_sh_db_empty { color: $db-muted; padding: 10px 2px; }
+    .o_sh_db_click { cursor: pointer; }
+
+    // overall (gradient)
+    .o_sh_db_overall {
+        color: #fff;
+        background: linear-gradient(140deg, #4b2fb8 0%, #7b4fe0 55%, #b06ce8 100%);
+        box-shadow: 0 10px 28px rgba(91, 55, 200, 0.35);
+        .o_sh_db_title { color: #fff; }
+    }
+    .o_sh_db_big { display: flex; align-items: center; gap: 18px; margin: 16px 0 18px; > div { display: flex; align-items: center; gap: 10px; } }
+    .o_sh_db_num { font-size: 3rem; font-weight: 800; line-height: 1; }
+    .o_sh_db_numlbl { font-size: 0.82rem; opacity: 0.85; line-height: 1.25; }
+    .o_sh_db_sep { width: 1px; align-self: stretch; background: rgba(255, 255, 255, 0.3); }
+    .o_sh_db_bad .o_sh_db_num { color: #ffd1dc; }
+    .o_sh_db_tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .o_sh_db_tile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+        padding: 12px 6px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(4px);
+        i { font-size: 1.2rem; opacity: 0.9; }
+        b { font-size: 1.6rem; line-height: 1.1; }
+        span { font-size: 0.78rem; opacity: 0.9; }
+    }
+
+    // chart
+    .o_sh_db_legend { display: flex; gap: 16px; font-size: 0.85rem; color: $db-muted; margin-bottom: 6px; span { display: inline-flex; align-items: center; gap: 6px; } }
+    .o_sh_db_dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+    .o_sh_db_dot_new { background: #ff9f43; }
+    .o_sh_db_dot_done { background: $db-purple; }
+    .o_sh_db_dot_plan { background: #d9d3f5; }
+    .o_sh_db_dot_late { background: #ef476f; }
+    .o_sh_db_chart { width: 100%; height: 140px; overflow: visible; }
+    .o_sh_db_line_done { fill: none; stroke: $db-purple; stroke-width: 3; stroke-linecap: round; }
+    .o_sh_db_line_new { fill: none; stroke: #ff9f43; stroke-width: 2.5; stroke-dasharray: 6 5; stroke-linecap: round; }
+    .o_sh_db_todayline { stroke: #e3def5; stroke-width: 2; }
+    .o_sh_db_point { fill: #fff; stroke: $db-purple; stroke-width: 3; }
+    .o_sh_db_days {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 6px;
+        span { width: 34px; text-align: center; font-size: 0.78rem; color: $db-muted; padding: 3px 0; border-radius: 999px; }
+        .o_sh_db_today { background: $db-ink; color: #fff; font-weight: 600; }
+    }
+
+    // ring
+    .o_sh_db_ringwrap { display: flex; align-items: center; gap: 14px; }
+    .o_sh_db_ring { width: 150px; height: 150px; flex: 0 0 auto; }
+    .o_sh_db_ring_bg { fill: none; stroke: #efecf8; stroke-width: 14; }
+    .o_sh_db_ring_fg { fill: none; stroke: $db-purple; stroke-width: 14; stroke-linecap: round; }
+    .o_sh_db_ring_pct { font-size: 26px; font-weight: 800; fill: $db-ink; }
+    .o_sh_db_ring_lbl { font-size: 11px; fill: $db-muted; }
+    .o_sh_db_ringinfo { display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; color: #55526a; div { display: flex; align-items: center; gap: 8px; } }
+
+    // checklist
+    .o_sh_db_check {
+        display: grid;
+        grid-template-columns: 22px 1fr;
+        column-gap: 8px;
+        padding: 9px 4px;
+        border-bottom: 1px solid #f2f0f8;
+        cursor: pointer;
+        i { font-size: 1.15rem; color: #b8b2d6; grid-row: span 2; padding-top: 1px; }
+        &:hover { background: #faf9fe; border-radius: 10px; }
+    }
+    .o_sh_db_check_name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .o_sh_db_check_due { font-size: 0.8rem; color: $db-muted; }
+    .o_sh_db_check_done { i { color: #2bb673; } .o_sh_db_check_name { color: $db-muted; text-decoration: line-through; } }
+    .o_sh_db_check_late { .o_sh_db_check_due { color: #ef476f; font-weight: 600; } }
+
+    // in-process task cards
+    .o_sh_db_inproc { min-width: 0; }
+    .o_sh_db_tasks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .o_sh_db_task {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-height: 200px;
+        padding: 18px;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow: 0 4px 20px rgba(40, 30, 80, 0.06);
+        cursor: pointer;
+        transition: transform 0.15s, box-shadow 0.15s;
+        &:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(40, 30, 80, 0.12); }
+    }
+    .o_sh_db_c0 { background: linear-gradient(160deg, #fff 55%, #f1ecff); }
+    .o_sh_db_c1 { background: linear-gradient(160deg, #fff 55%, #e4f4ff); }
+    .o_sh_db_c2 { background: linear-gradient(160deg, #fff 55%, #fff1e3); }
+    .o_sh_db_task_top { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+    .o_sh_db_tnum { font-size: 0.75rem; color: $db-muted; font-weight: 600; }
+    .o_sh_db_task_name { font-size: 1.12rem; font-weight: 700; line-height: 1.3; }
+    .o_sh_db_task_dept { font-size: 0.82rem; color: $db-muted; }
+    .o_sh_db_task_prog { height: 6px; border-radius: 3px; background: #efecf8; overflow: hidden; div { height: 100%; background: linear-gradient(90deg, #6b4fd8, #b06ce8); border-radius: 3px; } }
+    .o_sh_db_task_bottom { margin-top: auto; display: flex; align-items: center; justify-content: space-between; font-size: 0.82rem; color: #55526a; }
+    .o_sh_db_bell { width: 36px; height: 36px; border-radius: 12px; background: $db-ink; color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+    .o_sh_db_add {
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        gap: 8px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: $db-purple;
+        background: transparent;
+        border: 2px dashed #cfc6f3;
+        box-shadow: none;
+        &:hover { background: #fbfaff; }
+    }
+
+    // status pill (in-process cards)
+    .o_sh_db_kind { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 500; background: #efe9fb; color: #6b4fd8; }
+    .o_sh_db_kdot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .o_sh_db_kind_accepted { background: #e7f0ff; color: #1c7ed6; }
+    .o_sh_db_kind_review { background: #fff1e0; color: #e8590c; }
+    .o_sh_db_kind_returned { background: #fde8ee; color: #d6336c; }
+    .o_sh_db_kind_late { background: #fdecea; color: #dc3545; }
+
+    // projects
+    .o_sh_db_projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+    .o_sh_db_proj {
+        padding: 20px 22px;
+        border-radius: 24px;
+        color: #fff;
+        cursor: pointer;
+        box-shadow: 0 8px 22px rgba(40, 30, 80, 0.16);
+        transition: transform 0.15s;
+        &:hover { transform: translateY(-3px); }
+    }
+    .o_sh_db_p0 { background: linear-gradient(140deg, #4b2fb8, #8a5ee6); }
+    .o_sh_db_p1 { background: linear-gradient(140deg, #0f6ab4, #36a3e8); }
+    .o_sh_db_p2 { background: linear-gradient(140deg, #c2410c, #f59e0b); }
+    .o_sh_db_p3 { background: linear-gradient(140deg, #0f766e, #2dd4bf); }
+    .o_sh_db_proj_top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+    .o_sh_db_proj_name { font-size: 1.12rem; font-weight: 700; line-height: 1.3; }
+    .o_sh_db_minir { width: 46px; height: 46px; flex: 0 0 auto; text { font-size: 10px; fill: #fff; font-weight: 700; } }
+    .o_sh_db_minir_bg { fill: none; stroke: rgba(255, 255, 255, 0.3); stroke-width: 4; }
+    .o_sh_db_minir_fg { fill: none; stroke: #fff; stroke-width: 4; stroke-linecap: round; }
+    .o_sh_db_proj_status { margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 0.88rem; opacity: 0.95; }
+    .o_sh_db_proj_late { margin-top: 6px; font-size: 0.82rem; font-weight: 600; color: #ffe1e8; }
+}
+
+@media (max-width: 1100px) {
+    .o_sh_db .o_sh_db_row1, .o_sh_db .o_sh_db_row2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 767px) {
+    .o_sh_db { padding: 16px; .o_sh_db_hi { font-size: 1.5rem; } }
+}
