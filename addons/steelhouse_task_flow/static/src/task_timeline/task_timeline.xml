@@ -108,14 +108,14 @@
                             <t t-foreach="state.data.groups" t-as="g" t-key="g.key">
                                 <div class="o_sh_tl_row o_sh_tl_group" t-on-click="() => this.toggle(g.key)">
                                     <div class="o_sh_tl_label" t-att-style="'width:' + LABEL_W + 'px'">
-                                        <i t-att-class="'fa me-1 ' + (state.collapsed[g.key] ? 'fa-caret-right' : 'fa-caret-down')"/>
+                                        <i t-att-class="'fa me-1 ' + (state.expanded[g.key] ? 'fa-caret-down' : 'fa-caret-right')"/>
                                         <span class="o_sh_tl_gname" t-esc="g.label"/>
                                         <span class="o_sh_tl_gcount"><t t-esc="g.tasks.length"/></span>
                                         <span t-if="g.overdue" class="o_sh_tl_gcount o_sh_tl_glate" title="ვადაგადაცილებული"><t t-esc="g.overdue"/></span>
                                     </div>
                                     <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'"/>
                                 </div>
-                                <t t-if="!state.collapsed[g.key]">
+                                <t t-if="state.expanded[g.key]">
                                     <t t-foreach="g.tasks" t-as="t" t-key="g.key + '_' + t.id">
                                         <t t-call="steelhouse_task_flow.TaskTimelineRow"/>
                                     </t>

@@ -73,7 +73,7 @@ export class TaskTimeline extends Component {
             subtasks: false,
             data: null,
             loading: true,
-            collapsed: {},
+            expanded: {}, // "ყველა": groups start folded
         });
         onWillStart(() => this.load());
     }
@@ -432,11 +432,11 @@ export class TaskTimeline extends Component {
         }
     }
     toggle(key) {
-        this.state.collapsed[key] = !this.state.collapsed[key];
+        this.state.expanded[key] = !this.state.expanded[key];
     }
     expandAll(open) {
         for (const g of this.state.data.groups) {
-            this.state.collapsed[g.key] = !open;
+            this.state.expanded[g.key] = open;
         }
     }
     openTask(id) {
