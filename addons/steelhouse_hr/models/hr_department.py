@@ -1,3 +1,5 @@
+from markupsafe import Markup, escape
+
 from odoo import api, fields, models
 
 
@@ -17,6 +19,9 @@ class HrDepartment(models.Model):
     sh_head_title = fields.Char(
         string='ხელმძღვანელის პოზიცია',
         help="სტრუქტურის მიხედვით ხელმძღვანელის პოზიცია; იერარქიაში ჩანს, როცა ხელმძღვანელი ვაკანტურია.")
+    sh_heads_html = fields.Html(
+        compute='_compute_sh_heads_html', sanitize=False,
+        help="All equal heads with photo and name, for the department cards (display only).")
     sh_headcount = fields.Integer(
         compute='_compute_sh_headcount', string='ქვეშ მყოფი თანამშრომლები',
         help="ყველა, ვინც ამ ერთეულის ხელმძღვანელების ქვეშაა (ქვედანაყოფების ჩათვლით, ხელმძღვანელების გარეშე).")
@@ -28,6 +33,15 @@ class HrDepartment(models.Model):
         for department in self:
             if not department.name:
                 department.complete_name = False
+
+    @api.depends('manager_ids', 'manager_ids.name')
+    def _compute_sh_heads_html(self):
+        for dept in self:
+            dept.sh_heads_html = Markup('').join(
+                Markup('<span class="o_sh_head_pill"><img src="/web/image/hr.employee.public/%s/avatar_128" alt=""/>%s</span>')
+                % (head.id, escape(head.name or ''))
+                for head in dept.manager_ids
+            ) or False
 
     def _sh_team(self):
         """Everyone in this unit and its sub-units, except this unit's heads."""

@@ -132,6 +132,13 @@ $sh-text: #2b2430;
         gap: 6px;
         margin-top: 10px;
 
+        > div,
+        .o_readonly {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .o_sh_head_pill,
         .o_tag,
         .badge {
             display: inline-flex;
