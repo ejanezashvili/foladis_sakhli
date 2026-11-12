@@ -117,4 +117,40 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Configuration > Work schedules: card rows, rate as a bar, type as a pill (style only) -->
+    <record id="view_resource_calendar_tree_steelhouse" model="ir.ui.view">
+        <field name="name">resource.calendar.list.steelhouse</field>
+        <field name="model">resource.calendar</field>
+        <field name="inherit_id" ref="resource.view_resource_calendar_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_cal_list</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+            <field name="work_time_rate" position="attributes">
+                <attribute name="widget">progressbar</attribute>
+            </field>
+            <field name="schedule_type" position="attributes">
+                <attribute name="class">o_sh_pill_cell</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- work schedule form: new look; schedule type side by side (fields unchanged) -->
+    <record id="resource_calendar_form_steelhouse" model="ir.ui.view">
+        <field name="name">resource.calendar.form.steelhouse</field>
+        <field name="model">resource.calendar</field>
+        <field name="inherit_id" ref="resource.resource_calendar_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_cal_form</attribute>
+            </xpath>
+            <field name="schedule_type" position="attributes">
+                <attribute name="options">{'horizontal': true}</attribute>
+            </field>
+        </field>
+    </record>
 </odoo>

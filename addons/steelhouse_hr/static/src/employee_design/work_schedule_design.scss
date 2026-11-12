@@ -1,0 +1,354 @@
+// Configuration > Work schedules: list and form in the new look. Look only - schedule data unchanged.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+$sh-blue: #2f6fd6;
+$sh-blue-soft: #e8f0fe;
+
+.o_action:has(.o_sh_cal_list, .o_sh_cal_form) .o_content {
+    background-color: $sh-page;
+}
+
+// ---------- list
+.o_sh_cal_list {
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+    td.o_sh_type_cell::before {
+        content: "\f017";
+    }
+    td[name="name"] {
+        color: $sh-text;
+    }
+    // rate: plum bar, bold number
+    .o_progressbar {
+        .o_progress {
+            height: 8px;
+            border-radius: 999px;
+            background-color: #efe9ee;
+        }
+        .bg-primary {
+            border-radius: 999px;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5) !important;
+        }
+        .o_progressbar_value {
+            font-weight: 600;
+            color: $sh-plum;
+        }
+    }
+    td.o_sh_pill_cell > span {
+        display: inline-block;
+        padding: 3px 12px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 600;
+        color: $sh-blue;
+        background-color: $sh-blue-soft;
+    }
+}
+
+// ---------- form
+.o_sh_cal_form {
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbf3f7 0, #fff 120px);
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // title: plum clock badge + name, thin line below
+    .oe_title {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin: 4px -16px 18px;
+        padding: 0 16px 18px;
+        border-bottom: 1px solid $sh-line;
+
+        &::before {
+            content: "\f017";
+            flex: 0 0 56px;
+            height: 56px;
+            border-radius: 16px;
+            font-family: FontAwesome;
+            font-size: 24px;
+            line-height: 56px;
+            text-align: center;
+            color: #fff;
+            background-color: $sh-plum;
+            box-shadow: 0 6px 16px rgba(113, 75, 103, 0.3);
+        }
+        h1 {
+            flex: 1 1 auto;
+            margin: 0;
+        }
+        h1 input {
+            font-weight: 700;
+        }
+    }
+
+    .o_inner_group .o_form_label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $sh-text;
+    }
+
+    // schedule type: segmented control
+    .o_field_widget[name="schedule_type"] {
+        [role="radiogroup"],
+        > div {
+            display: inline-flex !important;
+            gap: 4px;
+            padding: 4px;
+            border-radius: 12px;
+            background-color: #f4f1f4;
+        }
+        .o_radio_item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 !important;
+            padding: 6px 14px !important;
+            border-radius: 9px;
+
+            .o_radio_input {
+                float: none;
+                margin: 0 !important;
+            }
+            .o_radio_input:checked {
+                border-color: $sh-plum;
+                background-color: $sh-plum;
+            }
+            &:has(.o_radio_input:checked) {
+                background-color: #fff;
+                box-shadow: 0 1px 4px rgba(40, 20, 40, 0.12);
+            }
+        }
+    }
+
+    // "hours per day" / "2 weeks" checkbox-buttons shown as switches
+    button[name="switch_based_on_duration"],
+    button[name="switch_calendar_type"] {
+        position: relative;
+        width: 2.6em;
+        height: 1.4em;
+        padding: 0 !important;
+        border: 1px solid #d9d3d8 !important;
+        border-radius: 999px !important;
+        background-color: #e9e5e8;
+
+        > i {
+            visibility: hidden;
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 2px;
+            width: 1.05em;
+            height: 1.05em;
+            border-radius: 50%;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+            transform: translateY(-50%);
+            transition: left 0.15s;
+        }
+        &:has(.fa-check-square) {
+            border-color: $sh-plum !important;
+            background-color: $sh-plum;
+
+            &::after {
+                left: calc(100% - 1.05em - 2px);
+            }
+        }
+    }
+
+    // hours and rate: filled boxes with bold plum numbers; units as soft pills
+    .o_field_widget:is([name="full_time_required_hours"], [name="work_time_rate"], [name="hours_per_day"], [name="hours_per_week"]) input {
+        width: 80px !important;
+        padding: 7px 8px;
+        border: 1px solid $sh-line !important;
+        border-radius: 10px;
+        font-weight: 700;
+        text-align: center;
+        color: $sh-plum;
+        background-color: #f6f3f6;
+    }
+    [name="resource_working_hours"] .o_cell > div,
+    [name="flex_details"] .o_cell > div {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        > span {
+            margin: 0 !important;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // company: grey pill; time zone: blue pill
+    .o_field_widget[name="company_id"] input {
+        width: auto;
+        padding: 5px 14px;
+        border: 0 !important;
+        border-radius: 999px;
+        font-weight: 600;
+        background-color: #f1eef1;
+    }
+    .o_field_widget[name="tz"] select {
+        width: auto;
+        padding: 4px 28px 4px 14px;
+        border: 0 !important;
+        border-radius: 999px;
+        font-weight: 600;
+        color: $sh-blue;
+        background-color: $sh-blue-soft;
+    }
+
+    // tabs
+    .o_notebook .nav-tabs {
+        border-bottom: 1px solid $sh-line;
+
+        .nav-link {
+            padding: 8px 16px;
+            border: 0 !important;
+            border-radius: 10px 10px 0 0;
+            color: $sh-muted;
+
+            &.active {
+                font-weight: 600;
+                color: $sh-plum;
+                background-color: $sh-plum-soft;
+                box-shadow: inset 0 -2px 0 $sh-plum;
+            }
+        }
+    }
+
+    // average / total per tab: small soft pills side by side
+    .tab-pane > .o_group:first-child,
+    .tab-pane > .o_inner_group:first-child {
+        display: flex !important;
+        gap: 10px;
+        margin-bottom: 12px;
+
+        > .o_inner_group,
+        > div {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            width: auto !important;
+            padding: 6px 14px;
+            border: 1px solid $sh-line;
+            border-radius: 10px;
+            background-color: #faf8fa;
+
+            .o_form_label {
+                font-size: 12px;
+                color: $sh-muted;
+            }
+            .o_field_widget input,
+            .o_field_widget span {
+                width: auto !important;
+                padding: 0;
+                border: 0 !important;
+                background: none;
+                font-weight: 700;
+                color: $sh-text;
+            }
+        }
+    }
+
+    // working hours table: rounded box, light header, pills for day and period
+    .o_field_widget[name^="attendance_ids"] {
+        .o_list_renderer {
+            overflow: hidden;
+            border: 1px solid $sh-line;
+            border-radius: 14px;
+        }
+        thead th {
+            font-size: 12px;
+            font-weight: 500;
+            color: $sh-muted;
+            background-color: #faf8fa;
+        }
+        td[name="dayofweek"] > span {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            background-color: #f1eef1;
+        }
+        td[name="day_period"] span[raw-value] {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 2px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+
+            &::before {
+                content: "";
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background-color: currentColor;
+            }
+        }
+        span[raw-value="morning"] {
+            color: $sh-blue;
+            background-color: $sh-blue-soft;
+        }
+        span[raw-value="lunch"] {
+            color: #b26a00;
+            background-color: #fff4e0;
+        }
+        span[raw-value="afternoon"] {
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        span[raw-value="full_day"] {
+            color: #1f8a57;
+            background-color: #e8f7ee;
+        }
+        td[name="hour_from"],
+        td[name="hour_to"],
+        td[name="duration_days"] {
+            font-weight: 700;
+        }
+        .o_field_x2many_list_row_add a {
+            display: inline-block;
+            padding: 5px 14px;
+            border: 1px dashed #d9c6d3;
+            border-radius: 10px;
+            font-weight: 600;
+            color: $sh-plum;
+        }
+        td.o_handle_cell {
+            color: #c9c1c7;
+        }
+    }
+}
