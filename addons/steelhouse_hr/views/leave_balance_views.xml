@@ -81,6 +81,10 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_hr_leave_allocation_form</attribute>
             </xpath>
+            <!-- request from the calendar card: only types employees may ask days for (compensatory days) -->
+            <xpath expr="//field[@name='holiday_status_id']" position="attributes">
+                <attribute name="domain">[('employee_requests', '=', True), ('requires_allocation', '=', True)]</attribute>
+            </xpath>
         </field>
     </record>
 </odoo>

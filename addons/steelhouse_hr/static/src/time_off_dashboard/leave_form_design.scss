@@ -156,10 +156,31 @@ $sh-green-soft: #e8f7ee;
         background-color: $sh-green-soft;
     }
 
+    // number of requested days and its unit ("დღე") side by side
+    div[name="duration_display"] {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        > span {
+            margin: 0 !important;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+    .o_field_widget[name="number_of_days_display"],
+    .o_field_widget[name="number_of_hours_display"] {
+        width: 96px !important;
+        flex: 0 0 96px;
+    }
+
     // number of requested days: big, centred, plum
     .o_field_widget[name="number_of_days_display"] input,
     .o_field_widget[name="number_of_hours_display"] input {
-        min-width: 80px;
+        width: 100%;
         padding: 10px 12px;
         font-size: 18px;
         font-weight: 700;
