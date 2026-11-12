@@ -251,8 +251,9 @@ $sh-green-soft: #e8f7ee;
     }
 }
 
-// ---------- dropdown lists of these forms (the list is rendered inside the field)
-:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--dropdown-menu {
+// ---------- dropdown lists: every field list of the forms above and of the whole Time Off app
+:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--dropdown-menu,
+body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-autocomplete--dropdown-menu {
     padding: 8px;
     border: 0;
     border-radius: 14px;
@@ -383,5 +384,31 @@ $sh-green-soft: #e8f7ee;
             color: $sh-plum;
             background-color: $sh-plum-soft;
         }
+    }
+}
+
+// ---------- menus of the Time Off app (Measures, Year / Month, filters, ...): same rounded card
+body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-dropdown--menu {
+    padding: 8px;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(40, 20, 40, 0.16);
+
+    .dropdown-item,
+    .o_menu_item {
+        margin: 1px 0;
+        padding: 8px 12px;
+        border-radius: 10px;
+
+        &:hover,
+        &.focus,
+        &.active,
+        &.selected {
+            color: inherit;
+            background-color: $sh-plum-soft;
+        }
+    }
+    .dropdown-divider {
+        border-top-style: dashed;
     }
 }
