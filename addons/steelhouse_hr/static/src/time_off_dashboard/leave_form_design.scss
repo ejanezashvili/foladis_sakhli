@@ -343,31 +343,6 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
         background-color: #e8f0fe;
     }
 
-    // allocation type: two option cards, the chosen one in plum
-    .o_field_widget[name="allocation_type"] .o_field_radio,
-    .o_field_radio[name="allocation_type"],
-    .o_field_widget[name="allocation_type"] > div {
-        display: flex;
-        gap: 10px;
-    }
-    .o_field_widget[name="allocation_type"] .o_radio_item {
-        flex: 1 1 0;
-        margin: 0 !important;
-        padding: 10px 14px;
-        border: 1px solid $sh-field-border;
-        border-radius: 10px;
-        background-color: $sh-field-bg;
-
-        &:has(input:checked) {
-            border-color: $sh-plum;
-            background-color: $sh-plum-soft;
-        }
-        label {
-            font-weight: 600;
-            color: #2b2430;
-        }
-    }
-
     // validity: date boxes centred, arrow in a small plum circle
     div[name="validity"] {
         gap: 10px;
@@ -601,6 +576,62 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
         img {
             width: 40px;
             height: 40px;
+        }
+    }
+}
+
+// ---------- allocation forms (single and group): "allocation type" options as cards,
+// radio and text on one line, the chosen one in plum
+.o_hr_leave_allocation_form .o_field_widget[name="allocation_type"] {
+    > div,
+    .o_field_radio {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+    .o_radio_item {
+        display: flex !important;
+        align-items: center;
+        gap: 10px;
+        margin: 0 !important;
+        padding: 9px 14px !important;
+        border: 1px solid $sh-field-border;
+        border-radius: 10px;
+        background-color: $sh-field-bg;
+        cursor: pointer;
+
+        .o_radio_input {
+            flex: 0 0 auto;
+            float: none !important;
+            width: 16px;
+            height: 16px;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 1px solid #c9c1c7 !important;
+            border-radius: 50% !important;
+            background-color: #fff;
+        }
+        .o_radio_input:checked {
+            border-color: $sh-plum !important;
+            background-color: $sh-plum;
+            box-shadow: inset 0 0 0 3px #fff;
+        }
+        label {
+            margin: 0;
+            font-weight: 500;
+            color: #2b2430;
+            cursor: pointer;
+        }
+
+        &:has(.o_radio_input:checked) {
+            border-color: $sh-plum;
+            background-color: $sh-plum-soft;
+
+            label {
+                font-weight: 700;
+                color: $sh-plum;
+            }
         }
     }
 }
