@@ -12,6 +12,10 @@
             <field name="notification_type" position="after">
                 <field name="sh_notification_channel" widget="radio" readonly="0"/>
             </field>
+            <!-- new look of "My preferences" (style only) -->
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_prefs_form</attribute>
+            </xpath>
         </field>
     </record>
 
