@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse Task Flow',
-    'version': '19.0.1.51.0',
+    'version': '19.0.1.54.0',
     'category': 'Services/Project',
     'summary': 'ფოლადის სახლი: სტადია-სტატუსი, მიზეზები, შემმოწმებელი, მტკიცებულება',
     'description': """
@@ -32,6 +32,7 @@
             'steelhouse_task_flow/static/src/sh_picker/*',
             'steelhouse_task_flow/static/src/stage_dialogs/*',
             'steelhouse_task_flow/static/src/task_steps/*',
+            'steelhouse_task_flow/static/src/task_chain/*',
         ],
     },
     'installable': True,

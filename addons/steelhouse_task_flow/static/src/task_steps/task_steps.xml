@@ -4,7 +4,7 @@
         <div class="o_sh_user_picker position-relative">
             <div class="d-flex align-items-center">
                 <img t-if="current" t-att-src="avatar(current.id)" class="rounded me-2 o_sh_avatar"/>
-                <input type="text" class="o_sh_user_input" placeholder="აირჩიეთ..."
+                <input type="text" class="o_sh_user_input" t-att-placeholder="props.placeholder or 'აირჩიეთ...'"
                        t-att-value="current ? current.name : ''"
                        t-on-focus="onFocus" t-on-input="onInput" t-on-blur="onBlur"/>
                 <i class="fa fa-caret-down text-muted ms-1"/>

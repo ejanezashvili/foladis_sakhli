@@ -7,7 +7,7 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 // Search box with avatars, like Odoo's many2one user field
 export class ShUserPicker extends Component {
     static template = "steelhouse_task_flow.ShUserPicker";
-    static props = { users: Array, value: { optional: true }, onChange: Function };
+    static props = { users: Array, value: { optional: true }, onChange: Function, placeholder: { type: String, optional: true } };
 
     setup() {
         this.state = useState({ open: false, term: "", all: false });

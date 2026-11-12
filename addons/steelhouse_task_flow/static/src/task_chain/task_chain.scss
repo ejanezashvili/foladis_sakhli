@@ -1,0 +1,253 @@
+.o_field_sh_task_chain {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    // the wide diagram scrolls inside; it must not widen the form
+    contain: inline-size;
+}
+.o_sh_chain {
+    padding: 4px 0;
+    max-width: 100%;
+    min-width: 0;
+    .o_sh_chain_scroll {
+        overflow-x: auto;
+        max-width: 100%;
+        border: 1px solid #e6e3ef;
+        border-radius: 8px;
+        background: #faf9fc;
+    }
+    .o_sh_chain_canvas {
+        position: relative;
+        min-width: 100%;
+    }
+    .o_sh_chain_svg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        pointer-events: none;
+    }
+    .o_sh_chain_card {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        padding: 8px 10px 10px;
+        background: #fff;
+        border: 1px solid #d9d5e6;
+        border-left: 5px solid #71639e;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        overflow: hidden;
+        &.o_sh_clickable {
+            cursor: pointer;
+            &:hover {
+                box-shadow: 0 3px 10px rgba(113, 99, 158, 0.25);
+            }
+        }
+        &.o_sh_current {
+            border: 2px solid #71639e;
+            border-left: 5px solid #71639e;
+            box-shadow: 0 0 0 3px rgba(113, 99, 158, 0.18);
+        }
+        &.o_sh_status_done {
+            border-left-color: #28a745;
+            .o_sh_chain_status { color: #28a745; }
+        }
+        &.o_sh_status_waiting {
+            border-left-color: #adb5bd;
+            background: #f4f4f6;
+            .o_sh_chain_name, .o_sh_chain_dept { color: #6c757d; }
+            .o_sh_chain_status { color: #6c757d; }
+        }
+        &.o_sh_status_cancelled {
+            border-left-color: #dc3545;
+            opacity: 0.6;
+            .o_sh_chain_name { text-decoration: line-through; }
+            .o_sh_chain_status { color: #dc3545; }
+        }
+        &.o_sh_status_active .o_sh_chain_status {
+            color: #71639e;
+        }
+    }
+    .o_sh_chain_num {
+        color: #71639e;
+        font-weight: 600;
+    }
+    .o_sh_chain_status {
+        font-weight: 600;
+        white-space: nowrap;
+    }
+    .o_sh_chain_name {
+        font-weight: 700;
+        line-height: 1.25;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .o_sh_chain_dept,
+    .o_sh_chain_meta {
+        font-size: 12px;
+        color: #555;
+    }
+    .o_sh_chain_bar {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3px;
+        background: #eee;
+        i {
+            display: block;
+            height: 100%;
+            background: #71639e;
+        }
+    }
+    .o_sh_status_done .o_sh_chain_bar i { background: #28a745; }
+    .o_sh_avatar {
+        width: 20px;
+        height: 20px;
+        object-fit: cover;
+    }
+    .o_sh_chain_empty {
+        padding: 14px;
+        border: 1px dashed #d9d5e6;
+        border-radius: 8px;
+    }
+    .o_sh_chain_side {
+        border: 1px solid #e6e3ef;
+        border-radius: 8px;
+        padding: 10px 12px;
+        height: 100%;
+    }
+    .o_sh_status_icon_done { color: #28a745; }
+    .o_sh_status_icon_waiting { color: #6c757d; }
+    .o_sh_status_icon_active { color: #71639e; }
+    .o_sh_status_icon_cancelled { color: #dc3545; }
+    .o_sh_chain_box {
+        border: 1px solid #cfc8e4;
+        background: #fbfaff;
+        border-radius: 8px;
+        padding: 12px 14px;
+    }
+    .o_sh_chain_result {
+        cursor: pointer;
+        border-radius: 4px;
+        &:hover { background: #ece8f6; }
+    }
+    .o_sh_step_num {
+        position: absolute;
+        top: 12px;
+        width: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: #6c757d;
+        &.o_sh_step_active { color: #71639e; }
+        &.o_sh_step_done { color: #28a745; }
+    }
+    .o_sh_step_circle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #adb5bd;
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+    }
+    .o_sh_step_active .o_sh_step_circle { background: #71639e; }
+    .o_sh_step_done .o_sh_step_circle { background: #28a745; }
+    .o_sh_chain_box .o_sh_step_circle { background: #71639e; }
+    .o_sh_chain_slot {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed #cfc8e4;
+        font-size: 13px;
+        border-radius: 8px;
+        color: #8f86b5;
+        cursor: pointer;
+        font-weight: 600;
+        &:hover {
+            border-color: #71639e;
+            color: #71639e;
+            background: #f3f0fa;
+        }
+    }
+    .o_sh_this {
+        background: #71639e;
+        color: #fff;
+        font-weight: 500;
+    }
+    .o_sh_card_plus {
+        position: absolute;
+        right: 4px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        padding: 0;
+        line-height: 18px;
+        border-radius: 50%;
+        border: 1px solid #cfc8e4;
+        background: #fff;
+        color: #71639e;
+        font-weight: 700;
+        opacity: 0;
+        transition: opacity 0.15s;
+    }
+    .o_sh_chain_card:hover .o_sh_card_plus { opacity: 1; }
+    .o_sh_edge_x {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        padding: 0;
+        line-height: 15px;
+        border-radius: 50%;
+        border: 1px solid #d9d5e6;
+        background: #fff;
+        color: #999;
+        font-size: 13px;
+        opacity: 0.35;
+        &:hover {
+            opacity: 1;
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+    }
+    .o_sh_chain_chip {
+        background: #ece8f6;
+        color: #3d3263;
+        font-weight: 500;
+        padding: 3px 10px 3px 3px;
+        .o_sh_chip_x { cursor: pointer; opacity: 0.6; &:hover { opacity: 1; } }
+    }
+    // user picker (same as in the sub-tasks tab)
+    .o_sh_user_picker {
+        .o_sh_avatar {
+            width: 22px;
+            height: 22px;
+        }
+        .o_sh_user_input {
+            border: 0;
+            background: transparent;
+            width: 100%;
+            padding: 0;
+            &:focus { outline: none; }
+        }
+        .o_sh_user_menu {
+            top: 100%;
+            left: 0;
+            min-width: 280px;
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 1050;
+        }
+    }
+}
