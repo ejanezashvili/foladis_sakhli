@@ -1,0 +1,236 @@
+// Employees > Configuration > Settings: white rounded cards per setting, switches on the right,
+// options as cards, apps list on the left as a card. Look only - no setting is changed.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+$sh-blue: #2f6fd6;
+
+body:has(.o_menu_brand[data-menu-xmlid="hr.menu_hr_root"]) {
+    // save / discard
+    .o_control_panel:has(+ .o_content .o_setting_container),
+    .o_action:has(.o_setting_container) .o_control_panel {
+        .o_form_button_save {
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(113, 75, 103, 0.25);
+        }
+        .o_form_button_cancel {
+            border: 1px solid $sh-line;
+            border-radius: 10px;
+            background-color: #fff;
+        }
+    }
+
+    .o_setting_container {
+        background-color: $sh-page;
+
+        // apps on the left: a card; the chosen one in soft plum with a plum mark
+        .settings_tab {
+            margin: 16px 0 16px 16px;
+            padding: 10px;
+            height: auto !important;
+            border: 0 !important;
+            border-radius: 14px;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(40, 20, 40, 0.07);
+
+            .tab {
+                margin: 2px 0;
+                padding: 9px 12px;
+                border-radius: 10px;
+                color: $sh-text;
+
+                .icon {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 7px;
+                    background-color: #f4f1f4 !important;
+                    background-size: 16px !important;
+                }
+                &:hover {
+                    background-color: #faf7f9;
+                }
+                &.selected {
+                    font-weight: 600;
+                    background-color: $sh-plum-soft;
+                    box-shadow: inset 3px 0 0 $sh-plum;
+                }
+            }
+        }
+
+        .settings {
+            background-color: $sh-page;
+        }
+        .app_settings_block {
+            padding: 4px 12px 24px;
+        }
+
+        // section titles with a small icon box
+        .app_settings_block h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 18px 0 8px;
+            padding: 0;
+            border: 0;
+            font-size: 15px;
+            font-weight: 700;
+            color: $sh-text;
+            background: none;
+
+            &::before {
+                content: "\f1de";
+                flex: 0 0 28px;
+                height: 28px;
+                border-radius: 8px;
+                font-family: FontAwesome;
+                font-size: 13px;
+                font-weight: normal;
+                line-height: 28px;
+                text-align: center;
+                color: $sh-plum;
+                background-color: $sh-plum-soft;
+            }
+        }
+
+        .o_settings_container {
+            row-gap: 14px;
+            margin-top: 6px !important;
+        }
+
+        // every setting: white rounded card, switch on the right
+        .o_setting_box {
+            position: relative;
+            display: flex;
+            margin: 0 !important;
+            padding: 0 7px !important;
+
+            > .o_setting_left_pane,
+            > .o_setting_right_pane {
+                background-color: #fff;
+            }
+            > .o_setting_right_pane {
+                flex: 1 1 auto;
+                margin: 0 !important;
+                padding: 16px 64px 16px 18px !important;
+                border: 0 !important;
+                border-radius: 14px;
+                box-shadow: 0 2px 10px rgba(40, 20, 40, 0.07);
+
+                > .o_form_label,
+                > label.o_form_label {
+                    font-size: 14px;
+                    font-weight: 700;
+                    color: $sh-text;
+                }
+                > .text-muted {
+                    margin-top: 2px;
+                    font-size: 12.5px;
+                    color: $sh-muted !important;
+                }
+            }
+            > .o_setting_left_pane {
+                position: absolute;
+                top: 16px;
+                right: 26px;
+                z-index: 1;
+                width: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: none;
+
+                // checkbox shown as a plum switch
+                .form-check-input {
+                    width: 2.6em;
+                    height: 1.4em;
+                    margin: 0;
+                    border-radius: 999px;
+                    border-color: #d9d3d8;
+                    background-color: #e9e5e8;
+                    background-image: radial-gradient(circle, #fff 45%, transparent 47%);
+                    background-position: left center;
+                    background-size: 1.4em 1.4em;
+                    background-repeat: no-repeat;
+                    transition: background-position 0.15s;
+                    cursor: pointer;
+
+                    &:checked {
+                        border-color: $sh-plum;
+                        background-color: $sh-plum;
+                        background-position: right center;
+                    }
+                }
+            }
+            // a setting without a switch: no empty space on the right
+            &:not(:has(> .o_setting_left_pane .form-check-input)) > .o_setting_right_pane {
+                padding-right: 18px !important;
+            }
+        }
+
+        // options inside a setting: cards, the chosen one in plum
+        .o_setting_right_pane .o_radio_item,
+        .o_setting_right_pane .content-group .form-check {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0 0 !important;
+            padding: 10px 14px !important;
+            border: 1px solid $sh-line;
+            border-radius: 10px;
+            background-color: #f8f6f8;
+
+            .form-check-input {
+                float: none;
+                margin: 0 !important;
+            }
+            &:has(.form-check-input:checked) {
+                border-color: $sh-plum;
+                background-color: $sh-plum-soft;
+            }
+            .form-check-input:checked {
+                border-color: $sh-plum;
+                background-color: $sh-plum;
+            }
+        }
+
+        // fields inside a setting: filled boxes; numbers bold and centred
+        .o_setting_right_pane .o_field_widget {
+            input:not(.form-check-input),
+            select {
+                padding: 8px 12px;
+                border: 1px solid transparent !important;
+                border-radius: 10px;
+                background-color: #f4f1f4;
+
+                &:focus {
+                    border-color: $sh-plum !important;
+                    background-color: #fff;
+                }
+            }
+        }
+        .o_setting_right_pane .o_field_integer input,
+        .o_setting_right_pane .o_field_float input {
+            width: 100px;
+            font-size: 15px;
+            font-weight: 700;
+            text-align: center;
+        }
+        // work schedule: blue text
+        .o_setting_right_pane .o_field_widget[name="resource_calendar_id"] input {
+            min-width: 240px;
+            font-weight: 600;
+            color: $sh-blue;
+        }
+        // links inside a setting ("→ open"): soft plum square / pill
+        .o_setting_right_pane .btn-link {
+            padding: 6px 10px;
+            border-radius: 10px;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            text-decoration: none;
+        }
+    }
+}
