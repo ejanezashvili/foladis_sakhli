@@ -33,6 +33,7 @@ class ProjectTask(models.Model):
     def write(self, vals):
         if 'date_deadline' in vals:
             vals['sh_overdue_notified'] = False
+            vals['sh_escalated'] = False
         return super().write(vals)
 
     def _sh_overdue_people(self):
@@ -60,3 +61,5 @@ class ProjectTask(models.Model):
                 task.sh_channel_id.sudo().message_post(
                     body=body, message_type='comment', subtype_xmlid='mail.mt_comment')
         tasks.with_context(sh_flow_internal=True).write({'sh_overdue_notified': True})
+        tasks._sh_notify_managers()  # 4.4 reviewers + direct managers; "კრიტიკული" -> escalation at once
+        self._cron_sh_escalate()     # 4.5 others: after 3 working days
