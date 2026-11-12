@@ -157,7 +157,7 @@
             <xpath expr="//t[@name='warning_section']" position="after">
                 <div class="alert alert-secondary mb-0" role="alert" invisible="state != '04_waiting_normal' or not sh_waiting_for">
                     <i class="fa fa-lock me-1"/><b>ელოდება წინა დავალებებს:</b> <field name="sh_waiting_for" readonly="1" class="d-inline"/>
-                    <span class="text-muted"> — აქტიური გახდება მათი შესრულების შემდეგ (ჩანართი „თანმიმდევრობა“).</span>
+                    <span class="text-muted"> - აქტიური გახდება მათი შესრულების შემდეგ (ჩანართი „თანმიმდევრობა“).</span>
                 </div>
                 <div class="alert alert-info mb-0" role="alert" invisible="sh_kind != 'on_hold'">
                     <b>შეჩერებულია:</b> <field name="sh_hold_info" readonly="1" class="d-inline"/>

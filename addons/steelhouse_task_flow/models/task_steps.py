@@ -161,7 +161,7 @@ class ProjectTask(models.Model):
         self.ensure_one()
         section = self.sh_section_ids.filtered(lambda s: s.id == section_id)
         if section.subtask_ids.filtered(lambda t: t.state != '1_canceled'):
-            raise UserError(_("ეტაპში ქვედავალებებია — ჯერ ისინი წაშალეთ."))
+            raise UserError(_("ეტაპში ქვედავალებებია - ჯერ ისინი წაშალეთ."))
         section.unlink()
         return True
 

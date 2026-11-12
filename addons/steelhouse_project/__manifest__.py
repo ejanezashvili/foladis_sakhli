@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse Project',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.0.1',
     'category': 'Services/Project',
     'summary': 'ფოლადის სახლი: დავალებების ნაკადი, შემოწმება, ვადის გადაწევა',
     'description': """

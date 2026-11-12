@@ -45,10 +45,10 @@ class ProjectTask(models.Model):
             prev = task._sh_open_previous()
             if prev:
                 raise UserError(_(
-                    "„%(task)s“ ჯერ ვერ გადავა შემდეგ ეტაპზე — ელოდება წინა დავალებებს:\n%(prev)s",
+                    "„%(task)s“ ჯერ ვერ გადავა შემდეგ ეტაპზე - ელოდება წინა დავალებებს:\n%(prev)s",
                     task=task.name,
                     prev='\n'.join('• %s%s (%s)' % (t.sh_number and t.sh_number + ' ' or '', t.name,
-                                                    t.project_id.name or '—') for t in prev)))
+                                                    t.project_id.name or '-') for t in prev)))
 
     def write(self, vals):
         if vals.get('stage_id') and not self.env.context.get('sh_flow_internal') and not self.env.su:
@@ -73,7 +73,7 @@ class ProjectTask(models.Model):
             partners = (task.user_ids | task.sh_responsible_id).partner_id
             prev = task.depend_on_ids
             body = Markup("🔓 <b>%s</b><br/>%s") % (
-                _("წინა დავალებები შესრულდა — შეგიძლიათ დაიწყოთ."),
+                _("წინა დავალებები შესრულდა - შეგიძლიათ დაიწყოთ."),
                 ', '.join('%s%s' % (t.sh_number and t.sh_number + ' ' or '', t.name) for t in prev))
             task.message_post(body=body, message_type='notification', subtype_xmlid='mail.mt_note',
                               partner_ids=partners.ids)

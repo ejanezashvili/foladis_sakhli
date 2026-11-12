@@ -69,13 +69,25 @@
             color: #71639e;
         }
     }
+    .o_sh_chain_card > * {
+        flex-shrink: 0;
+    }
+    .o_sh_chain_head {
+        flex-wrap: nowrap;
+        gap: 6px;
+    }
     .o_sh_chain_num {
         color: #71639e;
         font-weight: 600;
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     .o_sh_chain_status {
         font-weight: 600;
         white-space: nowrap;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .o_sh_chain_name {
         font-weight: 700;

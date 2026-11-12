@@ -8,7 +8,7 @@ import { ShUserPicker } from "../task_steps/task_steps";
 
 // sizes of the step diagram (px)
 const W = 236; // card
-const H = 100;
+const H = 116;
 const GX = 74; // gap between steps (arrows)
 const GY = 18;
 const PAD = 12;
@@ -154,7 +154,7 @@ export class TaskChain extends Component {
         return {
             done: "შესრულდა",
             cancelled: "გაუქმდა",
-            waiting: "ელოდება წინას",
+            waiting: "ელოდება",
             active: node.stage || "აქტიური",
         }[node.status];
     }
@@ -320,7 +320,7 @@ export class TaskChain extends Component {
     unlinkEdge(arrow) {
         this.dialog.add(ConfirmationDialog, {
             title: "დარწმუნებული ხარ?",
-            body: `„${this.nodeName(arrow.from)}“ → „${this.nodeName(arrow.to)}“ — კავშირი მოიხსნება (დავალებები არ წაიშლება).`,
+            body: `„${this.nodeName(arrow.from)}“ → „${this.nodeName(arrow.to)}“ - კავშირი მოიხსნება (დავალებები არ წაიშლება).`,
             confirmLabel: "კი, მოიხსნას",
             cancelLabel: "არა",
             confirm: async () => {

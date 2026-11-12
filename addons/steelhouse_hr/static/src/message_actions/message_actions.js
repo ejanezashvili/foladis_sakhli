@@ -31,7 +31,7 @@ registerMessageAction("sh-activity-done", {
             notification.add("ამ ჩანაწერზე თქვენთვის ღია აქტივობა აღარ არის.", { type: "info" });
             return;
         }
-        const list = acts.map((a) => `• ${a.name}${a.note ? " — " + a.note : ""} (ვადა: ${a.deadline})`).join("\n");
+        const list = acts.map((a) => `• ${a.name}${a.note ? " - " + a.note : ""} (ვადა: ${a.deadline})`).join("\n");
         dialog.add(ConfirmationDialog, {
             title: "შესრულებულად მონიშვნა",
             body: `მოინიშნოს შესრულებულად?\n\n${list}`,

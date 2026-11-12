@@ -201,7 +201,7 @@ class HrLeave(models.Model):
             for user in wanted - kept_users:
                 leave.activity_schedule(
                     'hr_holidays.mail_act_leave_approval', user_id=user.id,
-                    note=_("ახალი მოთხოვნა: %(type)s — %(employee)s",
+                    note=_("ახალი მოთხოვნა: %(type)s - %(employee)s",
                            type=leave.holiday_status_id.name, employee=leave.employee_id.name))
 
     @api.model
@@ -273,7 +273,7 @@ class HrLeave(models.Model):
     def _steelhouse_notify_deputies(self, event):
         titles = {
             'approved': _("თქვენ ხართ შემცვლელი შვებულების დროს"),
-            'cancelled': _("შვებულება გაუქმდა — შემცვლელობა აღარ არის საჭირო"),
+            'cancelled': _("შვებულება გაუქმდა - შემცვლელობა აღარ არის საჭირო"),
         }
         for leave in self:
             period = "%s – %s" % (

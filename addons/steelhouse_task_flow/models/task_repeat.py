@@ -21,7 +21,7 @@ class ProjectTask(models.Model):
     ], string='ერთეული', default='week', copy=False)
     sh_repeat_start = fields.Date(
         'ციკლის დაწყება', copy=False, tracking=True, default=fields.Date.context_today,
-        help="საიდან დაიწყოს ათვლა (ნაგულისხმევად — დღევანდელი დღე). ცარიელი — დავალების შექმნის დღიდან.")
+        help="საიდან დაიწყოს ათვლა (ნაგულისხმევად - დღევანდელი დღე). ცარიელი - დავალების შექმნის დღიდან.")
 
     @api.onchange('sh_repeat')
     def _onchange_sh_repeat_start(self):

@@ -56,11 +56,11 @@ class ProjectTask(models.Model):
     def _sh_fmt(self, fname, value):
         field = self._fields[fname]
         if value in (False, None, '') or (hasattr(value, '_name') and not value):
-            return '—'
+            return '-'
         if field.type == 'many2one':
             return value.display_name
         if field.type in ('many2many', 'one2many'):
-            return ', '.join(value.mapped('display_name')) or '—'
+            return ', '.join(value.mapped('display_name')) or '-'
         if field.type == 'selection':
             return dict(field._description_selection(self.env)).get(value, value)
         if field.type == 'date':
@@ -140,31 +140,31 @@ class ProjectTask(models.Model):
         old = section.name
         res = super().sh_steps_rename_section(section_id, name)
         if (old or '') != (name or '').strip():
-            self._sh_step_log(Markup('ეტაპის სახელი: <span style="color:#999;text-decoration:line-through">%s</span> → <b>%s</b>') % (old or '—', (name or '').strip() or '—'))
+            self._sh_step_log(Markup('ეტაპის სახელი: <span style="color:#999;text-decoration:line-through">%s</span> → <b>%s</b>') % (old or '-', (name or '').strip() or '-'))
         return res
 
     def sh_steps_write_section(self, section_id, vals):
         section = self.sh_section_ids.filtered(lambda s: s.id == section_id)
         old_user, old_date = section.user_id, section.date_deadline
         res = super().sh_steps_write_section(section_id, vals)
-        label = section.name or '—'
+        label = section.name or '-'
         if 'user_id' in vals and section.user_id != old_user:
-            self._sh_step_log(Markup('„%s“ — პასუხისმგებელი: %s → <b>%s</b>') % (label, old_user.name or '—', section.user_id.name or '—'))
+            self._sh_step_log(Markup('„%s“ - პასუხისმგებელი: %s → <b>%s</b>') % (label, old_user.name or '-', section.user_id.name or '-'))
         if 'deadline' in vals and section.date_deadline != old_date:
-            fmt = lambda d: d.strftime('%d.%m.%Y') if d else '—'
-            self._sh_step_log(Markup('„%s“ — ვადა: %s → <b>%s</b>') % (label, fmt(old_date), fmt(section.date_deadline)))
+            fmt = lambda d: d.strftime('%d.%m.%Y') if d else '-'
+            self._sh_step_log(Markup('„%s“ - ვადა: %s → <b>%s</b>') % (label, fmt(old_date), fmt(section.date_deadline)))
         return res
 
     def sh_steps_delete_section(self, section_id):
         name = self.sh_section_ids.filtered(lambda s: s.id == section_id).name
         res = super().sh_steps_delete_section(section_id)
-        self._sh_step_log(Markup('წაიშალა ეტაპი: <b>%s</b>') % (name or '—'))
+        self._sh_step_log(Markup('წაიშალა ეტაპი: <b>%s</b>') % (name or '-'))
         return res
 
     def sh_steps_add_item(self, section_id):
         res = super().sh_steps_add_item(section_id)
         section = self.env['steelhouse.task.section'].browse(section_id)
-        self._sh_step_log(Markup('„%s“ — დაემატა ქვედავალება') % (section.name or '—'))
+        self._sh_step_log(Markup('„%s“ - დაემატა ქვედავალება') % (section.name or '-'))
         return res
 
     def sh_steps_write_item(self, sub_id, vals):
@@ -175,10 +175,10 @@ class ProjectTask(models.Model):
         if 'name' in vals and sub.name != old['name']:
             self._sh_step_log(Markup('ქვედავალება: %s → <b>%s</b>') % (old['name'], sub.name))
         if 'user_id' in vals and sub.user_ids[:1].name != old['user']:
-            self._sh_step_log(Markup('„%s“ — შემსრულებელი: %s → <b>%s</b>') % (sub.name, old['user'] or '—', sub.user_ids[:1].name or '—'))
+            self._sh_step_log(Markup('„%s“ - შემსრულებელი: %s → <b>%s</b>') % (sub.name, old['user'] or '-', sub.user_ids[:1].name or '-'))
         if 'deadline' in vals and sub.date_deadline != old['date']:
-            fmt = lambda d: fields.Datetime.context_timestamp(self, d).strftime('%d.%m.%Y') if d else '—'
-            self._sh_step_log(Markup('„%s“ — ვადა: %s → <b>%s</b>') % (sub.name, fmt(old['date']), fmt(sub.date_deadline)))
+            fmt = lambda d: fields.Datetime.context_timestamp(self, d).strftime('%d.%m.%Y') if d else '-'
+            self._sh_step_log(Markup('„%s“ - ვადა: %s → <b>%s</b>') % (sub.name, fmt(old['date']), fmt(sub.date_deadline)))
         return res
 
     def sh_steps_toggle(self, sub_id, done):

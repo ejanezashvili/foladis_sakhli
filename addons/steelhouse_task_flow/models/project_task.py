@@ -64,7 +64,7 @@ class ProjectTask(models.Model):
     reviewer_ids = fields.Many2many(
         'res.users', 'sh_task_reviewer_rel', 'task_id', 'user_id', string='შემმოწმებლები',
         tracking=True, default=lambda self: self.env.user, domain="[('share', '=', False)]",
-        help="ადასტურებენ შესრულებას (დასრულება), აბრუნებენ ან აუქმებენ დავალებას — ნებისმიერი მათგანი.")
+        help="ადასტურებენ შესრულებას (დასრულება), აბრუნებენ ან აუქმებენ დავალებას - ნებისმიერი მათგანი.")
     # first reviewer, kept for compatibility (reports, older automation code)
     reviewer_id = fields.Many2one(
         'res.users', string='შემმოწმებელი', compute='_compute_reviewer_id', store=True, index=True)
@@ -89,7 +89,7 @@ class ProjectTask(models.Model):
                 parts.append(_("შეჩერდა: %s", task.hold_date.strftime('%d.%m.%Y')))
             if task.resume_date:
                 parts.append(_("განახლება: %s", task.resume_date.strftime('%d.%m.%Y')))
-            task.sh_hold_info = ' — '.join(p for p in parts if p)
+            task.sh_hold_info = ' - '.join(p for p in parts if p)
     resume_date = fields.Date('განახლების თარიღი', copy=False, tracking=True)
     return_reason = fields.Text('დაბრუნების მიზეზი', copy=False, tracking=True)
     cancel_reason = fields.Text('გაუქმების მიზეზი', copy=False, tracking=True)
@@ -114,7 +114,7 @@ class ProjectTask(models.Model):
     sh_progress = fields.Integer(
         'პროგრესი (%)', compute='_compute_sh_progress', store=True,
         help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებების, საკონტროლო სიისა და "
-             "ხელით პროგრესის საშუალო; თუ არცერთი არ არის — სტადიით. „შემოწმებაზე“ — მინიმუმ 90%.")
+             "ხელით პროგრესის საშუალო; თუ არცერთი არ არის - სტადიით. „შემოწმებაზე“ - მინიმუმ 90%.")
 
     # ------------------------------------------------------------------
     # Automatic progress (requirement 3.3)
@@ -195,7 +195,7 @@ class ProjectTask(models.Model):
     def _sh_prop_display(prop):
         value = prop.get('value')
         if value in (False, None, '', []):
-            return '—'
+            return '-'
         ptype = prop.get('type')
         if ptype == 'many2one':
             return value[1] if isinstance(value, (list, tuple)) else str(value)
@@ -226,7 +226,7 @@ class ProjectTask(models.Model):
             old, new = before.get(task.id, {}), after.get(task.id, {})
             lines = []
             for key, (label, value) in new.items():
-                old_value = old.get(key, (label, '—'))[1]
+                old_value = old.get(key, (label, '-'))[1]
                 if old_value != value:
                     lines.append(Markup("<li>%s: %s → <b>%s</b></li>") % (label, old_value, value))
             if lines:
@@ -252,7 +252,7 @@ class ProjectTask(models.Model):
                     if kind in REVIEWER_KINDS:
                         self._sh_check_reviewer(kind)
                     if len(self) != 1 or self.env.su:
-                        raise UserError(_("ამ სტადიაზე გადასაყვანად საჭიროა მიზეზი — გადაიყვანეთ თითო დავალება."))
+                        raise UserError(_("ამ სტადიაზე გადასაყვანად საჭიროა მიზეზი - გადაიყვანეთ თითო დავალება."))
                     labels = {'on_hold': _("შეჩერებისთვის მიუთითეთ მიზეზი და განახლების თარიღი."),
                               'returned': _("დაბრუნებისთვის მიუთითეთ მიზეზი."),
                               'cancelled': _("გაუქმებისთვის მიუთითეთ მიზეზი.")}
@@ -271,14 +271,14 @@ class ProjectTask(models.Model):
                         _("დასრულებამდე შეავსეთ „საბოლოო პროექტი“: აღწერა და ფოტოები/ფაილები (არასავალდებულო)."),
                         self.env.ref('steelhouse_task_flow.action_sh_task_final_wizard').id, _("გაგრძელება"),
                         {'default_task_id': self.id, 'default_note': self.sh_final_note or False})
-                # evidence (3.4) is now collected in the "საბოლოო პროექტი" dialog — no blocking check here
+                # evidence (3.4) is now collected in the "საბოლოო პროექტი" dialog - no blocking check here
                 if 'state' not in vals:
                     vals['state'] = KIND_STATE.get(kind, '01_in_progress')
         elif vals.get('state') in CLOSED:
             # Status set directly (status button): same rules, then move to the matching stage.
             kind = 'done' if vals['state'] == '1_done' else 'cancelled'
             if kind == 'cancelled' and not self.env.context.get('sh_reason_given'):
-                raise UserError(_("გასაუქმებლად გამოიყენეთ ღილაკი „გაუქმება“ — საჭიროა მიზეზი."))
+                raise UserError(_("გასაუქმებლად გამოიყენეთ ღილაკი „გაუქმება“ - საჭიროა მიზეზი."))
             self._sh_check_reviewer(kind)
         # leaving "შეჩერებული": the actual resume date is today
         resumed = self.browse()
@@ -335,7 +335,7 @@ class ProjectTask(models.Model):
             if user not in task.user_ids:
                 raise UserError(_(
                     "დავალების მიღება შეუძლია მხოლოდ შემსრულებელს (%s) ან ადმინს.",
-                    ', '.join(task.user_ids.mapped('name')) or '—'))
+                    ', '.join(task.user_ids.mapped('name')) or '-'))
 
     def action_sh_accept(self):
         """Assignee confirms they accept the task: ახალი -> მიღებული."""

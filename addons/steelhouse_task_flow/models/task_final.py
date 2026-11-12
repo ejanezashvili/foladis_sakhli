@@ -30,7 +30,7 @@ class ProjectTask(models.Model):
         self.ensure_one()
         return {
             'type': 'ir.actions.act_window',
-            'name': _('საბოლოო პროექტი — %s', self.name),
+            'name': _('საბოლოო პროექტი - %s', self.name),
             'res_model': 'steelhouse.task.final.wizard',
             'view_mode': 'form',
             'target': 'new',

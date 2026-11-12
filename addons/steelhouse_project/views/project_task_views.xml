@@ -31,14 +31,14 @@
 
             <xpath expr="//t[@name='warning_section']" position="after">
                 <div class="alert alert-warning mb-0" role="alert" invisible="not has_pending_extension">
-                    ვადის გადაწევის მოთხოვნა განსახილველია — იხ. ჩანართი „ვადა და შემოწმება“.
+                    ვადის გადაწევის მოთხოვნა განსახილველია - იხ. ჩანართი „ვადა და შემოწმება“.
                 </div>
                 <div class="alert alert-danger mb-0" role="alert" invisible="sh_stage_key != 'returned'">
                     <b>დაბრუნდა შესასწორებლად:</b> <field name="last_return_reason" readonly="1" class="d-inline"/>
                 </div>
                 <div class="alert alert-info mb-0" role="alert" invisible="sh_stage_key != 'on_hold'">
                     <b>შეჩერებულია:</b> <field name="hold_reason" readonly="1" class="d-inline"/>
-                    <span invisible="not resume_date"> — განახლება: <field name="resume_date" readonly="1" class="d-inline"/></span>
+                    <span invisible="not resume_date"> - განახლება: <field name="resume_date" readonly="1" class="d-inline"/></span>
                 </div>
             </xpath>
 

@@ -54,7 +54,7 @@
                              t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '')"
                              t-att-style="cardStyle(node)" t-on-click="() => this.openTask(node)"
                              t-att-title="node.current ? '' : 'გახსნა'">
-                            <div class="d-flex justify-content-between align-items-center small">
+                            <div class="o_sh_chain_head d-flex justify-content-between align-items-center small">
                                 <span class="o_sh_chain_num" t-esc="node.number"/>
                                 <span class="o_sh_chain_status">
                                     <i t-att-class="'fa me-1 ' + statusIcon(node)" t-att-title="statusLabel(node)"/><t t-esc="statusLabel(node)"/>
@@ -85,7 +85,7 @@
                 <!-- link an existing task -->
                 <div t-if="state.link" class="o_sh_chain_box mt-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <b>ნაბიჯი <t t-esc="state.link.step"/> — არსებული დავალება</b>
+                        <b>ნაბიჯი <t t-esc="state.link.step"/> - არსებული დავალება</b>
                         <button class="btn-close" title="დახურვა" t-on-click="() => this.state.link = null"/>
                     </div>
                     <input type="text" class="form-control form-control-sm mb-2" placeholder="ძიება სახელით ან ნომრით..."
@@ -102,7 +102,7 @@
                 <div t-if="state.form" class="o_sh_chain_box mt-3">
                     <t t-set="f" t-value="state.form"/>
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <b>ნაბიჯი <t t-esc="f.step"/> — ახალი დავალება</b>
+                        <b>ნაბიჯი <t t-esc="f.step"/> - ახალი დავალება</b>
                         <div class="d-flex align-items-center gap-3">
                             <a href="#" class="small text-muted" t-on-click.prevent="openLinkFromForm">არსებულის არჩევა</a>
                             <button class="btn-close" title="დახურვა" t-on-click="cancelForm"/>
@@ -133,7 +133,7 @@
                     <div class="small mt-2">
                         <span class="text-muted me-1">შემმოწმებელი:</span>
                         <t t-if="!f.editReviewers">
-                            <b t-esc="f.reviewer_ids.map((id) => this.userName(id)).join(', ') or '—'"/>
+                            <b t-esc="f.reviewer_ids.map((id) => this.userName(id)).join(', ') or '-'"/>
                             · <a href="#" t-on-click.prevent="() => f.editReviewers = true">შეცვლა</a>
                         </t>
                         <div t-else="" class="form-control form-control-sm d-flex flex-wrap align-items-center gap-2 mt-1">
