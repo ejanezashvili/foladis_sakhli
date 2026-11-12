@@ -135,8 +135,8 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_sh_type_form</attribute>
             </xpath>
-            <xpath expr="//field[@name='name']" position="before">
-                <label for="name" class="o_sh_name_label"/>
+            <xpath expr="//label[@for='name']" position="attributes">
+                <attribute name="class">o_sh_name_label</attribute>
             </xpath>
         </field>
     </record>

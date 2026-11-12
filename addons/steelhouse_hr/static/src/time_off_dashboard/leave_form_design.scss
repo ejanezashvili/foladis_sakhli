@@ -527,18 +527,18 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
         color: #2b2430;
     }
 
-    // name: small label above, thin line below
+    // name: small plum label above, thin line below
+    .o_form_label.o_sh_name_label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 12px;
+        color: $sh-plum;
+    }
     .oe_title {
         padding-bottom: 18px;
         margin-bottom: 18px;
         border-bottom: 1px solid $sh-field-border;
 
-        .o_sh_name_label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 12px;
-            color: $sh-plum;
-        }
         .o_field_widget[name="name"] input {
             border-color: transparent !important;
             background-color: #f3f1f4;
