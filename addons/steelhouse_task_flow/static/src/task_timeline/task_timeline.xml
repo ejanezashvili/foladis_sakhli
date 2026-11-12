@@ -2,204 +2,203 @@
 <templates xml:space="preserve">
     <t t-name="steelhouse_task_flow.TaskTimeline">
         <div class="o_action o_sh_tl">
-            <!-- toolbar -->
+            <!-- top: tabs (heads only) + period -->
             <div class="o_sh_tl_bar">
-                <div class="o_sh_tl_tabs">
+                <div t-if="isManager" class="o_sh_tl_tabs">
                     <t t-foreach="VIEWS" t-as="v" t-key="v.key">
                         <button t-att-class="'o_sh_tl_tab' + (state.view === v.key ? ' active' : '')" t-on-click="() => this.setView(v.key)">
                             <i t-att-class="'fa me-1 ' + v.icon"/><t t-esc="v.label"/>
                         </button>
                     </t>
                 </div>
-                <div class="o_sh_tl_title">
-                    <span t-if="state.view === 'timeline' and state.data" class="o_sh_tl_count">
-                        <t t-esc="state.data.total"/> დავალება<t t-if="state.data.overdue">,
-                        <span class="text-danger fw-bold"><t t-esc="state.data.overdue"/> ვადაგადაცილებული</span></t>
-                    </span>
-                </div>
-                <div class="o_sh_tl_nav">
-                    <div class="btn-group">
+                <div class="o_sh_tl_row1">
+                    <div t-if="state.view === 'timeline'" class="btn-group o_sh_tl_scope">
+                        <button t-att-class="'btn ' + (state.scope === 'mine' ? 'btn-primary' : 'btn-outline-primary')"
+                                t-on-click="() => this.setScope('mine')"><i class="fa fa-user me-1"/>ჩემი დავალებები</button>
+                        <button t-if="isManager" t-att-class="'btn ' + (state.scope === 'all' ? 'btn-primary' : 'btn-outline-primary')"
+                                t-on-click="() => this.setScope('all')"><i class="fa fa-users me-1"/>ყველა</button>
+                    </div>
+                    <div class="o_sh_tl_nav">
+                        <button class="btn btn-light" title="წინა" t-on-click="() => this.move(-1)"><i class="fa fa-chevron-left"/></button>
+                        <button class="btn btn-light" t-on-click="goToday">დღეს</button>
+                        <button class="btn btn-light" title="შემდეგი" t-on-click="() => this.move(1)"><i class="fa fa-chevron-right"/></button>
+                        <span class="o_sh_tl_period" t-esc="periodLabel"/>
+                    </div>
+                    <div class="btn-group btn-group-sm o_sh_tl_scale">
                         <t t-foreach="scaleKeys" t-as="sc" t-key="sc">
-                            <button t-att-class="'btn btn-sm ' + (state.scale === sc ? 'btn-primary' : 'btn-outline-secondary')"
+                            <button t-att-class="'btn ' + (state.scale === sc ? 'btn-secondary' : 'btn-outline-secondary')"
                                     t-on-click="() => this.setScale(sc)" t-esc="SCALES[sc].label"/>
                         </t>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-secondary" title="წინა" t-on-click="() => this.move(-1)"><i class="fa fa-chevron-left"/></button>
-                        <button class="btn btn-sm btn-outline-secondary" t-on-click="goToday">დღეს</button>
-                        <button class="btn btn-sm btn-outline-secondary" title="შემდეგი" t-on-click="() => this.move(1)"><i class="fa fa-chevron-right"/></button>
-                    </div>
-                    <span class="o_sh_tl_period" t-esc="periodLabel"/>
-                    <span t-if="state.view !== 'timeline' and state.work" class="o_sh_tl_count">
-                        ღია: <t t-esc="state.work.totals.open"/>,
-                        <span t-att-class="state.work.totals.overdue ? 'text-danger fw-bold' : ''">ვადაგადაცილებული: <t t-esc="state.work.totals.overdue"/></span>,
-                        დასრულდა პერიოდში: <t t-esc="state.work.totals.done"/>
-                    </span>
                 </div>
-                <div class="o_sh_tl_filters">
+                <!-- heads: a few filters, only when looking at everyone -->
+                <div t-if="isManager and (state.view !== 'timeline' or state.scope === 'all') and filterLists" class="o_sh_tl_filters">
                     <select t-if="state.view === 'timeline'" class="form-select form-select-sm" title="დაჯგუფება" t-on-change="(ev) => this.setFilter('groupBy', ev)">
-                        <option value="department" t-att-selected="state.groupBy === 'department'">დეპარტამენტით</option>
-                        <option value="user" t-att-selected="state.groupBy === 'user'">თანამშრომლით</option>
-                        <option value="project" t-att-selected="state.groupBy === 'project'">პროექტით</option>
+                        <option value="department" t-att-selected="state.groupBy === 'department'">დეპარტამენტებით</option>
+                        <option value="user" t-att-selected="state.groupBy === 'user'">თანამშრომლებით</option>
                     </select>
-                    <select t-if="state.view === 'timeline'" class="form-select form-select-sm" title="სტატუსი" t-on-change="(ev) => this.setFilter('status', ev)">
-                        <option value="open" t-att-selected="state.status === 'open'">ღია</option>
-                        <option value="overdue" t-att-selected="state.status === 'overdue'">ვადაგადაცილებული</option>
-                        <option value="done" t-att-selected="state.status === 'done'">დასრულებული</option>
-                        <option value="all" t-att-selected="state.status === 'all'">ყველა</option>
-                    </select>
-                    <select t-if="filterLists" class="form-select form-select-sm" title="დეპარტამენტი" t-on-change="(ev) => this.setFilter('departmentId', ev)">
+                    <select class="form-select form-select-sm" title="დეპარტამენტი" t-on-change="(ev) => this.setFilter('departmentId', ev)">
                         <option value="">ყველა დეპარტამენტი</option>
                         <t t-foreach="filterLists.departments" t-as="d" t-key="d.id">
                             <option t-att-value="d.id" t-att-selected="d.id == state.departmentId" t-esc="d.name"/>
                         </t>
                     </select>
-                    <select t-if="filterLists" class="form-select form-select-sm" title="თანამშრომელი" t-on-change="(ev) => this.setFilter('userId', ev)">
+                    <select class="form-select form-select-sm" title="თანამშრომელი" t-on-change="(ev) => this.setFilter('userId', ev)">
                         <option value="">ყველა თანამშრომელი</option>
                         <t t-foreach="filterLists.users" t-as="u" t-key="u.id">
                             <option t-att-value="u.id" t-att-selected="u.id == state.userId" t-esc="u.name"/>
                         </t>
                     </select>
-                    <input t-if="state.view === 'timeline'" type="search" class="form-control form-control-sm o_sh_tl_search" placeholder="ძებნა (სახელი / ნომერი) + Enter"
-                           t-att-value="state.search" t-on-keydown="onSearchKey"/>
-                    <label class="o_sh_tl_check"><input type="checkbox" t-att-checked="state.subtasks" t-on-change="(ev) => this.setFilter('subtasks', ev)"/> ქვედავალებებიც</label>
                 </div>
             </div>
-            <!-- legend -->
-            <div t-if="state.view !== 'timeline'" class="o_sh_tl_legend">
-                <span><i class="o_sh_tl_sw o_sh_wl_ok"/><t t-esc="state.view === 'team' ? '1-2 ერთ ადამიანზე' : '1-2 დავალება'"/></span>
-                <span><i class="o_sh_tl_sw o_sh_wl_busy"/><t t-esc="state.view === 'team' ? '3-4 ერთ ადამიანზე' : '3-4 დავალება'"/></span>
-                <span><i class="o_sh_tl_sw o_sh_wl_over"/><t t-esc="state.view === 'team' ? '5+ ერთ ადამიანზე' : '5+ (გადატვირთული)'"/></span>
-                <span><i class="o_sh_wl_dot"/>შიგნით ვადაგადაცილებულია</span>
-                <span class="text-muted">უჯრაში: იმ დღეს / კვირაში მიმდინარე ღია დავალებები. დააჭირეთ რიცხვს - გაიხსნება სია.</span>
-            </div>
-            <div t-if="state.view === 'timeline'" class="o_sh_tl_legend">
-                <t t-foreach="['new', 'accepted', 'in_progress', 'on_hold', 'review', 'returned', 'done']" t-as="k" t-key="k">
-                    <span><i t-att-class="'o_sh_tl_sw o_sh_k_' + k"/><t t-esc="KINDS[k]"/></span>
-                </t>
-                <span><i class="o_sh_tl_sw o_sh_tl_sw_late"/>ვადაგადაცილება (დღემდე)</span>
-                <span><i class="o_sh_tl_sw o_sh_tl_sw_open"/>ვადა არ აქვს</span>
-                <span><i class="o_sh_tl_mark_sample"/>ვადა</span>
-                <span t-if="state.data and state.data.groups.length" class="ms-auto">
-                    <a href="#" t-on-click.prevent="() => this.expandAll(true)">ყველას გაშლა</a> ·
-                    <a href="#" t-on-click.prevent="() => this.expandAll(false)">აკეცვა</a>
-                </span>
-            </div>
-            <!-- workload -->
-            <div t-if="state.view !== 'timeline'" class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
-                <table t-if="state.work" class="o_sh_wl_table">
-                    <thead>
-                        <tr>
-                            <th class="o_sh_wl_name"><t t-esc="state.view === 'team' ? 'დეპარტამენტი' : 'თანამშრომელი'"/></th>
-                            <th t-if="state.view === 'team'" class="o_sh_wl_num" title="ადამიანები ამ დავალებებზე"><i class="fa fa-users" title="ადამიანები"/></th>
-                            <th class="o_sh_wl_num">ღია</th>
-                            <th class="o_sh_wl_num" title="ვადაგადაცილებული">ვადაგად.</th>
-                            <th class="o_sh_wl_num" title="ვადა 7 დღეში">7 დღეში</th>
-                            <th class="o_sh_wl_num" title="შემოწმებაზე">შემოწმ.</th>
-                            <th class="o_sh_wl_num" title="დასრულდა არჩეულ პერიოდში">დასრ.</th>
-                            <th t-if="state.view === 'team'" class="o_sh_wl_num" title="ღია დავალება ერთ ადამიანზე">1 კაცზე</th>
-                            <t t-foreach="state.work.cols" t-as="c" t-key="c.key">
-                                <th t-att-class="'o_sh_wl_col' + (c.off ? ' o_sh_wl_off' : '') + (c.today ? ' o_sh_wl_today' : '')"
-                                    t-att-style="'min-width:' + cellW + 'px;width:' + cellW + 'px'" t-esc="c.label"/>
+
+            <!-- ============ TIMELINE ============ -->
+            <t t-if="state.view === 'timeline'">
+                <div class="o_sh_tl_legend">
+                    <span><i class="o_sh_tl_sw o_sh_s_todo"/>არ დაწყებული</span>
+                    <span><i class="o_sh_tl_sw o_sh_s_doing"/>მიმდინარე</span>
+                    <span><i class="o_sh_tl_sw o_sh_s_review"/>შემოწმებაზე</span>
+                    <span><i class="o_sh_tl_sw o_sh_s_done"/>დასრულებული</span>
+                    <span><i class="o_sh_tl_sw o_sh_s_late"/>ვადაგადაცილებული</span>
+                    <label class="o_sh_tl_check ms-auto">
+                        <input type="checkbox" t-att-checked="state.showDone" t-on-change="toggleDone"/> დასრულებულებიც
+                    </label>
+                </div>
+                <div class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
+                    <div t-if="state.data" class="o_sh_tl_grid" t-att-style="'width:' + (LABEL_W + width) + 'px'">
+                        <div class="o_sh_tl_bg" t-att-style="'left:' + LABEL_W + 'px;width:' + width + 'px'">
+                            <t t-foreach="dayCells" t-as="c" t-key="c.key">
+                                <div t-if="c.off" class="o_sh_tl_off" t-att-style="c.style"/>
                             </t>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr t-if="!state.work.rows.length"><td class="o_sh_wl_name text-muted" colspan="8">ამ პერიოდში დავალება არ არის.</td></tr>
-                        <t t-foreach="state.work.rows" t-as="r" t-key="r.key">
+                        </div>
+                        <div class="o_sh_tl_today" t-att-style="todayStyle"/>
+
+                        <div class="o_sh_tl_head">
+                            <div class="o_sh_tl_label o_sh_tl_head_label" t-att-style="'width:' + LABEL_W + 'px'">
+                                <t t-if="state.data.total"><t t-esc="state.data.total"/> დავალება</t>
+                                <span t-if="state.data.overdue" class="text-danger ms-1">(<t t-esc="state.data.overdue"/> გადაცილებული)</span>
+                            </div>
+                            <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'">
+                                <div class="o_sh_tl_months">
+                                    <t t-foreach="months" t-as="m" t-key="m.key">
+                                        <div class="o_sh_tl_month" t-att-style="m.style" t-esc="m.label"/>
+                                    </t>
+                                </div>
+                                <div class="o_sh_tl_days">
+                                    <t t-foreach="dayCells" t-as="c" t-key="c.key">
+                                        <div t-att-class="'o_sh_tl_day' + (c.off ? ' o_sh_tl_day_off' : '') + (c.today ? ' o_sh_tl_day_today' : '')"
+                                             t-att-style="c.style" t-esc="c.label"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div t-if="!state.data.groups.length" class="o_sh_tl_empty" t-att-style="'width:' + LABEL_W + 'px'">
+                            <i class="fa fa-check-circle text-success me-1"/>ამ პერიოდში დავალება არ გაქვთ.
+                        </div>
+
+                        <!-- my tasks: one plain list -->
+                        <t t-if="state.scope === 'mine'">
+                            <t t-foreach="flatTasks" t-as="t" t-key="t.id">
+                                <t t-call="steelhouse_task_flow.TaskTimelineRow"/>
+                            </t>
+                        </t>
+                        <!-- everyone: grouped -->
+                        <t t-else="">
+                            <t t-foreach="state.data.groups" t-as="g" t-key="g.key">
+                                <div class="o_sh_tl_row o_sh_tl_group" t-on-click="() => this.toggle(g.key)">
+                                    <div class="o_sh_tl_label" t-att-style="'width:' + LABEL_W + 'px'">
+                                        <i t-att-class="'fa me-1 ' + (state.collapsed[g.key] ? 'fa-caret-right' : 'fa-caret-down')"/>
+                                        <span class="o_sh_tl_gname" t-esc="g.label"/>
+                                        <span class="o_sh_tl_gcount"><t t-esc="g.tasks.length"/></span>
+                                        <span t-if="g.overdue" class="o_sh_tl_gcount o_sh_tl_glate" title="ვადაგადაცილებული"><t t-esc="g.overdue"/></span>
+                                    </div>
+                                    <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'"/>
+                                </div>
+                                <t t-if="!state.collapsed[g.key]">
+                                    <t t-foreach="g.tasks" t-as="t" t-key="g.key + '_' + t.id">
+                                        <t t-call="steelhouse_task_flow.TaskTimelineRow"/>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
+                    </div>
+                </div>
+            </t>
+
+            <!-- ============ WORKLOAD (heads) ============ -->
+            <t t-else="">
+                <div class="o_sh_tl_legend">
+                    <span><i class="o_sh_tl_sw o_sh_wl_ok"/><t t-esc="state.view === 'team' ? '1-2 ერთ ადამიანზე' : '1-2 დავალება'"/></span>
+                    <span><i class="o_sh_tl_sw o_sh_wl_busy"/><t t-esc="state.view === 'team' ? '3-4 ერთ ადამიანზე' : '3-4 დავალება'"/></span>
+                    <span><i class="o_sh_tl_sw o_sh_wl_over"/><t t-esc="state.view === 'team' ? '5+ ერთ ადამიანზე' : '5+ გადატვირთული'"/></span>
+                    <span><i class="o_sh_wl_dot"/>შიგნით ვადაგადაცილებულია</span>
+                    <span class="text-muted ms-auto">რიცხვზე დაჭერა - დავალებების სია</span>
+                </div>
+                <div class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
+                    <table t-if="state.work" class="o_sh_wl_table">
+                        <thead>
                             <tr>
-                                <td class="o_sh_wl_name" t-att-title="r.label"><t t-esc="r.label"/></td>
-                                <td t-if="state.view === 'team'" class="o_sh_wl_num" t-esc="r.people"/>
-                                <td class="o_sh_wl_num o_sh_wl_link" t-on-click="() => this.openIds(r.open_ids, r.label + ': ღია')" t-esc="r.open"/>
-                                <td t-att-class="'o_sh_wl_num o_sh_wl_link' + (r.overdue ? ' text-danger fw-bold' : '')" t-on-click="() => this.openIds(r.overdue_ids, r.label + ': ვადაგადაცილებული')" t-esc="r.overdue"/>
-                                <td class="o_sh_wl_num o_sh_wl_link" t-on-click="() => this.openIds(r.due_ids, r.label + ': ვადა 7 დღეში')" t-esc="r.due_week"/>
-                                <td class="o_sh_wl_num o_sh_wl_link" t-on-click="() => this.openIds(r.review_ids, r.label + ': შემოწმებაზე')" t-esc="r.review"/>
-                                <td class="o_sh_wl_num o_sh_wl_link text-success" t-on-click="() => this.openIds(r.done_ids, r.label + ': დასრულებული')" t-esc="r.done"/>
-                                <td t-if="state.view === 'team'" class="o_sh_wl_num fw-bold" t-esc="r.per_person"/>
-                                <t t-foreach="r.cells" t-as="cell" t-key="cell.key">
-                                    <td t-att-class="'o_sh_wl_cell ' + loadClass(cell, r)" t-att-title="cellTitle(cell, r)"
-                                        t-on-click="() => this.openIds(cell.ids, r.label + ': ' + cell.key.split('-').reverse().join('.'))">
-                                        <t t-if="cell.count"><t t-esc="cell.count"/><i t-if="cell.late" class="o_sh_wl_dot"/></t>
-                                    </td>
+                                <th class="o_sh_wl_name"><t t-esc="state.view === 'team' ? 'დეპარტამენტი' : 'თანამშრომელი'"/></th>
+                                <th t-if="state.view === 'team'" class="o_sh_wl_num" title="ადამიანები ამ დავალებებზე"><i class="fa fa-users" title="ადამიანები"/></th>
+                                <th class="o_sh_wl_num">ღია</th>
+                                <th class="o_sh_wl_num" title="ვადაგადაცილებული">ვადაგად.</th>
+                                <th class="o_sh_wl_num" title="ვადა 7 დღეში">7 დღეში</th>
+                                <th class="o_sh_wl_num" title="დასრულდა არჩეულ პერიოდში">დასრ.</th>
+                                <th t-if="state.view === 'team'" class="o_sh_wl_num" title="ღია დავალება ერთ ადამიანზე">1 კაცზე</th>
+                                <t t-foreach="state.work.cols" t-as="c" t-key="c.key">
+                                    <th t-att-class="'o_sh_wl_col' + (c.off ? ' o_sh_wl_off' : '') + (c.today ? ' o_sh_wl_today' : '')"
+                                        t-att-style="'min-width:' + cellW + 'px;width:' + cellW + 'px'" t-esc="c.label"/>
                                 </t>
                             </tr>
-                        </t>
-                    </tbody>
-                </table>
-            </div>
-            <!-- chart -->
-            <div t-if="state.view === 'timeline'" class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
-                <div t-if="state.data" class="o_sh_tl_grid" t-att-style="'width:' + (LABEL_W + width) + 'px'">
-                    <!-- weekend / holiday shading + today line (behind the bars) -->
-                    <div class="o_sh_tl_bg" t-att-style="'left:' + LABEL_W + 'px;width:' + width + 'px'">
-                        <t t-foreach="dayCells" t-as="c" t-key="c.key">
-                            <div t-if="c.off" class="o_sh_tl_off" t-att-style="c.style"/>
-                        </t>
-                    </div>
-                    <div class="o_sh_tl_today" t-att-style="todayStyle"/>
-
-                    <div class="o_sh_tl_head">
-                        <div class="o_sh_tl_label o_sh_tl_head_label" t-att-style="'width:' + LABEL_W + 'px'">დავალება</div>
-                        <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'">
-                            <div class="o_sh_tl_months">
-                                <t t-foreach="months" t-as="m" t-key="m.key">
-                                    <div class="o_sh_tl_month" t-att-style="m.style" t-esc="m.label"/>
-                                </t>
-                            </div>
-                            <div class="o_sh_tl_days">
-                                <t t-foreach="dayCells" t-as="c" t-key="c.key">
-                                    <div t-att-class="'o_sh_tl_day' + (c.off ? ' o_sh_tl_day_off' : '') + (c.today ? ' o_sh_tl_day_today' : '')"
-                                         t-att-style="c.style" t-esc="c.label"/>
-                                </t>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div t-if="!state.data.groups.length" class="o_sh_tl_empty" t-att-style="'width:' + LABEL_W + 'px'">
-                        ამ პერიოდში დავალება არ არის.
-                    </div>
-                    <t t-foreach="state.data.groups" t-as="g" t-key="g.key">
-                        <div class="o_sh_tl_row o_sh_tl_group" t-on-click="() => this.toggle(g.key)">
-                            <div class="o_sh_tl_label" t-att-style="'width:' + LABEL_W + 'px'">
-                                <i t-att-class="'fa me-1 ' + (state.collapsed[g.key] ? 'fa-caret-right' : 'fa-caret-down')"/>
-                                <span class="o_sh_tl_gname" t-esc="g.label"/>
-                                <span class="badge rounded-pill text-bg-light border ms-1" t-esc="g.tasks.length"/>
-                                <span t-if="g.overdue" class="badge rounded-pill text-bg-danger ms-1" title="ვადაგადაცილებული" t-esc="g.overdue"/>
-                            </div>
-                            <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'"/>
-                        </div>
-                        <t t-if="!state.collapsed[g.key]">
-                            <t t-foreach="g.tasks" t-as="t" t-key="g.key + '_' + t.id">
-                                <t t-set="b" t-value="bar(t)"/>
-                                <div t-att-class="'o_sh_tl_row' + (t.overdue ? ' o_sh_tl_row_late' : '')">
-                                    <div class="o_sh_tl_label o_sh_tl_tlabel" t-att-style="'width:' + LABEL_W + 'px'"
-                                         t-att-title="tooltip(t)" t-on-click="() => this.openTask(t.id)">
-                                        <span t-if="t.number" class="o_sh_tl_num" t-esc="t.number"/>
-                                        <span class="o_sh_tl_name" t-esc="t.name"/>
-                                        <span class="o_sh_tl_who" t-esc="t.responsible"/>
-                                    </div>
-                                    <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'">
-                                        <div t-if="b.tail" class="o_sh_tl_tail" t-att-style="b.tail" t-att-title="tooltip(t)"
-                                             t-on-click="() => this.openTask(t.id)">
-                                            <span t-if="lateDays(t)">+<t t-esc="lateDays(t)"/> დღე</span>
-                                        </div>
-                                        <div t-if="b.visible" t-att-style="b.style" t-att-title="tooltip(t)"
-                                             t-on-click="() => this.openTask(t.id)"
-                                             t-att-class="'o_sh_tl_barx o_sh_k_' + t.kind + (t.overdue ? ' o_sh_tl_late' : '') + (t.open_end ? ' o_sh_tl_open' : '') + (b.cutLeft ? ' o_sh_tl_cutl' : '') + (b.cutRight ? ' o_sh_tl_cutr' : '') + (t.priority === '3' ? ' o_sh_tl_crit' : '')">
-                                            <div class="o_sh_tl_prog" t-att-style="'width:' + t.progress + '%'"/>
-                                            <span t-if="b.wide" class="o_sh_tl_btext">
-                                                <t t-if="t.priority === '3'">❗</t><t t-esc="t.name"/> · <t t-esc="t.progress"/>%
-                                            </span>
-                                        </div>
-                                        <div t-if="b.mark" class="o_sh_tl_mark" t-att-style="b.mark" t-att-title="'ვადა: ' + t.deadline.split('-').reverse().join('.')"/>
-                                    </div>
-                                </div>
+                        </thead>
+                        <tbody>
+                            <tr t-if="!state.work.rows.length"><td class="o_sh_wl_name text-muted" colspan="7">ამ პერიოდში დავალება არ არის.</td></tr>
+                            <t t-foreach="state.work.rows" t-as="r" t-key="r.key">
+                                <tr>
+                                    <td class="o_sh_wl_name" t-att-title="r.label"><t t-esc="r.label"/></td>
+                                    <td t-if="state.view === 'team'" class="o_sh_wl_num" t-esc="r.people"/>
+                                    <td class="o_sh_wl_num o_sh_wl_link" t-on-click="() => this.openIds(r.open_ids, r.label + ': ღია')" t-esc="r.open"/>
+                                    <td t-att-class="'o_sh_wl_num o_sh_wl_link' + (r.overdue ? ' text-danger fw-bold' : '')" t-on-click="() => this.openIds(r.overdue_ids, r.label + ': ვადაგადაცილებული')" t-esc="r.overdue"/>
+                                    <td class="o_sh_wl_num o_sh_wl_link" t-on-click="() => this.openIds(r.due_ids, r.label + ': ვადა 7 დღეში')" t-esc="r.due_week"/>
+                                    <td class="o_sh_wl_num o_sh_wl_link text-success" t-on-click="() => this.openIds(r.done_ids, r.label + ': დასრულებული')" t-esc="r.done"/>
+                                    <td t-if="state.view === 'team'" class="o_sh_wl_num fw-bold" t-esc="r.per_person"/>
+                                    <t t-foreach="r.cells" t-as="cell" t-key="cell.key">
+                                        <td t-att-class="'o_sh_wl_cell ' + loadClass(cell, r)" t-att-title="cellTitle(cell, r)"
+                                            t-on-click="() => this.openIds(cell.ids, r.label + ': ' + cell.key.split('-').reverse().join('.'))">
+                                            <t t-if="cell.count"><t t-esc="cell.count"/><i t-if="cell.late" class="o_sh_wl_dot"/></t>
+                                        </td>
+                                    </t>
+                                </tr>
                             </t>
-                        </t>
-                    </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </div>
+    </t>
+
+    <!-- one task row: name + deadline text on the left, bar on the right -->
+    <t t-name="steelhouse_task_flow.TaskTimelineRow">
+        <t t-set="b" t-value="bar(t)"/>
+        <div t-att-class="'o_sh_tl_row o_sh_tl_trow' + (t.overdue ? ' o_sh_tl_row_late' : '')">
+            <div class="o_sh_tl_label o_sh_tl_tlabel" t-att-style="'width:' + LABEL_W + 'px'"
+                 t-att-title="tooltip(t)" t-on-click="() => this.openTask(t.id)">
+                <div class="o_sh_tl_name" t-esc="t.name"/>
+                <div t-att-class="'o_sh_tl_due ' + dueClass(t)">
+                    <span t-esc="dueText(t)"/>
+                    <span t-if="state.scope !== 'mine' and t.responsible" class="o_sh_tl_who"> · <t t-esc="t.responsible"/></span>
                 </div>
             </div>
-            <div t-if="state.data and state.data.truncated" class="text-muted small px-3 py-1">ნაჩვენებია პირველი 1500 დავალება - დააზუსტეთ ფილტრი.</div>
+            <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'">
+                <div t-if="b.tail" class="o_sh_tl_tail" t-att-style="b.tail" t-att-title="tooltip(t)" t-on-click="() => this.openTask(t.id)"/>
+                <div t-if="b.visible" t-att-style="b.style" t-att-title="tooltip(t)" t-on-click="() => this.openTask(t.id)"
+                     t-att-class="'o_sh_tl_barx o_sh_s_' + simpleKind(t) + (t.open_end ? ' o_sh_tl_open' : '') + (b.cutLeft ? ' o_sh_tl_cutl' : '') + (b.cutRight ? ' o_sh_tl_cutr' : '')">
+                    <div class="o_sh_tl_prog" t-att-style="'width:' + t.progress + '%'"/>
+                    <span t-if="b.wide" class="o_sh_tl_btext"><t t-esc="t.progress"/>%</span>
+                </div>
+                <div t-if="b.mark" class="o_sh_tl_mark" t-att-style="b.mark" t-att-title="'ვადა: ' + t.deadline.split('-').reverse().join('.')"/>
+            </div>
         </div>
     </t>
 </templates>

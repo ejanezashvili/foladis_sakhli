@@ -179,35 +179,69 @@
         <field name="model">project.task</field>
         <field name="inherit_id" ref="project.view_task_kanban"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="sh_progress" widget="progressbar"/>
-                <field name="sh_responsible_id" widget="many2one_avatar_user" invisible="not sh_responsible_id"/>
-            </xpath>
-            <xpath expr="//field[@name='priority'][@widget='priority']" position="replace">
-                <field name="priority" widget="badge"
-                       decoration-muted="priority == '0'" decoration-info="priority == '1'"
-                       decoration-warning="priority == '2'" decoration-danger="priority == '3'"/>
-                <field name="sh_repeat" invisible="1"/>
-                <span class="badge rounded-pill text-bg-light border ms-1" invisible="not sh_repeat"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
-                <span class="badge rounded-pill text-bg-secondary ms-1" invisible="state != '04_waiting_normal'" title="ელოდება წინა დავალებებს"><i class="fa fa-lock me-1"/>ელოდება</span>
-            </xpath>
-            <xpath expr="//field[@name='tag_ids'][@widget='many2many_tags']" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </xpath>
-            <xpath expr="//t[@t-name='card']//field[@name='name']" position="replace">
-                <div class="d-flex justify-content-between align-items-start">
-                    <field name="name" class="fw-bold fs-5"/>
-                    <field name="sh_number" class="badge rounded-pill ms-2 mt-1" style="background:#f1edf8;color:#71639e"/>
-                </div>
-                <field name="sh_is_overdue" invisible="1"/>
-                <div class="o_sh_overdue_mark small text-danger fw-bold" invisible="not sh_is_overdue">
-                    <i class="fa fa-exclamation-triangle me-1" title="ვადაგადაცილებული"/>ვადაგადაცილებული: <field name="date_deadline" widget="date"/>
-                </div>
-            </xpath>
-            <!-- card: creation date instead of "In 3 days" -->
-            <xpath expr="//field[@name='date_deadline'][@widget='remaining_days']" position="replace">
-                <div class="small" invisible="not sh_branch"><i class="fa fa-map-marker text-danger me-1"/><field name="sh_branch"/></div>
-                <div class="text-muted small">შექმნა: <field name="sh_create_date_str"/></div>
+            <!-- Card in the "pill" style: status pill + number, title, department line, assignees,
+                 deadline + priority, footer with comments / files / sub-tasks / activities / state -->
+            <xpath expr="//t[@t-name='card']/main" position="replace">
+                <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '')">
+                    <field name="sh_kind" invisible="1"/>
+                    <field name="priority" invisible="1"/>
+                    <field name="sh_deadline_str" invisible="1"/>
+                    <field name="date_deadline" invisible="1"/>
+                    <field name="sh_project_id" invisible="1"/>
+                    <field name="sh_branch" invisible="1"/>
+                    <field name="parent_id" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="sh_is_overdue" invisible="1"/>
+                    <field name="sh_repeat" invisible="1"/>
+                    <field name="closed_subtask_count" invisible="1"/>
+                    <field name="sh_comment_count" invisible="1"/>
+                    <field name="message_attachment_count" invisible="1"/>
+                    <field name="project_id" invisible="1"/>
+                    <div class="o_sh_card_top">
+                        <span t-if="record.sh_is_overdue.raw_value" class="o_sh_tpill o_sh_tpill_late o_sh_overdue_mark">
+                            <i class="o_sh_tpill_dot"/>ვადაგადაცილებული
+                        </span>
+                        <span t-else="" t-att-class="'o_sh_tpill o_sh_tpill_' + (record.sh_kind.raw_value or 'new')">
+                            <i class="o_sh_tpill_dot"/><t t-esc="record.stage_id.value"/>
+                        </span>
+                        <field name="sh_number" class="o_sh_card_num"/>
+                    </div>
+                    <field name="name" class="o_sh_card_title"/>
+                    <div class="o_sh_card_sub">
+                        <field t-if="record.parent_id.raw_value" invisible="context.get('default_parent_id', False)" name="parent_id"/>
+                        <span t-if="!record.parent_id.raw_value" t-esc="record.project_id.value"/>
+                        <t t-if="record.sh_project_id.raw_value"> · <field name="sh_project_id"/></t>
+                        <t t-if="record.sh_branch.raw_value"> · <i class="fa fa-map-marker" title="ფილიალი"/> <field name="sh_branch"/></t>
+                    </div>
+                    <div t-if="record.partner_id.raw_value" class="o_sh_card_sub"><i class="fa fa-user-o me-1" title="კლიენტი"/><field name="partner_id"/></div>
+                    <field name="sh_progress" widget="progressbar" class="o_sh_card_prog"/>
+                    <div class="o_sh_card_row">
+                        <span class="o_sh_card_lbl">შემსრულებლები:</span>
+                        <field name="user_ids" widget="many2many_avatar_user"/>
+                    </div>
+                    <div class="o_sh_card_row">
+                        <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold' : '')">
+                            <i class="fa fa-flag-o me-1" title="ვადა"/>
+                            <t t-if="record.sh_deadline_str.raw_value" t-esc="record.sh_deadline_str.raw_value"/>
+                            <t t-if="!record.sh_deadline_str.raw_value">ვადა არ აქვს</t>
+                        </span>
+                        <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
+                    </div>
+                    <div t-if="record.sh_repeat.raw_value or record.state.raw_value === '04_waiting_normal'" class="o_sh_card_tags">
+                        <span t-if="record.sh_repeat.raw_value" class="o_sh_tag"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
+                        <span t-if="record.state.raw_value === '04_waiting_normal'" class="o_sh_tag" title="ელოდება წინა დავალებებს"><i class="fa fa-lock me-1"/>ელოდება</span>
+                    </div>
+                    <footer t-if="!selection_mode" class="o_sh_card_foot">
+                        <span class="o_sh_meta" title="კომენტარები"><i class="fa fa-comments-o"/> <t t-esc="record.sh_comment_count.raw_value or 0"/></span>
+                        <span class="o_sh_meta" title="ფაილები"><i class="fa fa-paperclip"/> <t t-esc="record.message_attachment_count.raw_value or 0"/></span>
+                        <span t-if="record.subtask_count.raw_value" class="o_sh_meta" title="ქვედავალებები: დასრულებული / სულ">
+                            <i class="fa fa-check-square-o"/> <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
+                        </span>
+                        <div class="ms-auto d-flex align-items-center gap-1">
+                            <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
+                        </div>
+                    </footer>
+                </main>
             </xpath>
         </field>
     </record>
