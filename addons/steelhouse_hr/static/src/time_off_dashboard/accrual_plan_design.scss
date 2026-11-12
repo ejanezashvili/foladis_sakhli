@@ -1,0 +1,245 @@
+// Configuration > Accrual plans: list rows as cards (unnamed plans greyed with a note), levels as a
+// pill; form as a card with a big title box, options as cards, a switch, dashed levels box. Look only.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-text: #2b2430;
+
+.o_action:has(.o_sh_accrual_list, .o_sh_accrual_plan_form) .o_content {
+    background-color: $sh-page;
+}
+
+// ---------- list
+.o_sh_accrual_list {
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+    td.o_sh_type_cell::before {
+        content: "\f201";
+    }
+    td[name="name"] {
+        color: $sh-text;
+    }
+    // a plan nobody named yet: grey italic name + orange note
+    tr.text-muted td[name="name"] {
+        font-weight: 500 !important;
+        color: #9a9097;
+
+        &::after {
+            content: "სახელი არ აქვს";
+            display: inline-block;
+            margin-left: 10px;
+            padding: 1px 9px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-style: normal;
+            font-weight: 600;
+            vertical-align: middle;
+            color: #b26a00;
+            background-color: #fff4e0;
+        }
+    }
+    // levels: "N ეტაპი" pill, grey when 0
+    td.o_sh_levels_cell > span {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12.5px;
+        font-weight: 700;
+        color: $sh-plum;
+        background-color: $sh-plum-soft;
+
+        &::after {
+            content: " ეტაპი";
+        }
+        &.text-muted {
+            color: #a99ca5 !important;
+            background-color: #f1eef1;
+        }
+    }
+    td.o_sh_levels_cell.text-muted > span {
+        color: #a99ca5 !important;
+        background-color: #f1eef1;
+    }
+}
+
+// ---------- form
+.o_sh_accrual_plan_form {
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background-color: #fff;
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // title: small plum label, big filled box, line below
+    .oe_title {
+        width: 100% !important;
+        margin-bottom: 18px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid $sh-line;
+
+        > label {
+            margin-bottom: 8px;
+            font-size: 12.5px;
+            font-weight: 600 !important;
+            color: $sh-plum;
+        }
+        h1 input {
+            padding: 12px 16px;
+            border: 1px solid $sh-line !important;
+            border-radius: 14px;
+            font-size: 22px;
+            background-color: #f6f3f6;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+            }
+        }
+    }
+
+    // section title: plum bar, then a light line
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        padding-left: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: none;
+        color: $sh-text;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 4px;
+            border-radius: 2px;
+            background-color: $sh-plum;
+        }
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            height: 1px;
+            background-color: $sh-line;
+        }
+    }
+
+    .o_accrual .o_form_label {
+        font-weight: 500 !important;
+        color: $sh-text;
+    }
+    .o_accrual .o_inner_group,
+    .o_accrual.o_inner_group {
+        row-gap: 14px;
+    }
+
+    // options: one card per choice, the chosen one in plum
+    .o_accrual .o_field_widget:has(.o_radio_item) {
+        width: 100% !important;
+        margin: 0 !important;
+
+        [role="radiogroup"],
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
+    .o_accrual .o_radio_item {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        border: 1px solid $sh-line;
+        border-radius: 10px;
+        background-color: #f8f6f8;
+
+        .o_radio_input {
+            flex: 0 0 auto;
+            float: none !important;
+            margin: 0 !important;
+        }
+        .o_radio_input:checked {
+            border-color: $sh-plum;
+            background-color: $sh-plum;
+        }
+        label {
+            margin: 0;
+            font-weight: 500;
+            color: $sh-text;
+        }
+        &:has(> .o_radio_input:checked) {
+            border-color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // carry-over checkbox shown as a plum switch
+    .o_field_widget[name="can_be_carryover"] .form-check-input {
+        width: 2.6em;
+        height: 1.4em;
+        margin: 0;
+        border-radius: 999px;
+        border-color: #d9d3d8;
+        background-color: #e9e5e8;
+        background-image: radial-gradient(circle, #fff 45%, transparent 47%);
+        background-position: left center;
+        background-size: 1.4em 1.4em;
+        background-repeat: no-repeat;
+        transition: background-position 0.15s;
+        cursor: pointer;
+
+        &:checked {
+            border-color: $sh-plum;
+            background-color: $sh-plum;
+            background-position: right center;
+        }
+    }
+
+    // levels box: dashed, soft background; "create a milestone" as a plum pill with "+"
+    .o_accrual_plan_levels {
+        margin-top: 18px !important;
+        border: 1.5px dashed #e2d7de !important;
+        border-radius: 16px !important;
+        background: linear-gradient(180deg, #fbf8fa, #f6f3f6) !important;
+
+        .o_nocontent_help {
+            .btn-primary {
+                padding: 9px 20px;
+                border-color: $sh-plum;
+                border-radius: 12px;
+                font-weight: 600;
+                background-color: $sh-plum;
+                box-shadow: 0 4px 12px rgba(113, 75, 103, 0.3);
+
+                &::before {
+                    content: "+";
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}

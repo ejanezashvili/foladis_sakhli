@@ -197,4 +197,35 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Configuration > Accrual plans: card rows, unnamed plans greyed, levels as a pill (style only) -->
+    <record id="hr_accrual_plan_view_tree_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.accrual.plan.list.steelhouse</field>
+        <field name="model">hr.leave.accrual.plan</field>
+        <field name="inherit_id" ref="hr_holidays.hr_accrual_plan_view_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_accrual_list</attribute>
+                <attribute name="decoration-muted">name == 'უსახელო გეგმა'</attribute>
+                <attribute name="decoration-it">name == 'უსახელო გეგმა'</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+            <field name="level_count" position="attributes">
+                <attribute name="class">o_sh_levels_cell</attribute>
+                <attribute name="decoration-muted">level_count == 0</attribute>
+            </field>
+        </field>
+    </record>
+    <record id="hr_accrual_plan_view_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.accrual.plan.form.steelhouse</field>
+        <field name="model">hr.leave.accrual.plan</field>
+        <field name="inherit_id" ref="hr_holidays.hr_accrual_plan_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_accrual_plan_form o_sh_accrual_plan_form</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
