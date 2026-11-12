@@ -675,10 +675,10 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
     .o_accrual .o_field_widget {
         margin: 0 !important;
 
-        > input,
+        > input:not(.form-check-input),
         > select,
         > div > select,
-        > div > input {
+        > div > input:not(.form-check-input) {
             min-width: 56px;
             max-width: none !important;
             padding: 8px 12px;
@@ -787,5 +787,27 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
     .form-check-input:checked {
         border-color: $sh-plum;
         background-color: $sh-plum;
+    }
+}
+
+// ---------- checkboxes in the whole Time Off app: clear box, solid plum with a white tick when on
+// (the plum switches of the time off type form keep their own look)
+body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o_field_boolean .form-check-input:not(.o_sh_type_form *),
+.modal-content:has(.o_hr_leave_form, .o_hr_leave_allocation_form, .o_sh_accrual_level) .o_field_boolean .form-check-input {
+    width: 18px;
+    height: 18px;
+    min-width: 0;
+    padding: 0;
+    border: 1.5px solid #b9afb6 !important;
+    border-radius: 5px;
+    background-color: #fff;
+    cursor: pointer;
+
+    &:checked {
+        border-color: $sh-plum !important;
+        background-color: $sh-plum;
+    }
+    &:focus {
+        box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.15);
     }
 }
