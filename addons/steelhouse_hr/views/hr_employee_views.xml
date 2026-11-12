@@ -117,4 +117,16 @@
             </filter>
         </field>
     </record>
+
+    <!-- employee cards: company shown as a soft pill at the bottom (existing data, look only) -->
+    <record id="hr_kanban_view_employees_steelhouse" model="ir.ui.view">
+        <field name="name">hr.employee.kanban.steelhouse</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.hr_kanban_view_employees"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='card']//footer/div" position="before">
+                <field name="company_id" class="o_sh_company_pill" readonly="1" options="{'no_open': True}"/>
+            </xpath>
+        </field>
+    </record>
 </odoo>
