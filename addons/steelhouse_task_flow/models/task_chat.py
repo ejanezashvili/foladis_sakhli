@@ -52,14 +52,21 @@ class ProjectTask(models.Model):
                 task.sh_channel_id.sudo().name = task._sh_chat_name()
         return res
 
-    def action_sh_open_chat(self):
-        """Button "საერთო ჩატი": opens the task's group chat in Discuss."""
+    def sh_chat_channel_id(self):
+        """Button "საერთო ჩატი" (pop-up chat window): the chat id; whoever can see the task may join it."""
         self.ensure_one()
         self._sh_ensure_chat()
         channel = self.sudo().sh_channel_id
         me = self.env.user.partner_id
-        if me not in channel.channel_member_ids.partner_id:  # can see the task -> may join its chat
+        if channel and me not in channel.channel_member_ids.partner_id:
             channel.write({'channel_member_ids': [Command.create({'partner_id': me.id})]})
+        return channel.id
+
+    def action_sh_open_chat(self):
+        """Fallback: the chat in Discuss (full page)."""
+        self.ensure_one()
+        self.sh_chat_channel_id()
+        channel = self.sudo().sh_channel_id
         active_id = 'discuss.channel_%d' % channel.id
         return {
             'type': 'ir.actions.client',
