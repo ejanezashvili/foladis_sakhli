@@ -9,7 +9,7 @@ $sh-green: #1f8a57;
 $sh-green-soft: #e8f7ee;
 
 // ---------- dialog frame
-.modal-content:has(.o_hr_leave_form, .o_hr_leave_allocation_form) {
+.modal-content:has(.o_hr_leave_form, .o_hr_leave_allocation_form, .o_sh_accrual_level) {
     overflow: hidden;
     border: 0;
     border-radius: 18px;
@@ -89,14 +89,15 @@ $sh-green-soft: #e8f7ee;
 .modal-content:has(.o_hr_leave_form) .modal-footer .btn-primary::before {
     content: "\f00c";
 }
-.modal-content:has(.o_hr_leave_allocation_form) .modal-footer .btn-primary::before {
+.modal-content:has(.o_hr_leave_allocation_form, .o_sh_accrual_level) .modal-footer .btn-primary::before {
     content: "\f1d8";
 }
 
 // ---------- the forms themselves (dialog and page)
 .o_hr_leave_form,
 .o_hr_leave_allocation_form,
-.o_sh_type_form {
+.o_sh_type_form,
+.o_sh_accrual_level {
     // labels: small, muted
     .o_form_label,
     .o_wrap_label label {
@@ -633,5 +634,158 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
                 color: $sh-plum;
             }
         }
+    }
+}
+
+// ---------- accrual plan > level dialog: filled boxes, plum number, unit pill,
+// options as cards (carry-over side by side), section lines. Style only.
+.o_sh_accrual_level {
+    .o_form_label {
+        font-weight: 500 !important;
+        color: $sh-muted;
+    }
+
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            height: 1px;
+            background-color: $sh-field-border;
+        }
+    }
+
+    // fields and text of one line side by side
+    .o_accrual .o_cell > span,
+    .o_accrual .o_cell > span span:not(.o_field_widget *):not(.o_radio_item *) {
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+    .o_accrual .o_cell > span > span[invisible],
+    .o_accrual .o_cell > span > span:empty {
+        display: none;
+    }
+
+    // inputs and selects: filled rounded boxes instead of the underline
+    .o_accrual .o_field_widget {
+        margin: 0 !important;
+
+        > input,
+        > select,
+        > div > select,
+        > div > input {
+            min-width: 56px;
+            max-width: none !important;
+            padding: 8px 12px;
+            border: 1px solid $sh-field-border !important;
+            border-radius: 10px;
+            background-color: $sh-field-bg;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+                box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.12);
+            }
+        }
+        > select,
+        > div > select {
+            padding-right: 30px;
+        }
+    }
+
+    // numbers: bold plum, centred
+    .o_field_widget:is([name="added_value"], [name="start_count"], [name="postpone_max_days"],
+        [name="maximum_leave_yearly"], [name="maximum_leave"], [name="accrual_validity_count"]) input,
+    .o_field_widget[name="yearly_day"] :is(input, select) {
+        width: 84px;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
+        color: $sh-plum;
+    }
+
+    // unit ("day"): plum pill
+    .o_field_widget[name="added_value_type"] {
+        > span,
+        > select {
+            display: inline-block;
+            padding: 5px 14px !important;
+            border: 0 !important;
+            border-radius: 999px !important;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft !important;
+        }
+    }
+
+    // options as cards, the chosen one in plum
+    .o_field_widget:has(.o_radio_item) {
+        width: 100% !important;
+        margin: 0 !important;
+
+        [role="radiogroup"],
+        > div {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+    }
+    .o_field_widget[name="action_with_unused_accruals"] {
+        [role="radiogroup"],
+        > div {
+            flex-direction: row;
+        }
+        .o_radio_item {
+            flex: 1 1 0;
+        }
+    }
+    .o_radio_item {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        border: 1px solid $sh-field-border;
+        border-radius: 10px;
+        background-color: $sh-field-bg;
+
+        .o_radio_input {
+            flex: 0 0 auto;
+            float: none !important;
+            width: 16px;
+            height: 16px;
+            margin: 0 !important;
+            border: 1px solid #c9c1c7;
+            border-radius: 50%;
+            background-color: #fff;
+        }
+        .o_radio_input:checked {
+            border-color: $sh-plum;
+            background-color: $sh-plum;
+            background-image: none;
+            box-shadow: inset 0 0 0 3px #fff;
+        }
+        > label {
+            margin: 0;
+            font-weight: 600;
+            color: #2b2430;
+        }
+
+        &:has(> .o_radio_input:checked) {
+            border-color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // checkboxes in plum
+    .form-check-input:checked {
+        border-color: $sh-plum;
+        background-color: $sh-plum;
     }
 }

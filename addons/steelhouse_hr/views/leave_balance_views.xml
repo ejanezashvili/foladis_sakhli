@@ -185,4 +185,16 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Configuration > Accrual plans > level dialog: class for the new look (fields unchanged) -->
+    <record id="hr_accrual_level_view_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.accrual.level.form.steelhouse</field>
+        <field name="model">hr.leave.accrual.level</field>
+        <field name="inherit_id" ref="hr_holidays.hr_accrual_level_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_accrual_level</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
