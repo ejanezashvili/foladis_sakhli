@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-inherit="web.WarningDialog" t-inherit-mode="extension">
+        <xpath expr="//Dialog" position="attributes">
+            <attribute name="size">shDeputy ? 'md' : 'xl'</attribute>
+            <attribute name="contentClass">shDeputy ? 'o_error_dialog o_sh_deputy_dialog' : 'o_error_dialog'</attribute>
+        </xpath>
+        <xpath expr="//div[@role='alert']" position="replace">
+            <div t-if="shDeputy" role="alert" class="o_sh_dep_alert text-center">
+                <div class="o_sh_dep_icon"><i class="fa fa-exclamation-triangle"/></div>
+                <div class="o_sh_dep_title" t-esc="title"/>
+                <div class="o_sh_dep_who">
+                    <span class="o_sh_dep_chip">
+                        <span class="o_sh_dep_avatar" t-esc="shDeputy.initial"/>
+                        <span t-esc="shDeputy.name"/>
+                    </span>
+                    <span>ამ დღეებში თვითონ არის შვებულებაში:</span>
+                </div>
+                <div class="o_sh_dep_leave">
+                    <span class="o_sh_dep_cal"><i class="fa fa-calendar-o"/></span>
+                    <div class="o_sh_dep_leave_text">
+                        <div class="o_sh_dep_type" t-esc="shDeputy.type"/>
+                        <div class="o_sh_dep_dates" t-esc="shDeputy.dates"/>
+                    </div>
+                    <span class="o_sh_dep_status" t-att-class="shDeputy.statusClass" t-esc="shDeputy.status"/>
+                </div>
+                <div class="o_sh_dep_hint" t-esc="shDeputy.hint"/>
+            </div>
+            <div t-else="" role="alert">
+                <p t-esc="message" class="text-prewrap"/>
+            </div>
+        </xpath>
+    </t>
+
+</templates>
