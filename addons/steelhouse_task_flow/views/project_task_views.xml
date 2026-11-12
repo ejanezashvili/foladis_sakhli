@@ -185,6 +185,7 @@
                 <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '')">
                     <field name="sh_kind" invisible="1"/>
                     <field name="priority" invisible="1"/>
+                    <field name="sh_deadline_str" invisible="1"/>
                     <field name="date_deadline" invisible="1"/>
                     <field name="sh_project_id" invisible="1"/>
                     <field name="sh_branch" invisible="1"/>
@@ -221,8 +222,8 @@
                     <div class="o_sh_card_row">
                         <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold' : '')">
                             <i class="fa fa-flag-o me-1" title="ვადა"/>
-                            <t t-if="record.date_deadline.raw_value" t-esc="record.date_deadline.raw_value.toFormat('dd.MM.yyyy')"/>
-                            <t t-else="">ვადა არ აქვს</t>
+                            <t t-if="record.sh_deadline_str.raw_value" t-esc="record.sh_deadline_str.raw_value"/>
+                            <t t-if="!record.sh_deadline_str.raw_value">ვადა არ აქვს</t>
                         </span>
                         <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
                     </div>
