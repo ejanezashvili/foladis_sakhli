@@ -1,0 +1,370 @@
+// Employee form (card): white rounded sheet with a plum strip, soft header, filled fields,
+// tabs with a plum mark, section titles with a plum bar, cards for org chart / resume.
+// Look only - fields, rules and settings are unchanged.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-plum-dark: #4b3a5a;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-field-bg: #f6f4f7;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+$sh-green: #1f8a57;
+$sh-blue: #2f6fd6;
+$sh-blue-soft: #e8f0fe;
+
+.o_hr_employee_form_view {
+    // ---------- page, header buttons, smart buttons
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_statusbar {
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-secondary {
+            border: 1px solid $sh-line;
+            background-color: #fff;
+        }
+    }
+    .oe_button_box .oe_stat_button {
+        margin: 0 4px;
+        border: 1px solid $sh-line !important;
+        border-radius: 12px;
+        background-color: #fff;
+
+        .o_button_icon {
+            color: $sh-plum;
+        }
+    }
+
+    // ---------- sheet: white card, plum strip on top, soft pink header
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbf3f7 0, #fff 230px);
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // photo: big rounded square with a soft shadow
+    .o_employee_avatar .o_field_image img {
+        width: 128px !important;
+        height: 128px !important;
+        border: 0 !important;
+        border-radius: 22px !important;
+        object-fit: cover !important;
+        box-shadow: 0 8px 22px rgba(113, 75, 103, 0.25);
+    }
+
+    // name + contacts: name on top, e-mail / phones / tags as soft pills in two columns
+    .oe_title {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 12px;
+
+        h1 {
+            grid-column: 1 / -1;
+            margin-bottom: 4px;
+
+            input {
+                font-weight: 700;
+                color: $sh-text;
+            }
+        }
+        h5 {
+            display: flex;
+            align-items: center !important;
+            min-width: 0;
+            margin: 0 !important;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            background-color: #f4f1f4;
+
+            .fa {
+                color: #b3a8b0 !important;
+            }
+            .o_field_widget {
+                width: 100% !important;
+            }
+            input {
+                padding: 0;
+                border: 0 !important;
+                background: none !important;
+            }
+        }
+    }
+
+    // ---------- tabs: plain, the chosen one in soft plum with a plum underline
+    .o_notebook .nav-tabs {
+        border-bottom: 1px solid $sh-line;
+
+        .nav-link {
+            margin-right: 6px;
+            padding: 9px 18px;
+            border: 0 !important;
+            border-radius: 10px 10px 0 0;
+            color: $sh-muted;
+
+            &.active {
+                font-weight: 600;
+                color: $sh-plum;
+                background-color: $sh-plum-soft;
+                box-shadow: inset 0 -2px 0 $sh-plum;
+            }
+        }
+    }
+
+    // ---------- section titles: plum bar, then a light line
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-left: 12px;
+        position: relative;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: none !important;
+        color: $sh-text;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 4px;
+            border-radius: 2px;
+            background-color: $sh-plum;
+        }
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            order: 1;
+            height: 1px;
+            background-color: $sh-line;
+        }
+        // "Full chart" link as a soft pill at the end of the line
+        a {
+            order: 2;
+            float: none !important;
+            margin: 0 !important;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // ---------- labels and fields
+    .o_inner_group .o_form_label,
+    .o_wrap_label .o_form_label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $sh-muted;
+    }
+    .o_notebook .o_field_widget:not(.o_field_boolean):not(.o_field_image) {
+        input:not(.form-check-input),
+        textarea,
+        select {
+            padding: 7px 12px;
+            border: 1px solid transparent !important;
+            border-radius: 10px;
+            background-color: $sh-field-bg;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+                box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.12);
+            }
+        }
+    }
+    // tags and avatars as soft pills
+    .o_field_many2many_avatar_employee .o_tag,
+    .o_field_many2many_tags .o_tag {
+        border-radius: 999px;
+    }
+    .o_field_many2one_avatar img,
+    .o_field_many2many_avatar_employee img,
+    .o_m2o_avatar img {
+        border-radius: 6px !important;
+    }
+
+    // note: dashed box
+    .o_field_widget[name="additional_note"] textarea {
+        min-height: 80px;
+        border: 1.5px dashed #e2d7de !important;
+        background-color: #fbfafb;
+    }
+
+    // usual work location: one small dashed card per weekday
+    .o_inner_group:has(> .o_wrap_field [name="monday_location_id"]),
+    .o_inner_group:has([name="monday_location_id"]) {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 10px;
+
+        > .o_horizontal_separator,
+        > .g-col-sm-2:has(.o_horizontal_separator) {
+            grid-column: 1 / -1;
+        }
+        > .o_wrap_field {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 !important;
+            padding: 10px 8px;
+            border: 1.5px dashed #e4dbe1;
+            border-radius: 12px;
+            text-align: center;
+            background-color: #fbfafb;
+
+            .o_cell {
+                width: 100%;
+                padding: 0 !important;
+            }
+            .o_form_label {
+                font-weight: 700;
+                color: $sh-text;
+            }
+            input {
+                padding: 2px 4px !important;
+                font-size: 12px;
+                text-align: center;
+                background: none !important;
+            }
+        }
+    }
+
+    // ---------- org chart: light box with white rounded cards, "this employee" in plum
+    #o_employee_org_chart .o_field_hr_org_chart {
+        padding: 14px;
+        border-radius: 14px;
+        background-color: #f4f1f4;
+    }
+    .o_org_chart_entry {
+        margin-bottom: 10px;
+        padding: 10px 12px !important;
+        border: 1px solid $sh-line;
+        border-radius: 12px;
+        background-color: #fff;
+        box-shadow: 0 1px 6px rgba(40, 20, 40, 0.05);
+
+        .o_media_object {
+            width: 34px !important;
+            height: 34px !important;
+            border-radius: 10px !important;
+        }
+        .o_media_heading {
+            font-size: 13px !important;
+        }
+        .btn.rounded-pill {
+            padding: 1px 9px;
+            border: 0;
+            font-size: 11px;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+    .o_org_chart_entry_self {
+        border: 1.5px solid $sh-plum;
+        box-shadow: 0 4px 12px rgba(113, 75, 103, 0.15);
+    }
+
+    // ---------- resume: green dot on the line, every entry a white card, dashed "add" pill
+    .o_resume_timeline_cell .rounded-circle {
+        background-color: $sh-green !important;
+        box-shadow: 0 0 0 3px #e3f4ea;
+    }
+    .o_resume_line {
+        margin-bottom: 10px;
+        padding: 12px 16px;
+        border: 1px solid $sh-line;
+        border-radius: 12px;
+        background-color: #fff;
+        box-shadow: 0 1px 6px rgba(40, 20, 40, 0.05);
+
+        .o_resume_line_dates {
+            color: $sh-green;
+        }
+        .o_resume_line_title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+    }
+    .o_field_resume_one2many .btn-secondary,
+    .o_field_skills_one2many .btn-secondary {
+        border: 1.5px dashed #dcbfd2 !important;
+        border-radius: 10px;
+        font-weight: 600;
+        color: $sh-plum;
+        background-color: #fbf5f9;
+    }
+    .o_field_skills_one2many .btn-primary,
+    .o_field_skills_one2many .o_nocontent_help .btn {
+        border-radius: 10px;
+        border-color: $sh-plum;
+        background-color: $sh-plum;
+        color: #fff;
+    }
+    .o_group_skills .o_field_nocontent,
+    .o_group_skills .o_view_nocontent {
+        border: 1.5px dashed #e2d7de;
+        border-radius: 14px;
+        background-color: #fbfafb;
+    }
+
+    // ---------- file uploads: dashed plum pills
+    .o_field_binary .o_select_file_button,
+    .o_field_binary .btn,
+    .o_field_work_permit_upload .btn {
+        border: 1.5px dashed #dcbfd2 !important;
+        border-radius: 10px;
+        font-weight: 600;
+        color: $sh-plum;
+        background-color: #fbf5f9;
+    }
+
+    // ---------- payroll and settings accents
+    .o_field_widget[name="wage"] input {
+        font-size: 20px;
+        font-weight: 700;
+        color: $sh-plum;
+        background: none !important;
+    }
+    .o_field_widget[name="resource_calendar_id"] input,
+    .o_field_widget[name="tz"] select {
+        width: auto;
+        border-radius: 999px !important;
+        font-weight: 600;
+        color: $sh-blue;
+        background-color: $sh-blue-soft !important;
+    }
+
+    // ---------- chatter: rounded buttons, messages in soft bubbles
+    .o-mail-Chatter-topbar .btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .o-mail-Message-bubble {
+        border-radius: 12px !important;
+    }
+    .o-mail-Message-avatar,
+    .o-mail-Message-avatarContainer img {
+        border-radius: 8px !important;
+    }
+}
