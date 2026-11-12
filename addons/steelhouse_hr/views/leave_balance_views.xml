@@ -71,6 +71,10 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_hr_leave_allocation_form</attribute>
             </xpath>
+            <!-- days as a whole number ("2", not "2,00") -->
+            <xpath expr="//field[@name='number_of_days_display']" position="attributes">
+                <attribute name="digits">[16, 0]</attribute>
+            </xpath>
         </field>
     </record>
     <record id="hr_leave_allocation_view_form_dashboard_steelhouse" model="ir.ui.view">
@@ -80,6 +84,10 @@
         <field name="arch" type="xml">
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_hr_leave_allocation_form</attribute>
+            </xpath>
+            <!-- days as a whole number ("2", not "2,00") -->
+            <xpath expr="//field[@name='number_of_days_display']" position="attributes">
+                <attribute name="digits">[16, 0]</attribute>
             </xpath>
             <!-- request from the calendar card: only types employees may ask days for (compensatory days) -->
             <xpath expr="//field[@name='holiday_status_id']" position="attributes">
