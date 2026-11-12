@@ -153,4 +153,19 @@
             </field>
         </field>
     </record>
+
+    <!-- Configuration > Departure reasons: card rows with an exit badge (style only) -->
+    <record id="hr_departure_reason_view_list_steelhouse" model="ir.ui.view">
+        <field name="name">hr.departure.reason.list.steelhouse</field>
+        <field name="model">hr.departure.reason</field>
+        <field name="inherit_id" ref="hr.hr_departure_reason_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_departure_list</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+        </field>
+    </record>
 </odoo>
