@@ -231,7 +231,6 @@
                             <i class="fa fa-check-square-o"/> <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
                         </span>
                         <div class="ms-auto d-flex align-items-center gap-1">
-                            <field name="activity_ids" widget="kanban_activity"/>
                             <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
                         </div>
                     </footer>
