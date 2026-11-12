@@ -20,7 +20,7 @@ MENU_FIXES = [
     ('hr_holidays', 'menu_hr_holidays_my_leaves', 'ჩემი შვებულება'),
     ('hr_holidays', 'hr_leave_menu_new_request', 'კალენდარი'),
     ('hr_holidays', 'hr_leave_menu_my', 'ჩემი მოთხოვნები'),
-    ('hr_holidays', 'menu_open_allocation', 'დღეების ნაშთი'),
+    ('hr_holidays', 'menu_open_allocation', 'შვებულების ბალანსი'),
 ]
 for mod, name, label in MENU_FIXES:
     ex('ir.ui.menu', 'update_field_translations', [[xid(mod, name)], 'name', {'ka_GE': label}])

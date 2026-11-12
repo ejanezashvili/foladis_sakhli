@@ -1,0 +1,81 @@
+// "Time off balance" list: every type as a rounded card row, icon badge,
+// pending in orange, remaining in green.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+
+.o_list_renderer:has(.o_sh_balance_list),
+.o_sh_balance_list {
+    background-color: $sh-page;
+}
+
+// the class may land on the table or on its wrapper
+table.o_sh_balance_list,
+.o_sh_balance_list table {
+    border-collapse: separate !important;
+    border-spacing: 0 10px;
+}
+
+.o_sh_balance_list {
+    padding: 0 16px;
+
+    thead th {
+        border: 0 !important;
+        background: none !important;
+        font-size: 12px;
+        font-weight: 500;
+        color: #8c838b;
+    }
+
+    tbody tr.o_data_row {
+        background-color: #fff;
+        box-shadow: 0 1px 6px rgba(40, 20, 40, 0.06);
+
+        > td {
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+            border: 0 !important;
+            background: none;
+        }
+        > td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+        > td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+    }
+
+    // icon badge before the type name
+    td.o_sh_type_cell::before {
+        content: "0b1";
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        margin-right: 12px;
+        border-radius: 8px;
+        font-family: FontAwesome;
+        font-size: 13px;
+        font-weight: normal;
+        line-height: 28px;
+        text-align: center;
+        color: $sh-plum;
+        background-color: $sh-plum-soft;
+    }
+
+    td.o_sh_remaining {
+        font-size: 16px;
+    }
+
+    tfoot td {
+        border: 0 !important;
+        background: none !important;
+        font-weight: 700;
+        color: $sh-plum;
+    }
+}
+
+.o_sh_pill {
+    border-radius: 999px !important;
+    background-color: $sh-plum !important;
+    border-color: $sh-plum !important;
+}

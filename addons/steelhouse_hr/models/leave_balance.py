@@ -5,7 +5,7 @@ class SteelhouseLeaveBalance(models.Model):
     """Days balance of the current year: one line per employee and time off type
     (every active type, also the ones not used yet)."""
     _name = 'steelhouse.leave.balance'
-    _description = 'დღეების ნაშთი'
+    _description = 'შვებულების ბალანსი'
     _auto = False
     _order = 'sequence, leave_type_id'
 

@@ -4,18 +4,18 @@
         <field name="name">steelhouse.leave.balance.list</field>
         <field name="model">steelhouse.leave.balance</field>
         <field name="arch" type="xml">
-            <list string="დღეების ნაშთი" create="0" edit="0" delete="0">
+            <list string="შვებულების ბალანსი" create="0" edit="0" delete="0" class="o_sh_balance_list">
                 <header>
                     <button type="action" name="%(hr_holidays.hr_leave_allocation_action_my)d"
-                            string="დამატებითი დღეების მოთხოვნა" class="btn btn-secondary" display="always"/>
+                            string="დამატებითი დღეების მოთხოვნა" class="btn btn-primary o_sh_pill" display="always"/>
                 </header>
                 <field name="employee_id" widget="many2one_avatar_employee" column_invisible="context.get('sh_my_balance')"/>
                 <field name="department_id" optional="hide"/>
-                <field name="leave_type_id" class="fw-bold"/>
+                <field name="leave_type_id" class="fw-bold o_sh_type_cell"/>
                 <field name="allocated" invisible="not requires_allocation"/>
                 <field name="used" sum="სულ"/>
                 <field name="pending" decoration-warning="pending &gt; 0"/>
-                <field name="remaining" invisible="not requires_allocation" class="fw-bold"
+                <field name="remaining" invisible="not requires_allocation" class="fw-bold o_sh_remaining"
                        decoration-danger="remaining &lt; 0" decoration-success="remaining &gt; 0"/>
                 <field name="requires_allocation" column_invisible="1"/>
             </list>
@@ -38,9 +38,9 @@
         </field>
     </record>
 
-    <!-- "My Time Off > Days balance": every type with granted / used / pending / remaining days (this year) -->
+    <!-- "My Time Off > Time off balance": every type with granted / used / pending / remaining days (this year) -->
     <record id="steelhouse_leave_balance_action_my" model="ir.actions.act_window">
-        <field name="name">დღეების ნაშთი</field>
+        <field name="name">შვებულების ბალანსი</field>
         <field name="res_model">steelhouse.leave.balance</field>
         <field name="view_mode">list</field>
         <field name="domain">[('user_id', '=', uid)]</field>
@@ -56,13 +56,13 @@
 
     <!-- HR: everyone's balance -->
     <record id="steelhouse_leave_balance_action_all" model="ir.actions.act_window">
-        <field name="name">თანამშრომლების ნაშთი</field>
+        <field name="name">თანამშრომლების ბალანსი</field>
         <field name="res_model">steelhouse.leave.balance</field>
         <field name="view_mode">list</field>
         <field name="context">{'search_default_group_employee': 1}</field>
     </record>
 
-    <menuitem id="menu_steelhouse_leave_balance_all" name="თანამშრომლების ნაშთი"
+    <menuitem id="menu_steelhouse_leave_balance_all" name="თანამშრომლების ბალანსი"
               parent="hr_holidays.menu_hr_holidays_management" action="steelhouse_leave_balance_action_all"
               groups="hr_holidays.group_hr_holidays_user" sequence="40"/>
 </odoo>
