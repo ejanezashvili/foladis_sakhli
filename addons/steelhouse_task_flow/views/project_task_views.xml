@@ -25,8 +25,7 @@
                     </group>
                     <group>
                         <div colspan="2" class="d-flex justify-content-end" invisible="not id or is_template">
-                            <button name="action_sh_open_chat" type="object" class="btn btn-outline-primary btn-sm"
-                                    icon="fa-comments" string="საერთო ჩატი" title="დავალების საერთო ჩატი - ყველა ჩართული პირით"/>
+                            <widget name="sh_task_chat_button"/>
                         </div>
                         <field name="sh_responsible_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
                         <field name="user_ids" class="o_task_user_field" options="{'no_open': True, 'no_quick_create': True}"

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskChatButton">
+        <button type="button" class="btn btn-outline-primary btn-sm" title="დავალების საერთო ჩატი - ყველა ჩართული პირით"
+                t-on-click="onClick">
+            <i class="fa fa-comments me-1"/>საერთო ჩატი
+        </button>
+    </t>
+</templates>
