@@ -21,6 +21,14 @@ class HrDepartment(models.Model):
         compute='_compute_sh_headcount', string='ქვეშ მყოფი თანამშრომლები',
         help="ყველა, ვინც ამ ერთეულის ხელმძღვანელების ქვეშაა (ქვედანაყოფების ჩათვლით, ხელმძღვანელების გარეშე).")
 
+    @api.depends('name', 'parent_id.complete_name')
+    def _compute_complete_name(self):
+        # a new unit without a name yet: no "Parent / False" in the title
+        super()._compute_complete_name()
+        for department in self:
+            if not department.name:
+                department.complete_name = False
+
     def _sh_team(self):
         """Everyone in this unit and its sub-units, except this unit's heads."""
         self.ensure_one()

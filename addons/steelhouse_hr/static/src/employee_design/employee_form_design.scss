@@ -426,3 +426,129 @@ $sh-blue-soft: #e8f0fe;
         border-radius: 8px !important;
     }
 }
+
+// ---------- department form: card with a plum strip, building badge before a big name box,
+// filled fields, parent unit as a soft pill, round colour. Style only.
+.o_sh_dept_form {
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbf3f7 0, #fff 160px);
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    .oe_title {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin: 10px 0 30px;
+
+        &::before {
+            content: "\f0f7";
+            flex: 0 0 96px;
+            height: 96px;
+            border-radius: 22px;
+            font-family: FontAwesome;
+            font-size: 42px;
+            line-height: 96px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            box-shadow: 0 6px 18px rgba(113, 75, 103, 0.12);
+        }
+        h1 {
+            flex: 1 1 auto;
+            margin: 0;
+        }
+        h1 input {
+            padding: 14px 18px;
+            border: 1px solid $sh-line !important;
+            border-radius: 14px;
+            font-weight: 700;
+            background-color: #f6f3f6;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+            }
+        }
+    }
+
+    .o_inner_group .o_form_label {
+        font-size: 13.5px;
+        font-weight: 500;
+        color: $sh-text;
+    }
+    .o_inner_group .o_field_widget:not(.o_field_color_picker) {
+        input:not(.form-check-input),
+        .o_field_many2many_selection input {
+            padding: 9px 12px;
+            border: 1px solid $sh-line !important;
+            border-radius: 10px;
+            background-color: #f6f3f6;
+
+            &:focus {
+                border-color: $sh-plum !important;
+                background-color: #fff;
+            }
+        }
+    }
+
+    // parent department: soft plum pill with a building icon
+    .o_field_widget[name="parent_id"] {
+        position: relative;
+        width: auto !important;
+
+        &::before {
+            content: "\f0f7";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+            font-family: FontAwesome;
+            color: $sh-plum;
+        }
+        input {
+            width: auto;
+            min-width: 180px;
+            padding-left: 36px !important;
+            border-color: #e8d6e1 !important;
+            border-radius: 999px !important;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: #f7eef4 !important;
+        }
+    }
+
+    // colour: round dot with a ring
+    .o_field_color_picker .o_colorlist_toggler,
+    .o_field_color_picker .o_colorlist > button {
+        width: 32px;
+        height: 32px;
+        border-radius: 50% !important;
+        box-shadow: 0 0 0 3px #fff, 0 0 0 4px $sh-line;
+    }
+
+    .oe_button_box .oe_stat_button {
+        margin: 0 4px;
+        border: 1px solid $sh-line !important;
+        border-radius: 12px;
+        background-color: #fff;
+    }
+}

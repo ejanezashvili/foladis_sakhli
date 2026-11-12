@@ -14,6 +14,10 @@
                 <field name="sh_head_title"/>
                 <field name="deputy_id" widget="many2one_avatar_employee"/>
             </field>
+            <!-- new look (style only) -->
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_dept_form</attribute>
+            </xpath>
         </field>
     </record>
 
