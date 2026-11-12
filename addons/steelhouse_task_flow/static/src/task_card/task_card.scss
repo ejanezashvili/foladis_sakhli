@@ -1,0 +1,113 @@
+// Task boards (my tasks, departments, projects): soft columns + white rounded "pill" cards
+.o_kanban_project_tasks {
+    // columns
+    .o_kanban_group:not(.o_column_folded) {
+        background: #f4f4f8;
+        border-radius: 16px;
+        margin: 0 6px;
+        padding: 6px 8px 10px;
+    }
+    .o_kanban_header .o_column_title {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #2b2840;
+        &::before {
+            content: "";
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            margin-right: 8px;
+            border-radius: 50%;
+            background: #71639e;
+            vertical-align: middle;
+        }
+    }
+
+    // card
+    .o_kanban_record {
+        border: 1px solid #e9e8ef !important;
+        border-radius: 14px !important;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(30, 20, 60, 0.05);
+        margin-bottom: 10px !important;
+        overflow: hidden;
+        transition: box-shadow 0.15s, transform 0.15s;
+        &:hover { box-shadow: 0 6px 16px rgba(30, 20, 60, 0.10); }
+    }
+    // overdue: white card, red stripe + red pill (lighter than the old full red tint)
+    .o_kanban_record:has(.o_sh_pill_late) {
+        background: #fff !important;
+        border-left: 4px solid #dc3545 !important;
+    }
+    .o_sh_card {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        padding: 4px 4px 0;
+        &.o_sh_card_closed { opacity: 0.6; }
+    }
+    .o_sh_card_top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .o_sh_card_num { font-size: 0.75rem; font-weight: 600; color: #8b84a8; }
+    .o_sh_card_title { font-size: 1.02rem; font-weight: 600; color: #1f1d2b; line-height: 1.3; }
+    .o_sh_card_sub {
+        font-size: 0.82rem;
+        color: #7a7790;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        > div, > span { display: inline; }
+    }
+    .o_sh_card_prog {
+        .o_progressbar { gap: 8px; }
+        .o_progress { height: 6px; border-radius: 3px; background: #efedf5; }
+        .o_progressbar_value { font-size: 0.75rem; color: #7a7790; }
+    }
+    .o_sh_card_row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px; }
+    .o_sh_card_lbl { font-size: 0.85rem; color: #55526a; }
+    .o_sh_card_date { font-size: 0.85rem; color: #55526a; display: inline-flex; align-items: center; > div { display: inline; } }
+    .o_sh_card_tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .o_sh_tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; background: #f3f2f7; color: #55526a; }
+    .o_sh_card_foot {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 2px;
+        padding: 9px 0 2px;
+        border-top: 1px solid #efedf3;
+        font-size: 0.82rem;
+        color: #6f6c84;
+    }
+    .o_sh_meta { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
+}
+
+// status pill (stage kind)
+.o_sh_pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    max-width: 75%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    .o_sh_pill_dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: 0 0 auto; }
+}
+.o_sh_pill_new { background: #eef0ff; color: #4f46e5; }
+.o_sh_pill_accepted { background: #e8f1ff; color: #2563eb; }
+.o_sh_pill_in_progress { background: #f1edf8; color: #71639e; }
+.o_sh_pill_on_hold { background: #fff4e0; color: #b7791f; }
+.o_sh_pill_review { background: #fff1e6; color: #e8590c; }
+.o_sh_pill_returned { background: #fdecf3; color: #c0577c; }
+.o_sh_pill_done { background: #e7f6ec; color: #1e7e34; }
+.o_sh_pill_cancelled { background: #f1f1f1; color: #6c757d; }
+.o_sh_pill_late { background: #fdecea; color: #dc3545; }
+
+// priority pill
+.o_sh_prio { font-size: 0.78rem; font-weight: 500; padding: 2px 11px; border-radius: 11px; white-space: nowrap; }
+.o_sh_prio_0 { background: #eef0ff; color: #4f46e5; }
+.o_sh_prio_1 { background: #e8f1ff; color: #2563eb; }
+.o_sh_prio_2 { background: #fff1e6; color: #e8590c; }
+.o_sh_prio_3 { background: #fdecea; color: #dc3545; }
