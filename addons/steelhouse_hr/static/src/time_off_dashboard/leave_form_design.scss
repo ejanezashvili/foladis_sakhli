@@ -497,9 +497,8 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
         background-color: #e8f0fe;
     }
 
-    // checkboxes shown as plum switches
-    .o_field_widget[name="requires_allocation"],
-    .o_field_widget[name="employee_requests"] {
+    // every checkbox shown as a plum switch
+    .o_field_boolean {
         .form-check-input {
             width: 2.4em;
             height: 1.3em;
@@ -517,6 +516,91 @@ body:has(.o_menu_brand[data-menu-xmlid="hr_holidays.menu_hr_holidays_root"]) .o-
                 background-color: $sh-plum;
                 background-position: right center;
             }
+        }
+    }
+
+    // labels: dark and small (as in the design)
+    .o_form_label,
+    .o_wrap_label label {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #2b2430;
+    }
+
+    // name: small label above, thin line below
+    .oe_title {
+        padding-bottom: 18px;
+        margin-bottom: 18px;
+        border-bottom: 1px solid $sh-field-border;
+
+        .o_sh_name_label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            color: $sh-plum;
+        }
+        .o_field_widget[name="name"] input {
+            border-color: transparent !important;
+            background-color: #f3f1f4;
+        }
+    }
+
+    // section titles with a light line to the right
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            height: 1px;
+            background-color: $sh-field-border;
+        }
+    }
+
+    // colour: a round dot
+    .o_field_color_picker {
+        .o_colorlist_toggler,
+        .o_colorlist > button {
+            width: 28px;
+            height: 28px;
+            border-radius: 50% !important;
+            box-shadow: 0 0 0 3px #fff, 0 0 0 4px $sh-field-border;
+        }
+    }
+
+    // icon picker: every icon in a rounded card, the chosen one in plum
+    .o_time_off_icon_types {
+        .o_radio_item {
+            position: relative;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 1px solid $sh-field-border;
+            border-radius: 12px;
+            background-color: #f6f4f7;
+
+            &:has(input:checked) {
+                border-color: $sh-plum;
+                background-color: $sh-plum-soft;
+                box-shadow: 0 2px 8px rgba(113, 75, 103, 0.18);
+            }
+        }
+        .o_radio_input {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            margin: 0;
+            width: 12px;
+            height: 12px;
+        }
+        label {
+            padding: 10px 12px;
+            cursor: pointer;
+        }
+        img {
+            width: 40px;
+            height: 40px;
         }
     }
 }
