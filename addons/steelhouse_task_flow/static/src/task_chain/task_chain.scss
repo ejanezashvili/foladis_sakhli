@@ -85,7 +85,8 @@
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
-    .o_sh_chain_dept {
+    .o_sh_chain_dept,
+    .o_sh_chain_meta {
         font-size: 12px;
         color: #555;
     }
@@ -167,7 +168,8 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        border: 2px dashed #cfc8e4;
+        border: 1px dashed #cfc8e4;
+        font-size: 13px;
         border-radius: 8px;
         color: #8f86b5;
         cursor: pointer;

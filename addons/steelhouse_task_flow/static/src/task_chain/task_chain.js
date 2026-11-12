@@ -8,12 +8,13 @@ import { ShUserPicker } from "../task_steps/task_steps";
 
 // sizes of the step diagram (px)
 const W = 236; // card
-const H = 124;
+const H = 100;
 const GX = 74; // gap between steps (arrows)
 const GY = 18;
 const PAD = 12;
-const HEAD = 44; // row with the step numbers
-const SLOT = 150; // "+ previous step" / "+ step N" boxes
+const HEAD = 40; // row with the step numbers
+const SLOT = 96; // "+ before" / "+ after" boxes
+const SLOT_H = 44;
 
 // "თანმიმდევრობა" tab: tasks as numbered steps 1 → 2 → 3 ... (any department), joined by arrows.
 // Tasks of the same step run in parallel; a step starts when its previous tasks are finished.
@@ -36,6 +37,7 @@ export class TaskChain extends Component {
             edges: [],
             readonly: false,
             truncated: false,
+            project: "",
             departments: [],
             form: null,
             users: [],
@@ -69,6 +71,7 @@ export class TaskChain extends Component {
             edges: data.edges,
             readonly: data.readonly,
             truncated: data.truncated,
+            project: data.project || "",
             loaded: true,
         });
     }
@@ -110,10 +113,10 @@ export class TaskChain extends Component {
         return `left:${p.x}px;top:${p.y}px;width:${W}px;height:${H}px;`;
     }
     get startSlotStyle() {
-        return `left:${PAD}px;top:${PAD + HEAD}px;width:${SLOT}px;height:${H}px;`;
+        return `left:${PAD}px;top:${PAD + HEAD + (H - SLOT_H) / 2}px;width:${SLOT}px;height:${SLOT_H}px;`;
     }
     get endSlotStyle() {
-        return `left:${this.layout.endX}px;top:${PAD + HEAD}px;width:${SLOT}px;height:${H}px;`;
+        return `left:${this.layout.endX}px;top:${PAD + HEAD + (H - SLOT_H) / 2}px;width:${SLOT}px;height:${SLOT_H}px;`;
     }
     // the first step's first task gets "+ previous step"; the last step's first task gets "+ step N"
     get firstNode() {
@@ -146,23 +149,6 @@ export class TaskChain extends Component {
                     my: (y1 + y2) / 2,
                 };
             });
-    }
-    // dashed hint arrows to the "+" boxes
-    get hints() {
-        const pos = this.layout.pos;
-        const res = [];
-        const f = this.firstNode && pos[this.firstNode.id];
-        if (f) {
-            const y = PAD + HEAD + H / 2;
-            res.push({ key: "s", d: `M ${PAD + SLOT} ${y} C ${PAD + SLOT + GX / 2} ${y}, ${f.x - GX / 2} ${f.y + H / 2}, ${f.x - 3} ${f.y + H / 2}` });
-        }
-        const l = this.lastNode && pos[this.lastNode.id];
-        if (l) {
-            const x2 = this.layout.endX - 3;
-            const y2 = PAD + HEAD + H / 2;
-            res.push({ key: "e", d: `M ${l.x + W} ${l.y + H / 2} C ${l.x + W + GX / 2} ${l.y + H / 2}, ${x2 - GX / 2} ${y2}, ${x2} ${y2}` });
-        }
-        return res;
     }
     statusLabel(node) {
         return {
@@ -231,6 +217,7 @@ export class TaskChain extends Component {
             user_id: false,
             reviewer_ids: [user.userId],
             reviewerPick: 0,
+            editReviewers: false,
             deadline: "",
             subtasks: [],
         };

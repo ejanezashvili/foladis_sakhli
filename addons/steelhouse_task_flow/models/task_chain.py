@@ -158,6 +158,7 @@ class ProjectTask(models.Model):
             'prev': me.depend_on_ids.ids,
             'next': me.dependent_ids.ids,
             'readonly': not self.has_access('write'),
+            'project': me.sh_project_id.name or '',
             'truncated': len(tasks) >= MAX_NODES,
         }
 

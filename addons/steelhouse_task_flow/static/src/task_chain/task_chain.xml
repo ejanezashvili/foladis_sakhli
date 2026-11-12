@@ -2,12 +2,11 @@
 <templates xml:space="preserve">
     <t t-name="steelhouse_task_flow.TaskChain">
         <div class="o_sh_chain">
-            <div t-if="!taskId" class="text-muted p-3">თანმიმდევრობის დასაწერად ჯერ შეინახეთ დავალება.</div>
+            <div t-if="!taskId" class="text-muted p-3">ჯერ შეინახეთ დავალება.</div>
             <t t-elif="state.loaded">
                 <div class="text-muted small mb-2">
-                    <i class="fa fa-info-circle me-1"/>
-                    დავალებები სრულდება ნაბიჯებად: 1 → 2 → 3 … შემდეგი ნაბიჯი აქტიური ხდება, როცა წინა შესრულდება (🔒 — ელოდება).
-                    ერთ ნაბიჯში რამდენიმე დავალება ერთდროულად სრულდება.
+                    <t t-if="state.project"><i class="fa fa-folder-open-o me-1" title="პროექტი"/><b t-esc="state.project"/> · </t>
+                    <i class="fa fa-lock me-1" title="ელოდება"/>შემდეგი ნაბიჯი იწყება, როცა წინა დასრულდება.
                 </div>
 
                 <!-- numbered steps -->
@@ -22,17 +21,9 @@
                                 <marker id="o_sh_arrow_wait" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
                                     <path d="M 0 0 L 10 5 L 0 10 z" fill="#8f86b5"/>
                                 </marker>
-                                <marker id="o_sh_arrow_hint" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-                                    <path d="M 0 0 L 10 5 L 0 10 z" fill="#cfc8e4"/>
-                                </marker>
                             </defs>
-                            <t t-if="!state.readonly">
-                                <path t-foreach="hints" t-as="h" t-key="h.key" t-att-d="h.d" fill="none"
-                                      stroke="#cfc8e4" stroke-width="2" stroke-dasharray="3 5" marker-end="url(#o_sh_arrow_hint)"/>
-                            </t>
                             <path t-foreach="arrows()" t-as="a" t-key="a.key" t-att-d="a.d" fill="none"
                                   t-att-stroke="a.done ? '#28a745' : '#8f86b5'" stroke-width="2"
-                                  t-att-stroke-dasharray="a.done ? '' : '6 4'"
                                   t-att-marker-end="a.done ? 'url(#o_sh_arrow_done)' : 'url(#o_sh_arrow_wait)'"/>
                         </svg>
 
@@ -41,23 +32,20 @@
                              t-att-class="'o_sh_step_num o_sh_step_' + stepState(step.level)"
                              t-att-style="'left:' + (step.x - 60) + 'px;'">
                             <span class="o_sh_step_circle">
-                                <i t-if="stepState(step.level) === 'done'" class="fa fa-check"/>
+                                <i t-if="stepState(step.level) === 'done'" class="fa fa-check" title="შესრულდა"/>
                                 <t t-else="" t-esc="step.number"/>
                             </span>
-                            <span class="ms-1">ნაბიჯი <t t-esc="step.number"/></span>
                         </div>
 
-                        <!-- "+ previous step" / "+ step N" -->
+                        <!-- "+ before" / "+ after" -->
                         <t t-if="!state.readonly">
                             <div class="o_sh_chain_slot" t-att-style="startSlotStyle"
-                                 t-on-click="() => this.openForm('prev', this.firstNode)" title="დაამატეთ ნაბიჯი დასაწყისში">
-                                <i class="fa fa-plus-circle fa-2x mb-1"/>
-                                <span>წინა ნაბიჯი</span>
+                                 t-on-click="() => this.openForm('prev', this.firstNode)" title="ნაბიჯის დამატება დასაწყისში">
+                                <span>+ წინ</span>
                             </div>
                             <div class="o_sh_chain_slot" t-att-style="endSlotStyle"
-                                 t-on-click="() => this.openForm('next', this.lastNode)" title="დაამატეთ შემდეგი ნაბიჯი">
-                                <i class="fa fa-plus-circle fa-2x mb-1"/>
-                                <span>ნაბიჯი <t t-esc="lay.cols + 1"/></span>
+                                 t-on-click="() => this.openForm('next', this.lastNode)" title="ნაბიჯის დამატება ბოლოში">
+                                <span>+ შემდეგ</span>
                             </div>
                         </t>
 
@@ -65,32 +53,22 @@
                         <div t-foreach="state.nodes" t-as="node" t-key="node.id"
                              t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '')"
                              t-att-style="cardStyle(node)" t-on-click="() => this.openTask(node)"
-                             t-att-title="node.current ? 'ეს დავალება' : 'გახსნა'">
+                             t-att-title="node.current ? '' : 'გახსნა'">
                             <div class="d-flex justify-content-between align-items-center small">
-                                <span class="o_sh_chain_num">
-                                    <t t-esc="node.number"/>
-                                    <span t-if="node.current" class="badge o_sh_this ms-1">ეს დავალება</span>
-                                </span>
+                                <span class="o_sh_chain_num" t-esc="node.number"/>
                                 <span class="o_sh_chain_status">
-                                    <i t-att-class="'fa me-1 ' + statusIcon(node)"/><t t-esc="statusLabel(node)"/>
+                                    <i t-att-class="'fa me-1 ' + statusIcon(node)" t-att-title="statusLabel(node)"/><t t-esc="statusLabel(node)"/>
                                 </span>
                             </div>
                             <div class="o_sh_chain_name" t-esc="node.name"/>
-                            <div class="o_sh_chain_dept text-truncate"><i class="fa fa-sitemap me-1"/><t t-esc="node.department"/></div>
-                            <div class="d-flex justify-content-between align-items-center small mt-auto">
-                                <span class="text-truncate d-flex align-items-center">
-                                    <t t-if="node.user_id">
-                                        <img t-att-src="avatar(node.user_id)" class="rounded me-1 o_sh_avatar"/>
-                                        <span class="text-truncate" t-esc="node.user_name"/>
-                                    </t>
-                                    <span t-else="" class="text-muted">პასუხისმგებელი —</span>
-                                </span>
-                                <span t-if="node.deadline" t-att-class="'text-nowrap ms-1 ' + (node.overdue ? 'text-danger fw-bold' : 'text-muted')">
-                                    <i class="fa fa-clock-o me-1"/><t t-esc="node.deadline"/>
-                                </span>
+                            <div class="o_sh_chain_meta text-truncate">
+                                <t t-esc="node.department"/>
+                                <t t-if="node.user_name"> · <t t-esc="node.user_name"/></t>
                             </div>
-                            <div class="o_sh_chain_bar"><i t-att-style="'width:' + node.progress + '%'"/></div>
-                            <button t-if="!state.readonly" class="o_sh_card_plus" title="შემდეგი ნაბიჯი ამის შემდეგ"
+                            <div t-if="node.deadline" t-att-class="'small mt-auto ' + (node.overdue ? 'text-danger fw-bold' : 'text-muted')">
+                                <i class="fa fa-clock-o me-1" title="ვადა"/><t t-esc="node.deadline"/>
+                            </div>
+                            <button t-if="!state.readonly" class="o_sh_card_plus" title="ნაბიჯის დამატება ამის შემდეგ"
                                     t-on-click.stop="() => this.openForm('next', node)">+</button>
                         </div>
 
@@ -107,11 +85,8 @@
                 <!-- link an existing task -->
                 <div t-if="state.link" class="o_sh_chain_box mt-3">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <b>
-                            ნაბიჯი <t t-esc="state.link.step"/> — არსებული დავალება
-                            <span class="text-muted fw-normal">(<t t-esc="state.link.direction === 'next' ? 'შემდეგ: ' : 'მანამდე: '"/><t t-esc="state.link.anchor_name"/>)</span>
-                        </b>
-                        <button class="btn-close" t-on-click="() => this.state.link = null"/>
+                        <b>ნაბიჯი <t t-esc="state.link.step"/> — არსებული დავალება</b>
+                        <button class="btn-close" title="დახურვა" t-on-click="() => this.state.link = null"/>
                     </div>
                     <input type="text" class="form-control form-control-sm mb-2" placeholder="ძიება სახელით ან ნომრით..."
                            t-att-value="state.link.term" t-on-input="onLinkTerm"/>
@@ -127,86 +102,78 @@
                 <div t-if="state.form" class="o_sh_chain_box mt-3">
                     <t t-set="f" t-value="state.form"/>
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <b>
-                            <span class="o_sh_step_circle me-1" t-esc="f.step"/>
-                            ახალი ნაბიჯი
-                            <span class="text-muted fw-normal">(<t t-esc="f.direction === 'next' ? 'შემდეგ: ' : 'მანამდე: '"/><t t-esc="f.anchor_name"/>)</span>
-                        </b>
+                        <b>ნაბიჯი <t t-esc="f.step"/> — ახალი დავალება</b>
                         <div class="d-flex align-items-center gap-3">
-                            <a href="#" class="small" t-on-click.prevent="openLinkFromForm">ან აირჩიეთ არსებული დავალება</a>
-                            <button class="btn-close" t-on-click="cancelForm"/>
+                            <a href="#" class="small text-muted" t-on-click.prevent="openLinkFromForm">არსებულის არჩევა</a>
+                            <button class="btn-close" title="დახურვა" t-on-click="cancelForm"/>
                         </div>
                     </div>
-                    <div class="row g-2 align-items-end">
-                        <div class="col-md-12">
-                            <label class="form-label small mb-0">დავალება</label>
-                            <input type="text" class="form-control" placeholder="რა უნდა გაკეთდეს..."
-                                   t-att-value="f.name" t-on-input="(ev) => f.name = ev.target.value"/>
-                        </div>
+                    <input type="text" class="form-control mb-2" placeholder="რა უნდა გაკეთდეს..."
+                           t-att-value="f.name" t-on-input="(ev) => f.name = ev.target.value"/>
+                    <div class="row g-2">
                         <div class="col-md-4">
-                            <label class="form-label small mb-0">დეპარტამენტი</label>
-                            <select class="form-select form-select-sm" t-on-change="onDepartment">
-                                <option value="">— აირჩიეთ —</option>
+                            <select class="form-select form-select-sm" title="დეპარტამენტი" t-on-change="onDepartment">
+                                <option value="">დეპარტამენტი...</option>
                                 <option t-foreach="state.departments" t-as="d" t-key="d.id" t-att-value="d.id"
                                         t-att-selected="d.id === f.project_id" t-esc="d.name"/>
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label small mb-0">პასუხისმგებელი</label>
-                            <div class="form-control form-control-sm">
-                                <ShUserPicker users="state.users" value="f.user_id" onChange="(id) => f.user_id = id"/>
+                            <div class="form-control form-control-sm" title="პასუხისმგებელი">
+                                <ShUserPicker users="state.users" value="f.user_id" placeholder="'პასუხისმგებელი...'" onChange="(id) => f.user_id = id"/>
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label small mb-0">ვადა</label>
-                            <input type="date" class="form-control form-control-sm" t-att-value="f.deadline"
+                            <input type="date" class="form-control form-control-sm" title="ვადა" t-att-value="f.deadline"
                                    t-on-change="(ev) => f.deadline = ev.target.value"/>
                         </div>
                     </div>
-                    <div class="row g-2 mt-1">
-                        <div class="col-md-12">
-                            <label class="form-label small mb-0">შემმოწმებელი <span class="text-muted">(ადასტურებს შესრულებას; შეიძლება რამდენიმე)</span></label>
-                            <div class="form-control form-control-sm d-flex flex-wrap align-items-center gap-2">
-                                <span t-foreach="f.reviewer_ids" t-as="rid" t-key="rid" class="badge rounded-pill o_sh_chain_chip d-inline-flex align-items-center">
-                                    <img t-att-src="avatar(rid)" class="rounded-circle me-1 o_sh_avatar"/>
-                                    <t t-esc="userName(rid)"/>
-                                    <i class="fa fa-times ms-2 o_sh_chip_x" title="მოხსნა" t-on-click="() => this.removeReviewer(rid)"/>
-                                </span>
-                                <div class="flex-grow-1" style="min-width: 180px">
-                                    <ShUserPicker t-key="'rp' + f.reviewerPick" users="state.users" value="false"
-                                                  onChange="(id) => this.addReviewer(id)"/>
-                                </div>
+
+                    <!-- reviewer: one line, editable on demand -->
+                    <div class="small mt-2">
+                        <span class="text-muted me-1">შემმოწმებელი:</span>
+                        <t t-if="!f.editReviewers">
+                            <b t-esc="f.reviewer_ids.map((id) => this.userName(id)).join(', ') or '—'"/>
+                            · <a href="#" t-on-click.prevent="() => f.editReviewers = true">შეცვლა</a>
+                        </t>
+                        <div t-else="" class="form-control form-control-sm d-flex flex-wrap align-items-center gap-2 mt-1">
+                            <span t-foreach="f.reviewer_ids" t-as="rid" t-key="rid" class="badge rounded-pill o_sh_chain_chip d-inline-flex align-items-center">
+                                <t t-esc="userName(rid)"/>
+                                <i class="fa fa-times ms-2 o_sh_chip_x" title="მოხსნა" t-on-click="() => this.removeReviewer(rid)"/>
+                            </span>
+                            <div class="flex-grow-1" style="min-width: 180px">
+                                <ShUserPicker t-key="'rp' + f.reviewerPick" users="state.users" value="false"
+                                              onChange="(id) => this.addReviewer(id)"/>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <div class="small fw-bold mb-1">ქვედავალებები</div>
+
+                    <!-- sub-tasks: hidden until asked for -->
+                    <div class="mt-2">
                         <div t-foreach="f.subtasks" t-as="s" t-key="s.key" class="row g-2 mb-1 align-items-center">
                             <div class="col-md-5">
                                 <input type="text" class="form-control form-control-sm" placeholder="ქვედავალება..."
                                        t-att-value="s.name" t-on-input="(ev) => s.name = ev.target.value"/>
                             </div>
                             <div class="col-md-4">
-                                <div class="form-control form-control-sm">
-                                    <ShUserPicker users="state.users" value="s.user_id" onChange="(id) => s.user_id = id"/>
+                                <div class="form-control form-control-sm" title="შემსრულებელი">
+                                    <ShUserPicker users="state.users" value="s.user_id" placeholder="'შემსრულებელი...'" onChange="(id) => s.user_id = id"/>
                                 </div>
                             </div>
                             <div class="col-md-2">
-                                <input type="date" class="form-control form-control-sm" t-att-value="s.deadline"
+                                <input type="date" class="form-control form-control-sm" title="ვადა" t-att-value="s.deadline"
                                        t-on-change="(ev) => s.deadline = ev.target.value"/>
                             </div>
                             <div class="col-md-1">
-                                <button class="btn btn-link p-0 text-muted" title="წაშლა" t-on-click="() => this.removeSub(s)"><i class="fa fa-trash-o"/></button>
+                                <button class="btn btn-link p-0 text-muted" title="წაშლა" t-on-click="() => this.removeSub(s)"><i class="fa fa-trash-o" title="წაშლა"/></button>
                             </div>
                         </div>
-                        <a href="#" class="small" t-on-click.prevent="addSub">+ ქვედავალების დამატება</a>
+                        <a href="#" class="small" t-on-click.prevent="addSub">+ ქვედავალება</a>
                     </div>
+
                     <div class="mt-3 d-flex gap-2">
-                        <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm">ნაბიჯის დამატება</button>
+                        <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm">დამატება</button>
                         <button class="btn btn-secondary btn-sm" t-on-click="cancelForm">გაუქმება</button>
-                    </div>
-                    <div class="text-muted small mt-2">
-                        პასუხისმგებლების სიაში ჯერ არჩეული დეპარტამენტის თანამშრომლები ჩანს, შემდეგ — დანარჩენები.
                     </div>
                 </div>
             </t>
