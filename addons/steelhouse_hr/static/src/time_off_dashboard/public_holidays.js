@@ -54,7 +54,17 @@ patch(TimeOffCalendarYearRenderer.prototype, {
     },
 });
 
+const SH_WEEKDAYS_MONTH = ["კვი", "ორშ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"];
+
 patch(TimeOffCalendarCommonRenderer.prototype, {
+    // month view: Georgian weekday headers, whatever the browser locale
+    getHeaderHtml(arg) {
+        if (this.props.model.scale === "month") {
+            return { html: `<span class="o_sh_weekday">${SH_WEEKDAYS_MONTH[arg.date.getDay()]}</span>` };
+        }
+        return super.getHeaderHtml(...arguments);
+    },
+
     getDayCellClassNames(info) {
         return [...super.getDayCellClassNames(info), ...holidayClass(this, info)];
     },
