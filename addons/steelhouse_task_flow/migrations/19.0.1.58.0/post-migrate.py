@@ -18,3 +18,6 @@ def migrate(cr, version):
     # no weekly summary in the week of the install; the first one goes out next week
     today = datetime.now(pytz.timezone('Asia/Tbilisi')).date()
     env['ir.config_parameter'].set_param('steelhouse_task_flow.digest_week', '%s-W%02d' % today.isocalendar()[:2])
+    # e-mail is not set up yet: everyone gets notifications in Odoo
+    env['res.users'].with_context(active_test=False).search([('notification_type', '=', 'email'), ('share', '=', False)]).write(
+        {'notification_type': 'inbox'})

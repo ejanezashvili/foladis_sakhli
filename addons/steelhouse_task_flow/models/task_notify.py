@@ -15,6 +15,13 @@ ESCALATE_AFTER_DAYS = 3
 TODO = 'mail.mail_activity_data_todo'
 
 
+class ResUsers(models.Model):
+    _inherit = 'res.users'
+
+    # e-mail is not set up yet: new users get their notifications in Odoo (inbox / mobile)
+    notification_type = fields.Selection(default='inbox')
+
+
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 
@@ -30,11 +37,17 @@ class ProjectTask(models.Model):
         self.ensure_one()
         return self._sh_employees(self.user_ids).parent_id.user_id.filtered('active')
 
-    def _sh_escalation_users(self):
-        """One level up: the managers of the reviewers and of the assignees' direct managers."""
+    def _sh_first_level(self):
+        """4.4: reviewers (no reviewer -> the creator) and the assignees' direct managers."""
         self.ensure_one()
-        first = self.reviewer_ids | self._sh_direct_managers()
-        top = self._sh_employees(first).parent_id.user_id.filtered('active')
+        return ((self.reviewer_ids or self.create_uid) | self._sh_direct_managers()).filtered(
+            lambda u: u.active and not u.share)
+
+    def _sh_escalation_users(self):
+        """One level up: all equal heads of the 4.4 people."""
+        self.ensure_one()
+        first = self._sh_first_level()
+        top = self._sh_employees(first).sh_manager_ids.user_id.filtered('active')
         return top - first - self.user_ids
 
     def _sh_schedule(self, users, summary, note):
@@ -53,7 +66,7 @@ class ProjectTask(models.Model):
         """Called once when the task becomes overdue (from the hourly overdue cron)."""
         for task in self:
             label = '%s%s' % (task.sh_number and task.sh_number + ' ' or '', task.name)
-            task._sh_schedule((task.reviewer_ids | task._sh_direct_managers()) - task.user_ids,
+            task._sh_schedule(task._sh_first_level() - task.user_ids,
                               'ვადაგადაცილებულია: %s' % label, task._sh_people_note())
             if task.priority == '3':
                 task._sh_escalate(critical=True)
