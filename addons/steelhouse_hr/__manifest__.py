@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse HR',
-    'version': '19.0.1.34.0',
+    'version': '19.0.1.34.1',
     'category': 'Human Resources',
     'summary': 'ფოლადის სახლი: რამდენიმე თანაბარი ხელმძღვანელი, შემცვლელი, დეპარტამენტების იერარქია, შემცვლელები შვებულებისას',
     'author': 'Steelhouse',
@@ -31,6 +31,7 @@
             'steelhouse_hr/static/src/message_actions/*',
             'steelhouse_hr/static/src/activity_menu/*',
             'steelhouse_hr/static/src/employee_design/*',
+            'steelhouse_hr/static/src/form_buttons/*',
         ],
         'web.assets_backend_lazy': [
             'steelhouse_hr/static/src/department_hierarchy/*',

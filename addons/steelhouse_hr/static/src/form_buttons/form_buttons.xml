@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Form save / discard: a green "შენახვა" and a red "გაუქმება" button with their names
+         instead of the bare cloud and cross icons (same actions, same hotkeys). -->
+    <t t-inherit="web.FormStatusIndicator" t-inherit-mode="extension">
+        <xpath expr="//button[hasclass('o_form_button_save')]" position="attributes">
+            <attribute name="class">o_form_button_save o_sh_form_save btn btn-success px-3 py-1 lh-sm</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_form_button_save')]/i" position="after">
+            <span class="ms-1">შენახვა</span>
+        </xpath>
+        <xpath expr="//button[hasclass('o_form_button_cancel')]" position="attributes">
+            <attribute name="class">o_form_button_cancel o_sh_form_discard btn btn-outline-danger px-3 py-1 lh-sm ms-2</attribute>
+        </xpath>
+        <xpath expr="//button[hasclass('o_form_button_cancel')]/i" position="after">
+            <span class="ms-1">გაუქმება</span>
+        </xpath>
+    </t>
+
+</templates>
