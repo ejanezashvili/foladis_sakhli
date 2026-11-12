@@ -3,14 +3,14 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
 const DAY = 86400000;
-const LABEL_W = 280;
+const LABEL_W = 320;
 const MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი", "ივლისი",
     "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
 const WEEKDAYS = ["კვ", "ორ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"];
 const SCALES = {
     week: { label: "2 კვირა", dayW: 84 },
     month: { label: "თვე", dayW: 38 },
-    quarter: { label: "კვარტალი", dayW: 13 },
+    quarter: { label: "3 თვე", dayW: 13 },
 };
 export const KINDS = {
     new: "ახალი",
@@ -51,13 +51,16 @@ export class TaskTimeline extends Component {
     setup() {
         this.orm = useService("orm");
         this.action = useService("action");
-        this.LABEL_W = LABEL_W;
+        // narrower name column on phones
+        this.LABEL_W = window.innerWidth < 768 ? 170 : LABEL_W;
         this.SCALES = SCALES;
         this.scaleKeys = Object.keys(SCALES);
         this.KINDS = KINDS;
         this.VIEWS = VIEWS;
         this.state = useState({
             view: "timeline",
+            scope: "mine",
+            showDone: false,
             work: null,
             scale: "month",
             anchor: this.today(),
@@ -172,7 +175,7 @@ export class TaskTimeline extends Component {
         if (i < 0 || i >= this.days) {
             return "display:none";
         }
-        return `left:${LABEL_W + i * this.dayW + this.dayW / 2}px`;
+        return `left:${this.LABEL_W + i * this.dayW + this.dayW / 2}px`;
     }
 
     // ---------------------------------------------------------------- bars
@@ -245,15 +248,81 @@ export class TaskTimeline extends Component {
             this.state.loading = false;
             return;
         }
+        const mine = this.state.scope === "mine";
         this.state.data = await this.orm.call("project.task", "sh_timeline_data", [iso(from), iso(to)], {
+            mine,
             group_by: this.state.groupBy,
-            status: this.state.status,
+            status: this.state.showDone ? "all" : "open",
             department_id: this.state.departmentId ? Number(this.state.departmentId) : false,
-            user_id: this.state.userId ? Number(this.state.userId) : false,
-            search: this.state.search.trim(),
-            subtasks: this.state.subtasks,
+            user_id: !mine && this.state.userId ? Number(this.state.userId) : false,
         });
+        if (mine) {
+            this.state.data.department_id = false;
+        }
         this.state.loading = false;
+    }
+
+    // ---------------------------------------------------------------- simple view helpers
+    get isManager() {
+        return Boolean(this.state.data && this.state.data.is_manager);
+    }
+    // "ჩემი": one flat list sorted by deadline; "ყველა": grouped
+    get flatTasks() {
+        const all = [];
+        const seen = new Set();
+        for (const g of this.state.data.groups) {
+            for (const t of g.tasks) {
+                if (!seen.has(t.id)) {
+                    seen.add(t.id);
+                    all.push(t);
+                }
+            }
+        }
+        return all.sort((a, b) => (a.overdue === b.overdue ? 0 : a.overdue ? -1 : 1) || (a.end < b.end ? -1 : a.end > b.end ? 1 : 0));
+    }
+    // 5 simple colours instead of every stage kind
+    simpleKind(t) {
+        if (t.overdue) {
+            return "late";
+        }
+        return { new: "todo", accepted: "todo", review: "review", done: "done", cancelled: "cancel" }[t.kind] || "doing";
+    }
+    daysLeft(t) {
+        return Math.round((parse(t.deadline) - parse(this.state.data.today)) / DAY);
+    }
+    dueText(t) {
+        if (t.kind === "done") {
+            return `✓ დასრულდა ${t.closed_on ? fmt(t.closed_on).slice(0, 5) : ""}`;
+        }
+        if (t.overdue) {
+            const d = this.lateDays(t);
+            return d > 0 ? `⏰ ${d} დღით გადაცილებული` : "⏰ ვადა გავიდა დღეს";
+        }
+        if (!t.deadline) {
+            return "ვადა არ აქვს";
+        }
+        const left = this.daysLeft(t);
+        if (left === 0) {
+            return "ვადა: დღეს";
+        }
+        return `ვადა: ${fmt(t.deadline).slice(0, 5)} (კიდევ ${left} დღე)`;
+    }
+    dueClass(t) {
+        if (t.overdue) {
+            return "o_sh_due_late";
+        }
+        if (t.deadline && t.kind !== "done" && this.daysLeft(t) <= 1) {
+            return "o_sh_due_soon";
+        }
+        return "";
+    }
+    setScope(scope) {
+        this.state.scope = scope;
+        this.load();
+    }
+    toggleDone(ev) {
+        this.state.showDone = ev.target.checked;
+        this.load();
     }
 
     // ---------------------------------------------------------------- workload

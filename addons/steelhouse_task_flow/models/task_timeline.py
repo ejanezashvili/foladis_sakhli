@@ -50,11 +50,23 @@ class ProjectTask(models.Model):
         }
 
     @api.model
+    def _sh_tl_is_manager(self):
+        """Who sees "ყველა" and the workload tabs: project managers / admins and department heads."""
+        user = self.env.user
+        if user.has_group('project.group_project_manager') or user.has_group('base.group_system'):
+            return True
+        return bool(self.env['hr.department'].sudo().search_count([('manager_ids.user_id', '=', user.id)]))
+
+    @api.model
     def sh_timeline_data(self, date_from, date_to, group_by='department', status='open', department_id=False,
-                         user_id=False, search='', subtasks=False):
+                         user_id=False, search='', subtasks=False, mine=False):
         d_from, d_to = date.fromisoformat(date_from), date.fromisoformat(date_to)
         today = fields.Date.context_today(self)
         domain = [('is_template', '=', False), ('project_id', '!=', False)]
+        uid = self.env.uid
+        if mine:  # "ჩემი": my tasks and sub-tasks (assignee or main responsible)
+            domain += ['|', ('user_ids', 'in', [uid]), ('sh_responsible_id', '=', uid)]
+            subtasks = True
         if not subtasks:
             domain.append(('parent_id', '=', False))
         if status == 'open':
@@ -107,6 +119,7 @@ class ProjectTask(models.Model):
             [('sh_is_department', '=', True), ('is_template', '=', False)], order='name')
         users = self.env['res.users'].search([('share', '=', False)], order='name')
         return {
+            'is_manager': self._sh_tl_is_manager(),
             'groups': result,
             'today': today.isoformat(),
             'off_days': off,

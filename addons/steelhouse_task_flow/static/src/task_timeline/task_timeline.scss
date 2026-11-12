@@ -302,3 +302,74 @@ $sh-row: 34px;
     background: #dc3545;
     vertical-align: super;
 }
+
+// ---- simplified look (for everyone, not only heads)
+.o_sh_tl {
+    .o_sh_tl_bar { gap: 10px; padding-bottom: 10px; }
+    .o_sh_tl_row1 {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 18px;
+        width: 100%;
+    }
+    .o_sh_tl_scope .btn { font-weight: 600; }
+    .o_sh_tl_nav .btn { min-width: 38px; }
+    .o_sh_tl_period { font-size: 1.05rem; }
+    .o_sh_tl_scale { margin-left: auto; }
+    .o_sh_tl_legend { font-size: 0.85rem; gap: 6px 18px; }
+    .o_sh_tl_check { display: inline-flex; align-items: center; gap: 6px; margin: 0; cursor: pointer; }
+
+    .o_sh_tl_trow { height: 52px; }
+    .o_sh_tl_tlabel {
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2px;
+        padding-left: 16px;
+        white-space: normal;
+        .o_sh_tl_name {
+            width: 100%;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #212529;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .o_sh_tl_due { width: 100%; font-size: 0.8rem; color: #6c757d; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .o_sh_due_soon { color: #b76e00; font-weight: 600; }
+        .o_sh_due_late { color: #dc3545; font-weight: 600; }
+        .o_sh_tl_who { max-width: none; font-size: inherit; color: #8a8a8a; font-weight: 400; }
+    }
+    .o_sh_tl_row_late .o_sh_tl_tlabel .o_sh_tl_name { color: #b02a37; font-weight: 600; }
+    .o_sh_tl_trow .o_sh_tl_barx { top: 13px; height: 26px; border-radius: 6px; .o_sh_tl_btext { line-height: 26px; font-size: 0.78rem; } }
+    .o_sh_tl_trow .o_sh_tl_tail { top: 16px; height: 20px; }
+    .o_sh_tl_trow .o_sh_tl_mark { top: 20px; }
+    .o_sh_tl_group { height: 40px; }
+    .o_sh_tl_gcount {
+        display: inline-block;
+        min-width: 22px;
+        padding: 0 7px;
+        border-radius: 11px;
+        background: #fff;
+        border: 1px solid #d9d5e6;
+        font-size: 0.75rem;
+        text-align: center;
+        font-weight: 600;
+        color: #555;
+    }
+    .o_sh_tl_glate { background: #dc3545; border-color: #dc3545; color: #fff; }
+    .o_sh_tl_empty { font-size: 1rem; }
+}
+// 5 simple colours
+.o_sh_s_todo { background: #9aa5b8; }
+.o_sh_s_doing { background: #71639e; }
+.o_sh_s_review { background: #f0883e; }
+.o_sh_s_done { background: #28a745; }
+.o_sh_s_cancel { background: #c4c4c4; }
+.o_sh_s_late { background: #dc3545; }
+
+@media (max-width: 767px) {
+    .o_sh_tl .o_sh_tl_scale { margin-left: 0; }
+}
