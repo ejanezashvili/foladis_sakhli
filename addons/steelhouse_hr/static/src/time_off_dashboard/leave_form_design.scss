@@ -146,6 +146,14 @@ $sh-green-soft: #e8f7ee;
         font-weight: 600;
     }
 
+    // duration pill without the "( )" around it
+    #full_date > div:has(> .o_field_widget[name="duration_display"]) {
+        font-size: 0;
+        > .o_field_widget {
+            font-size: 14px;
+        }
+    }
+
     // duration as a green pill
     .o_field_widget[name="duration_display"] {
         display: inline-block;
@@ -243,8 +251,8 @@ $sh-green-soft: #e8f7ee;
     }
 }
 
-// ---------- dropdown lists opened from these forms (shown while their field has focus)
-body:has(:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--input:focus) .o-autocomplete--dropdown-menu {
+// ---------- dropdown lists of these forms (the list is rendered inside the field)
+:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--dropdown-menu {
     padding: 8px;
     border: 0;
     border-radius: 14px;
@@ -283,7 +291,7 @@ body:has(:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--inp
 }
 
 // time off type list: a briefcase badge before every type (solid when highlighted)
-body:has(.o_field_widget[name="holiday_status_id"] .o-autocomplete--input:focus) .o-autocomplete--dropdown-menu {
+:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o_field_widget[name="holiday_status_id"] .o-autocomplete--dropdown-menu {
     .o-autocomplete--dropdown-item:not(.o_m2o_dropdown_option) .dropdown-item {
         &::before {
             content: "\f0b1";
