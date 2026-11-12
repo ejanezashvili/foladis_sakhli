@@ -123,6 +123,31 @@ table.o_sh_card_list,
     }
 }
 
+// soft blue pill with a shield icon (e.g. "allocation approval" of time off types)
+.o_sh_card_list td.o_sh_pill_blue > span,
+.o_sh_card_list td.o_sh_pill_blue > div {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2f6fd6;
+    background-color: #e8f0fe;
+
+    &::before {
+        content: "\f132";
+        margin-right: 7px;
+        font-family: FontAwesome;
+        font-weight: normal;
+    }
+}
+
+// drag handle muted
+.o_sh_card_list td.o_handle_cell {
+    color: #c9c1c7;
+}
+
 // "Time off balance": no buttons and no title in the control panel
 .o_action:has(.o_sh_balance_list) .o_control_panel {
     .o_control_panel_main_buttons,
