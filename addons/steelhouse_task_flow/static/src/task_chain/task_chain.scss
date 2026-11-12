@@ -263,3 +263,23 @@
         }
     }
 }
+
+// "add a step" form: a small card that pops up where "+" was clicked
+.o_sh_chain .o_sh_chain_pop {
+    position: absolute;
+    z-index: 6;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid #cfc8e4;
+    border-top: 4px solid #71639e;
+    border-radius: 12px;
+    box-shadow: 0 10px 28px rgba(40, 30, 80, 0.18);
+    font-size: 0.9rem;
+    .o_sh_pop_sub {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 4px;
+        margin-bottom: 6px;
+        > div:first-child { grid-column: 1 / -1; }
+    }
+}
