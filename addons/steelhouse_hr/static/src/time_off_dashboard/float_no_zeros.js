@@ -12,10 +12,17 @@ class ShFloatWithoutTrailingZeros extends FloatField {
         if (typeof value !== "string") {
             return value;
         }
-        const sep = (localization.decimalPoint || ".").replace(/[.*+?^${}()|[\]\]/g, "\$&");
-        return value
-            .replace(new RegExp(`(${sep}\d*?[1-9])0+$`), "$1")
-            .replace(new RegExp(`${sep}0+$`), "");
+        const sep = localization.decimalPoint || ".";
+        let result = value;
+        const at = result.lastIndexOf(sep);
+        if (at !== -1 && /^\d+$/.test(result.slice(at + sep.length))) {
+            // drop zeros at the end of the decimals, then the sign itself if nothing is left
+            result = result.replace(/0+$/, "");
+            if (result.endsWith(sep)) {
+                result = result.slice(0, -sep.length);
+            }
+        }
+        return result;
     }
 }
 
