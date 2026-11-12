@@ -1,4 +1,4 @@
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, onWillStart, useRef, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
@@ -15,6 +15,8 @@ const PAD = 12;
 const HEAD = 40; // row with the step numbers
 const SLOT = 96; // "+ before" / "+ after" boxes
 const SLOT_H = 44;
+const POP_W = 300; // "add a step" pop-up card
+const POP_H = 400;
 
 // "თანმიმდევრობა" tab: tasks as numbered steps 1 → 2 → 3 ... (any department), joined by arrows.
 // Tasks of the same step run in parallel; a step starts when its previous tasks are finished.
@@ -45,6 +47,7 @@ export class TaskChain extends Component {
             link: null,
             busy: false,
         });
+        this.scrollRef = useRef("scroll");
         onWillStart(() => this.load());
     }
 
@@ -111,6 +114,38 @@ export class TaskChain extends Component {
     cardStyle(node) {
         const p = this.layout.pos[node.id];
         return `left:${p.x}px;top:${p.y}px;width:${W}px;height:${H}px;`;
+    }
+    // the pop-up opens where "+" was clicked: right of the anchor task ("next") or at the start ("prev")
+    get popPos() {
+        const p = this.state.form || this.state.link;
+        if (!p) {
+            return null;
+        }
+        const anchor = this.layout.pos[p.anchor_id];
+        const y = anchor ? anchor.y : PAD + HEAD;
+        const x = p.direction === "prev" ? PAD : anchor ? anchor.x + W + 14 : this.layout.endX;
+        return { x, y };
+    }
+    get popStyle() {
+        const p = this.popPos;
+        return p ? `left:${p.x}px;top:${p.y}px;width:${POP_W}px;` : "";
+    }
+    get canvasStyle() {
+        const lay = this.layout;
+        const p = this.popPos;
+        const w = p ? Math.max(lay.width, p.x + POP_W + PAD) : lay.width;
+        const h = p ? Math.max(lay.height, p.y + POP_H + PAD) : lay.height;
+        return `width:${w}px;height:${h}px;`;
+    }
+    scrollToPop() {
+        setTimeout(() => {
+            const el = this.scrollRef.el;
+            const p = this.popPos;
+            if (el && p) {
+                el.scrollTo({ left: Math.max(0, p.x + POP_W - el.clientWidth + PAD), behavior: "smooth" });
+                el.querySelector(".o_sh_chain_pop input")?.focus();
+            }
+        }, 50);
     }
     get startSlotStyle() {
         return `left:${PAD}px;top:${PAD + HEAD + (H - SLOT_H) / 2}px;width:${SLOT}px;height:${SLOT_H}px;`;
@@ -222,6 +257,7 @@ export class TaskChain extends Component {
             subtasks: [],
         };
         await this.loadUsers();
+        this.scrollToPop();
     }
     async loadUsers() {
         const res = await this.orm.call("project.task", "sh_chain_users", [this.state.form.project_id || false]);
