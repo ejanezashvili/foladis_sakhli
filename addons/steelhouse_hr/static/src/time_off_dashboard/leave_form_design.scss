@@ -1,4 +1,4 @@
-// Time off request form (dialog from the calendar / page from "My requests"):
+// Time off request and days (allocation) request forms, dialog or page:
 // soft filled inputs, pills, plum accents. Look only - fields and logic unchanged.
 $sh-plum: #714b67;
 $sh-plum-soft: #f3eaf0;
@@ -9,7 +9,7 @@ $sh-green: #1f8a57;
 $sh-green-soft: #e8f7ee;
 
 // ---------- dialog frame
-.modal-content:has(.o_hr_leave_form) {
+.modal-content:has(.o_hr_leave_form, .o_hr_leave_allocation_form) {
     overflow: hidden;
     border: 0;
     border-radius: 18px;
@@ -72,6 +72,12 @@ $sh-green-soft: #e8f7ee;
             border-color: $sh-plum;
             background-color: $sh-plum;
             box-shadow: 0 3px 10px rgba(113, 75, 103, 0.3);
+
+            &::before {
+                font-family: FontAwesome;
+                font-weight: normal;
+                margin-right: 8px;
+            }
         }
         .btn-secondary {
             border: 1px solid $sh-field-border;
@@ -79,9 +85,17 @@ $sh-green-soft: #e8f7ee;
         }
     }
 }
+// save: check mark; send a days request: paper plane
+.modal-content:has(.o_hr_leave_form) .modal-footer .btn-primary::before {
+    content: "\f00c";
+}
+.modal-content:has(.o_hr_leave_allocation_form) .modal-footer .btn-primary::before {
+    content: "\f1d8";
+}
 
-// ---------- the form itself (dialog and page)
-.o_hr_leave_form {
+// ---------- the forms themselves (dialog and page)
+.o_hr_leave_form,
+.o_hr_leave_allocation_form {
     // labels: small, muted
     .o_form_label,
     .o_wrap_label label {
@@ -102,18 +116,19 @@ $sh-green-soft: #e8f7ee;
         &:focus {
             border-color: $sh-plum !important;
             background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(113, 75, 103, 0.12);
         }
     }
 
-    // time off type as a soft pill
+    // reason / description: dashed box
+    .o_field_widget[name="notes"] textarea,
+    .o_field_widget[name="name"] textarea {
+        min-height: 90px;
+        border-style: dashed !important;
+    }
+
+    // time off type as a soft pill (read-only display)
     .o_field_widget[name="holiday_status_id"] {
-        input {
-            font-weight: 600;
-            color: $sh-plum;
-            background-color: $sh-plum-soft;
-            border-color: transparent !important;
-            border-radius: 999px;
-        }
         > span,
         > a {
             display: inline-block;
@@ -139,6 +154,17 @@ $sh-green-soft: #e8f7ee;
         font-weight: 700;
         color: $sh-green;
         background-color: $sh-green-soft;
+    }
+
+    // number of requested days: big, centred, plum
+    .o_field_widget[name="number_of_days_display"] input,
+    .o_field_widget[name="number_of_hours_display"] input {
+        min-width: 80px;
+        padding: 10px 12px;
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+        color: $sh-plum;
     }
 
     // attach file: dashed pill
@@ -192,6 +218,68 @@ $sh-green-soft: #e8f7ee;
             border-radius: 10px;
             font-weight: 600;
             color: $sh-plum;
+        }
+    }
+}
+
+// ---------- dropdown lists opened from these forms (shown while their field has focus)
+body:has(:is(.o_hr_leave_form, .o_hr_leave_allocation_form) .o-autocomplete--input:focus) .o-autocomplete--dropdown-menu {
+    padding: 8px;
+    border: 0;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(40, 20, 40, 0.16);
+
+    .o-autocomplete--dropdown-item .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 2px 0;
+        padding: 9px 12px;
+        border-radius: 10px;
+        white-space: normal;
+
+        &.ui-state-active,
+        &:hover {
+            color: inherit;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // "Search more..." with a search icon, below a dashed line
+    .o_m2o_dropdown_option_search_more .dropdown-item {
+        margin-top: 6px;
+        border-top: 1px dashed #ebe6ea;
+        border-radius: 0 0 10px 10px;
+        color: $sh-muted;
+
+        &::before {
+            content: "\f002";
+            width: 28px;
+            font-family: FontAwesome;
+            text-align: center;
+        }
+    }
+}
+
+// time off type list: a briefcase badge before every type (solid when highlighted)
+body:has(.o_field_widget[name="holiday_status_id"] .o-autocomplete--input:focus) .o-autocomplete--dropdown-menu {
+    .o-autocomplete--dropdown-item:not(.o_m2o_dropdown_option) .dropdown-item {
+        &::before {
+            content: "\f0b1";
+            flex: 0 0 auto;
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            font-family: FontAwesome;
+            font-size: 13px;
+            line-height: 30px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        &.ui-state-active::before {
+            color: #fff;
+            background-color: $sh-plum;
         }
     }
 }

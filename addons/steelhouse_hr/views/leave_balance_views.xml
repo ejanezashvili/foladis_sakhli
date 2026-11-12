@@ -61,4 +61,26 @@
     <menuitem id="menu_steelhouse_leave_balance_all" name="თანამშრომლების ბალანსი"
               parent="hr_holidays.menu_hr_holidays_management" action="steelhouse_leave_balance_action_all"
               groups="hr_holidays.group_hr_holidays_user" sequence="40"/>
+
+    <!-- class for the new look of the days (allocation) request forms; fields unchanged -->
+    <record id="hr_leave_allocation_view_form_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.steelhouse</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_hr_leave_allocation_form</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="hr_leave_allocation_view_form_dashboard_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.allocation.form.dashboard.steelhouse</field>
+        <field name="model">hr.leave.allocation</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_allocation_view_form_dashboard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_hr_leave_allocation_form</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>
