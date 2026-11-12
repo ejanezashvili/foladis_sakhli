@@ -128,14 +128,48 @@
 
             <!-- ============ WORKLOAD (heads) ============ -->
             <t t-else="">
-                <div class="o_sh_tl_legend">
+                <!-- simple view: one horizontal bar per person / department -->
+                <div t-if="!state.detail" class="o_sh_tl_legend">
+                    <span><i class="o_sh_tl_sw o_sh_wb_late"/>ვადაგადაცილებული</span>
+                    <span><i class="o_sh_tl_sw o_sh_wb_soon"/>ვადა 7 დღეში</span>
+                    <span><i class="o_sh_tl_sw o_sh_wb_rest"/>დანარჩენი ღია</span>
+                    <span class="text-muted">ზოლზე დაჭერა - დავალებების სია</span>
+                    <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.state.detail = true"><i class="fa fa-table me-1"/>დეტალურად</button>
+                </div>
+                <div t-if="!state.detail" class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
+                    <div t-if="state.work" class="o_sh_wb">
+                        <div t-if="!barRows.length" class="o_sh_tl_empty">ღია დავალება არ არის.</div>
+                        <t t-foreach="barRows" t-as="r" t-key="r.key">
+                            <div class="o_sh_wb_row">
+                                <div class="o_sh_wb_name" t-att-title="r.label">
+                                    <t t-esc="r.label"/>
+                                    <small t-if="state.view === 'team'" class="text-muted d-block"><t t-esc="r.people"/> ადამიანი · <t t-esc="r.per_person"/> ერთზე</small>
+                                </div>
+                                <div class="o_sh_wb_track">
+                                    <div t-if="r.overdue" class="o_sh_wb_seg o_sh_wb_late" t-att-style="'width:' + r.wLate + '%'"
+                                         t-att-title="r.overdue + ' ვადაგადაცილებული'" t-on-click="() => this.openIds(r.overdue_ids, r.label + ': ვადაგადაცილებული')"><t t-esc="r.overdue"/></div>
+                                    <div t-if="r.soon" class="o_sh_wb_seg o_sh_wb_soon" t-att-style="'width:' + r.wSoon + '%'"
+                                         t-att-title="r.soon + ' - ვადა 7 დღეში'" t-on-click="() => this.openIds(r.soon_ids, r.label + ': ვადა 7 დღეში')"><t t-esc="r.soon"/></div>
+                                    <div t-if="r.rest" class="o_sh_wb_seg o_sh_wb_rest" t-att-style="'width:' + r.wRest + '%'"
+                                         t-att-title="r.rest + ' ღია'" t-on-click="() => this.openIds(r.rest_ids, r.label + ': ღია')"><t t-esc="r.rest"/></div>
+                                </div>
+                                <div class="o_sh_wb_total o_sh_wl_link" t-on-click="() => this.openIds(r.open_ids, r.label + ': ღია')"><t t-esc="r.open"/></div>
+                                <div t-att-class="'o_sh_wb_status o_sh_wb_' + r.status"><t t-esc="r.statusLabel"/></div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <!-- detailed view: the per-day / per-week table -->
+                <div t-if="state.detail" class="o_sh_tl_legend">
                     <span><i class="o_sh_tl_sw o_sh_wl_ok"/><t t-esc="state.view === 'team' ? '1-2 ერთ ადამიანზე' : '1-2 დავალება'"/></span>
                     <span><i class="o_sh_tl_sw o_sh_wl_busy"/><t t-esc="state.view === 'team' ? '3-4 ერთ ადამიანზე' : '3-4 დავალება'"/></span>
                     <span><i class="o_sh_tl_sw o_sh_wl_over"/><t t-esc="state.view === 'team' ? '5+ ერთ ადამიანზე' : '5+ გადატვირთული'"/></span>
                     <span><i class="o_sh_wl_dot"/>შიგნით ვადაგადაცილებულია</span>
-                    <span class="text-muted ms-auto">რიცხვზე დაჭერა - დავალებების სია</span>
+                    <span class="text-muted">რიცხვზე დაჭერა - დავალებების სია</span>
+                    <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.state.detail = false"><i class="fa fa-bar-chart me-1"/>მარტივად</button>
                 </div>
-                <div class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
+                <div t-if="state.detail" class="o_sh_tl_scroll" t-att-class="{'o_sh_tl_loading': state.loading}">
                     <table t-if="state.work" class="o_sh_wl_table">
                         <thead>
                             <tr>

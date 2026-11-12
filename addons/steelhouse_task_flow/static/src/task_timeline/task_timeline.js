@@ -60,6 +60,7 @@ export class TaskTimeline extends Component {
         this.state = useState({
             view: "timeline",
             scope: "mine",
+            detail: false,
             showDone: false,
             work: null,
             scale: "month",
@@ -323,6 +324,37 @@ export class TaskTimeline extends Component {
     toggleDone(ev) {
         this.state.showDone = ev.target.checked;
         this.load();
+    }
+
+    // ---------------------------------------------------------------- workload: simple bars
+    // one bar per person / department: overdue + due in 7 days + the rest of the open tasks
+    get barRows() {
+        const rows = (this.state.work ? this.state.work.rows : []).filter((r) => r.open);
+        const max = Math.max(1, ...rows.map((r) => r.open));
+        const team = this.state.view === "team";
+        return rows
+            .map((r) => {
+                const late = new Set(r.overdue_ids);
+                const soonIds = r.due_ids.filter((id) => !late.has(id));
+                const taken = new Set([...r.overdue_ids, ...soonIds]);
+                const restIds = r.open_ids.filter((id) => !taken.has(id));
+                const load = team ? r.per_person : r.open;
+                const status = load >= 5 ? "over" : load >= 3 ? "busy" : "ok";
+                const pct = (v) => (100 * v) / max;
+                return {
+                    ...r,
+                    soon: soonIds.length,
+                    soon_ids: soonIds,
+                    rest: restIds.length,
+                    rest_ids: restIds,
+                    wLate: pct(r.overdue),
+                    wSoon: pct(soonIds.length),
+                    wRest: pct(restIds.length),
+                    status,
+                    statusLabel: { over: "გადატვირთული", busy: "დატვირთული", ok: "ნორმა" }[status],
+                };
+            })
+            .sort((a, b) => b.open - a.open || b.overdue - a.overdue);
     }
 
     // ---------------------------------------------------------------- workload
