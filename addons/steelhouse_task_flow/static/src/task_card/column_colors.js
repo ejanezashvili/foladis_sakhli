@@ -32,11 +32,12 @@ patch(KanbanRenderer.prototype, {
         super.setup(...arguments);
         useEffect(() => {
             const root = this.rootRef && this.rootRef.el;
-            if (!root || !root.classList.contains("o_kanban_project_tasks")) {
+            if (!root || !root.closest(".o_kanban_project_tasks")) {
                 return;
             }
             for (const group of root.querySelectorAll(".o_kanban_group")) {
-                const title = (group.querySelector(".o_column_title")?.textContent || "").trim();
+                // folded columns show the count too: "შეჩერებული(1)"
+                const title = (group.querySelector(".o_column_title")?.textContent || "").replace(/\(\d+\)\s*$/, "").trim();
                 if (title) {
                     group.dataset.shStage = stageKey(title);
                 }
