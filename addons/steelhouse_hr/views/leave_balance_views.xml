@@ -158,4 +158,28 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Configuration > Public holidays: card-style rows in green (style only) -->
+    <record id="resource_calendar_leaves_tree_inherit_steelhouse" model="ir.ui.view">
+        <field name="name">resource.calendar.leaves.list.steelhouse</field>
+        <field name="model">resource.calendar.leaves</field>
+        <field name="inherit_id" ref="hr_holidays.resource_calendar_leaves_tree_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_holiday_list</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_from']" position="attributes">
+                <attribute name="class">o_sh_date_green</attribute>
+            </xpath>
+            <xpath expr="//field[@name='date_to']" position="attributes">
+                <attribute name="class">o_sh_date_green o_sh_date_arrow</attribute>
+            </xpath>
+            <xpath expr="//field[@name='calendar_id']" position="attributes">
+                <attribute name="class">o_sh_schedule_pill</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

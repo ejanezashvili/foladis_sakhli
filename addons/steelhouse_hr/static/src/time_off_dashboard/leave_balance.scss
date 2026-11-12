@@ -165,6 +165,42 @@ table.o_sh_card_list,
     }
 }
 
+// public holidays: green edge, star badge, green dates, schedule as a grey pill
+.o_sh_holiday_list {
+    tbody tr.o_data_row > td:first-child {
+        box-shadow: inset 4px 0 0 #1f8a57;
+    }
+    td.o_sh_type_cell::before {
+        content: "\f005";
+        color: #1f8a57;
+        background-color: #e8f7ee;
+    }
+    td.o_sh_date_green {
+        font-weight: 700;
+        color: #1f8a57;
+    }
+    td.o_sh_date_green.o_sh_date_arrow {
+        color: #5fae88;
+    }
+    td.o_sh_date_arrow::before {
+        content: "\2192";
+        margin-right: 8px;
+        font-weight: normal;
+        color: #b9b0b7;
+    }
+    td.o_sh_schedule_pill > * {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        color: #6b6169;
+        background-color: #efedf0;
+    }
+    td.o_sh_schedule_pill input::placeholder {
+        color: #6b6169;
+    }
+}
+
 // drag handle muted
 .o_sh_card_list td.o_handle_cell {
     color: #c9c1c7;
