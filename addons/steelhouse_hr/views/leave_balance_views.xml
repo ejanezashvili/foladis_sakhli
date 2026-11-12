@@ -137,4 +137,25 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Configuration > Mandatory working days: card-style rows (style only) -->
+    <record id="hr_leave_mandatory_day_view_list_steelhouse" model="ir.ui.view">
+        <field name="name">hr.leave.mandatory.day.list.steelhouse</field>
+        <field name="model">hr.leave.mandatory.day</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_mandatory_day_view_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_mandatory_list</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </xpath>
+            <xpath expr="//field[@name='start_date']" position="attributes">
+                <attribute name="class">o_sh_date_orange</attribute>
+            </xpath>
+            <xpath expr="//field[@name='end_date']" position="attributes">
+                <attribute name="class">o_sh_date_orange o_sh_date_arrow</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

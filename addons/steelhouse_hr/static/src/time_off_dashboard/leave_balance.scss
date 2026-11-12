@@ -143,6 +143,28 @@ table.o_sh_card_list,
     }
 }
 
+// mandatory working days: orange edge and badge, orange dates, arrow before the end date
+.o_sh_mandatory_list {
+    tbody tr.o_data_row > td:first-child {
+        box-shadow: inset 4px 0 0 #e0912f;
+    }
+    td.o_sh_type_cell::before {
+        content: "\f073";
+        color: #e0912f;
+        background-color: #fdf0de;
+    }
+    td.o_sh_date_orange {
+        font-weight: 700;
+        color: #e0912f;
+    }
+    td.o_sh_date_arrow::before {
+        content: "\2192";
+        margin-right: 8px;
+        font-weight: normal;
+        color: #b9b0b7;
+    }
+}
+
 // drag handle muted
 .o_sh_card_list td.o_handle_cell {
     color: #c9c1c7;
