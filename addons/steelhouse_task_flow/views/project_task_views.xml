@@ -198,12 +198,15 @@
                     <field name="message_attachment_count" invisible="1"/>
                     <field name="project_id" invisible="1"/>
                     <div class="o_sh_card_top">
+                        <div class="o_sh_card_pills">
                         <span t-if="record.sh_is_overdue.raw_value" class="o_sh_tpill o_sh_tpill_late o_sh_overdue_mark">
                             <i class="o_sh_tpill_dot"/>ვადაგადაცილებული
                         </span>
                         <span t-else="" t-att-class="'o_sh_tpill o_sh_tpill_' + (record.sh_kind.raw_value or 'new')">
                             <i class="o_sh_tpill_dot"/><t t-esc="record.stage_id.value"/>
                         </span>
+                        <span t-if="record.state.raw_value === '04_waiting_normal'" class="o_sh_tag o_sh_tag_wait" title="ელოდება წინა დავალებებს"><i class="fa fa-lock me-1"/>ელოდება</span>
+                        </div>
                         <field name="sh_number" class="o_sh_card_num"/>
                     </div>
                     <field name="name" class="o_sh_card_title"/>
@@ -227,9 +230,8 @@
                         </span>
                         <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
                     </div>
-                    <div t-if="record.sh_repeat.raw_value or record.state.raw_value === '04_waiting_normal'" class="o_sh_card_tags">
-                        <span t-if="record.sh_repeat.raw_value" class="o_sh_tag"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
-                        <span t-if="record.state.raw_value === '04_waiting_normal'" class="o_sh_tag" title="ელოდება წინა დავალებებს"><i class="fa fa-lock me-1"/>ელოდება</span>
+                    <div t-if="record.sh_repeat.raw_value" class="o_sh_card_tags">
+                        <span class="o_sh_tag"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
                     </div>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">
                         <span class="o_sh_meta" title="კომენტარები"><i class="fa fa-comments-o"/> <t t-esc="record.sh_comment_count.raw_value or 0"/></span>
