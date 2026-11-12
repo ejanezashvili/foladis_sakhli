@@ -79,4 +79,42 @@
             </field>
         </field>
     </record>
+
+    <!-- Configuration > Work locations: card rows with a type badge, type picker as a segmented control (style only) -->
+    <record id="hr_work_location_tree_view_steelhouse" model="ir.ui.view">
+        <field name="name">hr.work.location.list.steelhouse</field>
+        <field name="model">hr.work.location</field>
+        <field name="inherit_id" ref="hr.hr_work_location_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_workloc_list</attribute>
+            </xpath>
+            <field name="name" position="attributes">
+                <attribute name="class">fw-bold o_sh_type_cell</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- work location form: name on top next to a type badge, then address and type tiles (fields unchanged) -->
+    <record id="hr_work_location_form_view_steelhouse" model="ir.ui.view">
+        <field name="name">hr.work.location.form.steelhouse</field>
+        <field name="model">hr.work.location</field>
+        <field name="inherit_id" ref="hr.hr_work_location_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="attributes">
+                <attribute name="class">o_sh_workloc_form</attribute>
+            </xpath>
+            <xpath expr="//sheet/group" position="before">
+                <div class="o_sh_loc_head">
+                    <div class="o_sh_loc_name">
+                        <label for="name"/>
+                        <field name="name"/>
+                    </div>
+                </div>
+            </xpath>
+            <xpath expr="//sheet/group//field[@name='name']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

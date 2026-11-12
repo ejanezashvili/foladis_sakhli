@@ -1,0 +1,190 @@
+// Configuration > Work locations: list rows as cards with a type badge, type picker as a
+// segmented control; form with a type badge next to a big name box and type tiles. Look only.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-line: #eee8ec;
+$sh-text: #2b2430;
+
+.o_action:has(.o_sh_workloc_list, .o_sh_workloc_form) .o_content {
+    background-color: $sh-page;
+}
+
+// ---------- type picker (home / office / other)
+.o_homework_icon_types {
+    [role="radiogroup"] {
+        display: inline-flex !important;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 12px;
+        background-color: #f4f1f4;
+    }
+    .o_radio_item {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 36px;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 1.5px solid transparent;
+        border-radius: 10px;
+        color: #b3a8b0;
+
+        // the round radio is invisible but still takes the click
+        .o_radio_input {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            margin: 0 !important;
+            opacity: 0;
+            cursor: pointer;
+        }
+        i {
+            font-size: 17px !important;
+        }
+        &:has(.o_radio_input:checked) {
+            border-color: $sh-plum;
+            color: $sh-plum;
+            background-color: #fff;
+            box-shadow: 0 2px 6px rgba(113, 75, 103, 0.18);
+        }
+    }
+}
+
+// ---------- list: badge before the name follows the chosen type
+.o_sh_workloc_list {
+    td.o_data_cell {
+        vertical-align: middle;
+    }
+    td[name="name"] {
+        color: $sh-text;
+    }
+    tr:has(.o_radio_input[data-value="home"]:checked) td.o_sh_type_cell::before {
+        content: "\f015";
+    }
+    tr:has(.o_radio_input[data-value="office"]:checked) td.o_sh_type_cell::before {
+        content: "\f0f7";
+    }
+    tr:has(.o_radio_input[data-value="other"]:checked) td.o_sh_type_cell::before {
+        content: "\f041";
+    }
+}
+
+// ---------- form
+.o_sh_workloc_form {
+    .o_form_sheet_bg {
+        background-color: $sh-page;
+    }
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fbf3f7 0, #fff 150px);
+        box-shadow: 0 4px 18px rgba(40, 20, 40, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-plum, #c58bb5);
+        }
+    }
+
+    // head: type badge + label + big name box, thin line below
+    .o_sh_loc_head {
+        display: flex;
+        align-items: center;
+        gap: 22px;
+        margin: 6px -16px 20px;
+        padding: 0 16px 22px;
+        border-bottom: 1px solid $sh-line;
+
+        &::before {
+            content: "\f041";
+            flex: 0 0 88px;
+            height: 88px;
+            border-radius: 20px;
+            font-family: FontAwesome;
+            font-size: 36px;
+            line-height: 88px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            box-shadow: 0 6px 18px rgba(113, 75, 103, 0.12);
+        }
+        .o_sh_loc_name {
+            flex: 1 1 auto;
+
+            .o_form_label {
+                display: block;
+                margin-bottom: 8px;
+                font-size: 12.5px;
+                font-weight: 600;
+                color: $sh-plum;
+            }
+            input {
+                padding: 14px 18px;
+                border: 1px solid $sh-line !important;
+                border-radius: 14px;
+                font-size: 20px;
+                background-color: #f6f3f6;
+
+                &:focus {
+                    border-color: $sh-plum !important;
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+    &:has(.o_radio_input[data-value="home"]:checked) .o_sh_loc_head::before {
+        content: "\f015";
+    }
+    &:has(.o_radio_input[data-value="office"]:checked) .o_sh_loc_head::before {
+        content: "\f0f7";
+    }
+
+    .o_inner_group .o_form_label {
+        font-size: 13.5px;
+        font-weight: 500;
+        color: $sh-text;
+    }
+    .o_field_widget[name="address_id"] input {
+        padding: 9px 12px;
+        border: 1px solid $sh-line !important;
+        border-radius: 10px;
+        background-color: #f6f3f6;
+    }
+
+    // type: big separate tiles here
+    .o_homework_icon_types {
+        [role="radiogroup"] {
+            gap: 12px;
+            padding: 0;
+            background: none;
+        }
+        .o_radio_item {
+            width: 92px;
+            height: 84px;
+            border: 1px solid $sh-line;
+            border-radius: 16px;
+            background-color: #f6f4f7;
+
+            i {
+                font-size: 22px !important;
+            }
+            &:has(.o_radio_input:checked) {
+                border: 1.5px solid $sh-plum;
+                background-color: $sh-plum-soft;
+                box-shadow: 0 6px 16px rgba(113, 75, 103, 0.2);
+            }
+        }
+    }
+}
