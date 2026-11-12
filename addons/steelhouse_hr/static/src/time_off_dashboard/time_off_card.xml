@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- Time off type card: "available N days of M" as a caption, and a "+ new request" button -->
+    <t t-inherit="hr_holidays.TimeOffCard" t-inherit-mode="extension">
+        <xpath expr="//span[hasclass('o_timeoff_details')]" position="replace">
+            <span t-att-class="'o_timeoff_details o_sh_caption' + (warning ? ' alert alert-warning' : '')"
+                  t-on-click.stop="(ev) => (show_popover &amp;&amp; this.onClickInfo(ev))">
+                <t t-if="props.requires_allocation">
+                    ხელმისაწვდომი <t t-if="data.request_unit == 'hour'">საათი</t><t t-else="">დღე</t>
+                    <t t-esc="formatNumber(this.lang, data.max_leaves)"/>-დან
+                </t>
+                <t t-else="">
+                    გამოყენებული <t t-if="data.request_unit == 'hour'">საათი</t><t t-else="">დღე</t>
+                </t>
+                <span t-if="show_popover"
+                      t-att-class="'o_timeoff_info ms-1 fa' + (warning ? ' fa-exclamation-triangle' : ' fa-question-circle-o')"/>
+            </span>
+        </xpath>
+        <xpath expr="//span[hasclass('o_timeoff_duration')]/t[@t-if='data and data.icon']" position="replace"/>
+        <xpath expr="//div[hasclass('o_timeoff_card')]" position="inside">
+            <a class="o_timeoff_details o_sh_card_button" t-on-click.stop="shNewLeave">+ ახალი მოთხოვნა</a>
+        </xpath>
+    </t>
+</templates>
