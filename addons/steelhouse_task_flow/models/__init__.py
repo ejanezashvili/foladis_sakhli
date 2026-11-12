@@ -9,5 +9,6 @@ from . import task_number
 from . import task_chain
 from . import task_overdue
 from . import task_chat
+from . import task_notify
 from . import project_project
 from . import hr_department
