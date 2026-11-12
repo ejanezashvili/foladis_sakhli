@@ -4,8 +4,11 @@ $db-muted: #7a7790;
 $db-purple: #6b4fd8;
 
 .o_sh_db {
+    // fill the action area and scroll inside it (the action manager itself does not scroll)
+    flex: 1 1 auto;
+    min-height: 0;
     height: 100%;
-    overflow: auto;
+    overflow-y: auto !important;
     padding: 24px 28px 40px;
     background: radial-gradient(1200px 500px at 10% -10%, #efe9ff 0%, transparent 60%),
         radial-gradient(900px 500px at 110% 10%, #e3f4ff 0%, transparent 60%), #f6f5fb;
