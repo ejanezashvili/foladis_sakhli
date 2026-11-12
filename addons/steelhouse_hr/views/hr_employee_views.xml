@@ -129,4 +129,18 @@
             </xpath>
         </field>
     </record>
+
+    <!-- Empty list: a plain "nothing found" instead of Odoo's sample-data / other-apps advert -->
+    <record id="hr.open_view_employee_list_my" model="ir.actions.act_window">
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">თანამშრომელი ვერ მოიძებნა</p>
+                <p>შეცვალეთ ძებნა ან ფილტრი, ან დაამატეთ ახალი თანამშრომელი.</p>
+            </field>
+    </record>
+    <record id="hr.hr_employee_public_action" model="ir.actions.act_window">
+            <field name="help" type="html">
+                <p class="o_view_nocontent_empty_folder">თანამშრომელი ვერ მოიძებნა</p>
+                <p>შეცვალეთ ძებნა ან ფილტრი, ან დაამატეთ ახალი თანამშრომელი.</p>
+            </field>
+    </record>
 </odoo>
