@@ -1,0 +1,197 @@
+// Time off request form (dialog from the calendar / page from "My requests"):
+// soft filled inputs, pills, plum accents. Look only - fields and logic unchanged.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-field-bg: #f6f4f7;
+$sh-field-border: #ebe6ea;
+$sh-muted: #8c838b;
+$sh-green: #1f8a57;
+$sh-green-soft: #e8f7ee;
+
+// ---------- dialog frame
+.modal-content:has(.o_hr_leave_form) {
+    overflow: hidden;
+    border: 0;
+    border-radius: 18px;
+    box-shadow: 0 12px 40px rgba(40, 20, 40, 0.18);
+
+    // coloured bar on top
+    &::before {
+        content: "";
+        display: block;
+        height: 5px;
+        background: linear-gradient(90deg, $sh-plum, #c58bb5);
+    }
+
+    .modal-header {
+        align-items: center;
+        padding: 18px 24px;
+        border-bottom: 1px solid #f0ecef;
+
+        .modal-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 700;
+
+            // calendar icon badge before the title
+            &::before {
+                content: "\f073";
+                flex: 0 0 auto;
+                width: 38px;
+                height: 38px;
+                border-radius: 10px;
+                font-family: FontAwesome;
+                font-size: 16px;
+                font-weight: normal;
+                line-height: 38px;
+                text-align: center;
+                color: #fff;
+                background-color: $sh-plum;
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 20px 24px;
+    }
+
+    .modal-footer {
+        padding: 14px 24px;
+        background-color: #faf8fa;
+        border-top: 1px solid #f0ecef;
+        justify-content: flex-start;
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        .btn-primary {
+            border-color: $sh-plum;
+            background-color: $sh-plum;
+            box-shadow: 0 3px 10px rgba(113, 75, 103, 0.3);
+        }
+        .btn-secondary {
+            border: 1px solid $sh-field-border;
+            background-color: #fff;
+        }
+    }
+}
+
+// ---------- the form itself (dialog and page)
+.o_hr_leave_form {
+    // labels: small, muted
+    .o_form_label,
+    .o_wrap_label label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $sh-muted;
+    }
+
+    // soft filled inputs
+    .o_field_widget:not(.o_field_many2many_binary) input,
+    .o_field_widget textarea,
+    .o_field_widget select {
+        padding: 8px 12px;
+        border: 1px solid $sh-field-border !important;
+        border-radius: 10px;
+        background-color: $sh-field-bg;
+
+        &:focus {
+            border-color: $sh-plum !important;
+            background-color: #fff;
+        }
+    }
+
+    // time off type as a soft pill
+    .o_field_widget[name="holiday_status_id"] {
+        input {
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            border-color: transparent !important;
+            border-radius: 999px;
+        }
+        > span,
+        > a {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 600;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+    }
+
+    // dates: centred values
+    .o_field_daterange input {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    // duration as a green pill
+    .o_field_widget[name="duration_display"] {
+        display: inline-block;
+        padding: 5px 14px !important;
+        border-radius: 999px;
+        font-weight: 700;
+        color: $sh-green;
+        background-color: $sh-green-soft;
+    }
+
+    // attach file: dashed pill
+    .o_field_many2many_binary .o_attach,
+    .o_field_many2many_binary .btn {
+        padding: 7px 16px;
+        border: 1px dashed #d9c6d3 !important;
+        border-radius: 10px;
+        font-weight: 600;
+        color: $sh-plum;
+        background-color: #fbf7fa;
+    }
+
+    // "Deputies" section title with a plum mark
+    .o_horizontal_separator {
+        position: relative;
+        padding-left: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #2b2430;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 4px;
+            border-radius: 2px;
+            background-color: $sh-plum;
+        }
+    }
+
+    // deputies table in a rounded box
+    .o_field_widget[name="delegation_ids"] {
+        .o_list_renderer {
+            overflow: hidden;
+            border: 1px solid $sh-field-border;
+            border-radius: 12px;
+        }
+        thead th {
+            font-size: 12px;
+            font-weight: 500;
+            color: $sh-muted;
+            background-color: #faf8fa;
+        }
+        .o_field_x2many_list_row_add a {
+            display: inline-block;
+            padding: 5px 14px;
+            border: 1px dashed #d9c6d3;
+            border-radius: 10px;
+            font-weight: 600;
+            color: $sh-plum;
+        }
+    }
+}
