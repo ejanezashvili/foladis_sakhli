@@ -18,7 +18,6 @@ LOGGED = [
     ('date_deadline', 'დასრულების თარიღი'),
     ('sh_category', 'კატეგორია'),
     ('sh_branch', 'ფილიალი'),
-    ('sh_manual_progress', 'ხელით პროგრესი (%)'),
     ('hold_reason', 'შეჩერების მიზეზი'),
     ('hold_date', 'შეჩერდა'),
     ('resume_date', 'განახლება'),

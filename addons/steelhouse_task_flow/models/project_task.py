@@ -110,11 +110,12 @@ class ProjectTask(models.Model):
         ('main', 'ძირითადი ფილიალი'), ('vaziani3', 'ვაზიანი #3'), ('vaziani1', 'ვაზიანი 1'),
         ('vaziani2', 'ვაზიანი 2'), ('batumi', 'ბათუმის ფილიალი'), ('lilo', 'ლილო'),
     ], string='ფილიალი', tracking=True)
-    sh_manual_progress = fields.Integer('ხელით პროგრესი (%)', tracking=True)
+    # no longer shown or used in the progress (kept so old values are not lost)
+    sh_manual_progress = fields.Integer('ხელით პროგრესი (%)')
     sh_progress = fields.Integer(
         'პროგრესი (%)', compute='_compute_sh_progress', store=True,
-        help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებების, საკონტროლო სიისა და "
-             "ხელით პროგრესის საშუალო; თუ არცერთი არ არის - სტადიით. „შემოწმებაზე“ - მინიმუმ 90%.")
+        help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებებისა და საკონტროლო "
+             "სიის საშუალო; თუ არცერთი არ არის - სტადიით. „შემოწმებაზე“ - მინიმუმ 90%.")
 
     # ------------------------------------------------------------------
     # Automatic progress (requirement 3.3)
@@ -132,11 +133,7 @@ class ProjectTask(models.Model):
                     done += 1
         return round(100 * done / total) if total else None
 
-    def _sh_manual_percent(self):
-        value = self.sh_manual_progress
-        return max(0, min(100, value)) if value else None
-
-    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description', 'sh_manual_progress')
+    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description')
     def _compute_sh_progress(self):
         for task in self:
             kind = task.stage_id.sh_kind
@@ -150,9 +147,6 @@ class ProjectTask(models.Model):
             checklist = self._sh_checklist_percent(task.description and str(task.description))
             if checklist is not None:
                 sources.append(checklist)
-            manual = task._sh_manual_percent()
-            if manual is not None:
-                sources.append(manual)
             value = round(sum(sources) / len(sources)) if sources else KIND_PROGRESS.get(kind, 0)
             if kind == 'review':
                 value = max(value, 90)
