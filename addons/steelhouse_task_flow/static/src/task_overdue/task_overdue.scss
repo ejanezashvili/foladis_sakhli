@@ -1,0 +1,5 @@
+// Overdue task: the whole kanban card is tinted red (the marker is rendered only when overdue)
+.o_kanban_record:has(.o_sh_overdue_mark) {
+    background-color: #fdecea !important;
+    border-left: 4px solid #dc3545 !important;
+}
