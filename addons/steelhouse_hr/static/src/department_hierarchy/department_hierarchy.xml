@@ -34,6 +34,7 @@
         </div>
         <div t-if="isOpen" class="o_sh_tree_children" t-ref="panel">
             <div class="o_sh_tree_level" t-att-class="{ 'o_sh_tree_frame': !props.isRoot }">
+                <div t-if="teamLabel" class="o_sh_team_label"><t t-esc="teamLabel"/> · <t t-esc="count"/></div>
                 <t t-foreach="positions" t-as="pos" t-key="pos.id">
                     <div class="o_sh_position">
                         <div class="o_sh_position_title" t-esc="pos.name"/>

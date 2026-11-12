@@ -42,6 +42,13 @@
             <field name="parent_id" position="after">
                 <field name="sh_manager_ids" widget="many2many_avatar_employee" optional="show"/>
             </field>
+            <!-- new look: rows as cards, department as a path of chips (data unchanged) -->
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_emp_list</attribute>
+            </xpath>
+            <field name="department_id" position="attributes">
+                <attribute name="widget">sh_dept_path</attribute>
+            </field>
         </field>
     </record>
 
@@ -77,6 +84,13 @@
             </field>
             <field name="parent_id" position="after">
                 <field name="sh_manager_ids" widget="many2many_avatar_employee"/>
+            </field>
+            <!-- new look: rows as cards, department as a path of chips (data unchanged) -->
+            <xpath expr="//list" position="attributes">
+                <attribute name="class">o_sh_card_list o_sh_emp_list</attribute>
+            </xpath>
+            <field name="department_id" position="attributes">
+                <attribute name="widget">sh_dept_path</attribute>
             </field>
         </field>
     </record>

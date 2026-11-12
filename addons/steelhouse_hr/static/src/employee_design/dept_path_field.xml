@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="steelhouse_hr.DeptPathField">
+        <div t-if="props.readonly and shPath.length" class="o_sh_dept_path">
+            <t t-foreach="shPath" t-as="part" t-key="part_index">
+                <span class="o_sh_dept_part" t-att-class="{ 'o_sh_dept_root': part_first and !part_last, 'o_sh_dept_last': part_last }" t-esc="part"/>
+                <i t-if="!part_last" class="fa fa-angle-right o_sh_dept_sep"/>
+            </t>
+        </div>
+        <t t-else="" t-call="web.Many2OneField"/>
+    </t>
+
+</templates>

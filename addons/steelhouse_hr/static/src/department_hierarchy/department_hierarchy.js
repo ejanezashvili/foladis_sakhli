@@ -78,6 +78,19 @@ export class DepartmentTreeNode extends Component {
         return this.props.node.childResIds.length + this.positions.length;
     }
 
+    // Org chart of employees: "<name>'s team" label on the frame (Georgian genitive: + "ს" after a vowel, else + "ის")
+    get teamLabel() {
+        const node = this.props.node;
+        if (this.props.isRoot || !node.model.resModel.startsWith("hr.employee")) {
+            return "";
+        }
+        const name = (node.data.name || "").trim();
+        if (!name) {
+            return "";
+        }
+        return `${"აეიოუ".includes(name.slice(-1)) ? name + "ს" : name + "ის"} გუნდი`;
+    }
+
     async toggle() {
         const node = this.props.node;
         const open = this.shared.open;
