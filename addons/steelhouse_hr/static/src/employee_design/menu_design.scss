@@ -1,0 +1,79 @@
+// Employees app: top menu dropdowns (e.g. Configuration) as a rounded card, every entry with an
+// icon badge, group titles small and muted with a line above. Look only - menus unchanged.
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-line: #eee8ec;
+$sh-muted: #8c838b;
+$sh-text: #2b2430;
+
+body:has(.o_menu_brand[data-menu-xmlid="hr.menu_hr_root"]) .o-dropdown--menu:has(.dropdown-item[data-menu-xmlid]) {
+    min-width: 280px;
+    padding: 8px !important;
+    border: 0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 12px 34px rgba(40, 20, 40, 0.18) !important;
+
+    .dropdown-item[data-menu-xmlid] {
+        display: flex !important;
+        align-items: center;
+        gap: 12px;
+        margin: 2px 0;
+        padding: 8px 12px !important;
+        border-radius: 10px;
+        font-weight: 600;
+        color: $sh-text;
+
+        &::before {
+            content: "\f105";
+            flex: 0 0 30px;
+            height: 30px;
+            border-radius: 9px;
+            font-family: FontAwesome;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: 30px;
+            text-align: center;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+        }
+        &:hover,
+        &.focus,
+        &:focus {
+            color: $sh-text;
+            background-color: #faf5f8;
+        }
+    }
+
+    // icons by entry
+    .dropdown-item[data-menu-xmlid="hr.hr_menu_configuration"] {
+        background-color: $sh-plum-soft;
+
+        &::before {
+            content: "\f013";
+            color: #fff;
+            background-color: $sh-plum;
+        }
+    }
+    .dropdown-item[data-menu-xmlid="hr.menu_hr_work_location_tree"]::before { content: "\f041"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_resource_calendar_view"]::before { content: "\f017"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_hr_departure_reason_tree"]::before { content: "\f08b"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_view_hr_job"]::before { content: "\f0b1"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_view_employee_category_form"]::before { content: "\f02c"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_config_plan_plan"]::before { content: "\f0ae"; }
+    .dropdown-item[data-menu-xmlid="hr.menu_hr_employee_contract_templates"]::before { content: "\f15c"; }
+    .dropdown-item[data-menu-xmlid="hr_skills.hr_skill_type_menu"]::before { content: "\f005"; }
+    .dropdown-item[data-menu-xmlid="hr_skills.hr_resume_line_type_menu"]::before { content: "\f0ca"; }
+    .dropdown-item[data-menu-xmlid^="hr_gamification."]::before { content: "\f091"; }
+    // Departments / Employees lists in their own dropdowns
+    .dropdown-item[data-menu-xmlid*="department"]::before { content: "\f0f7"; }
+
+    // group titles ("Employee", "Recruitment"): small, muted, line above
+    .dropdown-header {
+        margin: 8px 6px 2px;
+        padding: 10px 6px 4px !important;
+        border-top: 1px solid $sh-line;
+        font-size: 11.5px;
+        font-weight: 500;
+        color: $sh-muted;
+    }
+}
