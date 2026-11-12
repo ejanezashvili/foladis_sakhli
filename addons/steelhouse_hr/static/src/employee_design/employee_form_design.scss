@@ -69,6 +69,64 @@ $sh-blue-soft: #e8f0fe;
         box-shadow: 0 8px 22px rgba(113, 75, 103, 0.25);
     }
 
+    // new employee without a photo: dashed box with a camera, plum "+" button in the corner
+    .o_employee_avatar .o_field_image:has(img[src*="placeholder"]) {
+        > div,
+        > .d-inline-block {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            border: 2px dashed #d9cdd5;
+            border-radius: 22px;
+            background-color: #faf8fa;
+
+            &::before {
+                content: "\f030";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-family: FontAwesome;
+                font-size: 34px;
+                color: #a99ca5;
+            }
+        }
+        img {
+            opacity: 0;
+            box-shadow: none;
+        }
+        .o_image_uploader_container {
+            right: -10px;
+            bottom: -10px !important;
+            left: auto !important;
+            width: auto !important;
+            height: auto !important;
+            z-index: 2;
+            opacity: 1 !important;
+        }
+        .o_select_file_button {
+            width: 30px;
+            height: 30px;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: 2px solid #fff !important;
+            border-radius: 9px !important;
+            color: #fff !important;
+            background-color: $sh-plum !important;
+            box-shadow: 0 3px 8px rgba(113, 75, 103, 0.35);
+
+            .fa-pencil::before {
+                content: "\f067";
+            }
+        }
+    }
+
+    // org chart without people yet: dashed placeholder cards
+    .o_org_chart_entry.pe-none {
+        border-style: dashed;
+        box-shadow: none;
+    }
+
     // name + contacts: name on top, e-mail / phones / tags as soft pills in two columns
     .oe_title {
         display: grid;
