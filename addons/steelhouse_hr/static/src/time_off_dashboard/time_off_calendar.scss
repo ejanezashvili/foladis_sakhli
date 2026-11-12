@@ -11,19 +11,9 @@
     }
 }
 
-// Public holidays: light green ("lettuce"), different from the grey weekends.
-$sh-holiday-green: #c9efa6;
-.o_calendar_widget .o_sh_public_holiday,
-.o_calendar_widget .o_sh_public_holiday .fc-daygrid-day-frame {
-    background-color: $sh-holiday-green !important;
-}
-.o_calendar_widget .o_sh_public_holiday .fc-daygrid-day-number {
-    font-weight: 600;
-}
+// Public holidays: legend swatch (day cells are styled in time_off_design.scss).
 .o_sh_holiday_swatch {
     display: inline-block;
     width: 20px;
     height: 14px;
-    border-radius: 3px;
-    background-color: $sh-holiday-green;
 }

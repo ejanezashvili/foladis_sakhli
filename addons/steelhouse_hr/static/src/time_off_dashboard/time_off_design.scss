@@ -1,0 +1,218 @@
+// Time off dashboard ("კალენდარი"): cards with a coloured top bar, big numbers,
+// pill buttons, every month in its own card, round day cells
+// (weekend grey, public holiday green ring with a dot, today filled).
+$sh-plum: #714b67;
+$sh-plum-soft: #f3eaf0;
+$sh-page: #f6f5f7;
+$sh-card-shadow: 0 2px 10px rgba(40, 20, 40, 0.07);
+$sh-muted: #8c838b;
+$sh-weekend-bg: #f1eff2;
+$sh-weekend-fg: #9b929a;
+$sh-holiday-ring: #8fd3ad;
+$sh-holiday-bg: #e8f7ee;
+$sh-holiday-fg: #1f8a57;
+
+// ---------- top cards
+.o_timeoff_dashboard {
+    gap: 20px;
+    padding: 20px 24px;
+    background-color: $sh-page;
+    box-shadow: none;
+
+    .o_timeoff_card {
+        position: relative;
+        overflow: hidden;
+        align-items: flex-start;
+        justify-content: flex-start !important;
+        padding: 22px 24px 20px !important;
+        text-align: left;
+        border: 0;
+        border-radius: 16px;
+        background-color: #fff;
+        box-shadow: $sh-card-shadow;
+
+        // coloured bar on top
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, $sh-plum, #a07895);
+        }
+
+        & > *,
+        .d-flex.flex-column {
+            margin-left: 0;
+            margin-right: 0;
+            align-items: flex-start !important;
+        }
+
+        .o_timeoff_name {
+            margin-bottom: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #2b2430;
+            text-decoration: none;
+        }
+
+        .o_timeoff_duration {
+            margin-bottom: 4px;
+            font-size: 44px;
+            font-weight: 700;
+            line-height: 1.05;
+            color: $sh-plum;
+        }
+
+        small,
+        .o_timeoff_validity {
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: $sh-muted;
+        }
+
+        // links as pill buttons
+        .o_timeoff_details {
+            margin: 4px 0 0 0;
+            padding: 6px 14px !important;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: none !important;
+            color: $sh-plum;
+            background-color: $sh-plum-soft;
+            text-decoration: none;
+
+            &:hover {
+                background-color: darken($sh-plum-soft, 5%);
+            }
+        }
+    }
+
+    // "waiting for me" card: red-orange bar, red number
+    .o_timeoff_card.o_sh_card_alert::before {
+        background: linear-gradient(90deg, #e5484d, #f2a33a);
+    }
+    .o_timeoff_card.o_sh_card_alert .o_timeoff_duration.text-danger {
+        color: #e5484d !important;
+    }
+}
+
+// ---------- year calendar: every month in its own card
+.o_timeoff_calendar {
+    .o_calendar_widget {
+        background-color: $sh-page;
+    }
+
+    .fc-dayGridYear-view {
+        gap: 20px !important;
+        padding: 4px 24px 24px !important;
+
+        > .fc-month-container {
+            padding: 18px 16px 12px;
+            border-radius: 16px;
+            background-color: #fff;
+            box-shadow: $sh-card-shadow;
+        }
+
+        .fc-toolbar-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #2b2430;
+        }
+
+        .fc-col-header-cell {
+            font-size: 12px;
+            font-weight: 500;
+            color: $sh-muted;
+        }
+
+        .fc-daygrid-week-number {
+            color: #c2bcc1 !important;
+        }
+
+        // round day cells
+        .fc-daygrid-body tr .fc-day {
+            background: none !important;
+
+            .fc-daygrid-day-number {
+                position: relative;
+                width: 34px;
+                height: 34px;
+                padding: 0 !important;
+                line-height: 34px !important;
+                font-weight: 500;
+            }
+
+            // weekend and other non-working days
+            &.o_calendar_disabled .fc-daygrid-day-number {
+                --o-cw-bg: #{$sh-weekend-bg};
+                --o-cw-color: #{$sh-weekend-fg};
+            }
+
+            // public holiday: green ring and a dot
+            &.o_sh_public_holiday .fc-daygrid-day-number {
+                --o-cw-bg: #{$sh-holiday-bg};
+                --o-cw-color: #{$sh-holiday-fg};
+                font-weight: 700;
+                box-shadow: inset 0 0 0 2px $sh-holiday-ring;
+
+                &::after {
+                    content: "";
+                    position: absolute;
+                    left: 50%;
+                    bottom: 4px;
+                    width: 4px;
+                    height: 4px;
+                    margin-left: -2px;
+                    border-radius: 50%;
+                    background-color: $sh-holiday-fg;
+                }
+            }
+
+            // today
+            &.fc-day-today .fc-daygrid-day-number {
+                --o-cw-bg: #{$sh-plum};
+                --o-cw-color: #fff;
+                box-shadow: none;
+            }
+        }
+    }
+
+    // ---------- side panel as a card
+    .o_calendar_sidebar_container {
+        background-color: $sh-page !important;
+    }
+
+    .o_calendar_sidebar {
+        .o_calendar_filter {
+            margin: 16px;
+            padding: 18px 20px;
+            border-radius: 16px;
+            background-color: #fff;
+            box-shadow: $sh-card-shadow;
+
+            h5 {
+                padding-bottom: 10px;
+                border-bottom: 1px solid #eee8ec;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+// legend swatches
+.o_sh_holiday_swatch {
+    border: 2px solid $sh-holiday-ring;
+    background-color: $sh-holiday-bg !important;
+    border-radius: 6px !important;
+}
+.o_sh_today_swatch {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    margin: 0 3px;
+    border-radius: 50%;
+    background-color: $sh-plum;
+}
