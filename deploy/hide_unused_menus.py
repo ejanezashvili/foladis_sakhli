@@ -1,5 +1,5 @@
 """Hide menus the company does not use (Employees: skills, learning, resume, contract templates,
-challenges, onboarding plans; Time Off: mandatory days). They stay visible to admins in developer mode (group "Technical Features").
+challenges, onboarding plans). They stay visible to admins in developer mode (group "Technical Features").
 
 Undo: python deploy/hide_unused_menus.py <admin password> --show
 Re-run after an upgrade of hr / hr_skills / hr_gamification if the menus come back.
@@ -22,7 +22,6 @@ MENUS = [
     'hr.menu_hr_employee_contract_templates',            # კონფიგურაცია / კონტრაქტის შაბლონები
     'hr_gamification.menu_hr_gamification',              # კონფიგურაცია / გამოწვევები
     'hr.menu_config_plan_plan',                          # კონფიგურაცია / ადაპტაცია / გათავისუფლება
-    'hr_holidays.hr_holidays_mandatory_day_menu_configuration',  # შვებულება / კონფიგურაცია / სავალდებულო სამუშაო დღეები
 ]
 
 
