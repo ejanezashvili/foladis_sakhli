@@ -184,6 +184,12 @@
             <xpath expr="//t[@t-name='card']/main" position="replace">
                 <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '')">
                     <field name="sh_kind" invisible="1"/>
+                    <field name="priority" invisible="1"/>
+                    <field name="date_deadline" invisible="1"/>
+                    <field name="sh_project_id" invisible="1"/>
+                    <field name="sh_branch" invisible="1"/>
+                    <field name="parent_id" invisible="1"/>
+                    <field name="partner_id" invisible="1"/>
                     <field name="sh_is_overdue" invisible="1"/>
                     <field name="sh_repeat" invisible="1"/>
                     <field name="closed_subtask_count" invisible="1"/>
