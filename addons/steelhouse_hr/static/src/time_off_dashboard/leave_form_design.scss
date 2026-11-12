@@ -106,7 +106,7 @@ $sh-green-soft: #e8f7ee;
     }
 
     // soft filled inputs
-    .o_field_widget:not(.o_field_many2many_binary) input,
+    .o_field_widget:not(.o_field_many2many_binary) input:not(.form-check-input),
     .o_field_widget textarea,
     .o_field_widget select {
         padding: 8px 12px;
