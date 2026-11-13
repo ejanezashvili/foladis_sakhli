@@ -368,5 +368,28 @@ class ProjectTask(models.Model):
                 sub_id = new.sh_steps_add_item(section.id)
                 new.sh_steps_write_item(sub_id, {
                     'name': s['name'], 'user_id': s.get('user_id') or False, 'deadline': s.get('deadline') or False})
-        anchor._sh_chain_connect(direction, new)
+        parallel = vals.get('parallel_ids') and self._sh_chain_tasks().filtered(
+            lambda t: t.id in vals['parallel_ids'])
+        if parallel:
+            new._sh_chain_parallel(parallel)
+        else:
+            anchor._sh_chain_connect(direction, new)
         return new.id
+
+    def _sh_chain_parallel(self, tasks):
+        """This (new) task runs in parallel with tasks: it starts after their previous tasks
+        and their next tasks also wait for it."""
+        me = self.sudo()
+        tasks = tasks.sudo()
+        prev = tasks.depend_on_ids - me
+        nxt = tasks.dependent_ids - me
+        if prev:
+            me.write({'depend_on_ids': [(4, p.id) for p in prev]})
+        for n in nxt:
+            n.write({'depend_on_ids': [(4, me.id)]})
+        labels = ', '.join(self._sh_label(t) for t in tasks)
+        me.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("პარალელური დავალება"), labels),
+                        message_type='notification', subtype_xmlid='mail.mt_note')
+        for t in tasks:
+            t.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("პარალელური დავალება"), self._sh_label(me)),
+                           message_type='notification', subtype_xmlid='mail.mt_note')

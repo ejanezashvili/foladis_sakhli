@@ -257,6 +257,8 @@ export class TaskChain extends Component {
             editReviewers: false,
             deadline: "",
             subtasks: [],
+            parallel: false,
+            parallel_ids: [],
         };
         await this.loadUsers();
         this.scrollToPop();
@@ -294,6 +296,22 @@ export class TaskChain extends Component {
     removeSub(sub) {
         this.state.form.subtasks = this.state.form.subtasks.filter((s) => s !== sub);
     }
+    // parallel task: runs alongside the chosen tasks of this sequence (same previous / next tasks)
+    toggleParallel(ev) {
+        const f = this.state.form;
+        f.parallel = ev.target.checked;
+        if (f.parallel && !f.parallel_ids.length && this.state.nodes.some((n) => n.id === f.anchor_id)) {
+            f.parallel_ids = [f.anchor_id];
+        }
+    }
+    toggleParallelTask(id) {
+        const f = this.state.form;
+        f.parallel_ids = f.parallel_ids.includes(id) ? f.parallel_ids.filter((x) => x !== id) : [...f.parallel_ids, id];
+    }
+    get parallelStep() {
+        const levels = this.state.nodes.filter((n) => this.state.form.parallel_ids.includes(n.id)).map((n) => n.level + 1);
+        return [...new Set(levels)].sort((a, b) => a - b).join(", ");
+    }
     cancelForm() {
         this.state.form = null;
     }
@@ -305,6 +323,10 @@ export class TaskChain extends Component {
         }
         if (!f.project_id) {
             this.notification.add("აირჩიეთ დეპარტამენტი.", { type: "warning" });
+            return;
+        }
+        if (f.parallel && !f.parallel_ids.length) {
+            this.notification.add("მონიშნეთ, რომელი დავალებების პარალელურია.", { type: "warning" });
             return;
         }
         if (!f.reviewer_ids.length) {
@@ -322,6 +344,7 @@ export class TaskChain extends Component {
                     reviewer_ids: f.reviewer_ids,
                     deadline: f.deadline || false,
                     subtasks: f.subtasks.map((s) => ({ name: s.name, user_id: s.user_id || false, deadline: s.deadline || false })),
+                    parallel_ids: f.parallel ? f.parallel_ids : [],
                 },
                 f.anchor_id,
             ]);

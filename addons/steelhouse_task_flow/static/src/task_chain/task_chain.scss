@@ -309,3 +309,29 @@
         border-radius: 3px;
     }
 }
+
+// "პარალელური დავალება": which tasks of the sequence it runs alongside
+.o_sh_par_list {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+.o_sh_par_item {
+    padding: 2px 0;
+    cursor: pointer;
+    min-width: 0;
+}
+.o_sh_par_step {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #71639e;
+    color: #fff;
+    font-size: 11px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
