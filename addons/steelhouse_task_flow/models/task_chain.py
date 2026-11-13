@@ -274,6 +274,55 @@ class ProjectTask(models.Model):
                 message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
+    def sh_chain_move(self, task_id, mode, target_level):
+        """Drag & drop: move a task of the chain to another step.
+        mode 'into': the task joins step target_level (runs in parallel with its tasks);
+        mode 'before': the task becomes a new step placed before step target_level
+        (target_level = number of steps -> at the end). Levels are the ones shown in the widget."""
+        self._sh_chain_check_rights()
+        chain = self._sh_chain_tasks()
+        task = chain.filtered(lambda t: t.id == task_id)
+        if not task or mode not in ('into', 'before'):
+            raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
+        level = self._sh_layers(chain)
+        own = level[task.id]
+        alone = not any(lv == own for tid, lv in level.items() if tid != task.id)
+        if (mode == 'into' and target_level == own) or \
+                (mode == 'before' and alone and target_level in (own, own + 1)):
+            return False
+
+        # 1. take the task out; its previous tasks now go straight to its next ones
+        old_prev = task.depend_on_ids & chain
+        old_next = task.dependent_ids & chain
+        for nxt in old_next:
+            nxt.write({'depend_on_ids': [(3, task.id)] + [(4, p.id) for p in old_prev]})
+        if old_prev:
+            task.write({'depend_on_ids': [(3, p.id) for p in old_prev]})
+
+        # its step disappeared: the later steps moved one place to the left
+        if alone and target_level > own:
+            target_level -= 1
+        level = self._sh_layers(chain - task)
+        at = lambda lv: chain.filtered(lambda t: t.id != task.id and level.get(t.id) == lv)
+
+        # 2. put it in its new place
+        if mode == 'into':
+            prev, nxt = at(target_level - 1), at(target_level + 1)
+        else:
+            prev, nxt = at(target_level - 1), at(target_level)
+            # the arrows that jumped over the new step now go through it
+            for n in nxt:
+                n.write({'depend_on_ids': [(3, p.id) for p in prev & n.depend_on_ids]})
+        if prev:
+            task.write({'depend_on_ids': [(4, p.id) for p in prev]})
+        for n in nxt:
+            n.write({'depend_on_ids': [(4, task.id)]})
+
+        step = self._sh_layers(chain)[task.id] + 1
+        task.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("თანმიმდევრობაში გადაადგილდა"), _("ნაბიჯი %s") % step),
+                          message_type='notification', subtype_xmlid='mail.mt_note')
+        return True
+
     def _sh_end_of_day(self, day):
         """'2026-11-20' -> 20.11 23:59 in the user's time zone, stored in UTC."""
         if not day:

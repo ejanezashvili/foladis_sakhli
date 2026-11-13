@@ -76,7 +76,7 @@ class ProjectTask(models.Model):
         elif status == 'done':
             domain.append(('state', '=', '1_done'))
         if department_id:
-            domain.append(('project_id', '=', int(department_id)))
+            domain.append(('project_id', 'in', self.env['project.project'].browse(int(department_id))._sh_dept_tree_ids() or [int(department_id)]))
         if user_id:
             domain.append(('user_ids', 'in', [int(user_id)]))
         if search:
@@ -144,7 +144,7 @@ class ProjectTask(models.Model):
         if not subtasks:
             base.append(('parent_id', '=', False))
         if department_id:
-            base.append(('project_id', '=', int(department_id)))
+            base.append(('project_id', 'in', self.env['project.project'].browse(int(department_id))._sh_dept_tree_ids() or [int(department_id)]))
         if user_id:
             base.append(('user_ids', 'in', [int(user_id)]))
         open_tasks = self.search(base + [('state', 'not in', CLOSED)], limit=MAX_TASKS)

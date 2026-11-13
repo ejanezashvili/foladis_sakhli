@@ -46,6 +46,8 @@ export class TaskChain extends Component {
             deptUserIds: [],
             link: null,
             busy: false,
+            drag: null,
+            drop: null,
         });
         this.scrollRef = useRef("scroll");
         onWillStart(() => this.load());
@@ -353,6 +355,94 @@ export class TaskChain extends Component {
         this.state.link = null;
         await this.refresh();
     }
+    // ---------------------------------------------------------- drag & drop
+    // drop on a step's column: the task joins that step (in parallel);
+    // drop in the gap between steps (or before the first / after the last): it becomes a new step there
+    get canDrag() {
+        return !this.state.readonly && !this.state.form && !this.state.link && this.state.nodes.length > 1;
+    }
+    onDragStart(ev, node) {
+        if (!this.canDrag) {
+            ev.preventDefault();
+            return;
+        }
+        ev.dataTransfer.effectAllowed = "move";
+        ev.dataTransfer.setData("text/plain", String(node.id));
+        this.state.drag = { id: node.id, level: node.level };
+    }
+    onDragEnd() {
+        this.state.drag = null;
+        this.state.drop = null;
+    }
+    dropTarget(ev) {
+        const rect = ev.currentTarget.getBoundingClientRect();
+        const x = ev.clientX - rect.left;
+        const cols = this.layout.cols;
+        for (let l = 0; l < cols; l++) {
+            const left = this.colX(l);
+            if (x >= left && x <= left + W) {
+                return { mode: "into", level: l };
+            }
+            if (x < left) {
+                return { mode: "before", level: l };
+            }
+        }
+        return { mode: "before", level: cols };
+    }
+    isNoop(target) {
+        const drag = this.state.drag;
+        if (!drag || !target) {
+            return true;
+        }
+        const alone = !this.state.nodes.some((n) => n.level === drag.level && n.id !== drag.id);
+        if (target.mode === "into") {
+            return target.level === drag.level;
+        }
+        return alone && (target.level === drag.level || target.level === drag.level + 1);
+    }
+    onDragOver(ev) {
+        if (!this.state.drag) {
+            return;
+        }
+        ev.preventDefault();
+        const t = this.dropTarget(ev);
+        const drop = this.isNoop(t) ? null : t;
+        const cur = this.state.drop;
+        if (!cur !== !drop || (cur && (cur.mode !== drop.mode || cur.level !== drop.level))) {
+            this.state.drop = drop;
+        }
+        ev.dataTransfer.dropEffect = drop ? "move" : "none";
+    }
+    async onDrop(ev) {
+        ev.preventDefault();
+        const drag = this.state.drag;
+        const drop = this.state.drop;
+        this.onDragEnd();
+        if (!drag || !drop) {
+            return;
+        }
+        this.state.busy = true;
+        try {
+            await this.call("sh_chain_move", [drag.id, drop.mode, drop.level]);
+            await this.refresh();
+        } finally {
+            this.state.busy = false;
+        }
+    }
+    get dropStyle() {
+        const d = this.state.drop;
+        if (!d) {
+            return "";
+        }
+        const top = PAD + HEAD - 8;
+        const height = this.layout.height - top - 4;
+        if (d.mode === "into") {
+            return `left:${this.colX(d.level) - 8}px;top:${top}px;width:${W + 16}px;height:${height}px;`;
+        }
+        const x = d.level === 0 ? PAD + SLOT + GX / 2 : this.colX(d.level) - GX / 2;
+        return `left:${x - 3}px;top:${top}px;width:6px;height:${height}px;`;
+    }
+
     unlinkEdge(arrow) {
         this.dialog.add(ConfirmationDialog, {
             title: "დარწმუნებული ხარ?",

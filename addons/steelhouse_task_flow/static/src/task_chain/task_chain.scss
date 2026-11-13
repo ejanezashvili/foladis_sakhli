@@ -283,3 +283,29 @@
         > div:first-child { grid-column: 1 / -1; }
     }
 }
+
+// drag & drop (change the order of the steps)
+.o_sh_chain_card[draggable="true"] {
+    cursor: grab;
+}
+.o_sh_chain_card.o_sh_drag_src {
+    opacity: 0.45;
+}
+.o_sh_chain_canvas.o_sh_dragging .o_sh_edge_x,
+.o_sh_chain_canvas.o_sh_dragging .o_sh_card_plus {
+    visibility: hidden;
+}
+.o_sh_chain_drop {
+    position: absolute;
+    pointer-events: none;
+    z-index: 0;
+    border-radius: 10px;
+    &.o_sh_drop_into {
+        background: rgba(113, 99, 158, 0.10);
+        border: 2px dashed #71639e;
+    }
+    &.o_sh_drop_before {
+        background: #71639e;
+        border-radius: 3px;
+    }
+}

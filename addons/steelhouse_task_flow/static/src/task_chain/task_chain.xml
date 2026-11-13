@@ -7,12 +7,14 @@
                 <div class="text-muted small mb-2">
                     <t t-if="state.project"><i class="fa fa-folder-open-o me-1" title="პროექტი"/><b t-esc="state.project"/> · </t>
                     <i class="fa fa-lock me-1" title="ელოდება"/>შემდეგი ნაბიჯი იწყება, როცა წინა დასრულდება.
+                    <t t-if="!state.readonly and state.nodes.length > 1"> · <i class="fa fa-arrows me-1" title="გადაადგილება"/>რიგის შესაცვლელად ბარათი გადაათრიეთ სხვა ნაბიჯზე ან ნაბიჯებს შორის.</t>
                 </div>
 
                 <!-- numbered steps -->
                 <div class="o_sh_chain_scroll" t-ref="scroll">
                     <t t-set="lay" t-value="layout"/>
-                    <div class="o_sh_chain_canvas" t-att-style="canvasStyle">
+                    <div t-att-class="'o_sh_chain_canvas' + (state.drag ? ' o_sh_dragging' : '')" t-att-style="canvasStyle"
+                         t-on-dragover="onDragOver" t-on-drop="onDrop">
                         <svg class="o_sh_chain_svg" t-att-width="lay.width" t-att-height="lay.height">
                             <defs>
                                 <marker id="o_sh_arrow_done" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
@@ -49,10 +51,15 @@
                             </div>
                         </t>
 
+                        <!-- drag & drop: where the task will land -->
+                        <div t-if="state.drop" t-att-class="'o_sh_chain_drop o_sh_drop_' + state.drop.mode" t-att-style="dropStyle"/>
+
                         <!-- tasks -->
                         <div t-foreach="state.nodes" t-as="node" t-key="node.id"
-                             t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '')"
+                             t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '') + (state.drag and state.drag.id === node.id ? ' o_sh_drag_src' : '')"
                              t-att-style="cardStyle(node)" t-on-click="() => this.openTask(node)"
+                             t-att-draggable="canDrag ? 'true' : 'false'"
+                             t-on-dragstart="(ev) => this.onDragStart(ev, node)" t-on-dragend="onDragEnd"
                              t-att-title="node.current ? '' : 'გახსნა'">
                             <div class="o_sh_chain_head d-flex justify-content-between align-items-center small">
                                 <span class="o_sh_chain_num" t-esc="node.number"/>
