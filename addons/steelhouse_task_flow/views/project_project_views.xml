@@ -43,6 +43,8 @@
                             string="პროექტები" class="btn-secondary" display="always"/>
                 </header>
             </xpath>
+            <!-- no activities (clock) on the department cards -->
+            <xpath expr="//field[@name='activity_ids'][@widget='kanban_activity']" position="replace"/>
         </field>
     </record>
 
