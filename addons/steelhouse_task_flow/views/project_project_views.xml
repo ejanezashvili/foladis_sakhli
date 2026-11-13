@@ -45,6 +45,9 @@
             </xpath>
             <!-- no activities (clock) on the department cards -->
             <xpath expr="//field[@name='activity_ids'][@widget='kanban_activity']" position="replace"/>
+            <!-- no project status (on track / at risk ...) - a department is not a project -->
+            <xpath expr="//field[@name='last_update_status'][@widget='project_state_selection']" position="replace"/>
+            <xpath expr="//span[hasclass('o_status_bubble')]" position="replace"/>
         </field>
     </record>
 
