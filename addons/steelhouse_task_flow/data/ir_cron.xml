@@ -29,4 +29,15 @@
         <field name="nextcall" eval="(DateTime.now() + timedelta(days=1)).strftime('%Y-%m-%d 05:00:00')"/>
         <field name="active" eval="True"/>
     </record>
+    <!-- nightly 00:05 Tbilisi (20:05 UTC): "ჩემი დავალებები" columns by creation date -->
+    <record id="ir_cron_sh_place_personal" model="ir.cron">
+        <field name="name">დავალებები: „ჩემი დავალებების“ სვეტები შექმნის თარიღით</field>
+        <field name="model_id" ref="project.model_project_task"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_sh_place_personal()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="nextcall" eval="DateTime.now().strftime('%Y-%m-%d 20:05:00')"/>
+        <field name="active" eval="True"/>
+    </record>
 </odoo>
