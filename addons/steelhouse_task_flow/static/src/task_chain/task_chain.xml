@@ -56,11 +56,11 @@
 
                         <!-- tasks -->
                         <div t-foreach="state.nodes" t-as="node" t-key="node.id"
-                             t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (node.can_open and !node.current ? ' o_sh_clickable' : '') + (state.drag and state.drag.id === node.id ? ' o_sh_drag_src' : '')"
-                             t-att-style="cardStyle(node)" t-on-click="() => this.openTask(node)"
+                             t-att-class="'o_sh_chain_card o_sh_status_' + node.status + (node.current ? ' o_sh_current' : '') + (!node.current and (node.can_open or !state.readonly) ? ' o_sh_clickable' : '') + (state.drag and state.drag.id === node.id ? ' o_sh_drag_src' : '')"
+                             t-att-style="cardStyle(node)" t-on-click="() => this.onCardClick(node)"
                              t-att-draggable="canDrag ? 'true' : 'false'"
                              t-on-dragstart="(ev) => this.onDragStart(ev, node)" t-on-dragend="onDragEnd"
-                             t-att-title="node.current ? '' : 'გახსნა'">
+                             t-att-title="node.current ? '' : (state.readonly ? 'გახსნა' : 'რედაქტირება')">
                             <div class="o_sh_chain_head d-flex justify-content-between align-items-center small">
                                 <span class="o_sh_chain_num" t-esc="node.number"/>
                                 <span class="o_sh_chain_status">
@@ -107,12 +107,14 @@
                         <div t-if="state.form" class="o_sh_chain_box o_sh_chain_pop" t-att-style="popStyle">
                             <t t-set="f" t-value="state.form"/>
                             <div class="d-flex justify-content-between align-items-center mb-2">
-                                <b>ნაბიჯი <t t-esc="f.parallel ? (parallelStep or '?') : f.step"/> - ახალი<t t-if="f.parallel"> (პარალელური)</t></b>
+                                <b t-if="f.mode === 'edit'">ნაბიჯი <t t-esc="f.step"/> - რედაქტირება</b>
+                                <b t-else="">ნაბიჯი <t t-esc="f.parallel ? (parallelStep or '?') : f.step"/> - ახალი<t t-if="f.parallel"> (პარალელური)</t></b>
                                 <button class="btn-close" title="დახურვა" t-on-click="cancelForm"/>
                             </div>
-                            <a href="#" class="small d-block mb-2" t-on-click.prevent="openLinkFromForm"><i class="fa fa-link me-1"/>არსებული დავალების არჩევა</a>
+                            <a t-if="f.mode === 'edit' and f.node.can_open" href="#" class="small d-block mb-2" t-on-click.prevent="() => this.openTask(f.node)"><i class="fa fa-external-link me-1"/>დავალების სრულად გახსნა</a>
+                            <a t-if="f.mode !== 'edit'" href="#" class="small d-block mb-2" t-on-click.prevent="openLinkFromForm"><i class="fa fa-link me-1"/>არსებული დავალების არჩევა</a>
                             <!-- parallel task: alongside the chosen tasks of this sequence -->
-                            <div t-if="state.nodes.length > 1" class="mb-2">
+                            <div t-if="f.mode !== 'edit' and state.nodes.length > 1" class="mb-2">
                                 <label class="d-flex align-items-center gap-2 small mb-1">
                                     <input type="checkbox" class="form-check-input mt-0" t-att-checked="f.parallel" t-on-change="toggleParallel"/>
                                     <b>პარალელური დავალება</b>
@@ -168,7 +170,7 @@
                             </div>
 
                             <!-- sub-tasks: hidden until asked for -->
-                            <div class="mt-2">
+                            <div t-if="f.mode !== 'edit'" class="mt-2">
                                 <div t-foreach="f.subtasks" t-as="s" t-key="s.key" class="o_sh_pop_sub">
                                     <div>
                                         <input type="text" class="form-control form-control-sm" placeholder="ქვედავალება..."
@@ -191,7 +193,7 @@
                             </div>
 
                             <div class="mt-3 d-flex gap-2">
-                                <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm">დამატება</button>
+                                <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm"><t t-esc="f.mode === 'edit' ? 'შენახვა' : 'დამატება'"/></button>
                                 <button class="btn btn-secondary btn-sm" t-on-click="cancelForm">გაუქმება</button>
                             </div>
                         </div>

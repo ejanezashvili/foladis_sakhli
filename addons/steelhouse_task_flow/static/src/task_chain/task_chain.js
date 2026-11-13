@@ -218,6 +218,15 @@ export class TaskChain extends Component {
         return n ? n.name : "";
     }
 
+    onCardClick(node) {
+        if (node.current) {
+            return;
+        }
+        if (this.state.readonly) {
+            return this.openTask(node);
+        }
+        return this.openEdit(node);
+    }
     async openTask(node) {
         if (node.current) {
             return;
@@ -256,6 +265,35 @@ export class TaskChain extends Component {
             reviewerPick: 0,
             editReviewers: false,
             deadline: "",
+            subtasks: [],
+            parallel: false,
+            parallel_ids: [],
+        };
+        await this.loadUsers();
+        this.scrollToPop();
+    }
+    // edit a task of the chain in the same pop-up
+    async openEdit(node) {
+        this.state.link = null;
+        if (!this.state.departments.length) {
+            this.state.departments = await this.orm.call("project.task", "sh_chain_departments", []);
+        }
+        const v = await this.call("sh_chain_task_get", [node.id]);
+        this.state.form = {
+            mode: "edit",
+            task_id: node.id,
+            node,
+            direction: "next",
+            anchor_id: node.id,
+            anchor_name: node.name,
+            step: node.level + 1,
+            name: v.name,
+            project_id: v.project_id,
+            user_id: v.user_id,
+            reviewer_ids: v.reviewer_ids,
+            reviewerPick: 0,
+            editReviewers: false,
+            deadline: v.deadline,
             subtasks: [],
             parallel: false,
             parallel_ids: [],
@@ -334,6 +372,21 @@ export class TaskChain extends Component {
             return;
         }
         this.state.busy = true;
+        if (f.mode === "edit") {
+            try {
+                await this.call("sh_chain_task_write", [
+                    f.task_id,
+                    { name: f.name, project_id: f.project_id, user_id: f.user_id || false,
+                      reviewer_ids: f.reviewer_ids, deadline: f.deadline || false },
+                ]);
+                this.state.form = null;
+                this.notification.add("ცვლილებები შენახულია.", { type: "success" });
+                await this.refresh();
+            } finally {
+                this.state.busy = false;
+            }
+            return;
+        }
         try {
             await this.call("sh_chain_create", [
                 f.direction,

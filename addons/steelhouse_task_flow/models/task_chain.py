@@ -323,6 +323,52 @@ class ProjectTask(models.Model):
                           message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
+    def _sh_chain_member(self, task_id):
+        """A task of this chain, as superuser (rights: the user can edit the task the tab is on)."""
+        self._sh_chain_check_rights()
+        task = self._sh_chain_tasks().filtered(lambda t: t.id == task_id)
+        if not task:
+            raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
+        return task
+
+    def sh_chain_task_get(self, task_id):
+        """Values of a chain task for the edit pop-up."""
+        task = self._sh_chain_member(task_id)
+        deadline = task.date_deadline and fields.Datetime.context_timestamp(self, task.date_deadline).date()
+        return {
+            'name': task.name,
+            'project_id': task.project_id.id,
+            'user_id': (task.sh_responsible_id or task.user_ids[:1]).id or False,
+            'reviewer_ids': task.reviewer_ids.ids,
+            'deadline': deadline and deadline.isoformat() or '',
+        }
+
+    def sh_chain_task_write(self, task_id, vals):
+        """Edit a chain task right in the "თანმიმდევრობა" tab."""
+        task = self._sh_chain_member(task_id)
+        name = (vals.get('name') or '').strip()
+        if not name:
+            raise UserError(_("ჩაწერეთ დავალების სახელი."))
+        project = self.env['project.project'].sudo().browse(vals.get('project_id') or 0).exists()
+        if not project:
+            raise UserError(_("აირჩიეთ დეპარტამენტი."))
+        reviewers = [int(r) for r in (vals.get('reviewer_ids') or []) if r]
+        if not reviewers:
+            raise UserError(_("მიუთითეთ შემმოწმებელი."))
+        user_id = vals.get('user_id') or False
+        write_vals = {
+            'name': name,
+            'sh_responsible_id': user_id,
+            'reviewer_ids': [(6, 0, reviewers)],
+            'date_deadline': self._sh_end_of_day(vals.get('deadline')),
+        }
+        if project != task.project_id:
+            write_vals['project_id'] = project.id
+        if user_id and user_id not in task.user_ids.ids:
+            write_vals['user_ids'] = [(4, user_id)]
+        task.with_context(sh_flow_internal=True).write(write_vals)
+        return True
+
     def _sh_end_of_day(self, day):
         """'2026-11-20' -> 20.11 23:59 in the user's time zone, stored in UTC."""
         if not day:
