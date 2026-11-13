@@ -234,8 +234,6 @@
                         <span class="o_sh_tag"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
                     </div>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">
-                        <span class="o_sh_meta" title="კომენტარები"><i class="fa fa-comments-o"/> <t t-esc="record.sh_comment_count.raw_value or 0"/></span>
-                        <span class="o_sh_meta" title="ფაილები"><i class="fa fa-paperclip"/> <t t-esc="record.message_attachment_count.raw_value or 0"/></span>
                         <span t-if="record.subtask_count.raw_value" class="o_sh_meta" title="ქვედავალებები: დასრულებული / სულ">
                             <i class="fa fa-check-square-o"/> <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
                         </span>
