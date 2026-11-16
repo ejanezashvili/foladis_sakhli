@@ -20,6 +20,10 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     sh_chain = fields.Char(compute='_compute_sh_chain', string='თანმიმდევრობა')
+    # tasks running in parallel with this one in its sequence (same step); kept symmetric.
+    # Needed when the step has no previous / next task to hold them together (e.g. 2 tasks side by side)
+    sh_parallel_ids = fields.Many2many(
+        'project.task', 'sh_task_parallel_rel', 'task_id', 'peer_id', string='პარალელური დავალებები', copy=False)
     sh_waiting_for = fields.Char(compute='_compute_sh_waiting_for', string='ელოდება')
 
     def _compute_sh_chain(self):
@@ -87,7 +91,7 @@ class ProjectTask(models.Model):
         seen = self.sudo()
         todo = self.sudo()
         while todo and len(seen) < MAX_NODES:
-            around = (todo.depend_on_ids | todo.dependent_ids) - seen
+            around = (todo.depend_on_ids | todo.dependent_ids | todo.sh_parallel_ids) - seen
             seen |= around
             todo = around
         return seen
@@ -109,6 +113,17 @@ class ProjectTask(models.Model):
 
         for task in tasks:
             depth(task)
+        # parallel peers stand in the same step (the later one of them)
+        for _i in range(len(tasks)):
+            changed = False
+            for task in tasks:
+                for peer in task.sh_parallel_ids:
+                    if peer.id in level and level[peer.id] != level[task.id]:
+                        top = max(level[peer.id], level[task.id])
+                        level[peer.id] = level[task.id] = top
+                        changed = True
+            if not changed:
+                break
         return level
 
     def _sh_node_status(self):
@@ -298,6 +313,7 @@ class ProjectTask(models.Model):
             nxt.write({'depend_on_ids': [(3, task.id)] + [(4, p.id) for p in old_prev]})
         if old_prev:
             task.write({'depend_on_ids': [(3, p.id) for p in old_prev]})
+        task._sh_unlink_parallel()
 
         # its step disappeared: the later steps moved one place to the left
         if alone and target_level > own:
@@ -317,6 +333,8 @@ class ProjectTask(models.Model):
             task.write({'depend_on_ids': [(4, p.id) for p in prev]})
         for n in nxt:
             n.write({'depend_on_ids': [(4, task.id)]})
+        if mode == 'into':
+            task._sh_link_parallel(at(target_level))
 
         step = self._sh_layers(chain)[task.id] + 1
         task.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("თანმიმდევრობაში გადაადგილდა"), _("ნაბიჯი %s") % step),
@@ -422,6 +440,23 @@ class ProjectTask(models.Model):
             anchor._sh_chain_connect(direction, new)
         return new.id
 
+    def _sh_link_parallel(self, peers):
+        """Symmetric parallel link between self and peers."""
+        me = self.sudo()
+        peers = peers.sudo() - me
+        if peers:
+            me.write({'sh_parallel_ids': [(4, p.id) for p in peers]})
+            for p in peers:
+                p.write({'sh_parallel_ids': [(4, me.id)]})
+
+    def _sh_unlink_parallel(self):
+        me = self.sudo()
+        peers = me.sh_parallel_ids
+        if peers:
+            for p in peers:
+                p.write({'sh_parallel_ids': [(3, me.id)]})
+            me.write({'sh_parallel_ids': [(5, 0, 0)]})
+
     def _sh_chain_parallel(self, tasks):
         """This (new) task runs in parallel with tasks: it starts after their previous tasks
         and their next tasks also wait for it."""
@@ -433,6 +468,7 @@ class ProjectTask(models.Model):
             me.write({'depend_on_ids': [(4, p.id) for p in prev]})
         for n in nxt:
             n.write({'depend_on_ids': [(4, me.id)]})
+        me._sh_link_parallel(tasks)
         labels = ', '.join(self._sh_label(t) for t in tasks)
         me.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("პარალელური დავალება"), labels),
                         message_type='notification', subtype_xmlid='mail.mt_note')
