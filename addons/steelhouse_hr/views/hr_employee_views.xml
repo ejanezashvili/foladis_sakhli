@@ -21,6 +21,10 @@
                 <field name="sh_co_manager_ids" invisible="1"/>
                 <field name="sh_manager_ids" widget="many2many_avatar_employee" readonly="1" invisible="not sh_co_manager_ids"/>
             </xpath>
+            <!-- quarterly time off: the date each employee's quarters are counted from -->
+            <xpath expr="//group[@name='managers']" position="inside">
+                <field name="sh_quarter_start"/>
+            </xpath>
         </field>
     </record>
 

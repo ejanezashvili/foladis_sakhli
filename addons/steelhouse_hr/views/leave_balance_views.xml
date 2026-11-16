@@ -135,6 +135,18 @@
             <xpath expr="//form" position="attributes">
                 <attribute name="class">o_sh_type_form</attribute>
             </xpath>
+            <!-- company rules: calendar-day count, no mandatory days, days per quarter -->
+            <xpath expr="//label[@for='create_calendar_meeting']" position="after">
+                <label for="sh_calendar_days" class="me-4"/>
+                <label for="sh_ignore_mandatory_days" class="me-4"/>
+            </xpath>
+            <xpath expr="//field[@name='create_calendar_meeting']" position="after">
+                <field name="sh_calendar_days" nolabel="1"/>
+                <field name="sh_ignore_mandatory_days" nolabel="1"/>
+            </xpath>
+            <xpath expr="//field[@name='employee_requests']" position="after">
+                <field name="sh_quarter_days" invisible="not requires_allocation"/>
+            </xpath>
             <xpath expr="//label[@for='name']" position="attributes">
                 <attribute name="class">o_sh_name_label</attribute>
             </xpath>
