@@ -52,6 +52,12 @@
                             <field name="repeat_type" required="recurring_task" class="me-2" style="max-width: 15rem !important;"/>
                             <field name="repeat_until" invisible="repeat_type != 'until'" required="repeat_type == 'until'" class="me-2"/>
                         </div>
+                        <label for="sh_work_time" invisible="not sh_work_time"/>
+                        <div invisible="not sh_work_time" class="o_sh_worktime">
+                            <field name="sh_work_running" invisible="1"/>
+                            <field name="sh_work_time" nolabel="1" class="fw-semibold" decoration-info="sh_work_running" decoration-success="not sh_work_running"/>
+                            <div class="text-muted small"><field name="sh_work_time_note" nolabel="1"/></div>
+                        </div>
                     </group>
                     <group>
                         <field name="evidence_required" invisible="1"/>
