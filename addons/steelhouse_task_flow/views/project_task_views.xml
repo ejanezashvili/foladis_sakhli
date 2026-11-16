@@ -229,9 +229,14 @@
                             <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
                         </div>
                     </footer>
-                    <div class="o_sh_seg" t-att-title="(record.sh_progress.raw_value or 0) + ' %'">
-                        <t t-foreach="[0, 1, 2, 3, 4]" t-as="i" t-key="i">
-                            <i t-att-class="(record.sh_progress.raw_value or 0) &gt; i * 20 ? 'o_sh_seg_on' : ''"/>
+                    <!-- stage path: ახალი → მიღებული → მიმდინარე → შემოწმებაზე → დასრულებული;
+                         passed steps are coloured with their stage colour; on hold / returned colour the current step -->
+                    <t t-set="sh_path" t-value="['new', 'accepted', 'in_progress', 'review', 'done']"/>
+                    <t t-set="sh_k" t-value="record.sh_kind.raw_value or 'new'"/>
+                    <t t-set="sh_pos" t-value="sh_k === 'on_hold' or sh_k === 'returned' ? 2 : (sh_k === 'cancelled' ? -1 : sh_path.indexOf(sh_k))"/>
+                    <div t-att-class="'o_sh_seg o_sh_seg_' + sh_k" t-att-title="record.stage_id.value">
+                        <t t-foreach="sh_path" t-as="step" t-key="step">
+                            <i t-att-class="step_index &lt; sh_pos ? 'o_sh_seg_' + step : (step_index === sh_pos ? 'o_sh_seg_' + sh_k + ' o_sh_seg_cur' : '')"/>
                         </t>
                     </div>
                 </main>

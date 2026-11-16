@@ -56,7 +56,15 @@
         gap: 4px;
         margin: 4px 0 2px;
         i { flex: 1 1 0; height: 6px; border-radius: 3px; background: #e4e6ea; }
-        i.o_sh_seg_on { background: #5aa9e6; }
+        i.o_sh_seg_new { background: #6c63d9; }
+        i.o_sh_seg_accepted { background: #3d8fd6; }
+        i.o_sh_seg_in_progress { background: #7d5ba6; }
+        i.o_sh_seg_on_hold { background: #d4a017; }
+        i.o_sh_seg_review { background: #e8873a; }
+        i.o_sh_seg_returned { background: #d6336c; }
+        i.o_sh_seg_done { background: #2b9a4a; }
+        i.o_sh_seg_cancelled { background: #868e96; }
+        i.o_sh_seg_cur { box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08); }
     }
     .o_sh_card_sub {
         font-size: 0.82rem;
