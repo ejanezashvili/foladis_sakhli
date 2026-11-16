@@ -108,3 +108,58 @@ class ProjectTask(models.Model):
                 task._sh_wt_apply(task.stage_id.sh_kind, end)
             done += 1
         return done
+
+    # ------------------------------------------------------------------ 7.7 report
+    @api.model
+    def sh_worktime_data(self, date_from, date_to, mine=False, department_id=False, user_id=False):
+        """Average work time: tasks that reached "შემოწმებაზე" / done in the period, by department
+        and employee. The "ყველა" scope is for heads only; access rules apply."""
+        from datetime import date, datetime, time, timedelta
+        manager = self._sh_tl_is_manager()
+        mine = mine or not manager
+        start = TZ.localize(datetime.combine(date.fromisoformat(date_from), time.min)).astimezone(pytz.utc).replace(tzinfo=None)
+        stop = TZ.localize(datetime.combine(date.fromisoformat(date_to) + timedelta(days=1), time.min)).astimezone(pytz.utc).replace(tzinfo=None)
+        base = [('is_template', '=', False), ('project_id', '!=', False)]
+        if mine:
+            base.append(('user_ids', 'in', [self.env.uid]))
+        else:
+            if department_id:
+                base.append(('project_id', 'in', self.env['project.project'].browse(int(department_id))._sh_dept_tree_ids() or [int(department_id)]))
+            if user_id:
+                base.append(('user_ids', 'in', [int(user_id)]))
+        done = self.search(base + [('sh_wt_run_from', '=', False), ('sh_wt_end', '>=', start), ('sh_wt_end', '<', stop),
+                                   ('stage_id.sh_kind', 'in', ['review', 'done'])])
+        running = self.search(base + [('sh_wt_run_from', '!=', False)])
+
+        def stats(key, label, d, r):
+            secs = [t.sh_wt_secs or 0.0 for t in d]
+            avg = sum(secs) / len(secs) if secs else 0
+            return {'key': key, 'label': label, 'count': len(d), 'ids': d.ids, 'avg': avg,
+                    'avg_str': _fmt_secs(avg) if secs else '-',
+                    'min_str': _fmt_secs(min(secs)) if secs else '-',
+                    'max_str': _fmt_secs(max(secs)) if secs else '-',
+                    'running': len(r), 'running_ids': r.ids}
+
+        total = stats('all', 'სულ', done, running)
+        rows = []
+        for dept in (done | running).project_id.sorted('name'):
+            d = done.filtered(lambda t: t.project_id == dept)
+            r = running.filtered(lambda t: t.project_id == dept)
+            row = stats(dept.id, dept.name, d, r)
+            people = (d | r).user_ids
+            if mine:
+                people = people.filtered(lambda u: u.id == self.env.uid)
+            elif user_id:
+                people = people.filtered(lambda u: u.id == int(user_id))
+            row['users'] = [stats('%s_%s' % (dept.id, u.id), u.name, d.filtered(lambda t: u in t.user_ids),
+                                  r.filtered(lambda t: u in t.user_ids)) for u in people.sorted('name')]
+            rows.append(row)
+        top = max([x['avg'] for x in rows] + [u['avg'] for x in rows for u in x['users']] + [1])
+        for x in [x for x in rows] + [u for x in rows for u in x['users']]:
+            x['slow'] = bool(total['avg'] and x['count'] and x['avg'] > total['avg'] * 1.5)
+            x['bar'] = round(100 * x['avg'] / top)
+        depts = self.env['project.project'].search([('sh_is_department', '=', True), ('is_template', '=', False)], order='name')
+        users = self.env['res.users'].search([('share', '=', False)], order='name')
+        return {'is_manager': manager, 'total': total, 'rows': rows,
+                'departments': [{'id': d.id, 'name': d.name} for d in depts],
+                'users': [{'id': u.id, 'name': u.name} for u in users]}

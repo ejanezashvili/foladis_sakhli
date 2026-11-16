@@ -26,6 +26,7 @@ const VIEWS = [
     { key: "timeline", label: "Timeline", icon: "fa-align-left" },
     { key: "user", label: "ინდივიდუალური დატვირთვა", icon: "fa-user" },
     { key: "team", label: "გუნდური დატვირთვა", icon: "fa-users" },
+    { key: "worktime", label: "სამუშაო დრო", icon: "fa-clock-o" },
 ];
 // workload colors: open tasks running at the same time (per person for the team view)
 const LOAD_STEPS = [
@@ -63,6 +64,8 @@ export class TaskTimeline extends Component {
             detail: false,
             showDone: false,
             work: null,
+            wt: null,
+            wtOpen: {},
             scale: "month",
             anchor: this.today(),
             groupBy: "department",
@@ -238,6 +241,16 @@ export class TaskTimeline extends Component {
     async load() {
         this.state.loading = true;
         const { from, to } = this.range;
+        if (this.state.view === "worktime") {
+            const mine = this.state.scope === "mine";
+            this.state.wt = await this.orm.call("project.task", "sh_worktime_data", [iso(from), iso(to)], {
+                mine,
+                department_id: !mine && this.state.departmentId ? Number(this.state.departmentId) : false,
+                user_id: !mine && this.state.userId ? Number(this.state.userId) : false,
+            });
+            this.state.loading = false;
+            return;
+        }
         if (this.state.view !== "timeline") {
             this.state.work = await this.orm.call("project.task", "sh_workload_data", [iso(from), iso(to)], {
                 mode: this.state.view,
@@ -265,7 +278,34 @@ export class TaskTimeline extends Component {
 
     // ---------------------------------------------------------------- simple view helpers
     get isManager() {
-        return Boolean(this.state.data && this.state.data.is_manager);
+        return Boolean((this.state.data && this.state.data.is_manager) || (this.state.wt && this.state.wt.is_manager));
+    }
+    // employees see Timeline + "სამუშაო დრო"; heads see all tabs
+    get tabs() {
+        return this.isManager ? VIEWS : VIEWS.filter((v) => v.key === "timeline" || v.key === "worktime");
+    }
+    toggleWt(key) {
+        this.state.wtOpen[key] = !this.state.wtOpen[key];
+    }
+    // Excel: the table as a CSV file (opens in Excel)
+    exportWt() {
+        const wt = this.state.wt;
+        const head = ["დეპარტამენტი", "თანამშრომელი", "დავალება", "საშუალო სამუშაო დრო", "ყველაზე სწრაფი", "ყველაზე გრძელი", "ახლა მიმდინარე"];
+        const line = (a) => a.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(",");
+        const out = [line(head)];
+        for (const r of wt.rows) {
+            out.push(line([r.label, "", r.count, r.avg_str, r.min_str, r.max_str, r.running]));
+            for (const u of r.users) {
+                out.push(line([r.label, u.label, u.count, u.avg_str, u.min_str, u.max_str, u.running]));
+            }
+        }
+        out.push(line(["სულ", "", wt.total.count, wt.total.avg_str, wt.total.min_str, wt.total.max_str, wt.total.running]));
+        const blob = new Blob(["\ufeff" + out.join("\r\n")], { type: "text/csv;charset=utf-8" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `სამუშაო დრო ${iso(this.range.from)} - ${iso(this.range.to)}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
     }
     // "ჩემი": one flat list sorted by deadline; "ყველა": grouped
     get flatTasks() {
@@ -359,7 +399,7 @@ export class TaskTimeline extends Component {
 
     // ---------------------------------------------------------------- workload
     get filterLists() {
-        const src = this.state.view === "timeline" ? this.state.data : this.state.work;
+        const src = this.state.view === "timeline" ? this.state.data : this.state.view === "worktime" ? this.state.wt : this.state.work;
         return src ? { departments: src.departments, users: src.users } : null;
     }
     get cellW() {
