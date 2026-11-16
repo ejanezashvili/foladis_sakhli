@@ -202,7 +202,7 @@
                         <field name="name" class="o_sh_card_title"/>
                         <field name="sh_number" class="o_sh_card_num"/>
                     </div>
-                    <div class="o_sh_card_sub">
+                    <div t-if="record.project_id.raw_value or record.parent_id.raw_value" class="o_sh_card_sub">
                         <i class="fa fa-building-o me-1" title="დეპარტამენტი"/>
                         <field t-if="record.parent_id.raw_value" invisible="context.get('default_parent_id', False)" name="parent_id"/>
                         <span t-if="!record.parent_id.raw_value" t-esc="record.project_id.value"/>
