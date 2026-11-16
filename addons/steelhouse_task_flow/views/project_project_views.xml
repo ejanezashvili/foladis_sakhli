@@ -35,6 +35,7 @@
         <field name="arch" type="xml">
             <kanban position="attributes">
                 <attribute name="on_create">steelhouse_task_flow.action_sh_create_department</attribute>
+                <attribute name="class" add="o_sh_dept_kanban" separator=" "/>
             </kanban>
             <xpath expr="//kanban/*[1]" position="before">
                 <header>
@@ -42,6 +43,11 @@
                             string="პროექტები" class="btn-secondary" display="always"/>
                 </header>
             </xpath>
+            <!-- no activities (clock) on the department cards -->
+            <xpath expr="//field[@name='activity_ids'][@widget='kanban_activity']" position="replace"/>
+            <!-- no project status (on track / at risk ...) - a department is not a project -->
+            <xpath expr="//field[@name='last_update_status'][@widget='project_state_selection']" position="replace"/>
+            <xpath expr="//span[contains(@t-att-class, 'o_status_bubble')]" position="replace"/>
         </field>
     </record>
 

@@ -197,52 +197,48 @@
                     <field name="sh_comment_count" invisible="1"/>
                     <field name="message_attachment_count" invisible="1"/>
                     <field name="project_id" invisible="1"/>
+                    <field name="sh_progress" invisible="1"/>
                     <div class="o_sh_card_top">
-                        <div class="o_sh_card_pills">
-                        <span t-if="record.sh_is_overdue.raw_value" class="o_sh_tpill o_sh_tpill_late o_sh_overdue_mark">
-                            <i class="o_sh_tpill_dot"/>ვადაგადაცილებული
-                        </span>
-                        <span t-else="" t-att-class="'o_sh_tpill o_sh_tpill_' + (record.sh_kind.raw_value or 'new')">
-                            <i class="o_sh_tpill_dot"/><t t-esc="record.stage_id.value"/>
-                        </span>
-                        <span t-if="record.state.raw_value === '04_waiting_normal'" class="o_sh_tag o_sh_tag_wait" title="ელოდება წინა დავალებებს"><i class="fa fa-lock me-1"/>ელოდება</span>
-                        </div>
+                        <field name="name" class="o_sh_card_title"/>
                         <field name="sh_number" class="o_sh_card_num"/>
                     </div>
-                    <field name="name" class="o_sh_card_title"/>
-                    <div class="o_sh_card_sub">
+                    <div t-if="record.project_id.raw_value or record.parent_id.raw_value" class="o_sh_card_sub">
+                        <i class="fa fa-building-o me-1" title="დეპარტამენტი"/>
                         <field t-if="record.parent_id.raw_value" invisible="context.get('default_parent_id', False)" name="parent_id"/>
                         <span t-if="!record.parent_id.raw_value" t-esc="record.project_id.value"/>
                         <t t-if="record.sh_project_id.raw_value"> · <field name="sh_project_id"/></t>
-                        <t t-if="record.sh_branch.raw_value"> · <i class="fa fa-map-marker" title="ფილიალი"/> <field name="sh_branch"/></t>
+                    </div>
+                    <div t-if="record.sh_branch.raw_value or record.sh_repeat.raw_value or record.state.raw_value === '04_waiting_normal'" class="o_sh_card_sub">
+                        <t t-if="record.sh_branch.raw_value"><i class="fa fa-map-marker me-1" title="ფილიალი"/><field name="sh_branch"/></t>
+                        <t t-if="record.sh_repeat.raw_value"><t t-if="record.sh_branch.raw_value"> · </t><i class="fa fa-repeat me-1"/>განმეორებადი</t>
+                        <t t-if="record.state.raw_value === '04_waiting_normal'"> · <i class="fa fa-lock me-1" title="ელოდება წინა დავალებებს"/>ელოდება</t>
                     </div>
                     <div t-if="record.partner_id.raw_value" class="o_sh_card_sub"><i class="fa fa-user-o me-1" title="კლიენტი"/><field name="partner_id"/></div>
-                    <field name="sh_progress" widget="progressbar" class="o_sh_card_prog"/>
-                    <div class="o_sh_card_row">
-                        <span class="o_sh_card_lbl">შემსრულებლები:</span>
-                        <field name="user_ids" widget="many2many_avatar_user"/>
-                    </div>
-                    <div class="o_sh_card_row">
-                        <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold' : '')">
-                            <i class="fa fa-flag-o me-1" title="ვადა"/>
-                            <t t-if="record.sh_deadline_str.raw_value" t-esc="record.sh_deadline_str.raw_value"/>
-                            <t t-if="!record.sh_deadline_str.raw_value">ვადა არ აქვს</t>
-                        </span>
-                        <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
-                    </div>
-                    <div t-if="record.sh_repeat.raw_value" class="o_sh_card_tags">
-                        <span class="o_sh_tag"><i class="fa fa-repeat me-1"/>განმეორებადი</span>
+                    <div t-if="record.subtask_count.raw_value" class="o_sh_card_sub" title="ქვედავალებები: დასრულებული / სულ">
+                        <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
                     </div>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">
-                        <span class="o_sh_meta" title="კომენტარები"><i class="fa fa-comments-o"/> <t t-esc="record.sh_comment_count.raw_value or 0"/></span>
-                        <span class="o_sh_meta" title="ფაილები"><i class="fa fa-paperclip"/> <t t-esc="record.message_attachment_count.raw_value or 0"/></span>
-                        <span t-if="record.subtask_count.raw_value" class="o_sh_meta" title="ქვედავალებები: დასრულებული / სულ">
-                            <i class="fa fa-check-square-o"/> <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
+                        <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold o_sh_overdue_mark' : '')">
+                            <i class="fa fa-flag-checkered me-1" title="ვადა"/>
+                            <t t-if="record.sh_deadline_str.raw_value" t-esc="record.sh_deadline_str.raw_value"/>
+                            <t t-if="!record.sh_deadline_str.raw_value">—</t>
                         </span>
-                        <div class="ms-auto d-flex align-items-center gap-1">
+                        <div class="ms-auto d-flex align-items-center gap-2">
+                            <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
+                            <field name="user_ids" widget="many2many_avatar_user"/>
                             <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
                         </div>
                     </footer>
+                    <!-- stage path: ახალი → მიღებული → მიმდინარე → შემოწმებაზე → დასრულებული;
+                         passed steps are coloured with their stage colour; on hold / returned colour the current step -->
+                    <t t-set="sh_path" t-value="['new', 'accepted', 'in_progress', 'review', 'done']"/>
+                    <t t-set="sh_k" t-value="record.sh_kind.raw_value or 'new'"/>
+                    <t t-set="sh_pos" t-value="sh_k === 'on_hold' or sh_k === 'returned' ? 2 : (sh_k === 'cancelled' ? -1 : sh_path.indexOf(sh_k))"/>
+                    <div t-att-class="'o_sh_seg o_sh_seg_' + sh_k" t-att-title="record.stage_id.value">
+                        <t t-foreach="sh_path" t-as="step" t-key="step">
+                            <i t-att-class="step_index &lt; sh_pos ? 'o_sh_seg_' + step : (step_index === sh_pos ? 'o_sh_seg_' + sh_k + ' o_sh_seg_cur' : '')"/>
+                        </t>
+                    </div>
                 </main>
             </xpath>
         </field>

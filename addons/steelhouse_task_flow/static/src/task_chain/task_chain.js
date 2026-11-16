@@ -46,6 +46,8 @@ export class TaskChain extends Component {
             deptUserIds: [],
             link: null,
             busy: false,
+            drag: null,
+            drop: null,
         });
         this.scrollRef = useRef("scroll");
         onWillStart(() => this.load());
@@ -216,6 +218,15 @@ export class TaskChain extends Component {
         return n ? n.name : "";
     }
 
+    onCardClick(node) {
+        if (node.current) {
+            return;
+        }
+        if (this.state.readonly) {
+            return this.openTask(node);
+        }
+        return this.openEdit(node);
+    }
     async openTask(node) {
         if (node.current) {
             return;
@@ -255,6 +266,37 @@ export class TaskChain extends Component {
             editReviewers: false,
             deadline: "",
             subtasks: [],
+            parallel: false,
+            parallel_ids: [],
+        };
+        await this.loadUsers();
+        this.scrollToPop();
+    }
+    // edit a task of the chain in the same pop-up
+    async openEdit(node) {
+        this.state.link = null;
+        if (!this.state.departments.length) {
+            this.state.departments = await this.orm.call("project.task", "sh_chain_departments", []);
+        }
+        const v = await this.call("sh_chain_task_get", [node.id]);
+        this.state.form = {
+            mode: "edit",
+            task_id: node.id,
+            node,
+            direction: "next",
+            anchor_id: node.id,
+            anchor_name: node.name,
+            step: node.level + 1,
+            name: v.name,
+            project_id: v.project_id,
+            user_id: v.user_id,
+            reviewer_ids: v.reviewer_ids,
+            reviewerPick: 0,
+            editReviewers: false,
+            deadline: v.deadline,
+            subtasks: [],
+            parallel: false,
+            parallel_ids: [],
         };
         await this.loadUsers();
         this.scrollToPop();
@@ -292,6 +334,22 @@ export class TaskChain extends Component {
     removeSub(sub) {
         this.state.form.subtasks = this.state.form.subtasks.filter((s) => s !== sub);
     }
+    // parallel task: runs alongside the chosen tasks of this sequence (same previous / next tasks)
+    toggleParallel(ev) {
+        const f = this.state.form;
+        f.parallel = ev.target.checked;
+        if (f.parallel && !f.parallel_ids.length && this.state.nodes.some((n) => n.id === f.anchor_id)) {
+            f.parallel_ids = [f.anchor_id];
+        }
+    }
+    toggleParallelTask(id) {
+        const f = this.state.form;
+        f.parallel_ids = f.parallel_ids.includes(id) ? f.parallel_ids.filter((x) => x !== id) : [...f.parallel_ids, id];
+    }
+    get parallelStep() {
+        const levels = this.state.nodes.filter((n) => this.state.form.parallel_ids.includes(n.id)).map((n) => n.level + 1);
+        return [...new Set(levels)].sort((a, b) => a - b).join(", ");
+    }
     cancelForm() {
         this.state.form = null;
     }
@@ -305,11 +363,30 @@ export class TaskChain extends Component {
             this.notification.add("აირჩიეთ დეპარტამენტი.", { type: "warning" });
             return;
         }
+        if (f.parallel && !f.parallel_ids.length) {
+            this.notification.add("მონიშნეთ, რომელი დავალებების პარალელურია.", { type: "warning" });
+            return;
+        }
         if (!f.reviewer_ids.length) {
             this.notification.add("მიუთითეთ შემმოწმებელი.", { type: "warning" });
             return;
         }
         this.state.busy = true;
+        if (f.mode === "edit") {
+            try {
+                await this.call("sh_chain_task_write", [
+                    f.task_id,
+                    { name: f.name, project_id: f.project_id, user_id: f.user_id || false,
+                      reviewer_ids: f.reviewer_ids, deadline: f.deadline || false },
+                ]);
+                this.state.form = null;
+                this.notification.add("ცვლილებები შენახულია.", { type: "success" });
+                await this.refresh();
+            } finally {
+                this.state.busy = false;
+            }
+            return;
+        }
         try {
             await this.call("sh_chain_create", [
                 f.direction,
@@ -320,6 +397,7 @@ export class TaskChain extends Component {
                     reviewer_ids: f.reviewer_ids,
                     deadline: f.deadline || false,
                     subtasks: f.subtasks.map((s) => ({ name: s.name, user_id: s.user_id || false, deadline: s.deadline || false })),
+                    parallel_ids: f.parallel ? f.parallel_ids : [],
                 },
                 f.anchor_id,
             ]);
@@ -353,6 +431,94 @@ export class TaskChain extends Component {
         this.state.link = null;
         await this.refresh();
     }
+    // ---------------------------------------------------------- drag & drop
+    // drop on a step's column: the task joins that step (in parallel);
+    // drop in the gap between steps (or before the first / after the last): it becomes a new step there
+    get canDrag() {
+        return !this.state.readonly && !this.state.form && !this.state.link && this.state.nodes.length > 1;
+    }
+    onDragStart(ev, node) {
+        if (!this.canDrag) {
+            ev.preventDefault();
+            return;
+        }
+        ev.dataTransfer.effectAllowed = "move";
+        ev.dataTransfer.setData("text/plain", String(node.id));
+        this.state.drag = { id: node.id, level: node.level };
+    }
+    onDragEnd() {
+        this.state.drag = null;
+        this.state.drop = null;
+    }
+    dropTarget(ev) {
+        const rect = ev.currentTarget.getBoundingClientRect();
+        const x = ev.clientX - rect.left;
+        const cols = this.layout.cols;
+        for (let l = 0; l < cols; l++) {
+            const left = this.colX(l);
+            if (x >= left && x <= left + W) {
+                return { mode: "into", level: l };
+            }
+            if (x < left) {
+                return { mode: "before", level: l };
+            }
+        }
+        return { mode: "before", level: cols };
+    }
+    isNoop(target) {
+        const drag = this.state.drag;
+        if (!drag || !target) {
+            return true;
+        }
+        const alone = !this.state.nodes.some((n) => n.level === drag.level && n.id !== drag.id);
+        if (target.mode === "into") {
+            return target.level === drag.level;
+        }
+        return alone && (target.level === drag.level || target.level === drag.level + 1);
+    }
+    onDragOver(ev) {
+        if (!this.state.drag) {
+            return;
+        }
+        ev.preventDefault();
+        const t = this.dropTarget(ev);
+        const drop = this.isNoop(t) ? null : t;
+        const cur = this.state.drop;
+        if (!cur !== !drop || (cur && (cur.mode !== drop.mode || cur.level !== drop.level))) {
+            this.state.drop = drop;
+        }
+        ev.dataTransfer.dropEffect = drop ? "move" : "none";
+    }
+    async onDrop(ev) {
+        ev.preventDefault();
+        const drag = this.state.drag;
+        const drop = this.state.drop;
+        this.onDragEnd();
+        if (!drag || !drop) {
+            return;
+        }
+        this.state.busy = true;
+        try {
+            await this.call("sh_chain_move", [drag.id, drop.mode, drop.level]);
+            await this.refresh();
+        } finally {
+            this.state.busy = false;
+        }
+    }
+    get dropStyle() {
+        const d = this.state.drop;
+        if (!d) {
+            return "";
+        }
+        const top = PAD + HEAD - 8;
+        const height = this.layout.height - top - 4;
+        if (d.mode === "into") {
+            return `left:${this.colX(d.level) - 8}px;top:${top}px;width:${W + 16}px;height:${height}px;`;
+        }
+        const x = d.level === 0 ? PAD + SLOT + GX / 2 : this.colX(d.level) - GX / 2;
+        return `left:${x - 3}px;top:${top}px;width:6px;height:${height}px;`;
+    }
+
     unlinkEdge(arrow) {
         this.dialog.add(ConfirmationDialog, {
             title: "დარწმუნებული ხარ?",

@@ -20,6 +20,10 @@ class ProjectTask(models.Model):
     _inherit = 'project.task'
 
     sh_chain = fields.Char(compute='_compute_sh_chain', string='თანმიმდევრობა')
+    # tasks running in parallel with this one in its sequence (same step); kept symmetric.
+    # Needed when the step has no previous / next task to hold them together (e.g. 2 tasks side by side)
+    sh_parallel_ids = fields.Many2many(
+        'project.task', 'sh_task_parallel_rel', 'task_id', 'peer_id', string='პარალელური დავალებები', copy=False)
     sh_waiting_for = fields.Char(compute='_compute_sh_waiting_for', string='ელოდება')
 
     def _compute_sh_chain(self):
@@ -87,7 +91,7 @@ class ProjectTask(models.Model):
         seen = self.sudo()
         todo = self.sudo()
         while todo and len(seen) < MAX_NODES:
-            around = (todo.depend_on_ids | todo.dependent_ids) - seen
+            around = (todo.depend_on_ids | todo.dependent_ids | todo.sh_parallel_ids) - seen
             seen |= around
             todo = around
         return seen
@@ -109,6 +113,17 @@ class ProjectTask(models.Model):
 
         for task in tasks:
             depth(task)
+        # parallel peers stand in the same step (the later one of them)
+        for _i in range(len(tasks)):
+            changed = False
+            for task in tasks:
+                for peer in task.sh_parallel_ids:
+                    if peer.id in level and level[peer.id] != level[task.id]:
+                        top = max(level[peer.id], level[task.id])
+                        level[peer.id] = level[task.id] = top
+                        changed = True
+            if not changed:
+                break
         return level
 
     def _sh_node_status(self):
@@ -274,6 +289,104 @@ class ProjectTask(models.Model):
                 message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
+    def sh_chain_move(self, task_id, mode, target_level):
+        """Drag & drop: move a task of the chain to another step.
+        mode 'into': the task joins step target_level (runs in parallel with its tasks);
+        mode 'before': the task becomes a new step placed before step target_level
+        (target_level = number of steps -> at the end). Levels are the ones shown in the widget."""
+        self._sh_chain_check_rights()
+        chain = self._sh_chain_tasks()
+        task = chain.filtered(lambda t: t.id == task_id)
+        if not task or mode not in ('into', 'before'):
+            raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
+        level = self._sh_layers(chain)
+        own = level[task.id]
+        alone = not any(lv == own for tid, lv in level.items() if tid != task.id)
+        if (mode == 'into' and target_level == own) or \
+                (mode == 'before' and alone and target_level in (own, own + 1)):
+            return False
+
+        # 1. take the task out; its previous tasks now go straight to its next ones
+        old_prev = task.depend_on_ids & chain
+        old_next = task.dependent_ids & chain
+        for nxt in old_next:
+            nxt.write({'depend_on_ids': [(3, task.id)] + [(4, p.id) for p in old_prev]})
+        if old_prev:
+            task.write({'depend_on_ids': [(3, p.id) for p in old_prev]})
+        task._sh_unlink_parallel()
+
+        # its step disappeared: the later steps moved one place to the left
+        if alone and target_level > own:
+            target_level -= 1
+        level = self._sh_layers(chain - task)
+        at = lambda lv: chain.filtered(lambda t: t.id != task.id and level.get(t.id) == lv)
+
+        # 2. put it in its new place
+        if mode == 'into':
+            prev, nxt = at(target_level - 1), at(target_level + 1)
+        else:
+            prev, nxt = at(target_level - 1), at(target_level)
+            # the arrows that jumped over the new step now go through it
+            for n in nxt:
+                n.write({'depend_on_ids': [(3, p.id) for p in prev & n.depend_on_ids]})
+        if prev:
+            task.write({'depend_on_ids': [(4, p.id) for p in prev]})
+        for n in nxt:
+            n.write({'depend_on_ids': [(4, task.id)]})
+        if mode == 'into':
+            task._sh_link_parallel(at(target_level))
+
+        step = self._sh_layers(chain)[task.id] + 1
+        task.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("თანმიმდევრობაში გადაადგილდა"), _("ნაბიჯი %s") % step),
+                          message_type='notification', subtype_xmlid='mail.mt_note')
+        return True
+
+    def _sh_chain_member(self, task_id):
+        """A task of this chain, as superuser (rights: the user can edit the task the tab is on)."""
+        self._sh_chain_check_rights()
+        task = self._sh_chain_tasks().filtered(lambda t: t.id == task_id)
+        if not task:
+            raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
+        return task
+
+    def sh_chain_task_get(self, task_id):
+        """Values of a chain task for the edit pop-up."""
+        task = self._sh_chain_member(task_id)
+        deadline = task.date_deadline and fields.Datetime.context_timestamp(self, task.date_deadline).date()
+        return {
+            'name': task.name,
+            'project_id': task.project_id.id,
+            'user_id': (task.sh_responsible_id or task.user_ids[:1]).id or False,
+            'reviewer_ids': task.reviewer_ids.ids,
+            'deadline': deadline and deadline.isoformat() or '',
+        }
+
+    def sh_chain_task_write(self, task_id, vals):
+        """Edit a chain task right in the "თანმიმდევრობა" tab."""
+        task = self._sh_chain_member(task_id)
+        name = (vals.get('name') or '').strip()
+        if not name:
+            raise UserError(_("ჩაწერეთ დავალების სახელი."))
+        project = self.env['project.project'].sudo().browse(vals.get('project_id') or 0).exists()
+        if not project:
+            raise UserError(_("აირჩიეთ დეპარტამენტი."))
+        reviewers = [int(r) for r in (vals.get('reviewer_ids') or []) if r]
+        if not reviewers:
+            raise UserError(_("მიუთითეთ შემმოწმებელი."))
+        user_id = vals.get('user_id') or False
+        write_vals = {
+            'name': name,
+            'sh_responsible_id': user_id,
+            'reviewer_ids': [(6, 0, reviewers)],
+            'date_deadline': self._sh_end_of_day(vals.get('deadline')),
+        }
+        if project != task.project_id:
+            write_vals['project_id'] = project.id
+        if user_id and user_id not in task.user_ids.ids:
+            write_vals['user_ids'] = [(4, user_id)]
+        task.with_context(sh_flow_internal=True).write(write_vals)
+        return True
+
     def _sh_end_of_day(self, day):
         """'2026-11-20' -> 20.11 23:59 in the user's time zone, stored in UTC."""
         if not day:
@@ -319,5 +432,46 @@ class ProjectTask(models.Model):
                 sub_id = new.sh_steps_add_item(section.id)
                 new.sh_steps_write_item(sub_id, {
                     'name': s['name'], 'user_id': s.get('user_id') or False, 'deadline': s.get('deadline') or False})
-        anchor._sh_chain_connect(direction, new)
+        parallel = vals.get('parallel_ids') and self._sh_chain_tasks().filtered(
+            lambda t: t.id in vals['parallel_ids'])
+        if parallel:
+            new._sh_chain_parallel(parallel)
+        else:
+            anchor._sh_chain_connect(direction, new)
         return new.id
+
+    def _sh_link_parallel(self, peers):
+        """Symmetric parallel link between self and peers."""
+        me = self.sudo()
+        peers = peers.sudo() - me
+        if peers:
+            me.write({'sh_parallel_ids': [(4, p.id) for p in peers]})
+            for p in peers:
+                p.write({'sh_parallel_ids': [(4, me.id)]})
+
+    def _sh_unlink_parallel(self):
+        me = self.sudo()
+        peers = me.sh_parallel_ids
+        if peers:
+            for p in peers:
+                p.write({'sh_parallel_ids': [(3, me.id)]})
+            me.write({'sh_parallel_ids': [(5, 0, 0)]})
+
+    def _sh_chain_parallel(self, tasks):
+        """This (new) task runs in parallel with tasks: it starts after their previous tasks
+        and their next tasks also wait for it."""
+        me = self.sudo()
+        tasks = tasks.sudo()
+        prev = tasks.depend_on_ids - me
+        nxt = tasks.dependent_ids - me
+        if prev:
+            me.write({'depend_on_ids': [(4, p.id) for p in prev]})
+        for n in nxt:
+            n.write({'depend_on_ids': [(4, me.id)]})
+        me._sh_link_parallel(tasks)
+        labels = ', '.join(self._sh_label(t) for t in tasks)
+        me.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("პარალელური დავალება"), labels),
+                        message_type='notification', subtype_xmlid='mail.mt_note')
+        for t in tasks:
+            t.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("პარალელური დავალება"), self._sh_label(me)),
+                           message_type='notification', subtype_xmlid='mail.mt_note')

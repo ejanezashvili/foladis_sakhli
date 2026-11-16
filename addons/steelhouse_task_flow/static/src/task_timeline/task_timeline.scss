@@ -373,3 +373,35 @@ $sh-row: 34px;
 @media (max-width: 767px) {
     .o_sh_tl .o_sh_tl_scale { margin-left: 0; }
 }
+
+// workload - simple horizontal bars
+.o_sh_wb { padding: 8px 16px 16px; min-width: 560px; }
+.o_sh_wb_row {
+    display: grid;
+    grid-template-columns: minmax(150px, 230px) 1fr 44px 120px;
+    align-items: center;
+    gap: 14px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f1f0f5;
+}
+.o_sh_wb_name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.o_sh_wb_track { display: flex; height: 26px; border-radius: 8px; background: #f4f3f8; overflow: hidden; }
+.o_sh_wb_seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover { filter: brightness(0.92); }
+}
+.o_sh_wb_late { background: #e03131; }
+.o_sh_wb_soon { background: #f08c00; }
+.o_sh_wb_rest { background: #7c6bc4; }
+.o_sh_wb_total { font-size: 1.1rem; font-weight: 700; text-align: center; cursor: pointer; }
+.o_sh_wb_status { justify-self: start; padding: 3px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+.o_sh_wb_ok { background: #e6f7ec; color: #2b8a3e; }
+.o_sh_wb_busy { background: #fff4dc; color: #b7791f; }
+.o_sh_wb_over { background: #fdecea; color: #c92a2a; }

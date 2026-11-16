@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskDashboard">
+        <div class="o_action o_sh_db">
+            <t t-if="state.d">
+                <t t-set="d" t-value="state.d"/>
+                <!-- greeting -->
+                <div class="o_sh_db_top">
+                    <div>
+                        <h1 class="o_sh_db_hi">გამარჯობა, <t t-esc="d.name"/>! 👋</h1>
+                        <div class="o_sh_db_date" t-esc="d.today_label"/>
+                    </div>
+                    <div class="o_sh_db_actions">
+                        <button class="o_sh_db_btn o_sh_db_btn_light" t-on-click="openTimeline"><i class="fa fa-align-left me-2"/>Timeline</button>
+                        <button class="o_sh_db_btn o_sh_db_btn_light" t-on-click="openMyTasks"><i class="fa fa-th-large me-2"/>ჩემი დავალებები</button>
+                        <button class="o_sh_db_btn" t-on-click="newTask"><i class="fa fa-plus me-2"/>ახალი დავალება</button>
+                    </div>
+                </div>
+
+                <!-- row 1 -->
+                <div class="o_sh_db_row o_sh_db_row1">
+                    <!-- overall -->
+                    <div class="o_sh_db_card o_sh_db_overall">
+                        <div class="o_sh_db_title">საერთო სურათი</div>
+                        <div class="o_sh_db_big">
+                            <div>
+                                <span class="o_sh_db_num" t-esc="d.done_all"/>
+                                <span class="o_sh_db_numlbl">დავალება<br/>დასრულებული სულ</span>
+                            </div>
+                            <div class="o_sh_db_sep"/>
+                            <div t-att-class="d.overdue ? 'o_sh_db_bad' : ''" class="o_sh_db_click" t-on-click="openMyTasks">
+                                <span class="o_sh_db_num" t-esc="d.overdue"/>
+                                <span class="o_sh_db_numlbl">ვადაგადა-<br/>ცილებული</span>
+                            </div>
+                        </div>
+                        <div class="o_sh_db_tiles">
+                            <div class="o_sh_db_tile"><i class="fa fa-folder-open-o"/><b t-esc="d.open"/><span>ღია</span></div>
+                            <div class="o_sh_db_tile"><i class="fa fa-spinner"/><b t-esc="d.in_progress"/><span>მიმდინარე</span></div>
+                            <div class="o_sh_db_tile"><i class="fa fa-check-circle-o"/><b t-esc="d.done_month"/><span>ამ თვეში</span></div>
+                        </div>
+                    </div>
+
+                    <!-- weekly chart -->
+                    <div class="o_sh_db_card">
+                        <t t-set="ch" t-value="chart"/>
+                        <div class="o_sh_db_head">
+                            <div class="o_sh_db_title">ეს კვირა</div>
+                            <i class="fa fa-line-chart o_sh_db_icon" title="კვირა"/>
+                        </div>
+                        <div class="o_sh_db_legend">
+                            <span><i class="o_sh_db_dot o_sh_db_dot_new"/>შემოვიდა: <b t-esc="ch.totalNew"/></span>
+                            <span><i class="o_sh_db_dot o_sh_db_dot_done"/>დასრულდა: <b t-esc="ch.totalDone"/></span>
+                        </div>
+                        <svg class="o_sh_db_chart" t-att-viewBox="'-8 -8 ' + (CHART_W + 16) + ' ' + (CHART_H + 8)" preserveAspectRatio="none">
+                            <defs>
+                                <linearGradient id="o_sh_db_grad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0" stop-color="#7c5cdb" stop-opacity="0.28"/>
+                                    <stop offset="1" stop-color="#7c5cdb" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+                            <line t-att-x1="ch.todayX" t-att-x2="ch.todayX" y1="0" t-att-y2="CHART_H" class="o_sh_db_todayline"/>
+                            <path t-att-d="ch.done.area" fill="url(#o_sh_db_grad)"/>
+                            <path t-att-d="ch.new.line" class="o_sh_db_line_new"/>
+                            <path t-att-d="ch.done.line" class="o_sh_db_line_done"/>
+                            <circle t-if="ch.badge" t-att-cx="ch.badge.x" t-att-cy="ch.badge.y" r="5" class="o_sh_db_point"/>
+                        </svg>
+                        <div class="o_sh_db_days">
+                            <t t-foreach="d.week" t-as="w" t-key="w.date">
+                                <span t-att-class="w.today ? 'o_sh_db_today' : ''" t-esc="w.label"/>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- month ring -->
+                    <div class="o_sh_db_card">
+                        <div class="o_sh_db_head">
+                            <div class="o_sh_db_title">თვის პროგრესი</div>
+                            <i class="fa fa-pie-chart o_sh_db_icon" title="თვე"/>
+                        </div>
+                        <div class="o_sh_db_sub">
+                            <b t-att-class="d.vs_last >= 0 ? 'text-success' : 'text-danger'"><t t-if="d.vs_last >= 0">+</t><t t-esc="d.vs_last"/>%</b>
+                            გასულ თვესთან შედარებით
+                        </div>
+                        <div class="o_sh_db_ringwrap">
+                            <t t-set="r1" t-value="ring(d.month_pct, 54)"/>
+                            <svg viewBox="0 0 140 140" class="o_sh_db_ring">
+                                <circle cx="70" cy="70" r="54" class="o_sh_db_ring_bg"/>
+                                <circle cx="70" cy="70" r="54" class="o_sh_db_ring_fg" t-att-stroke-dasharray="r1.dash" transform="rotate(-90 70 70)"/>
+                                <text x="70" y="68" text-anchor="middle" class="o_sh_db_ring_pct"><t t-esc="d.month_pct"/>%</text>
+                                <text x="70" y="88" text-anchor="middle" class="o_sh_db_ring_lbl">შესრულდა</text>
+                            </svg>
+                            <div class="o_sh_db_ringinfo">
+                                <div><i class="o_sh_db_dot o_sh_db_dot_done"/>დასრულდა: <b t-esc="d.done_month"/></div>
+                                <div><i class="o_sh_db_dot o_sh_db_dot_plan"/>თვის გეგმა: <b t-esc="d.month_plan"/></div>
+                                <div t-if="d.overdue"><i class="o_sh_db_dot o_sh_db_dot_late"/>გადაცილებული: <b t-esc="d.overdue"/></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- row 2 -->
+                <div class="o_sh_db_row o_sh_db_row2">
+                    <!-- this week's deadlines -->
+                    <div class="o_sh_db_card">
+                        <div class="o_sh_db_head">
+                            <div class="o_sh_db_title">ამ კვირის ვადები</div>
+                            <span class="o_sh_db_badge"><t t-esc="d.week_due_done"/>/<t t-esc="d.week_due_total"/></span>
+                        </div>
+                        <div t-if="!d.week_due.length" class="o_sh_db_empty">ამ კვირაში ვადა არაფერს აქვს 🎉</div>
+                        <t t-foreach="d.week_due" t-as="t" t-key="t.id">
+                            <div t-att-class="'o_sh_db_check' + (t.done ? ' o_sh_db_check_done' : '') + (t.kind === 'late' ? ' o_sh_db_check_late' : '')"
+                                 t-on-click="() => this.openTask(t.id)">
+                                <i t-att-class="'fa ' + (t.done ? 'fa-check-square' : 'fa-square-o')"/>
+                                <span class="o_sh_db_check_name" t-esc="t.name"/>
+                                <span class="o_sh_db_check_due" t-esc="dueText(t)"/>
+                            </div>
+                        </t>
+                    </div>
+
+                    <!-- in process -->
+                    <div class="o_sh_db_inproc">
+                        <div class="o_sh_db_head">
+                            <div class="o_sh_db_title">მიმდინარე დავალებები (<t t-esc="d.in_process_total"/>)</div>
+                            <a href="#" class="o_sh_db_link" t-on-click.prevent="openMyTasks">ყველა <i class="fa fa-chevron-right"/></a>
+                        </div>
+                        <div class="o_sh_db_tasks">
+                            <t t-foreach="d.in_process" t-as="t" t-key="t.id">
+                                <div t-att-class="'o_sh_db_task o_sh_db_c' + (t_index % 3)" t-on-click="() => this.openTask(t.id)">
+                                    <div class="o_sh_db_task_top">
+                                        <span t-att-class="'o_sh_db_kind o_sh_db_kind_' + t.kind"><i class="o_sh_db_kdot"/><t t-esc="KIND_LABEL[t.kind] or t.stage"/></span>
+                                        <span class="o_sh_db_tnum" t-esc="t.number"/>
+                                    </div>
+                                    <div class="o_sh_db_task_name" t-esc="t.name"/>
+                                    <div class="o_sh_db_task_dept" t-esc="t.department"/>
+                                    <div class="o_sh_db_task_prog"><div t-att-style="'width:' + t.progress + '%'"/></div>
+                                    <div class="o_sh_db_task_bottom">
+                                        <span t-att-class="t.kind === 'late' ? 'text-danger fw-semibold' : ''" t-esc="dueText(t)"/>
+                                        <span class="o_sh_db_bell"><i class="fa fa-arrow-right"/></span>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="o_sh_db_task o_sh_db_add" t-on-click="newTask">
+                                <i class="fa fa-plus"/> ახალი დავალება
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- row 3: projects -->
+                <div class="o_sh_db_head mt-2">
+                    <div class="o_sh_db_title o_sh_db_title_lg">ჩემი პროექტები და დეპარტამენტები</div>
+                </div>
+                <div t-if="!d.projects.length" class="o_sh_db_empty">ჯერ არცერთ დავალებაზე არ ხართ.</div>
+                <div class="o_sh_db_projects">
+                    <t t-foreach="d.projects" t-as="p" t-key="p.id">
+                        <t t-set="pr" t-value="ring(projectPct(p), 17)"/>
+                        <div t-att-class="'o_sh_db_proj o_sh_db_p' + (p_index % 4)" t-on-click="() => this.openIds(p.ids, p.name)">
+                            <div class="o_sh_db_proj_top">
+                                <div class="o_sh_db_proj_name" t-esc="p.name"/>
+                                <svg viewBox="0 0 44 44" class="o_sh_db_minir">
+                                    <circle cx="22" cy="22" r="17" class="o_sh_db_minir_bg"/>
+                                    <circle cx="22" cy="22" r="17" class="o_sh_db_minir_fg" t-att-stroke-dasharray="pr.dash" transform="rotate(-90 22 22)"/>
+                                    <text x="22" y="26" text-anchor="middle"><t t-esc="p.done"/>/<t t-esc="p.total"/></text>
+                                </svg>
+                            </div>
+                            <div class="o_sh_db_proj_status"><i class="o_sh_db_kdot"/><t t-esc="statusText(p)"/><t t-if="p.is_dept"> · დეპარტამენტი</t></div>
+                            <div t-if="p.late" class="o_sh_db_proj_late">⏰ <t t-esc="p.late"/> ვადაგადაცილებული</div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

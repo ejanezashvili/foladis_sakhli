@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "მთავარი": personal dashboard (static/src/task_dashboard) -->
+    <record id="action_sh_task_dashboard" model="ir.actions.client">
+        <field name="name">მთავარი</field>
+        <field name="tag">sh_task_dashboard</field>
+        <field name="path">sh-home</field>
+    </record>
+    <menuitem id="menu_sh_task_dashboard" name="მთავარი" parent="project.menu_main_pm"
+              action="action_sh_task_dashboard" sequence="0"/>
+</odoo>
