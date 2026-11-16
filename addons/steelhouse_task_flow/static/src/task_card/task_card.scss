@@ -54,7 +54,7 @@
     .o_sh_seg {
         display: flex;
         gap: 4px;
-        margin-top: 2px;
+        margin: 4px 0 2px;
         i { flex: 1 1 0; height: 6px; border-radius: 3px; background: #e4e6ea; }
         i.o_sh_seg_on { background: #5aa9e6; }
     }

@@ -217,11 +217,6 @@
                     <div t-if="record.subtask_count.raw_value" class="o_sh_card_sub" title="ქვედავალებები: დასრულებული / სულ">
                         <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
                     </div>
-                    <div class="o_sh_seg" t-att-title="(record.sh_progress.raw_value or 0) + ' %'">
-                        <t t-foreach="[0, 1, 2, 3, 4]" t-as="i" t-key="i">
-                            <i t-att-class="(record.sh_progress.raw_value or 0) &gt; i * 20 ? 'o_sh_seg_on' : ''"/>
-                        </t>
-                    </div>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">
                         <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold o_sh_overdue_mark' : '')">
                             <i class="fa fa-flag-checkered me-1" title="ვადა"/>
@@ -234,6 +229,11 @@
                             <field name="state" widget="project_task_state_selection" options="{'is_toggle_mode': false}"/>
                         </div>
                     </footer>
+                    <div class="o_sh_seg" t-att-title="(record.sh_progress.raw_value or 0) + ' %'">
+                        <t t-foreach="[0, 1, 2, 3, 4]" t-as="i" t-key="i">
+                            <i t-att-class="(record.sh_progress.raw_value or 0) &gt; i * 20 ? 'o_sh_seg_on' : ''"/>
+                        </t>
+                    </div>
                 </main>
             </xpath>
         </field>
