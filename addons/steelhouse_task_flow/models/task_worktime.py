@@ -4,10 +4,10 @@ from odoo import api, fields, models
 
 TZ = pytz.timezone('Asia/Tbilisi')
 
-# "სამუშაო დრო": runs from "მიღებული" until "შემოწმებაზე" (real time).
-# Returned tasks continue - the extra time is added to the earlier one.
-RUN_KINDS = ('accepted', 'in_progress', 'on_hold', 'returned')
-STOP_KINDS = ('review', 'done', 'cancelled')
+# "სამუშაო დრო": runs from "მიღებული" until "შემოწმებაზე" (real time), paused while "შეჩერებული".
+# Returned / resumed tasks continue - the extra time is added to the earlier one.
+RUN_KINDS = ('accepted', 'in_progress', 'returned')
+STOP_KINDS = ('review', 'done', 'cancelled', 'on_hold')
 
 
 def _fmt_secs(secs):
