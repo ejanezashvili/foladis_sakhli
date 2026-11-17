@@ -1,0 +1,218 @@
+// Task form: white rounded sheet with a purple strip, soft header, number as a pill,
+// section titles with a purple bar, filled rounded fields, tabs with a purple mark,
+// stage bar as one rounded group. Look only - fields and rules are unchanged.
+// Same idea as the employee form (steelhouse_hr/static/src/employee_design), in purple.
+$sh-tp: #6f63a6;
+$sh-tp-soft: #efedf7;
+$sh-tp-dark: #5b5093;
+$sh-tp-page: #f6f6f8;
+$sh-tp-line: #eeedf3;
+$sh-tp-field: #f5f4f9;
+$sh-tp-muted: #6e6a7c;
+$sh-tp-text: #2b2838;
+
+.o_form_project_tasks {
+    // ---------- page
+    .o_form_sheet_bg {
+        background-color: $sh-tp-page;
+    }
+
+    // ---------- stage bar: one white rounded group, the current stage a purple pill
+    .o_form_statusbar .o_statusbar_status {
+        gap: 2px;
+        padding: 4px;
+        border: 1px solid $sh-tp-line;
+        border-radius: 12px;
+        background-color: #fff;
+
+        .o_arrow_button {
+            border: 0 !important;
+            border-radius: 9px !important;
+            padding: 6px 14px !important;
+            color: #444;
+            background: transparent !important;
+
+            &::before,
+            &::after {
+                display: none !important;
+            }
+            &.o_arrow_button_current,
+            &.o_arrow_button_current:hover {
+                font-weight: 600;
+                color: #fff !important;
+                background-color: $sh-tp !important;
+            }
+            &:not(.o_arrow_button_current):hover {
+                background-color: $sh-tp-soft !important;
+            }
+        }
+    }
+    .o_form_statusbar .btn {
+        border-radius: 10px;
+    }
+
+    // ---------- sheet: white card, purple strip on top, soft header
+    .o_form_sheet {
+        position: relative;
+        border: 0 !important;
+        border-radius: 18px;
+        background: linear-gradient(180deg, #faf9ff 0, #fff 150px);
+        box-shadow: 0 4px 18px rgba(40, 30, 80, 0.08);
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 18px 18px 0 0;
+            background: linear-gradient(90deg, $sh-tp, #a79ad6);
+        }
+    }
+
+    // title row: big name; progress / priority / save as soft pills
+    .o_task_name textarea,
+    .o_task_name input {
+        font-size: 30px;
+        font-weight: 700;
+        color: $sh-tp-text;
+    }
+    .o_sh_num_pill {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: $sh-tp-dark;
+        background-color: $sh-tp-soft;
+    }
+    .o_field_widget[name="sh_progress"] {
+        padding: 8px 14px;
+        border-radius: 12px;
+        background-color: #f3f2f7;
+    }
+    .o_sh_priority select {
+        border: 0 !important;
+        border-radius: 12px;
+        padding: 7px 12px;
+        font-weight: 600;
+        background-color: $sh-tp-field;
+    }
+
+    // ---------- section titles: purple bar, then a light line
+    .o_horizontal_separator {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        position: relative;
+        padding-left: 12px;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: none !important;
+        color: $sh-tp-text;
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 15%;
+            bottom: 15%;
+            width: 4px;
+            border-radius: 2px;
+            background-color: $sh-tp;
+        }
+        &::after {
+            content: "";
+            flex: 1 1 auto;
+            height: 1px;
+            background-color: $sh-tp-line;
+        }
+    }
+
+    // ---------- labels and fields: soft filled rounded boxes
+    .o_inner_group .o_form_label,
+    .o_wrap_label .o_form_label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $sh-tp-muted;
+    }
+    .o_inner_group .o_field_widget:not(.o_field_boolean):not(.o_field_boolean_toggle):not(.o_field_many2many_avatar_user):not(.o_field_many2one_avatar_user) {
+        input:not(.form-check-input),
+        select {
+            padding: 7px 12px;
+            border: 1px solid transparent !important;
+            border-radius: 10px;
+            background-color: $sh-tp-field;
+
+            &:focus {
+                border-color: $sh-tp !important;
+                background-color: #fff;
+                box-shadow: 0 0 0 3px rgba(111, 99, 166, 0.12);
+            }
+        }
+    }
+    .o_field_many2many_avatar_user .o_tag,
+    .o_field_many2many_tags .o_tag {
+        border-radius: 10px;
+    }
+    .o_field_many2one_avatar_user img,
+    .o_field_many2many_avatar_user img,
+    .o_m2o_avatar img {
+        border-radius: 6px !important;
+    }
+    // department: a soft purple pill
+    .o_field_widget[name="project_id"] input {
+        width: auto;
+        font-weight: 600;
+        color: $sh-tp-dark;
+        background-color: $sh-tp-soft !important;
+    }
+
+    // "საერთო ჩატი" button
+    .o_widget_sh_task_chat_button .btn,
+    .btn.btn-outline-primary:has(.fa-comments) {
+        border: 1px solid #d9d4ec !important;
+        border-radius: 10px;
+        color: $sh-tp-dark;
+        background-color: #fff;
+    }
+
+    // ---------- tabs: plain, the chosen one soft purple with a purple underline
+    .o_notebook .nav-tabs {
+        border-bottom: 1px solid $sh-tp-line;
+
+        .nav-link {
+            margin-right: 6px;
+            padding: 9px 18px;
+            border: 0 !important;
+            border-radius: 10px 10px 0 0;
+            color: $sh-tp-muted;
+
+            &.active {
+                font-weight: 600;
+                color: $sh-tp-dark;
+                background-color: $sh-tp-soft;
+                box-shadow: inset 0 -2px 0 $sh-tp;
+            }
+        }
+    }
+    // description: dashed soft box
+    .o_field_widget[name="description"] .note-editable,
+    .o_field_widget[name="description"] .odoo-editor-editable {
+        min-height: 90px;
+        padding: 12px;
+        border: 1.5px dashed #dcd8ea;
+        border-radius: 12px;
+        background-color: #fcfbfe;
+    }
+
+    // ---------- chatter: rounded buttons, soft bubbles
+    .o-mail-Chatter-topbar .btn {
+        border-radius: 10px;
+        font-weight: 600;
+    }
+    .o-mail-Message-bubble {
+        border-radius: 12px !important;
+    }
+}
