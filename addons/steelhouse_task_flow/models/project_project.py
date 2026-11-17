@@ -80,17 +80,23 @@ class ProjectProject(models.Model):
         """Concrete project: its tasks are the ones whose "პროექტი" is this project;
         each task keeps the flow (stages) of its department (project_id)."""
         action = super().action_view_tasks()
-        # boards: only the main tasks; sequence steps are listed on their card (filter can be removed)
-        action['context'] = dict(action.get('context') or {}, search_default_sh_main_only=1)
+        # boards: only the main tasks - sequence steps are seen only inside their main card
         if self.sh_is_department:
             # a department also shows the tasks of its sub-departments
             tree = self._sh_dept_tree_ids()
             if len(tree) > 1:
                 action['domain'] = [('project_id', 'in', tree), ('has_template_ancestor', '=', False)]
+            action['domain'] = self._sh_main_only(action.get('domain'))
             return action
         ctx = dict(action['context'])
         ctx.pop('default_project_id', None)
         ctx.update({'default_sh_project_id': self.id, 'sh_project_view': self.id})
         action['context'] = ctx
-        action['domain'] = [('sh_project_id', '=', self.id)]
+        action['domain'] = [('sh_project_id', '=', self.id), ('sh_is_step', '=', False)]
         return action
+
+    def _sh_main_only(self, domain):
+        from odoo.tools.safe_eval import safe_eval
+        if isinstance(domain, str):
+            domain = safe_eval(domain, {'active_id': self.id, 'uid': self.env.uid})
+        return list(domain or []) + [('sh_is_step', '=', False)]
