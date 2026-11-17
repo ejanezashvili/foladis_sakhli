@@ -17,40 +17,6 @@ $sh-tp-text: #2b2838;
         background-color: $sh-tp-page;
     }
 
-    // ---------- stage bar: one white rounded group, the current stage a purple pill
-    .o_form_statusbar .o_statusbar_status {
-        gap: 2px;
-        padding: 4px;
-        border: 1px solid $sh-tp-line;
-        border-radius: 12px;
-        background-color: #fff;
-
-        .o_arrow_button {
-            border: 0 !important;
-            border-radius: 9px !important;
-            padding: 6px 14px !important;
-            color: #444;
-            background: transparent !important;
-
-            &::before,
-            &::after {
-                display: none !important;
-            }
-            &.o_arrow_button_current,
-            &.o_arrow_button_current:hover {
-                font-weight: 600;
-                color: #fff !important;
-                background-color: $sh-tp !important;
-            }
-            &:not(.o_arrow_button_current):hover {
-                background-color: $sh-tp-soft !important;
-            }
-        }
-    }
-    .o_form_statusbar .btn {
-        border-radius: 10px;
-    }
-
     // ---------- sheet: white card, purple strip on top, soft header
     .o_form_sheet {
         position: relative;
