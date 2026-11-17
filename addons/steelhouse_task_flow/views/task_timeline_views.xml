@@ -9,6 +9,15 @@
 
     <menuitem id="menu_sh_task_timeline" name="Timeline" parent="project.menu_main_pm"
               action="action_sh_task_timeline" sequence="3"/>
+    <!-- "რეპორტინგი" is its own app on the home screen (not a menu inside Projects): the standard
+         reporting menu is lifted to the top level, so its children and access groups come along.
+         It opens on its first child, "Timeline და დატვირთვა". -->
+    <record id="project.menu_project_report" model="ir.ui.menu">
+        <field name="name">რეპორტინგი</field>
+        <field name="parent_id" eval="False"/>
+        <field name="sequence">71</field>
+        <field name="web_icon">steelhouse_task_flow,static/description/reporting_icon.svg</field>
+    </record>
     <menuitem id="menu_sh_task_timeline_report" name="Timeline და დატვირთვა" parent="project.menu_project_report"
               action="action_sh_task_timeline" sequence="1"/>
 </odoo>

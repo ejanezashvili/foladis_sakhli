@@ -68,6 +68,7 @@ class ProjectProject(models.Model):
             'project.open_view_project_all_group_stage': 'დეპარტამენტები',
             'project.menu_projects': 'დეპარტამენტები',
             'project.menu_projects_group_stage': 'დეპარტამენტები',
+            'project.menu_project_report': 'რეპორტინგი',
             'steelhouse_task_flow.action_sh_all_tasks': 'პროექტები',
             'steelhouse_task_flow.action_sh_create_department': 'დეპარტამენტის შექმნა',
         }
