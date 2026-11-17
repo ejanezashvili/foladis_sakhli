@@ -19,3 +19,4 @@ from . import task_personal
 from . import task_worktime
 from . import task_returns
 from . import task_confidential
+from . import task_chain_check

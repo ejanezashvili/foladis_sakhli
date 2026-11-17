@@ -227,6 +227,19 @@ export class TaskChain extends Component {
         }
         return this.openEdit(node);
     }
+    // switch in the card corner: the step done / open again
+    async toggleDone(node) {
+        if (this.state.busy) {
+            return;
+        }
+        this.state.busy = true;
+        try {
+            await this.call("sh_chain_toggle_done", [node.id]);
+            await this.refresh();
+        } finally {
+            this.state.busy = false;
+        }
+    }
     // ✎ in the card corner: edit any step in the small window (the current task too)
     editNode(node) {
         if (this.state.readonly) {

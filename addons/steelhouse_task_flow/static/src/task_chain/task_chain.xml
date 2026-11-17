@@ -66,11 +66,20 @@
                                 <span class="ms-auto o_sh_chain_status">
                                     <i t-att-class="'fa me-1 ' + statusIcon(node)" t-att-title="statusLabel(node)"/><t t-esc="statusLabel(node)"/>
                                 </span>
+                                <div t-if="node.can_check" class="form-check form-switch d-inline-block mb-0 o_sh_chain_check"
+                                     t-att-title="node.status === 'done' ? 'დასრულებულია - დააჭირეთ გასახსნელად' : 'დასრულებულად მონიშვნა'"
+                                     t-on-click.stop="">
+                                    <input class="form-check-input" type="checkbox" t-att-checked="node.status === 'done'"
+                                           t-on-click.prevent.stop="() => this.toggleDone(node)"/>
+                                </div>
                                 <button t-if="!state.readonly or (node.can_open and !node.current)" type="button" class="btn o_sh_chain_edit"
                                         t-att-title="state.readonly ? 'გახსნა' : 'რედაქტირება'" t-on-click.stop="() => this.editNode(node)"
                                         draggable="false"><i class="fa fa-pencil"/></button>
                             </div>
                             <div class="o_sh_chain_name" t-esc="node.name"/>
+                            <div t-if="node.current and node.prev_total" t-att-class="'o_sh_chain_prevdone small' + (node.prev_done === node.prev_total ? ' text-success' : ' text-muted')">
+                                ნაბიჯები: <t t-esc="node.prev_done"/> / <t t-esc="node.prev_total"/> ✓
+                            </div>
                             <div class="o_sh_chain_meta text-truncate">
                                 <t t-esc="node.department"/>
                                 <t t-if="node.user_name"> · <t t-esc="node.user_name"/></t>
