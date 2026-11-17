@@ -227,6 +227,13 @@ export class TaskChain extends Component {
         }
         return this.openEdit(node);
     }
+    // ✎ in the card corner: edit any step in the small window (the current task too)
+    editNode(node) {
+        if (this.state.readonly) {
+            return this.openTask(node);
+        }
+        return this.openEdit(node);
+    }
     async openTask(node) {
         if (node.current) {
             return;

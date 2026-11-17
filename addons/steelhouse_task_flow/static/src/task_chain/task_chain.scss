@@ -335,3 +335,10 @@
     align-items: center;
     justify-content: center;
 }
+
+// ✎ edit button in the top-right corner of every step card
+.o_sh_chain_card .o_sh_chain_edit {
+    padding: 0; width: 24px; height: 24px; margin-left: 6px; border-radius: 6px; line-height: 1;
+    color: #9a97a8; background: transparent; border: 0; font-size: 0.85rem;
+    &:hover { background: #eee9f7; color: #6c63d9; }
+}
