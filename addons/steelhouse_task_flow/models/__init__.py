@@ -22,3 +22,4 @@ from . import task_confidential
 from . import task_chain_check
 from . import task_card_lists
 from . import task_reports
+from . import task_approvals

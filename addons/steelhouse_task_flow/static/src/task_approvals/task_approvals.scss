@@ -1,0 +1,112 @@
+// "დასადასტურებელი": the reviewer's list of tasks to confirm or reject
+$ap-purple: #71639e;
+$ap-green: #2b9a4a;
+$ap-red: #d6336c;
+
+.o_sh_ap {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    background: #f7f6fa;
+    position: relative;
+
+    .o_sh_ap_tabs {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px 16px 0;
+        background: #fff; border-bottom: 1px solid #e6e3ef;
+    }
+    .o_sh_ap_tab {
+        border: 0; background: transparent; padding: 9px 14px; font-weight: 500; color: #6c757d;
+        border-bottom: 3px solid transparent;
+        &:hover { color: $ap-purple; }
+        &.active { color: $ap-purple; border-bottom-color: $ap-purple; font-weight: 600; }
+    }
+    .o_sh_ap_badge {
+        display: inline-block; min-width: 22px; margin-left: 7px; padding: 0 7px; border-radius: 11px;
+        background: #ece9f5; color: $ap-purple; font-size: 0.8rem; font-weight: 700; text-align: center;
+    }
+    .o_sh_ap_tab.active .o_sh_ap_badge { background: $ap-purple; color: #fff; }
+    .o_sh_ap_search { margin-left: auto; margin-bottom: 6px; width: 240px; max-width: 100%; }
+
+    .o_sh_ap_body {
+        flex: 1 1 auto; min-height: 0; overflow: auto; padding: 16px;
+        > * { max-width: 1180px; margin-left: auto; margin-right: auto; }
+        &.o_sh_ap_loading { opacity: 0.55; }
+    }
+    .o_sh_ap_sub { color: #77738a; margin-bottom: 14px; }
+    .o_sh_ap_stats { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 16px; }
+    .o_sh_ap_stat {
+        flex: 1 1 170px; background: #fff; border: 1px solid #ececf1; border-left: 5px solid $ap-purple;
+        border-radius: 12px; padding: 12px 16px;
+        small { display: block; color: #777; }
+        b { font-size: 1.6rem; }
+        &.o_sh_ap_s_late { border-left-color: $ap-red; }
+        &.o_sh_ap_s_due { border-left-color: #e8873a; }
+        &.o_sh_ap_s_again { border-left-color: #3d8fd6; }
+    }
+    .o_sh_ap_empty {
+        background: #fff; border: 1px dashed #d9d5e6; border-radius: 14px; padding: 36px 16px; text-align: center;
+        color: #77738a; font-size: 1.05rem;
+        i { display: block; font-size: 2.2rem; color: $ap-green; margin-bottom: 8px; }
+    }
+
+    .o_sh_ap_card {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; background: #fff;
+        border: 1px solid #ececf1; border-radius: 14px; padding: 14px 18px; margin-bottom: 12px;
+        box-shadow: 0 1px 2px rgba(40, 30, 80, 0.04);
+        &.o_sh_ap_hist { cursor: pointer; }
+    }
+    .o_sh_ap_ico {
+        flex: 0 0 46px; width: 46px; height: 46px; border-radius: 12px; background: #e3f0fb; color: #2c78bd;
+        display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+        &.o_sh_ap_ico_ok { background: #e3f5e8; color: $ap-green; }
+        &.o_sh_ap_ico_no { background: #fde3ea; color: $ap-red; }
+    }
+    .o_sh_ap_main { flex: 1 1 320px; min-width: 0; cursor: pointer; }
+    .o_sh_ap_kind { font-size: 0.82rem; font-weight: 700; color: #2c78bd; }
+    .o_sh_ap_green { color: $ap-green; }
+    .o_sh_ap_red { color: $ap-red; }
+    .o_sh_ap_wait {
+        display: inline-block; margin-left: 8px; padding: 1px 9px; border-radius: 10px; background: #f1eff6;
+        color: #5a5570; font-weight: 600;
+        &.o_sh_ap_wait_late { background: #fde3ea; color: #c2255c; }
+        &.o_sh_ap_wait_again { background: #e3f0fb; color: #2c78bd; }
+    }
+    .o_sh_ap_title { font-size: 1.08rem; font-weight: 600; margin: 3px 0 5px; overflow-wrap: anywhere; }
+    .o_sh_ap_meta {
+        display: flex; flex-wrap: wrap; gap: 3px 16px; color: #6d6982; font-size: 0.88rem;
+        b { color: #2b2b33; font-weight: 600; &.o_sh_ap_red { color: $ap-red; } }
+    }
+    .o_sh_ap_btns { display: flex; flex-wrap: wrap; gap: 8px; flex: 0 0 auto; margin-left: auto; }
+    .btn { border-radius: 9px; padding: 9px 16px; font-weight: 600; border: 1.5px solid transparent; }
+    .o_sh_ap_open { background: #f1eff6; color: #5a5570; &:hover { background: #e6e3ef; } }
+    .o_sh_ap_ok { background: $ap-green; color: #fff; &:hover { background: darken($ap-green, 6%); color: #fff; } }
+    .o_sh_ap_no { background: #fff; color: $ap-red; border-color: $ap-red; &:hover { background: #fdeef3; } }
+    .o_sh_ap_rej { background: $ap-red; color: #fff; &:hover { background: darken($ap-red, 6%); color: #fff; } }
+
+    // confirm / reject window
+    .o_sh_ap_shade {
+        position: absolute; inset: 0; z-index: 20; background: rgba(30, 24, 55, 0.45);
+        display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .o_sh_ap_dlg {
+        width: 520px; max-width: 100%; background: #fff; border-radius: 16px; overflow: hidden;
+        box-shadow: 0 18px 50px rgba(20, 10, 60, 0.35);
+        h3 { margin: 0; padding: 16px 20px; font-size: 1.15rem; }
+        &.o_sh_ap_dlg_ok h3 { background: #e3f5e8; color: #1f7a39; }
+        &.o_sh_ap_dlg_no h3 { background: #fdeef3; color: #b3204f; }
+        label { font-weight: 600; display: block; margin-bottom: 6px; }
+        textarea { border: 1.5px solid $ap-red; border-radius: 10px; padding: 10px; resize: vertical; }
+    }
+    .o_sh_ap_dlg_in { padding: 18px 20px 14px; }
+    .o_sh_ap_what { background: #f7f6fa; border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; overflow-wrap: anywhere; }
+    .o_sh_ap_hint { color: #8a869c; font-size: 0.87rem; margin-top: 6px; }
+    .o_sh_ap_err { color: $ap-red; font-weight: 600; font-size: 0.9rem; margin-top: 6px; }
+    .o_sh_ap_dlg_foot { display: flex; justify-content: flex-end; gap: 8px; padding: 0 20px 18px; }
+
+    @media (max-width: 767px) {
+        .o_sh_ap_search { width: 100%; margin-left: 0; }
+        .o_sh_ap_btns { width: 100%; .btn { flex: 1 1 auto; } }
+        .o_sh_ap_ico { display: none; }
+    }
+}
