@@ -32,7 +32,7 @@
     <record id="action_sh_all_tasks_kanban" model="ir.actions.act_window.view">
         <field name="sequence">1</field>
         <field name="view_mode">kanban</field>
-        <field name="view_id" ref="steelhouse_task_flow.view_sh_all_tasks_kanban"/>
+        <field name="view_id" ref="project.view_task_kanban"/>
         <field name="act_window_id" ref="action_sh_all_tasks"/>
     </record>
     <record id="action_sh_all_tasks_list" model="ir.actions.act_window.view">
