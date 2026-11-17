@@ -58,6 +58,49 @@ class ProjectTask(models.Model):
             prev = task._sh_all_previous()
             node['prev_total'] = len(prev)
             node['prev_done'] = len(prev.filtered(lambda t: t.state in CLOSED))
+        return self._sh_chain_hide_cancelled(res)
+
+    @staticmethod
+    def _sh_chain_hide_cancelled(res):
+        """Cancelled steps disappear from the sequence (the opened task always stays);
+        their previous and next steps are joined, the columns close up."""
+        nodes = res.get('nodes', [])
+        gone = {n['id'] for n in nodes if n['status'] == 'cancelled' and not n['current']}
+        if not gone:
+            return res
+        edges = res.get('edges', [])
+        done = {n['id']: n['status'] == 'done' for n in nodes}
+        prev_of, next_of = {}, {}
+        for a, b, _ok in edges:
+            next_of.setdefault(a, set()).add(b)
+            prev_of.setdefault(b, set()).add(a)
+
+        def live(start, links):
+            out, todo, seen = set(), list(links.get(start, ())), set()
+            while todo:
+                x = todo.pop()
+                if x in seen:
+                    continue
+                seen.add(x)
+                if x in gone:
+                    todo.extend(links.get(x, ()))
+                else:
+                    out.add(x)
+            return out
+
+        new_edges = {(a, b) for a, b, _ok in edges if a not in gone and b not in gone}
+        for g in gone:
+            for a in live(g, prev_of):
+                for b in live(g, next_of):
+                    new_edges.add((a, b))
+        kept = [n for n in nodes if n['id'] not in gone]
+        levels = sorted({n['level'] for n in kept})
+        for n in kept:
+            n['level'] = levels.index(n['level'])
+        res['nodes'] = kept
+        res['edges'] = [[a, b, done.get(a, False)] for a, b in sorted(new_edges)]
+        res['prev'] = [i for i in res.get('prev', []) if i not in gone]
+        res['next'] = [i for i in res.get('next', []) if i not in gone]
         return res
 
     def sh_chain_toggle_done(self, task_id):
