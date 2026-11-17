@@ -349,6 +349,14 @@ class ProjectTask(models.Model):
             raise UserError(_("დავალება ამ თანმიმდევრობაში ვერ მოიძებნა."))
         return task
 
+    def sh_chain_cancel(self, task_id):
+        """"გაუქმება" in the edit pop-up: cancel the task right away, no reason dialog.
+        Only the reviewer / an admin may cancel (same rule as everywhere)."""
+        task = self._sh_chain_member(task_id)
+        task.with_user(self.env.user)._sh_check_reviewer('cancelled')
+        task._sh_apply_reason('cancelled', False)
+        return True
+
     def sh_chain_task_get(self, task_id):
         """Values of a chain task for the edit pop-up."""
         task = self._sh_chain_member(task_id)

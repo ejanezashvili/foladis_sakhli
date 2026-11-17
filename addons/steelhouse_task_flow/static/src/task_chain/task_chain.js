@@ -357,13 +357,17 @@ export class TaskChain extends Component {
         const levels = this.state.nodes.filter((n) => this.state.form.parallel_ids.includes(n.id)).map((n) => n.level + 1);
         return [...new Set(levels)].sort((a, b) => a - b).join(", ");
     }
-    // "გაუქმება" in the edit window cancels the task itself (the usual dialog asks for the reason)
+    // "გაუქმება" in the edit window cancels the task itself, right away (no reason dialog)
     async cancelTask(node) {
-        this.state.form = null;
-        await this.action.doAction("steelhouse_task_flow.action_sh_task_cancel_wizard", {
-            additionalContext: { default_task_id: node.id, default_mode: "cancelled" },
-            onClose: () => this.refresh(),
-        });
+        this.state.busy = true;
+        try {
+            await this.call("sh_chain_cancel", [node.id]);
+            this.state.form = null;
+            this.notification.add(`${node.number || ""} გაუქმდა`, { type: "success" });
+            await this.refresh();
+        } finally {
+            this.state.busy = false;
+        }
     }
     cancelForm() {
         this.state.form = null;
