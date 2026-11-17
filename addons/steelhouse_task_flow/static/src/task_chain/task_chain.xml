@@ -156,30 +156,25 @@
                                         <ShUserPicker users="state.users" value="f.user_id" placeholder="'პასუხისმგებელი...'" onChange="(id) => f.user_id = id"/>
                                     </div>
                                 </div>
+                                <!-- reviewers: same field as the responsible person, several can be chosen -->
+                                <div>
+                                    <div class="form-control form-control-sm d-flex flex-wrap align-items-center gap-1 o_sh_rev_field" title="შემმოწმებელი">
+                                        <span t-foreach="f.reviewer_ids" t-as="rid" t-key="rid" class="badge rounded-pill o_sh_chain_chip d-inline-flex align-items-center">
+                                            <t t-esc="userName(rid)"/>
+                                            <i class="fa fa-times ms-2 o_sh_chip_x" title="მოხსნა" t-on-click="() => this.removeReviewer(rid)"/>
+                                        </span>
+                                        <div class="flex-grow-1" style="min-width: 140px">
+                                            <ShUserPicker t-key="'rp' + f.reviewerPick" users="state.users" value="false"
+                                                          placeholder="'შემმოწმებელი...'" onChange="(id) => this.addReviewer(id)"/>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div>
                                     <input type="date" class="form-control form-control-sm" title="ვადა" t-att-value="f.deadline"
                                            t-on-change="(ev) => f.deadline = ev.target.value"/>
                                 </div>
                             </div>
 
-                            <!-- reviewer: one line, editable on demand -->
-                            <div class="small mt-2">
-                                <span class="text-muted me-1">შემმოწმებელი:</span>
-                                <t t-if="!f.editReviewers">
-                                    <b t-esc="f.reviewer_ids.map((id) => this.userName(id)).join(', ') or '-'"/>
-                                    · <a href="#" t-on-click.prevent="() => f.editReviewers = true">შეცვლა</a>
-                                </t>
-                                <div t-else="" class="form-control form-control-sm d-flex flex-wrap align-items-center gap-2 mt-1">
-                                    <span t-foreach="f.reviewer_ids" t-as="rid" t-key="rid" class="badge rounded-pill o_sh_chain_chip d-inline-flex align-items-center">
-                                        <t t-esc="userName(rid)"/>
-                                        <i class="fa fa-times ms-2 o_sh_chip_x" title="მოხსნა" t-on-click="() => this.removeReviewer(rid)"/>
-                                    </span>
-                                    <div class="flex-grow-1" style="min-width: 180px">
-                                        <ShUserPicker t-key="'rp' + f.reviewerPick" users="state.users" value="false"
-                                                      onChange="(id) => this.addReviewer(id)"/>
-                                    </div>
-                                </div>
-                            </div>
 
                             <!-- sub-tasks: hidden until asked for -->
                             <div t-if="f.mode !== 'edit'" class="mt-2">
