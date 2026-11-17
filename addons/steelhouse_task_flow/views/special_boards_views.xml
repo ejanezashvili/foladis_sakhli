@@ -50,17 +50,21 @@
         <field name="act_window_id" ref="action_sh_confidential_tasks"/>
     </record>
 
-    <!-- the two buttons on the departments page, next to "პროექტები" -->
-    <record id="view_sh_department_project_kanban_special" model="ir.ui.view">
-        <field name="name">project.project.kanban.sh.department.special</field>
-        <field name="model">project.project</field>
-        <field name="inherit_id" ref="steelhouse_task_flow.view_sh_department_project_kanban"/>
+    <!-- the two buttons on the "პროექტები" page, small, next to the title -->
+    <record id="view_sh_all_tasks_kanban" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.all.tasks</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="mode">primary</field>
+        <field name="priority">98</field>
         <field name="arch" type="xml">
-            <xpath expr="//header/button[@name='%(steelhouse_task_flow.action_sh_all_tasks)d']" position="after">
-                <button name="%(steelhouse_task_flow.action_sh_recurring_tasks)d" type="action"
-                        string="⟳ განმეორებადი" class="btn-secondary o_sh_btn_repeat" display="always"/>
-                <button name="%(steelhouse_task_flow.action_sh_confidential_tasks)d" type="action"
-                        string="🔒 კონფიდენციალური" class="btn-secondary o_sh_btn_conf" display="always"/>
+            <xpath expr="//kanban/*[1]" position="before">
+                <header>
+                    <button name="%(steelhouse_task_flow.action_sh_recurring_tasks)d" type="action"
+                            string="⟳ განმეორებადი" class="btn-sm o_sh_btn_repeat" display="always"/>
+                    <button name="%(steelhouse_task_flow.action_sh_confidential_tasks)d" type="action"
+                            string="🔒 კონფიდენციალური" class="btn-sm o_sh_btn_conf" display="always"/>
+                </header>
             </xpath>
         </field>
     </record>
