@@ -165,3 +165,7 @@
     max-width: 460px; font-size: 0.78rem; line-height: 1.3; color: #a61e4d;
     background: #fdeef3; border-radius: 6px; padding: 3px 8px; text-align: right;
 }
+
+// departments page: "⟳ განმეორებადი" / "🔒 კონფიდენციალური" buttons
+.o_control_panel .o_sh_btn_repeat { color: #5b5093 !important; background: #efedf7 !important; border-color: #cfc8ea !important; }
+.o_control_panel .o_sh_btn_conf { color: #a61e4d !important; background: #fdeef3 !important; border-color: #f3c2d2 !important; }

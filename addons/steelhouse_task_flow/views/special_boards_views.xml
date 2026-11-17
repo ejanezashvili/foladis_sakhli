@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "⟳ განმეორებადი" / "🔒 კონფიდენციალური": boards across all departments, columns by stage type
+         (ახალი, მიღებული, მიმდინარე...). Cards can't be dragged here - stages differ per department. -->
+    <record id="view_sh_special_task_kanban" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.special</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban position="attributes">
+                <attribute name="default_group_by">sh_kind</attribute>
+                <attribute name="records_draggable">0</attribute>
+                <attribute name="groups_draggable">0</attribute>
+                <attribute name="quick_create">0</attribute>
+                <attribute name="group_create">0</attribute>
+                <attribute name="group_delete">0</attribute>
+                <attribute name="group_edit">0</attribute>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_sh_recurring_tasks" model="ir.actions.act_window">
+        <field name="name">განმეორებადი</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('sh_repeat', '=', True), ('is_template', '=', False)]</field>
+        <field name="context">{'create': False, 'group_by': 'sh_kind'}</field>
+    </record>
+    <record id="action_sh_recurring_tasks_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_sh_special_task_kanban"/>
+        <field name="act_window_id" ref="action_sh_recurring_tasks"/>
+    </record>
+
+    <!-- confidential: with and without a cycle; an overdue one stays here until it is closed -->
+    <record id="action_sh_confidential_tasks" model="ir.actions.act_window">
+        <field name="name">კონფიდენციალური</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('sh_confidential', '=', True), ('is_template', '=', False)]</field>
+        <field name="context">{'create': False, 'group_by': 'sh_kind'}</field>
+    </record>
+    <record id="action_sh_confidential_tasks_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_sh_special_task_kanban"/>
+        <field name="act_window_id" ref="action_sh_confidential_tasks"/>
+    </record>
+
+    <!-- the two buttons on the departments page, next to "პროექტები" -->
+    <record id="view_sh_department_project_kanban_special" model="ir.ui.view">
+        <field name="name">project.project.kanban.sh.department.special</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="steelhouse_task_flow.view_sh_department_project_kanban"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='%(steelhouse_task_flow.action_sh_all_tasks)d']" position="after">
+                <button name="%(steelhouse_task_flow.action_sh_recurring_tasks)d" type="action"
+                        string="⟳ განმეორებადი" class="btn-secondary o_sh_btn_repeat" display="always"/>
+                <button name="%(steelhouse_task_flow.action_sh_confidential_tasks)d" type="action"
+                        string="🔒 კონფიდენციალური" class="btn-secondary o_sh_btn_conf" display="always"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

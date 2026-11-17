@@ -60,7 +60,7 @@ class ProjectTask(models.Model):
             stages = stages.sorted(lambda s: (s.sequence, s.id))
         return stages
 
-    sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი')
+    sh_kind = fields.Selection(related='stage_id.sh_kind', string='სტადიის ტიპი', store=True)
     reviewer_ids = fields.Many2many(
         'res.users', 'sh_task_reviewer_rel', 'task_id', 'user_id', string='შემმოწმებლები',
         tracking=True, default=lambda self: self.env.user, domain="[('share', '=', False)]",
