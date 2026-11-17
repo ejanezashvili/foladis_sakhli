@@ -10,6 +10,11 @@
                 <field name="active" invisible="1"/>
                 <field name="allocated_hours" invisible="1"/>
                 <div class="fw-semibold fs-5 mb-2" style="color:#71639e" invisible="not sh_number">№ <field name="sh_number" class="d-inline"/></div>
+                <div class="d-flex align-items-center gap-2 mb-2" invisible="is_template">
+                    <field name="sh_can_confidential" invisible="1"/>
+                    <field name="sh_confidential" widget="boolean_toggle" nolabel="1" readonly="not sh_can_confidential"/>
+                    <label for="sh_confidential" string="🔒 კონფიდენციალური" class="mb-0"/>
+                </div>
                 <separator string="ვინ"/>
                 <group name="sh_who">
                     <group>
@@ -33,8 +38,6 @@
                         <field name="sh_responsible_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
                         <field name="user_ids" class="o_task_user_field" options="{'no_open': True, 'no_quick_create': True}"
                                required="not project_id" widget="many2many_avatar_user"/>
-                        <field name="sh_can_confidential" invisible="1"/>
-                        <field name="sh_confidential" widget="boolean_toggle" invisible="is_template" readonly="not sh_can_confidential"/>
                         <field name="sh_confidential_viewer_ids" widget="many2many_avatar_user" options="{'no_create': True}"
                                invisible="not sh_confidential or is_template" readonly="not sh_can_confidential"/>
                         <field name="role_ids" invisible="not has_project_template or is_template" widget="many2many_tags"
