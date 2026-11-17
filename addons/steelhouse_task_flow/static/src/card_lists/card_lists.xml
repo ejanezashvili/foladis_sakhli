@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <t t-name="steelhouse_task_flow.TaskCardLists">
-        <div t-if="subTotal or stepTotal" class="o_sh_cl" t-on-click.stop="">
+        <div t-if="stepTotal" class="o_sh_cl" t-on-click.stop="">
             <div class="o_sh_cl_btns">
-                <button t-if="subTotal" type="button" t-att-class="'o_sh_cl_btn' + (state.open === 'subtasks' ? ' o_sh_cl_on' : '')"
+                <button t-if="false" type="button" t-att-class="'o_sh_cl_btn' + (state.open === 'subtasks' ? ' o_sh_cl_on' : '')"
                         t-on-click.stop="() => this.toggle('subtasks')">
                     <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="subDone"/>/<t t-esc="subTotal"/>
                     <i t-att-class="'fa ms-1 ' + (state.open === 'subtasks' ? 'fa-caret-up' : 'fa-caret-down')"/>
