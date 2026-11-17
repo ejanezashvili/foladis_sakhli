@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.ShExcelMenu">
+        <Dropdown t-if="items.length" position="'bottom-end'" menuClass="'o_sh_excel_menu'">
+            <button class="btn o_sh_excel_btn" title="Excel: იმპორტი / ექსპორტი">
+                <span class="o_sh_excel_ic">X</span>Excel <i class="fa fa-caret-down ms-1"/>
+            </button>
+            <t t-set-slot="content">
+                <t t-foreach="items" t-as="item" t-key="item.key">
+                    <t t-component="item.Component"/>
+                </t>
+            </t>
+        </Dropdown>
+    </t>
+
+    <!-- right of the search bar, on task boards / lists only -->
+    <t t-inherit="web.ControlPanel" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('o_control_panel_navigation')]" position="inside">
+            <t t-if="env.searchModel and env.searchModel.resModel === 'project.task' and ['kanban', 'list'].includes(env.config.viewType)">
+                <div class="o_sh_excel_wrap order-first">
+                    <ShExcelMenu/>
+                </div>
+            </t>
+        </xpath>
+    </t>
+</templates>

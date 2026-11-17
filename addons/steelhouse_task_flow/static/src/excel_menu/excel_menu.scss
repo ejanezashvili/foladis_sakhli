@@ -1,0 +1,23 @@
+// green "Excel ▾" button on task pages
+.o_sh_excel_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #fff !important;
+    background-color: #1d6f42 !important;
+    border: 1px solid #1d6f42 !important;
+    &:hover { background-color: #185c37 !important; }
+    .o_sh_excel_ic {
+        padding: 0 4px;
+        border-radius: 3px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        line-height: 1.4;
+        color: #1d6f42;
+        background: #fff;
+    }
+}
