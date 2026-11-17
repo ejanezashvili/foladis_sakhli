@@ -12,7 +12,7 @@
                     </t>
                 </div>
                 <div class="o_sh_tl_row1">
-                    <div t-if="state.view === 'timeline' or state.view === 'worktime'" class="btn-group o_sh_tl_scope">
+                    <div t-if="state.view === 'timeline' or state.view === 'worktime' or state.view === 'returns'" class="btn-group o_sh_tl_scope">
                         <button t-att-class="'btn ' + (state.scope === 'mine' ? 'btn-primary' : 'btn-outline-primary')"
                                 t-on-click="() => this.setScope('mine')"><i class="fa fa-user me-1"/>ჩემი დავალებები</button>
                         <button t-if="isManager" t-att-class="'btn ' + (state.scope === 'all' ? 'btn-primary' : 'btn-outline-primary')"
@@ -32,7 +32,7 @@
                     </div>
                 </div>
                 <!-- heads: a few filters, only when looking at everyone -->
-                <div t-if="isManager and ((state.view !== 'timeline' and state.view !== 'worktime') or state.scope === 'all') and filterLists" class="o_sh_tl_filters">
+                <div t-if="isManager and (['timeline', 'worktime', 'returns'].indexOf(state.view) &lt; 0 or state.scope === 'all') and filterLists" class="o_sh_tl_filters">
                     <select t-if="state.view === 'timeline'" class="form-select form-select-sm" title="დაჯგუფება" t-on-change="(ev) => this.setFilter('groupBy', ev)">
                         <option value="department" t-att-selected="state.groupBy === 'department'">დეპარტამენტებით</option>
                         <option value="user" t-att-selected="state.groupBy === 'user'">თანამშრომლებით</option>
@@ -158,6 +158,85 @@
                                 </t>
                             </tbody>
                         </table>
+                    </t>
+                </div>
+            </t>
+
+            <!-- ============ RETURNS (7.8) ============ -->
+            <t t-elif="state.view === 'returns'">
+                <div class="o_sh_tl_scroll o_sh_wt o_sh_ret" t-att-class="{'o_sh_tl_loading': state.loading}">
+                    <t t-if="state.ret">
+                        <div class="o_sh_wt_cards">
+                            <div class="o_sh_wt_card o_sh_rt_c1 o_sh_wl_link" t-on-click="() => this.openIds(state.ret.total.reviewed_ids, 'შემოწმებაზე გადასული')">
+                                <small>შემოწმებაზე გადასული</small><b t-esc="state.ret.total.reviewed"/></div>
+                            <div class="o_sh_wt_card o_sh_rt_c2 o_sh_wl_link" t-on-click="() => this.openIds(state.ret.total.returned_ids, 'დაბრუნებული დავალებები')">
+                                <small>დაბრუნებული დავალებები</small><b><t t-esc="state.ret.total.returned"/> <span class="o_sh_rt_pct">(<t t-esc="state.ret.total.pct"/>%)</span></b></div>
+                            <div class="o_sh_wt_card o_sh_rt_c3"><small>დაბრუნებების სულ რაოდენობა</small><b t-esc="state.ret.total.returns"/></div>
+                            <div class="o_sh_wt_card o_sh_rt_c4 o_sh_wl_link" t-on-click="() => this.openIds(state.ret.total.rework_ids, 'ახლა ხელახლა კეთდება')">
+                                <small>ახლა ხელახლა კეთდება</small><b t-esc="state.ret.total.rework"/></div>
+                        </div>
+                        <div class="o_sh_wt_tools">
+                            <span class="text-muted">დაჯგუფება:</span>
+                            <div class="btn-group btn-group-sm">
+                                <button t-att-class="'btn ' + (state.retGroup === 'department' ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setRetGroup('department')">დეპარტამენტებით</button>
+                                <button t-att-class="'btn ' + (state.retGroup === 'project' ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setRetGroup('project')">პროექტებით</button>
+                                <button t-att-class="'btn ' + (state.retGroup === 'user' ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setRetGroup('user')">თანამშრომლებით</button>
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportRet"><i class="fa fa-download me-1"/>Excel</button>
+                        </div>
+                        <div class="o_sh_rt_wrap">
+                            <table class="o_sh_wt_table o_sh_rt_table">
+                                <thead><tr>
+                                    <th t-esc="retGroupLabel"/><th t-if="state.retGroup === 'project'">დეპარტამენტი</th>
+                                    <th>შემოწმებაზე</th><th>დაბრუნებული დავალება</th><th>დაბრუნება სულ</th><th>დაბრუნების %</th><th>ახლა ხელახლა კეთდება</th>
+                                </tr></thead>
+                                <tbody>
+                                    <tr t-if="!state.ret.rows.length"><td colspan="7" class="text-muted">ამ პერიოდში შემოწმებაზე გადასული დავალება არ არის.</td></tr>
+                                    <t t-foreach="state.ret.rows" t-as="r" t-key="r.key">
+                                        <tr class="o_sh_wt_dept">
+                                            <td t-att-class="'o_sh_wl_link' + (r.high ? ' o_sh_rt_high' : '')" t-on-click="() => this.toggleWt(r.key)">
+                                                <i t-att-class="'fa me-1 ' + (state.wtOpen[r.key] ? 'fa-caret-down' : 'fa-caret-right')"/><t t-esc="r.label"/></td>
+                                            <td t-if="state.retGroup === 'project'" t-esc="r.sub or '-'"/>
+                                            <td class="o_sh_wl_link" t-on-click="() => this.openIds(r.reviewed_ids, r.label + ': შემოწმებაზე გადასული')" t-esc="r.reviewed"/>
+                                            <td class="o_sh_wl_link" t-on-click="() => this.openIds(r.returned_ids, r.label + ': დაბრუნებული')" t-esc="r.returned"/>
+                                            <td t-att-class="r.high ? 'o_sh_rt_high' : ''" t-esc="r.returns"/>
+                                            <td t-att-class="r.high ? 'o_sh_rt_high' : ''">
+                                                <span t-if="r.returned" class="o_sh_wt_bar o_sh_rt_bar" t-att-style="'width:' + Math.max(r.pct, 4) + 'px'"/><t t-esc="r.pct"/>%
+                                            </td>
+                                            <td class="o_sh_wl_link" t-on-click="() => this.openIds(r.rework_ids, r.label + ': ხელახლა კეთდება')" t-esc="r.rework"/>
+                                        </tr>
+                                        <t t-if="state.wtOpen[r.key]">
+                                            <tr t-if="!r.items.length" class="o_sh_wt_emp"><td colspan="7" class="text-muted">დაბრუნებული დავალება არ არის.</td></tr>
+                                            <t t-foreach="r.items" t-as="it" t-key="r.key + '_' + it.id">
+                                                <tr class="o_sh_wt_emp">
+                                                    <td class="o_sh_wl_link" t-on-click="() => this.openTask(it.id)"><i class="fa fa-file-text-o me-1"/><t t-esc="it.label"/></td>
+                                                    <td t-if="state.retGroup === 'project'"/>
+                                                    <td/><td/>
+                                                    <td t-att-class="it.returns &gt; 1 ? 'o_sh_rt_high' : ''" t-esc="it.returns"/>
+                                                    <td/>
+                                                    <td><t t-if="it.state === 'rework'">↩ კეთდება</t><t t-elif="it.state === 'review'">✔ შემოწმებაზე</t><t t-else="" t-esc="it.stage"/></td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="o_sh_rt_side">
+                                <h6><i class="fa fa-undo me-1"/>ბოლო დაბრუნებები და მიზეზები</h6>
+                                <div t-if="!state.ret.recent.length" class="text-muted small">დაბრუნება არ ყოფილა.</div>
+                                <t t-foreach="state.ret.recent" t-as="e" t-key="e_index">
+                                    <div class="o_sh_rt_item o_sh_wl_link" t-on-click="() => this.openTask(e.task_id)">
+                                        <b t-esc="e.number"/> <t t-esc="e.name"/>
+                                        <small>
+                                            <t t-if="e.reason">„<t t-esc="e.reason"/>“ · </t><t t-if="e.who"><t t-esc="e.who"/> · </t><t t-esc="e.date"/>
+                                            <span t-if="e.times &gt; 1" class="o_sh_rt_high"> · <t t-esc="e.times"/>-ჯერ</span>
+                                        </small>
+                                    </div>
+                                </t>
+                                <div t-if="state.ret.all_return_ids.length" class="o_sh_rt_all o_sh_wl_link" t-on-click="() => this.openIds(state.ret.all_return_ids, 'დაბრუნებული დავალებები')">ყველა დაბრუნებული →</div>
+                            </div>
+                        </div>
+                        <div class="text-muted small mt-2">დაბრუნება = შემმოწმებელმა „შემოწმებაზე“-დან უკან გადაიტანა („დაბრუნებულზე“ ან „მიმდინარეზე“) - თითოეული ჯერ ითვლება. ციფრზე დაჭერა - დავალებების სია.</div>
                     </t>
                 </div>
             </t>

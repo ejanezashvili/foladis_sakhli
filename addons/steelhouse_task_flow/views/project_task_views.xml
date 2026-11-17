@@ -58,6 +58,11 @@
                             <field name="sh_work_time" nolabel="1" class="fw-semibold" decoration-info="sh_work_running" decoration-success="not sh_work_running"/>
                             <div class="text-muted small"><field name="sh_work_time_note" nolabel="1"/></div>
                         </div>
+                        <label for="sh_return_count" invisible="not sh_return_count"/>
+                        <div invisible="not sh_return_count">
+                            <span class="badge rounded-pill text-bg-danger me-2">↩ <field name="sh_return_count" class="d-inline"/>-ჯერ</span>
+                            <span class="text-muted small"><field name="sh_return_note" nolabel="1"/></span>
+                        </div>
                     </group>
                     <group>
                         <field name="evidence_required" invisible="1"/>

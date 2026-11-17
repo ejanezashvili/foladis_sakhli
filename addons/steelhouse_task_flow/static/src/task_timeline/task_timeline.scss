@@ -430,3 +430,23 @@ $sh-row: 34px;
     .o_sh_wt_bar { display: inline-block; height: 9px; border-radius: 5px; background: #3d8fd6; vertical-align: middle; margin-right: 8px; max-width: 120px; }
     .o_sh_wt_slow { color: #d6336c; font-weight: 700; .o_sh_wt_bar { background: #d6336c; } }
 }
+
+// "დაბრუნებები" (7.8)
+.o_sh_ret {
+    .o_sh_wt_card { border-left-color: #d6336c; }
+    .o_sh_rt_c1 { border-left-color: #e8873a; }
+    .o_sh_rt_c3 { border-left-color: #7d5ba6; }
+    .o_sh_rt_c4 { border-left-color: #868e96; }
+    .o_sh_rt_pct { font-size: 0.95rem; color: #777; font-weight: 400; }
+    .o_sh_rt_table th { background: #fdeef3; }
+    .o_sh_rt_bar { background: #e8873a; }
+    .o_sh_rt_high { color: #d6336c; font-weight: 700; .o_sh_rt_bar { background: #d6336c; } }
+    .o_sh_rt_wrap { display: flex; gap: 14px; align-items: flex-start; flex-wrap: wrap; }
+    .o_sh_rt_table { flex: 1 1 600px; width: auto; }
+    .o_sh_rt_side {
+        flex: 0 1 320px; background: #fff; border-radius: 12px; border: 1px solid #ececf1; padding: 12px 14px; font-size: 0.85rem;
+        h6 { font-weight: 700; }
+        .o_sh_rt_item { border-top: 1px solid #eee; padding: 7px 0; b { color: #d6336c; } small { display: block; color: #888; } }
+        .o_sh_rt_all { color: #3d8fd6; padding-top: 8px; border-top: 1px solid #eee; }
+    }
+}

@@ -27,6 +27,7 @@ const VIEWS = [
     { key: "user", label: "ინდივიდუალური დატვირთვა", icon: "fa-user" },
     { key: "team", label: "გუნდური დატვირთვა", icon: "fa-users" },
     { key: "worktime", label: "სამუშაო დრო", icon: "fa-clock-o" },
+    { key: "returns", label: "დაბრუნებები", icon: "fa-undo" },
 ];
 // workload colors: open tasks running at the same time (per person for the team view)
 const LOAD_STEPS = [
@@ -66,6 +67,8 @@ export class TaskTimeline extends Component {
             work: null,
             wt: null,
             wtOpen: {},
+            ret: null,
+            retGroup: "project",
             scale: "month",
             anchor: this.today(),
             groupBy: "department",
@@ -241,6 +244,17 @@ export class TaskTimeline extends Component {
     async load() {
         this.state.loading = true;
         const { from, to } = this.range;
+        if (this.state.view === "returns") {
+            const mine = this.state.scope === "mine";
+            this.state.ret = await this.orm.call("project.task", "sh_returns_data", [iso(from), iso(to)], {
+                mine,
+                group_by: this.state.retGroup,
+                department_id: !mine && this.state.departmentId ? Number(this.state.departmentId) : false,
+                user_id: !mine && this.state.userId ? Number(this.state.userId) : false,
+            });
+            this.state.loading = false;
+            return;
+        }
         if (this.state.view === "worktime") {
             const mine = this.state.scope === "mine";
             this.state.wt = await this.orm.call("project.task", "sh_worktime_data", [iso(from), iso(to)], {
@@ -278,11 +292,38 @@ export class TaskTimeline extends Component {
 
     // ---------------------------------------------------------------- simple view helpers
     get isManager() {
-        return Boolean((this.state.data && this.state.data.is_manager) || (this.state.wt && this.state.wt.is_manager));
+        return Boolean((this.state.data && this.state.data.is_manager) || (this.state.wt && this.state.wt.is_manager)
+            || (this.state.ret && this.state.ret.is_manager));
     }
     // employees see Timeline + "სამუშაო დრო"; heads see all tabs
     get tabs() {
-        return this.isManager ? VIEWS : VIEWS.filter((v) => v.key === "timeline" || v.key === "worktime");
+        return this.isManager ? VIEWS : VIEWS.filter((v) => ["timeline", "worktime", "returns"].includes(v.key));
+    }
+    setRetGroup(g) {
+        this.state.retGroup = g;
+        this.state.wtOpen = {};
+        this.load();
+    }
+    get retGroupLabel() {
+        return { project: "პროექტი", department: "დეპარტამენტი", user: "თანამშრომელი" }[this.state.retGroup];
+    }
+    exportRet() {
+        const r = this.state.ret;
+        const line = (a) => a.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(",");
+        const out = [line([this.retGroupLabel, "დავალება", "შემოწმებაზე", "დაბრუნებული დავალება", "დაბრუნება სულ", "დაბრუნების %", "ახლა ხელახლა კეთდება"])];
+        for (const row of r.rows) {
+            out.push(line([row.label, "", row.reviewed, row.returned, row.returns, row.pct + "%", row.rework]));
+            for (const it of row.items) {
+                out.push(line([row.label, it.label, "", "", it.returns, "", it.stage]));
+            }
+        }
+        out.push(line(["სულ", "", r.total.reviewed, r.total.returned, r.total.returns, r.total.pct + "%", r.total.rework]));
+        const blob = new Blob(["\ufeff" + out.join("\r\n")], { type: "text/csv;charset=utf-8" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `დაბრუნებები ${iso(this.range.from)} - ${iso(this.range.to)}.csv`;
+        a.click();
+        URL.revokeObjectURL(a.href);
     }
     toggleWt(key) {
         this.state.wtOpen[key] = !this.state.wtOpen[key];
@@ -399,7 +440,7 @@ export class TaskTimeline extends Component {
 
     // ---------------------------------------------------------------- workload
     get filterLists() {
-        const src = this.state.view === "timeline" ? this.state.data : this.state.view === "worktime" ? this.state.wt : this.state.work;
+        const src = this.state.view === "timeline" ? this.state.data : this.state.view === "worktime" ? this.state.wt : this.state.view === "returns" ? this.state.ret : this.state.work;
         return src ? { departments: src.departments, users: src.users } : null;
     }
     get cellW() {
