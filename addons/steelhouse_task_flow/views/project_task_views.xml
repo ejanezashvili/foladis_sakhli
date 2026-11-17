@@ -14,6 +14,9 @@
                     <field name="sh_can_confidential" invisible="1"/>
                     <field name="sh_confidential" widget="boolean_toggle" nolabel="1" readonly="not sh_can_confidential"/>
                     <label for="sh_confidential" string="🔒 კონფიდენციალური" class="mb-0"/>
+                    <span class="ms-auto o_sh_conf_note" invisible="not sh_confidential">
+                        <i class="fa fa-lock me-1"/>ხედავენ მხოლოდ ადმინისტრატორები, მთავარი პასუხისმგებელი, შემსრულებლები, შემმოწმებლები, შემქმნელი და „დამატებით ხედავენ“
+                    </span>
                 </div>
                 <separator string="ვინ"/>
                 <group name="sh_who">
@@ -29,9 +32,6 @@
                                invisible="not project_id or has_template_ancestor or has_project_template"/>
                     </group>
                     <group>
-                        <div colspan="2" class="alert alert-danger py-2 mb-2" role="status" invisible="not sh_confidential">
-                            <i class="fa fa-lock me-1"/>კონფიდენციალური დავალება - ხედავენ მხოლოდ ადმინისტრატორები, მთავარი პასუხისმგებელი, შემსრულებლები, შემმოწმებლები, შემქმნელი და „დამატებით ხედავენ“
-                        </div>
                         <div colspan="2" class="d-flex justify-content-end" invisible="not id or is_template">
                             <widget name="sh_task_chat_button"/>
                         </div>
