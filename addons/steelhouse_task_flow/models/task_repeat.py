@@ -1,5 +1,7 @@
 from datetime import timedelta
 
+import pytz
+
 from dateutil.relativedelta import relativedelta
 from markupsafe import Markup
 
@@ -113,15 +115,61 @@ class ProjectTask(models.Model):
         if first:
             vals['stage_id'] = first.id
         if self.date_deadline and start:
-            vals['date_deadline'] = self.date_deadline + timedelta(days=(on_date - start).days)
+            vals['date_deadline'] = self._sh_repeat_deadline(start, on_date)
         new = self.with_context(sh_flow_internal=True).copy(vals)
         # sub-tasks of the new occurrence get its dates (work start and deadline)
         if new.child_ids:
             new.child_ids.with_context(sh_flow_internal=True).write({
                 'sh_work_start': new.sh_work_start, 'date_deadline': new.date_deadline})
+        self._sh_repeat_copy_steps(new, first)
         new.message_post(body=Markup(_("ავტომატურად შეიქმნა განმეორებით (%s).")) % self._get_html_link(),
                          message_type='notification', subtype_xmlid='mail.mt_note')
         return new
+
+    def _sh_repeat_deadline(self, start, on_date):
+        """Deadline of the new occurrence: same distance from its start as the original; a monthly
+        task whose deadline is the last day of a month gets the last day of the new month."""
+        import calendar
+        shifted = self.date_deadline + timedelta(days=(on_date - start).days)
+        if self.sh_repeat_unit != 'month':
+            return shifted
+        local = pytz.utc.localize(self.date_deadline).astimezone(pytz.timezone('Asia/Tbilisi'))
+        if local.day != calendar.monthrange(local.year, local.month)[1]:
+            return shifted
+        months = (local.year - start.year) * 12 + local.month - start.month  # deadline month vs start month
+        y, m = on_date.year, on_date.month + months
+        y, m = y + (m - 1) // 12, (m - 1) % 12 + 1
+        last = local.replace(year=y, month=m, day=calendar.monthrange(y, m)[1])
+        return last.astimezone(pytz.utc).replace(tzinfo=None)
+
+    def _sh_repeat_copy_steps(self, new, first_stage):
+        """The new occurrence gets its own copy of the sequence steps before it (same order,
+        same people), with its dates; the first steps start, the others wait."""
+        steps = self._sh_all_previous()
+        if not steps:
+            return
+        mapping = {}
+        for step in steps.sorted('id'):
+            vals = {'name': step.name, 'sh_repeat': False, 'sh_work_start': new.sh_work_start,
+                    'date_deadline': new.date_deadline, 'state': '01_in_progress',
+                    'reviewer_ids': [(6, 0, step.reviewer_ids.ids)], 'user_ids': [(6, 0, step.user_ids.ids)],
+                    'sh_confidential_viewer_ids': [(6, 0, step.sh_confidential_viewer_ids.ids)]}
+            stage = step.project_id.type_ids.filtered(lambda s: s.sh_kind == 'new')[:1]
+            if stage:
+                vals['stage_id'] = stage.id
+            mapping[step.id] = step.with_context(sh_flow_internal=True, sh_conf_internal=True).copy(vals)
+        mapping[self.id] = new
+        # links only inside the new sequence (Odoo's copy would also tie the copies to the old tasks)
+        for old_id, copy in mapping.items():
+            old = self.browse(old_id)
+            copy.with_context(sh_flow_internal=True).write({
+                'depend_on_ids': [(6, 0, [mapping[p.id].id for p in old.depend_on_ids if p.id in mapping])],
+                'dependent_ids': [(6, 0, [mapping[n.id].id for n in old.dependent_ids if n.id in mapping])],
+                'sh_parallel_ids': [(6, 0, [mapping[p.id].id for p in old.sh_parallel_ids if p.id in mapping])],
+            })
+        for copy in mapping.values():
+            waiting = copy.depend_on_ids.filtered(lambda t: t.state not in ('1_done', '1_canceled'))
+            copy.with_context(sh_flow_internal=True).write({'state': '04_waiting_normal' if waiting else '01_in_progress'})
 
     @api.model
     def _cron_sh_repeat(self):
