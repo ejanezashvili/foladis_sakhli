@@ -18,3 +18,4 @@ from . import hr_department
 from . import task_personal
 from . import task_worktime
 from . import task_returns
+from . import task_confidential

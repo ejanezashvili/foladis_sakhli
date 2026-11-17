@@ -13,6 +13,7 @@
                 <field name="sh_department_id" string="დეპარტამენტი" operator="child_of"/>
                 <field name="partner_id" string="კლიენტი"/>
                 <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[('sh_is_overdue', '=', True)]"/>
+                <filter name="sh_confidential" string="🔒 კონფიდენციალური" domain="[('sh_confidential', '=', True)]"/>
             </search>
         </field>
     </record>

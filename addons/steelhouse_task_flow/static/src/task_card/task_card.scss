@@ -156,3 +156,6 @@
     .o_kanban_group[data-sh-stage="c4"] { background: #eaf6ec !important; .o_kanban_header { background: #2b8a3e; } }
     .o_kanban_group[data-sh-stage="c5"] { background: #e6f6f8 !important; .o_kanban_header { background: #0c8599; } }
 }
+
+// 8.3 confidential: lock before the card title
+.o_sh_card_lock { margin: 4px 6px 0 0; flex: none; }
