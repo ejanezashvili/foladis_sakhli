@@ -1,4 +1,4 @@
-"""The "დასადასტურებელი" app (static/src/task_approvals): what waits for my decision as a reviewer.
+"""The "დადასტურებები" app (static/src/task_approvals): what waits for my decision as a reviewer.
 A task on "შემოწმებაზე" goes to its reviewers ("შემმოწმებლები"): confirm -> done, reject with a
 reason -> back to the assignee ("დაბრუნებული"). Same rules as the buttons on the task form.
 The reviewer is set automatically - the person who created the task; only admins change it."""
@@ -41,7 +41,7 @@ class ProjectTask(models.Model):
         body = Markup('<b>%s</b><br/>%s<br/><a href="/odoo/sh-approvals">%s</a>') % (
             _("დასადასტურებელია: %s", self.display_name),
             _("დავალება გადმოვიდა შემოწმებაზე. შემსრულებლები: %s", ', '.join(self.user_ids.mapped('name')) or '-'),
-            _("გახსენით „დასადასტურებელი“"))
+            _("გახსენით „დადასტურებები“"))
         self.sudo().with_context(mail_post_autofollow=False).message_post(
             body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
             message_type='comment', subtype_xmlid='mail.mt_comment')

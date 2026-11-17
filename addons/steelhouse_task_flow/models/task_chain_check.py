@@ -108,7 +108,7 @@ class ProjectTask(models.Model):
     def sh_chain_toggle_done(self, task_id):
         """The switch on a step card marks the step as performed ("შესრულებულია") from the assignee's
         side: it goes to "შემოწმებაზე" and its reviewers confirm or reject it in the
-        "დასადასტურებელი" app. Switched off (performed or already confirmed) - back in progress."""
+        "დადასტურებები" app. Switched off (performed or already confirmed) - back in progress."""
         task = self._sh_chain_member(task_id)
         user = self.env.user
         if not task.with_user(user)._sh_can_check(self):

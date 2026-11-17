@@ -1,0 +1,72 @@
+// Login / password reset pages: brand picture on top of the card, brand blue instead of the Odoo purple.
+// Colours are taken from the brand picture (static/img/login_brand.png).
+$sh-login-blue: #1c5aa6;
+$sh-login-blue-dark: #164a8a;
+$sh-login-bg-top: #075181;
+$sh-login-bg-bottom: #041425;
+
+body:has(.o_database_list) {
+    min-height: 100vh;
+    background: linear-gradient(160deg, $sh-login-bg-top 0%, #01375b 45%, $sh-login-bg-bottom 100%) fixed !important;
+
+    #wrapwrap {
+        background: transparent;
+    }
+}
+
+.o_database_list {
+    max-width: 420px !important;
+    background: #fff !important;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 18px 48px rgba(2, 16, 32, .45);
+
+    > .card-body {
+        padding: 0 28px 24px;
+
+        // the logo block becomes the brand picture, edge to edge
+        > .text-center:first-child {
+            margin: 0 -28px 24px !important;
+            padding: 0 !important;
+            border: 0 !important;
+            aspect-ratio: 16 / 11;
+            background: $sh-login-bg-top url("/steelhouse_task_flow/static/img/login_brand.png") center 52% / cover no-repeat;
+
+            > img {
+                visibility: hidden;
+            }
+        }
+    }
+
+    .btn-primary {
+        background-color: $sh-login-blue !important;
+        border-color: $sh-login-blue !important;
+        color: #fff !important;
+        border-radius: 8px;
+        padding-top: .6rem;
+        padding-bottom: .6rem;
+        font-weight: 600;
+
+        &:hover, &:focus, &:active {
+            background-color: $sh-login-blue-dark !important;
+            border-color: $sh-login-blue-dark !important;
+        }
+    }
+
+    a, .btn-link {
+        color: $sh-login-blue !important;
+
+        &:hover {
+            color: $sh-login-blue-dark !important;
+        }
+    }
+
+    .form-control:focus {
+        border-color: $sh-login-blue;
+        box-shadow: 0 0 0 .2rem rgba($sh-login-blue, .2);
+    }
+
+    .list-group-item-action:hover {
+        background-color: rgba($sh-login-blue, .08);
+    }
+}

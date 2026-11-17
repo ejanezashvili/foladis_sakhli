@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- "დასადასტურებელი" app: tasks on review that wait for me as a reviewer
+    <!-- "დადასტურებები" app: tasks on review that wait for me as a reviewer
          (static/src/task_approvals, models/task_approvals.py). Access rules apply. -->
     <record id="action_sh_task_approvals" model="ir.actions.client">
-        <field name="name">დასადასტურებელი</field>
+        <field name="name">დადასტურებები</field>
         <field name="tag">sh_task_approvals</field>
         <field name="path">sh-approvals</field>
     </record>
-    <menuitem id="menu_sh_approvals_root" name="დასადასტურებელი" action="action_sh_task_approvals" sequence="72"
+    <menuitem id="menu_sh_approvals_root" name="დადასტურებები" action="action_sh_task_approvals" sequence="72"
               web_icon="steelhouse_task_flow,static/description/approvals_icon.svg"/>
 </odoo>

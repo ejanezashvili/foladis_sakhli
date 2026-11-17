@@ -66,7 +66,7 @@ class ProjectTask(models.Model):
         tracking=True, default=lambda self: self.env.user, domain="[('share', '=', False)]",
         help="ავტომატურად - დავალების შემქმნელი; ცვლის მხოლოდ ადმინისტრატორი. ადასტურებენ შესრულებას "
              "(დასრულება), აბრუნებენ ან აუქმებენ დავალებას - ნებისმიერი მათგანი. მათთან მოდის "
-             "დავალება აპლიკაციაში „დასადასტურებელი“.")
+             "დავალება აპლიკაციაში „დადასტურებები“.")
     # first reviewer, kept for compatibility (reports, older automation code)
     reviewer_id = fields.Many2one(
         'res.users', string='შემმოწმებელი', compute='_compute_reviewer_id', store=True, index=True)
