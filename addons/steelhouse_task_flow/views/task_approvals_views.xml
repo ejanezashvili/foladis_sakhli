@@ -8,5 +8,5 @@
         <field name="path">sh-approvals</field>
     </record>
     <menuitem id="menu_sh_approvals_root" name="დადასტურებები" action="action_sh_task_approvals" sequence="72"
-              web_icon="steelhouse_task_flow,static/description/approvals_icon.svg"/>
+              web_icon="steelhouse_task_flow,static/description/approvals_app_icon.svg"/>
 </odoo>
