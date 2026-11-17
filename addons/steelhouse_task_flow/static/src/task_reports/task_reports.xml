@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskReports">
+        <div class="o_action o_sh_tl o_sh_rep">
+            <div class="o_sh_tl_bar">
+                <div class="o_sh_tl_tabs">
+                    <t t-foreach="VIEWS" t-as="v" t-key="v.key">
+                        <button t-att-class="'o_sh_tl_tab' + (state.view === v.key ? ' active' : '')" t-on-click="() => this.setView(v.key)">
+                            <i t-att-class="'fa me-1 ' + v.icon"/><t t-esc="v.label"/>
+                        </button>
+                    </t>
+                </div>
+                <div class="o_sh_tl_row1">
+                    <div class="btn-group o_sh_tl_scope">
+                        <button t-att-class="'btn ' + (state.scope === 'mine' ? 'btn-primary' : 'btn-outline-primary')"
+                                t-on-click="() => this.setScope('mine')"><i class="fa fa-user me-1"/>ჩემი დავალებები</button>
+                        <button t-if="isManager" t-att-class="'btn ' + (state.scope === 'all' ? 'btn-primary' : 'btn-outline-primary')"
+                                t-on-click="() => this.setScope('all')"><i class="fa fa-users me-1"/>ყველა</button>
+                    </div>
+                    <div class="o_sh_tl_nav">
+                        <button class="btn btn-light" title="წინა" t-on-click="() => this.move(-1)"><i class="fa fa-chevron-left"/></button>
+                        <button class="btn btn-light" t-on-click="goToday">ახლა</button>
+                        <button class="btn btn-light" title="შემდეგი" t-on-click="() => this.move(1)"><i class="fa fa-chevron-right"/></button>
+                        <span class="o_sh_tl_period" t-esc="periodLabel"/>
+                    </div>
+                    <div class="btn-group btn-group-sm o_sh_tl_scale">
+                        <t t-foreach="scaleKeys" t-as="sc" t-key="sc">
+                            <button t-att-class="'btn ' + (state.scale === sc ? 'btn-secondary' : 'btn-outline-secondary')"
+                                    t-on-click="() => this.setScale(sc)" t-esc="SCALES[sc]"/>
+                        </t>
+                    </div>
+                </div>
+                <div t-if="isManager and state.scope === 'all' and state.data" class="o_sh_tl_filters">
+                    <select class="form-select form-select-sm" title="დეპარტამენტი" t-on-change="(ev) => this.setFilter('departmentId', ev)">
+                        <option value="">ყველა დეპარტამენტი</option>
+                        <t t-foreach="state.data.departments" t-as="dp" t-key="dp.id">
+                            <option t-att-value="dp.id" t-att-selected="dp.id == state.departmentId" t-esc="dp.name"/>
+                        </t>
+                    </select>
+                    <select class="form-select form-select-sm" title="თანამშრომელი" t-on-change="(ev) => this.setFilter('userId', ev)">
+                        <option value="">ყველა თანამშრომელი</option>
+                        <t t-foreach="state.data.users" t-as="u" t-key="u.id">
+                            <option t-att-value="u.id" t-att-selected="u.id == state.userId" t-esc="u.name"/>
+                        </t>
+                    </select>
+                </div>
+            </div>
+
+            <div class="o_sh_tl_scroll o_sh_wt" t-att-class="{'o_sh_tl_loading': state.loading}">
+                <!-- ============ DEADLINE COMPLIANCE ============ -->
+                <t t-if="d and state.view === 'deadline'">
+                    <div class="o_sh_wt_cards">
+                        <div class="o_sh_wt_card o_sh_rep_blue o_sh_rep_link" t-on-click="() => this.openIds(d.total.done_ids, 'დასრულებული დავალებები')">
+                            <small>დასრულებული დავალებები</small><b t-esc="d.total.done"/>
+                            <small t-if="d.total.nodl">მათგან ვადის გარეშე: <t t-esc="d.total.nodl"/></small>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_green o_sh_rep_link" t-on-click="() => this.openIds(d.total.ontime_ids, 'დროულად დასრულებული')">
+                            <small>დროულად</small>
+                            <b><t t-esc="d.total.ontime"/> <span t-if="d.total.pct !== null" class="o_sh_rep_pct">(<t t-esc="d.total.pct"/>%)</span></b>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_red o_sh_rep_link" t-on-click="() => this.openIds(d.total.late_ids, 'დაგვიანებით დასრულებული')">
+                            <small>დაგვიანებით</small><b t-esc="d.total.late"/>
+                            <small t-if="d.total.late">საშუალოდ <t t-esc="d.total.avg_late"/> · ყველაზე დიდი <t t-esc="d.total.max_late"/></small>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_orange o_sh_rep_link" t-on-click="() => this.openIds(d.total.overdue_ids, 'ახლა ვადაგადაცილებული')">
+                            <small>ახლა ვადაგადაცილებული (ჯერ დაუსრულებელი)</small><b t-esc="d.total.overdue"/>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_rep_trend">
+                        <div class="o_sh_rep_trend_head">
+                            <b>თვეების ტრენდი</b>
+                            <span><i class="o_sh_rep_sw o_sh_rep_on"/>დროულად</span>
+                            <span><i class="o_sh_rep_sw o_sh_rep_late"/>დაგვიანებით</span>
+                            <span class="text-muted">ზემოთ - დროულად დასრულებულის %</span>
+                        </div>
+                        <div class="o_sh_rep_bars">
+                            <t t-foreach="trendBars" t-as="m" t-key="m.key">
+                                <div t-att-class="'o_sh_rep_col' + (m.current ? ' o_sh_rep_cur' : '')">
+                                    <div t-att-class="'o_sh_rep_pctl o_sh_rep_' + m.level" t-esc="m.pctLabel"/>
+                                    <div class="o_sh_rep_stack">
+                                        <div t-if="m.late" class="o_sh_rep_seg o_sh_rep_late" t-att-style="'height:' + m.hLate + 'px'"
+                                             t-att-title="m.label + ': დაგვიანებით ' + m.late" t-on-click="() => this.openIds(m.late_ids, m.label + ': დაგვიანებით')"><t t-esc="m.late"/></div>
+                                        <div t-if="m.ontime" class="o_sh_rep_seg o_sh_rep_on" t-att-style="'height:' + m.hOn + 'px'"
+                                             t-att-title="m.label + ': დროულად ' + m.ontime" t-on-click="() => this.openIds(m.ontime_ids, m.label + ': დროულად')"><t t-esc="m.ontime"/></div>
+                                        <div t-if="!m.late and !m.ontime" class="o_sh_rep_none"/>
+                                    </div>
+                                    <div class="o_sh_rep_ml" t-esc="m.label"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <div class="o_sh_wt_tools">
+                        <span class="text-muted">დაჯგუფება:</span>
+                        <div class="btn-group btn-group-sm">
+                            <t t-foreach="groupKeys" t-as="g" t-key="g">
+                                <button t-att-class="'btn ' + (state.group === g ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setGroup(g)"><t t-esc="GROUPS[g]"/></button>
+                            </t>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportDeadline"><i class="fa fa-download me-1"/>Excel</button>
+                    </div>
+                    <table class="o_sh_wt_table o_sh_rep_table">
+                        <thead><tr>
+                            <th t-esc="groupLabel"/><th t-if="state.group === 'project'">დეპარტამენტი</th>
+                            <th>დასრულდა</th><th>დროულად</th><th>დაგვიანებით</th><th>დროულად %</th><th>საშუალო დაგვიანება</th><th>ახლა ვადაგადაცილებული</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr t-if="!d.rows.length"><td t-att-colspan="cols" class="text-muted">ამ პერიოდში დასრულებული ან ვადაგადაცილებული დავალება არ არის.</td></tr>
+                            <t t-foreach="d.rows" t-as="r" t-key="r.key">
+                                <tr class="o_sh_wt_dept">
+                                    <td class="o_sh_rep_link" t-on-click="() => this.toggle(r.key)">
+                                        <i t-att-class="'fa me-1 ' + (state.open[r.key] ? 'fa-caret-down' : 'fa-caret-right')"/><t t-esc="r.label"/></td>
+                                    <td t-if="state.group === 'project'" t-esc="r.sub or '-'"/>
+                                    <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.done_ids, r.label + ': დასრულებული')" t-esc="r.done"/>
+                                    <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.ontime_ids, r.label + ': დროულად')" t-esc="r.ontime"/>
+                                    <td t-att-class="'o_sh_rep_link' + (r.late ? ' o_sh_rep_bad' : '')" t-on-click="() => this.openIds(r.late_ids, r.label + ': დაგვიანებით')" t-esc="r.late"/>
+                                    <td t-att-class="'o_sh_rep_' + r.level">
+                                        <span t-if="r.pct !== null" class="o_sh_rep_meter"><i t-att-style="'width:' + r.pct + '%'"/></span><t t-esc="pctLabel(r)"/>
+                                    </td>
+                                    <td t-esc="r.avg_late"/>
+                                    <td t-att-class="'o_sh_rep_link' + (r.overdue ? ' o_sh_rep_bad' : '')" t-on-click="() => this.openIds(r.overdue_ids, r.label + ': ახლა ვადაგადაცილებული')" t-esc="r.overdue"/>
+                                </tr>
+                                <t t-if="state.open[r.key]">
+                                    <tr t-if="!r.items.length" class="o_sh_wt_emp"><td t-att-colspan="cols" class="text-muted">დაგვიანებული ან ვადაგადაცილებული დავალება არ არის.</td></tr>
+                                    <t t-foreach="r.items" t-as="it" t-key="r.key + '_' + it.kind + '_' + it.id">
+                                        <tr class="o_sh_wt_emp">
+                                            <td class="o_sh_rep_link" t-on-click="() => this.openTask(it.id)"><i class="fa fa-file-text-o me-1"/><t t-esc="it.label"/></td>
+                                            <td t-att-colspan="cols - 1">
+                                                <t t-if="it.kind === 'late'">დასრულდა <b class="o_sh_rep_bad"><t t-esc="it.amount"/></b> დაგვიანებით · <t t-esc="it.date"/></t>
+                                                <t t-else="">⏰ ჯერ დაუსრულებელია, ვადა (<t t-esc="it.date"/>) გავიდა <b class="o_sh_rep_bad"><t t-esc="it.amount"/></b>-ის წინ</t>
+                                                <span t-if="it.who" class="text-muted"> · <t t-esc="it.who"/></span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <tr t-if="r.more" class="o_sh_wt_emp"><td t-att-colspan="cols" class="text-muted">... და კიდევ <t t-esc="r.more"/> - სრული სია ციფრზე დაჭერით.</td></tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <div class="text-muted small mt-2">დროულად = შემსრულებელმა დავალება ვადამდე ჩააბარა შემოწმებაზე (შემმოწმებლის დრო დაგვიანებად არ ითვლება); თუ შემოწმება არ ყოფილა - დასრულების დრო. პერიოდში ხვდება ის, რაც ამ პერიოდში დასრულდა. ციფრზე დაჭერა - დავალებების სია.</div>
+                </t>
+
+                <!-- ============ HOLDS AND CANCELLATIONS ============ -->
+                <t t-if="d and state.view === 'stops'">
+                    <div class="o_sh_wt_cards">
+                        <div class="o_sh_wt_card o_sh_rep_orange o_sh_rep_link" t-on-click="() => this.openIds(d.total.hold_ids, 'პერიოდში შეჩერებული დავალებები')">
+                            <small>შეჩერება ამ პერიოდში</small><b t-esc="d.total.holds"/>
+                            <small t-if="d.total.holds">დავალება: <t t-esc="d.total.hold_tasks"/></small>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_blue">
+                            <small>საშუალოდ რამდენ ხანს დგას</small><b t-esc="d.total.avg"/>
+                            <small t-if="d.total.holds">ყველაზე გრძელი: <t t-esc="d.total.max"/></small>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_red o_sh_rep_link" t-on-click="() => this.openIds(d.total.now_ids, 'ახლა შეჩერებული')">
+                            <small>ახლა შეჩერებულია</small><b t-esc="d.total.now"/>
+                            <small t-if="d.total.stale" class="o_sh_rep_bad">განახლების თარიღი გასულია: <t t-esc="d.total.stale"/></small>
+                        </div>
+                        <div class="o_sh_wt_card o_sh_rep_grey o_sh_rep_link" t-on-click="() => this.openIds(d.total.cancel_ids, 'პერიოდში გაუქმებული დავალებები')">
+                            <small>გაუქმდა ამ პერიოდში</small><b t-esc="d.total.cancels"/>
+                        </div>
+                    </div>
+                    <div class="o_sh_wt_tools">
+                        <span class="text-muted">დაჯგუფება:</span>
+                        <div class="btn-group btn-group-sm">
+                            <t t-foreach="groupKeys" t-as="g" t-key="g">
+                                <button t-att-class="'btn ' + (state.group === g ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setGroup(g)"><t t-esc="GROUPS[g]"/></button>
+                            </t>
+                        </div>
+                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportStops"><i class="fa fa-download me-1"/>Excel</button>
+                    </div>
+                    <div class="o_sh_rep_wrap">
+                        <table class="o_sh_wt_table o_sh_rep_table o_sh_rep_stops">
+                            <thead><tr>
+                                <th t-esc="groupLabel"/><th t-if="state.group === 'project'">დეპარტამენტი</th>
+                                <th>შეჩერება</th><th>საშუალო ხანგრძლივობა</th><th>ყველაზე გრძელი</th><th>ახლა შეჩერებული</th><th>გაუქმდა</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr t-if="!d.rows.length"><td t-att-colspan="cols" class="text-muted">ამ პერიოდში შეჩერებული ან გაუქმებული დავალება არ არის.</td></tr>
+                                <t t-foreach="d.rows" t-as="r" t-key="r.key">
+                                    <tr class="o_sh_wt_dept">
+                                        <td class="o_sh_rep_link" t-on-click="() => this.toggle(r.key)">
+                                            <i t-att-class="'fa me-1 ' + (state.open[r.key] ? 'fa-caret-down' : 'fa-caret-right')"/><t t-esc="r.label"/></td>
+                                        <td t-if="state.group === 'project'" t-esc="r.sub or '-'"/>
+                                        <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.hold_ids, r.label + ': შეჩერებული')" t-esc="r.holds"/>
+                                        <td><span t-if="r.holds" class="o_sh_wt_bar o_sh_rep_bar" t-att-style="'width:' + Math.max(r.bar, 4) + 'px'"/><t t-esc="r.avg"/></td>
+                                        <td t-esc="r.max"/>
+                                        <td t-att-class="'o_sh_rep_link' + (r.stale ? ' o_sh_rep_bad' : '')" t-on-click="() => this.openIds(r.now_ids, r.label + ': ახლა შეჩერებული')">
+                                            <t t-esc="r.now"/><small t-if="r.stale"> (ვადაგასული: <t t-esc="r.stale"/>)</small></td>
+                                        <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.cancel_ids, r.label + ': გაუქმებული')" t-esc="r.cancels"/>
+                                    </tr>
+                                    <t t-if="state.open[r.key]">
+                                        <t t-foreach="r.items" t-as="it" t-key="r.key + '_' + it_index">
+                                            <tr class="o_sh_wt_emp">
+                                                <td class="o_sh_rep_link" t-on-click="() => this.openTask(it.id)"><i class="fa fa-file-text-o me-1"/><t t-esc="it.label"/></td>
+                                                <td t-att-colspan="cols - 1">
+                                                    <t t-if="it.kind === 'cancel'">✖ გაუქმდა <t t-esc="it.date"/></t>
+                                                    <t t-elif="it.kind === 'now'">⏸ შეჩერებულია <t t-esc="it.date"/>-დან (<b t-esc="it.amount"/>)<t t-if="it.resume"> · განახლება: <span t-att-class="it.stale ? 'o_sh_rep_bad' : ''" t-esc="it.resume"/></t></t>
+                                                    <t t-else="">შეჩერდა <t t-esc="it.date"/>, იდგა <b t-esc="it.amount"/></t>
+                                                    <span class="o_sh_rep_reason"> · „<t t-esc="it.reason"/>“</span>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                        <tr t-if="r.more" class="o_sh_wt_emp"><td t-att-colspan="cols" class="text-muted">... და კიდევ <t t-esc="r.more"/> - სრული სია ციფრზე დაჭერით.</td></tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                        <div class="o_sh_rep_side">
+                            <h6><i class="fa fa-pause-circle-o me-1"/>რა აჩერებს ყველაზე ხშირად</h6>
+                            <div t-if="!d.hold_reasons.length" class="text-muted small">ამ პერიოდში შეჩერება არ ყოფილა.</div>
+                            <t t-foreach="d.hold_reasons" t-as="hr" t-key="hr_index">
+                                <div class="o_sh_rep_item o_sh_rep_link" t-on-click="() => this.openIds(hr.ids, 'შეჩერების მიზეზი: ' + hr.reason)">
+                                    <b><t t-esc="hr.count"/>×</b> <t t-esc="hr.reason"/>
+                                    <small>საშუალოდ იდგა <t t-esc="hr.avg"/></small>
+                                </div>
+                            </t>
+                            <h6 class="mt-3"><i class="fa fa-times-circle-o me-1"/>რატომ უქმდება</h6>
+                            <div t-if="!d.cancel_reasons.length" class="text-muted small">ამ პერიოდში გაუქმება არ ყოფილა.</div>
+                            <t t-foreach="d.cancel_reasons" t-as="cr" t-key="cr_index">
+                                <div class="o_sh_rep_item o_sh_rep_link" t-on-click="() => this.openIds(cr.ids, 'გაუქმების მიზეზი: ' + cr.reason)">
+                                    <b><t t-esc="cr.count"/>×</b> <t t-esc="cr.reason"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="text-muted small mt-2">პერიოდში ხვდება ის, რაც ამ პერიოდში შეჩერდა ან გაუქმდა; „ახლა შეჩერებული“ - დღევანდელი მდგომარეობა, პერიოდის მიუხედავად. ხანგრძლივობა - შეჩერებიდან გაგრძელებამდე (კალენდარული დრო). მიზეზები თავისუფალი ტექსტია: ერთნაირად დაწერილი ერთად ითვლება. ციფრზე დაჭერა - დავალებების სია.</div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- "რეპორტინგი" app: deadline compliance and holds / cancellations (static/src/task_reports,
+         models/task_reports.py). One page with two tabs; each menu opens its own tab. Access rules apply. -->
+    <record id="action_sh_report_deadline" model="ir.actions.client">
+        <field name="name">ვადების დაცვა</field>
+        <field name="tag">sh_task_reports</field>
+        <field name="path">sh-deadlines</field>
+        <field name="params" eval="{'view': 'deadline'}"/>
+    </record>
+    <record id="action_sh_report_stops" model="ir.actions.client">
+        <field name="name">შეჩერება და გაუქმება</field>
+        <field name="tag">sh_task_reports</field>
+        <field name="path">sh-stops</field>
+        <field name="params" eval="{'view': 'stops'}"/>
+    </record>
+
+    <menuitem id="menu_sh_report_deadline" name="ვადების დაცვა" parent="project.menu_project_report"
+              action="action_sh_report_deadline" sequence="2"/>
+    <menuitem id="menu_sh_report_stops" name="შეჩერება და გაუქმება" parent="project.menu_project_report"
+              action="action_sh_report_stops" sequence="3"/>
+
+    <!-- first install of the report: hold / cancel history rebuilt from the stage history (runs once) -->
+    <function model="project.task" name="_sh_stops_backfill_once"/>
+</odoo>

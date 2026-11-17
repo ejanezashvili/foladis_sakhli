@@ -16,7 +16,9 @@ class ShTaskFlowEvent(models.Model):
     _order = 'date desc, id desc'
 
     task_id = fields.Many2one('project.task', required=True, ondelete='cascade', index=True)
-    kind = fields.Selection([('review', 'შემოწმებაზე'), ('return', 'დაბრუნება')], required=True, index=True)
+    # hold / resume / cancel feed the "შეჩერება და გაუქმება" report (task_reports.py)
+    kind = fields.Selection([('review', 'შემოწმებაზე'), ('return', 'დაბრუნება'), ('hold', 'შეჩერება'),
+                             ('resume', 'გაგრძელება'), ('cancel', 'გაუქმება')], required=True, index=True)
     date = fields.Datetime(required=True, index=True)
     user_id = fields.Many2one('res.users', string='ვინ')
     reason = fields.Text()
@@ -58,13 +60,21 @@ class ProjectTask(models.Model):
                 elif old == 'review' and new in BACK_KINDS:
                     Event.create({'task_id': task.id, 'kind': 'return', 'date': now, 'user_id': self.env.uid,
                                   'reason': vals.get('return_reason') or (task.return_reason if new == 'returned' else False)})
+                if new == 'on_hold' and old != 'on_hold':
+                    Event.create({'task_id': task.id, 'kind': 'hold', 'date': now, 'user_id': self.env.uid,
+                                  'reason': vals.get('hold_reason') or task.hold_reason})
+                elif old == 'on_hold' and new != 'on_hold':
+                    Event.create({'task_id': task.id, 'kind': 'resume', 'date': now, 'user_id': self.env.uid})
+                if new == 'cancelled' and old != 'cancelled':
+                    Event.create({'task_id': task.id, 'kind': 'cancel', 'date': now, 'user_id': self.env.uid,
+                                  'reason': vals.get('cancel_reason') or task.cancel_reason})
         return res
 
     @api.model
     def _sh_returns_backfill(self):
         """One-off: rebuild review / return events from the stage history."""
         Event = self.env['sh.task.flow.event'].sudo()
-        Event.search([]).unlink()
+        Event.search([('kind', 'in', ('review', 'return'))]).unlink()
         Track = self.env['mail.tracking.value'].sudo()
         Fields = self.env['ir.model.fields']
         f_stage, f_reason = Fields._get('project.task', 'stage_id'), Fields._get('project.task', 'return_reason')

@@ -121,21 +121,26 @@ class ProjectTask(models.Model):
     def _sh_digest_url(self, task):
         return '/odoo/project.task/%d' % task.id
 
-    def _sh_digest_rows(self, tasks, now, late=False):
+    def _sh_digest_rows(self, tasks, now, late=False, who=False, note=None):
+        """who: add the assignees (department digest); note: task -> extra text after the deadline."""
         rows = []
         for t in tasks.sorted(lambda t: (t.date_deadline or datetime.max)):
             deadline = fields.Datetime.context_timestamp(t, t.date_deadline).strftime('%d.%m') if t.date_deadline else '-'
             days = (now - t.date_deadline).days if late and t.date_deadline else None
             extra = '' if days is None else (' (დღეს)' if days == 0 else ' (%d დღე)' % days)
+            if who and t.user_ids:
+                extra += ' · %s' % ', '.join(t.user_ids.mapped('name'))
+            if note and note(t):
+                extra += ' · %s' % note(t)
             rows.append(Markup('<li><a href="%s">%s%s</a> - %s%s</li>') % (
                 self._sh_digest_url(t), t.sh_number and t.sh_number + ' ' or '', t.name, deadline, extra))
         return Markup('<ul>%s</ul>') % Markup('').join(rows) if rows else ''
 
-    def _sh_digest_section(self, title, tasks, now, late=False, limit=15):
+    def _sh_digest_section(self, title, tasks, now, late=False, limit=15, who=False, note=None):
         if not tasks:
             return ''
         more = len(tasks) - limit
-        body = self._sh_digest_rows(tasks[:limit] if more > 0 else tasks, now, late)
+        body = self._sh_digest_rows(tasks[:limit] if more > 0 else tasks, now, late, who=who, note=note)
         tail = Markup('<p>... და კიდევ %d</p>') % more if more > 0 else ''
         return Markup('<p><b>%s (%d)</b></p>%s%s') % (title, len(tasks), body, tail)
 
@@ -183,7 +188,14 @@ class ProjectTask(models.Model):
             if not (d_open or d_done or d_new):
                 continue
             d_over = d_open.filtered(lambda t: t.date_deadline and t.date_deadline < now)
+            d_over_new = d_over.filtered(lambda t: t.date_deadline >= week_ago)
+            d_due = d_open.filtered(lambda t: t.date_deadline and now <= t.date_deadline < week_end)
+            d_hold = d_open.filtered(lambda t: t.stage_id.sh_kind == 'on_hold')
             d_review = d_open.filtered(lambda t: t.stage_id.sh_kind == 'review')
+            # deadline compliance of the tasks finished last week (same rule as the "ვადების დაცვა" report)
+            split = d_done._sh_deadline_split()
+            on_time = sum(1 for i in split if i['state'] == 'ontime')
+            late_ids = {i['task'].id for i in split if i['state'] == 'late'}
             rows = []
             for emp_user in (d_open | d_done).user_ids.sorted('name'):
                 o = d_open.filtered(lambda t: emp_user in t.user_ids)
@@ -198,8 +210,23 @@ class ProjectTask(models.Model):
                           '⏰ ვადაგადაცილებული: <b>%d</b> &nbsp; 🔎 შემოწმებაზე: <b>%d</b></p>') % (
                 period, ', '.join(mine_depts.mapped('name')), len(d_new), len(d_done), len(d_open),
                 len(d_over), len(d_review))
+            if on_time or late_ids:
+                body += Markup('<p>🎯 ვადების დაცვა გასულ კვირას: დროულად <b>%d</b>, დაგვიანებით <b>%d</b> '
+                               '(დროულად <b>%d%%</b>)</p>') % (
+                    on_time, len(late_ids), round(100 * on_time / (on_time + len(late_ids))))
             body += table
-            body += self._sh_digest_section('⏰ ყველაზე დაგვიანებული', d_over.sorted('date_deadline'), now, late=True, limit=10)
+            body += self._sh_digest_section(
+                '✅ გასულ კვირას დასრულდა', d_done, now, limit=10, who=True,
+                note=lambda t: 'დაგვიანებით' if t.id in late_ids else '')
+            body += self._sh_digest_section(
+                '⏰ ვადაგადაცილებული (გასულ კვირას დაემატა: %d)' % len(d_over_new), d_over.sorted('date_deadline'),
+                now, late=True, limit=10, who=True, note=lambda t: '🆕' if t in d_over_new else '')
+            body += self._sh_digest_section('📅 ამ კვირაში იწურება', d_due, now, limit=10, who=True)
+            body += self._sh_digest_section(
+                '⏸ შეჩერებული', d_hold, now, limit=10, who=True,
+                note=lambda t: '„%s“' % t.hold_reason.strip() if t.hold_reason else '')
+            body += Markup('<p><a href="/odoo/sh-deadlines">ვადების დაცვის რეპორტი</a> · '
+                           '<a href="/odoo/sh-stops">შეჩერება და გაუქმება</a></p>')
             self._sh_digest_post(user, 'დეპარტამენტის კვირის შეჯამება: %s' % period, body)
 
     def _sh_digest_post(self, user, subject, body):
