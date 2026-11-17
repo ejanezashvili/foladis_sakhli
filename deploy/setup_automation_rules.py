@@ -33,7 +33,7 @@ for task in records:
     emps = env['hr.employee'].search([('user_id', 'in', bosses.ids)]) if bosses else env['hr.employee']
     for top in emps.sh_manager_ids.user_id:  # all equal heads of the reviewers
         task.activity_schedule('mail.mail_activity_data_todo', user_id=top.id,
-                               summary='ესკალაცია — 3 დღით ვადაგადაცილებული: %s' % task.name,
+                               summary='ესკალაცია - 3 დღით ვადაგადაცილებული: %s' % task.name,
                                note='შემმოწმებელი: %s; შემსრულებლები: %s' % (', '.join(bosses.mapped('name')), ', '.join(task.user_ids.mapped('name'))))
 '''
 CODE_REVIEW = '''

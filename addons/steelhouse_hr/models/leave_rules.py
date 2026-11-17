@@ -18,8 +18,8 @@ class HrLeaveType(models.Model):
 
     sh_calendar_days = fields.Boolean(
         string='კალენდარული დღეებით',
-        help="ხანგრძლივობა ითვლება კალენდარული დღეებით — შაბათ-კვირა და უქმეებიც შედის "
-             "(მაგ. ანაზღაურების გარეშე შვებულება). გამორთულისას — სამუშაო დღეებით.")
+        help="ხანგრძლივობა ითვლება კალენდარული დღეებით - შაბათ-კვირა და უქმეებიც შედის "
+             "(მაგ. ანაზღაურების გარეშე შვებულება). გამორთულისას - სამუშაო დღეებით.")
     sh_ignore_mandatory_days = fields.Boolean(
         string='სავალდებულო დღეები არ ეხება',
         help="ამ ტიპის მოთხოვნა სავალდებულო სამუშაო დღეებზეც შეიძლება (მაგ. ავადმყოფობა, მივლინება).")
@@ -42,7 +42,7 @@ class HrLeaveAllocation(models.Model):
 
     sh_quarter_start = fields.Date(
         string='კვარტლის დასაწყისი', readonly=True, index=True, copy=False,
-        help="ავტომატურად შექმნილი კვარტლის მინიჭება — რომელი კვარტლისაა.")
+        help="ავტომატურად შექმნილი კვარტლის მინიჭება - რომელი კვარტლისაა.")
 
     @api.model
     def _sh_quarter_bounds(self, anchor, today):
@@ -79,7 +79,7 @@ class HrLeaveAllocation(models.Model):
                                             ('sh_quarter_start', '=', start)]):
                     continue
                 allocation = Allocation.create({
-                    'name': "%s — კვარტალი %s – %s" % (
+                    'name': "%s - კვარტალი %s - %s" % (
                         leave_type.name, start.strftime('%d.%m.%Y'), end.strftime('%d.%m.%Y')),
                     'employee_id': employee.id,
                     'holiday_status_id': leave_type.id,

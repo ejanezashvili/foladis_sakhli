@@ -53,7 +53,7 @@ class SteelhouseLeaveDelegation(models.Model):
         status = {'confirm': 'დასამტკიცებელი', 'validate1': 'მეორე დამტკიცება', 'validate': 'დამტკიცებული'}
         dates = absence.request_date_from.strftime('%d.%m.%Y')
         if absence.request_date_to and absence.request_date_to != absence.request_date_from:
-            dates += ' – ' + absence.request_date_to.strftime('%d.%m.%Y')
+            dates += ' - ' + absence.request_date_to.strftime('%d.%m.%Y')
         return _("„%(name)s“ ამ დღეებში თვითონ არის შვებულებაში: %(type)s, %(dates)s (%(status)s). "
                  "აირჩიეთ სხვა შემცვლელი.",
                  name=absence.employee_id.name, type=absence.holiday_status_id.name, dates=dates,
@@ -276,7 +276,7 @@ class HrLeave(models.Model):
             'cancelled': _("შვებულება გაუქმდა - შემცვლელობა აღარ არის საჭირო"),
         }
         for leave in self:
-            period = "%s – %s" % (
+            period = "%s - %s" % (
                 leave.request_date_from and leave.request_date_from.strftime('%d/%m/%Y') or '',
                 leave.request_date_to and leave.request_date_to.strftime('%d/%m/%Y') or '')
             by_partner = {}

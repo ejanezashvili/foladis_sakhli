@@ -2943,7 +2943,7 @@ msgstr "თუ მონიშნულია, თეგზე დაწკა�
 #. odoo-javascript
 #: code:addons/web/static/src/views/fields/json_checkboxes/json_checkboxes_field.js:0
 msgid "If checked, the checkboxes will be displayed in a column. Otherwise, they will be inlined."
-msgstr "თუ მონიშნულია, მოსანიშნი ველები სვეტად გამოჩნდება. წინააღმდეგ შემთხვევაში — ერთ ხაზზე."
+msgstr "თუ მონიშნულია, მოსანიშნი ველები სვეტად გამოჩნდება. წინააღმდეგ შემთხვევაში - ერთ ხაზზე."
 
 #. module: web
 #. odoo-javascript
@@ -25924,13 +25924,13 @@ msgstr "ზომბი"
 #. odoo-javascript
 #: code:addons/web/static/src/webclient/user_menu/user_menu_items.xml:0
 msgid "— press"
-msgstr "— დააჭირეთ"
+msgstr "- დააჭირეთ"
 
 #. module: web
 #. odoo-javascript
 #: code:addons/web/static/src/core/commands/command_items.xml:0
 msgid "— search for"
-msgstr "— მოძებნეთ"
+msgstr "- მოძებნეთ"
 
 #. module: web
 #. odoo-javascript

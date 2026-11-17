@@ -47,37 +47,37 @@ msgstr "%(count1)s/%(count2)s"
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "%(name)s Dashboard"
-msgstr "%(name)s – დაფა"
+msgstr "%(name)s - დაფა"
 
 #. module: project
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "%(name)s's Burndown Chart"
-msgstr "%(name)s – შესრულების დიაგრამა"
+msgstr "%(name)s - შესრულების დიაგრამა"
 
 #. module: project
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "%(name)s's Milestones"
-msgstr "%(name)s – ეტაპები"
+msgstr "%(name)s - ეტაპები"
 
 #. module: project
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "%(name)s's Rating"
-msgstr "%(name)s – შეფასება"
+msgstr "%(name)s - შეფასება"
 
 #. module: project
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "%(name)s's Tasks Analysis"
-msgstr "%(name)s – დავალებების ანალიზი"
+msgstr "%(name)s - დავალებების ანალიზი"
 
 #. module: project
 #. odoo-python
 #: code:addons/project/models/res_partner.py:0
 msgid "%(partner_name)s's Tasks"
-msgstr "%(partner_name)s – დავალებები"
+msgstr "%(partner_name)s - დავალებები"
 
 #. module: project
 #. odoo-python
@@ -958,7 +958,7 @@ msgstr ""
 #. module: project
 #: model:mail.template,description:project.mail_template_data_project_task
 msgid "Automatically send an email to customers when a task reaches a specific stage in a project by setting this template on that stage"
-msgstr "ავტომატურად გაუგზავნეთ წერილი კლიენტებს, როცა დავალება პროექტის კონკრეტულ სტადიას მიაღწევს — ამისთვის მიუთითეთ ეს შაბლონი შესაბამის სტადიაზე"
+msgstr "ავტომატურად გაუგზავნეთ წერილი კლიენტებს, როცა დავალება პროექტის კონკრეტულ სტადიას მიაღწევს - ამისთვის მიუთითეთ ეს შაბლონი შესაბამის სტადიაზე"
 
 #. module: project
 #. odoo-python
@@ -1006,7 +1006,7 @@ msgstr "ნაშთი"
 #. odoo-python
 #: code:addons/project/models/account_analytic_account.py:0
 msgid "Before we can bid farewell to these accounts, you need to tidy up the projects linked to them by removing their existing tasks!"
-msgstr "ამ ანგარიშების დახურვამდე საჭიროა მათთან დაკავშირებული პროექტების მოწესრიგება — წაშალეთ მათი არსებული დავალებები!"
+msgstr "ამ ანგარიშების დახურვამდე საჭიროა მათთან დაკავშირებული პროექტების მოწესრიგება - წაშალეთ მათი არსებული დავალებები!"
 
 #. module: project
 #. odoo-javascript
@@ -1142,7 +1142,7 @@ msgid ""
 "Rating when changing stage: an email will be automatically sent when a task reaches the stage.\n"
 "Periodic rating: an email will be automatically sent at regular intervals as long as the task remains in the stage."
 msgstr ""
-"შეაგროვეთ კლიენტების შეფასებები — გაუგზავნეთ მათ შეფასების მოთხოვნა, როცა დავალება კონკრეტულ სტადიაზე გადავა. ამისთვის სტადიაზე მიუთითეთ შეფასების წერილის შაბლონი.\n"
+"შეაგროვეთ კლიენტების შეფასებები - გაუგზავნეთ მათ შეფასების მოთხოვნა, როცა დავალება კონკრეტულ სტადიაზე გადავა. ამისთვის სტადიაზე მიუთითეთ შეფასების წერილის შაბლონი.\n"
 "შეფასება სტადიის შეცვლისას: წერილი ავტომატურად გაიგზავნება, როცა დავალება ამ სტადიას მიაღწევს.\n"
 "პერიოდული შეფასება: წერილი ავტომატურად გაიგზავნება რეგულარული ინტერვალებით, სანამ დავალება ამ სტადიაზეა."
 
@@ -1864,7 +1864,7 @@ msgstr "მიეცით თანამშრომლებს წვდო�
 #. odoo-python
 #: code:addons/project/models/project_project.py:0
 msgid "Grant users access by adding them as followers — either to the project or individual tasks. Internal users automatically gain access to tasks they are assigned to."
-msgstr "მიეცით მომხმარებლებს წვდომა გამომწერებად დამატებით — პროექტზე ან ცალკეულ დავალებებზე. შიდა მომხმარებლები ავტომატურად იღებენ წვდომას მათზე მინიჭებულ დავალებებზე."
+msgstr "მიეცით მომხმარებლებს წვდომა გამომწერებად დამატებით - პროექტზე ან ცალკეულ დავალებებზე. შიდა მომხმარებლები ავტომატურად იღებენ წვდომას მათზე მინიჭებულ დავალებებზე."
 
 #. module: project
 #. odoo-javascript
@@ -3211,7 +3211,7 @@ msgstr ""
 #. module: project
 #: model:mail.template,subject:project.mail_template_data_project_task
 msgid "Reception of {{ object.name }}"
-msgstr "{{ object.name }} — მიღება"
+msgstr "{{ object.name }} - მიღება"
 
 #. module: project
 #: model:ir.model.fields,field_description:project.field_project_share_wizard__partner_ids model:ir.model.fields,field_description:project.field_task_share_wizard__partner_ids

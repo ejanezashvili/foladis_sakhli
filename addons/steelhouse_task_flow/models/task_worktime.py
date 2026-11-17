@@ -48,7 +48,7 @@ class ProjectTask(models.Model):
                 task.sh_work_time = False
                 task.sh_work_time_note = False
             elif task.sh_wt_run_from:
-                task.sh_work_time = '⏱ %s — მიმდინარეობს' % _fmt_secs(secs)
+                task.sh_work_time = '⏱ %s - მიმდინარეობს' % _fmt_secs(secs)
                 task.sh_work_time_note = 'მიღებულია: %s' % _fmt_dt(task.sh_wt_first)
             else:
                 task.sh_work_time = '✔ %s' % _fmt_secs(secs)

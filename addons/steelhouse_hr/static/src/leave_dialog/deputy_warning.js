@@ -3,7 +3,7 @@ import { WarningDialog } from "@web/core/errors/error_dialogs";
 
 // The "deputy is on leave" message (hr.leave.delegation._sh_absence_message):
 // „<name>“ ამ დღეებში თვითონ არის შვებულებაში: <type>, <dates> (<status>). <hint>
-const DEPUTY_ABSENT = /^„(.+?)“ ამ დღეებში თვითონ არის შვებულებაში: (.+), (\d{2}\.\d{2}\.\d{4}(?: – \d{2}\.\d{2}\.\d{4})?) \((.+?)\)\. ([\s\S]+)$/;
+const DEPUTY_ABSENT = /^„(.+?)“ ამ დღეებში თვითონ არის შვებულებაში: (.+), (\d{2}\.\d{2}\.\d{4}(?: - \d{2}\.\d{2}\.\d{4})?) \((.+?)\)\. ([\s\S]+)$/;
 const STATUS_CLASS = {
     "დამტკიცებული": "o_sh_dep_status_ok",
     "დასამტკიცებელი": "o_sh_dep_status_wait",

@@ -9316,7 +9316,7 @@ msgstr "გეგმა \"%(plan_name)s\" დაწყებულია"
 #. module: mail
 #: model:ir.model.fields,help:mail.field_ir_cron__priority
 msgid "The priority of the job, as an integer: 0 means higher priority, 10 means lower priority."
-msgstr "დავალების პრიორიტეტი მთელი რიცხვის სახით: 0 ნიშნავს მაღალ პრიორიტეტს, 10 — დაბალს."
+msgstr "დავალების პრიორიტეტი მთელი რიცხვის სახით: 0 ნიშნავს მაღალ პრიორიტეტს, 10 - დაბალს."
 
 #. module: mail
 #: model:ir.model.fields,help:mail.field_mail_template_preview__scheduled_date
@@ -9557,7 +9557,7 @@ msgstr "ეს პარამეტრი გავრცელდება ყ
 #. module: mail
 #: model:ir.model.fields,help:mail.field_res_users_settings__channel_notifications
 msgid "This setting will only be applied to channels. Mentions only if not specified."
-msgstr "ეს პარამეტრი მხოლოდ არხებზე გავრცელდება. თუ არ არის მითითებული — მხოლოდ მონიშვნები."
+msgstr "ეს პარამეტრი მხოლოდ არხებზე გავრცელდება. თუ არ არის მითითებული - მხოლოდ მონიშვნები."
 
 #. module: mail
 #. odoo-javascript

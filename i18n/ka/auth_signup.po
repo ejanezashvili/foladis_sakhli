@@ -1002,7 +1002,7 @@ msgstr "ამ მოქმედების შესრულება და
 #. module: auth_signup
 #: model:mail.template,subject:auth_signup.portal_set_password_email
 msgid "Your account at {{ object.company_id.name }}"
-msgstr "თქვენი ანგარიში — {{ object.company_id.name }}"
+msgstr "თქვენი ანგარიში - {{ object.company_id.name }}"
 
 #. module: auth_signup
 #. odoo-python

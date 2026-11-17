@@ -85,7 +85,7 @@ class ResUsersActivityMenu(models.Model):
             for leave in leaves.sudo():
                 dates = leave.request_date_from.strftime('%d.%m')
                 if leave.request_date_to and leave.request_date_to != leave.request_date_from:
-                    dates += '–' + leave.request_date_to.strftime('%d.%m')
+                    dates += '-' + leave.request_date_to.strftime('%d.%m')
                 status = SH_LEAVE_STATUS.get(leave.state) or dict(
                     leave._fields['state']._description_selection(self.env)).get(leave.state, '')
                 lines.append({'id': leave.id, 'employee': leave.employee_id.name,

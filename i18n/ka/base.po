@@ -2904,7 +2904,7 @@ msgstr "ახალი პაროლი და მისი დადას�
 #. module: base
 #: model:ir.model.fields,help:base.field_ir_cron__priority
 msgid "The priority of the job, as an integer: 0 means higher priority, 10 means lower priority."
-msgstr "დავალების პრიორიტეტი მთელი რიცხვის სახით: 0 ნიშნავს მაღალ პრიორიტეტს, 10 — დაბალს."
+msgstr "დავალების პრიორიტეტი მთელი რიცხვის სახით: 0 ნიშნავს მაღალ პრიორიტეტს, 10 - დაბალს."
 
 #. module: base
 #. odoo-python

@@ -12,7 +12,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/auth_totp/controllers/home.py:0
 msgid "%(browser)s on %(platform)s"
-msgstr "%(browser)s — %(platform)s"
+msgstr "%(browser)s - %(platform)s"
 
 #. module: auth_totp
 #: model:ir.model,name:auth_totp.model_auth_totp_wizard

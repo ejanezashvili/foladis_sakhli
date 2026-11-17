@@ -250,7 +250,7 @@
                         <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold o_sh_overdue_mark' : '')">
                             <i class="fa fa-flag-checkered me-1" title="ვადა"/>
                             <t t-if="record.sh_deadline_str.raw_value" t-esc="record.sh_deadline_str.raw_value"/>
-                            <t t-if="!record.sh_deadline_str.raw_value">—</t>
+                            <t t-if="!record.sh_deadline_str.raw_value">-</t>
                         </span>
                         <div class="ms-auto d-flex align-items-center gap-2">
                             <span t-if="record.priority.raw_value" t-att-class="'o_sh_prio o_sh_prio_' + record.priority.raw_value" t-esc="record.priority.value"/>
