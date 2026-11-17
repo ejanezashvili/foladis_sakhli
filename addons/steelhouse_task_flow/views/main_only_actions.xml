@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequence steps are seen only inside their main task's card ("⛓ თანმიმდევრობა"):
+         the task menus open with the filter "მხოლოდ მთავარი დავალებები" on (it can be removed). -->
+    <record id="project.action_view_my_task" model="ir.actions.act_window">
+        <field name="context">{
+            'search_default_open_tasks': 1,
+            'search_default_sh_main_only': 1,
+            'my_tasks': 1,
+            'default_user_ids': [(4, uid)],
+        }</field>
+    </record>
+    <record id="project.action_view_all_task" model="ir.actions.act_window">
+        <field name="context">{'search_default_open_tasks': 1, 'search_default_sh_main_only': 1, 'default_user_ids': [(4, uid)]}</field>
+    </record>
+</odoo>

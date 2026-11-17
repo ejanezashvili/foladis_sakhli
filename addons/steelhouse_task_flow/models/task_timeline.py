@@ -62,7 +62,7 @@ class ProjectTask(models.Model):
                          user_id=False, search='', subtasks=False, mine=False):
         d_from, d_to = date.fromisoformat(date_from), date.fromisoformat(date_to)
         today = fields.Date.context_today(self)
-        domain = [('is_template', '=', False), ('project_id', '!=', False)]
+        domain = [('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False)]
         uid = self.env.uid
         if mine:  # "ჩემი": my tasks and sub-tasks (assignee or main responsible)
             domain += ['|', ('user_ids', 'in', [uid]), ('sh_responsible_id', '=', uid)]
@@ -140,7 +140,7 @@ class ProjectTask(models.Model):
         d_from, d_to = date.fromisoformat(date_from), date.fromisoformat(date_to)
         today = fields.Date.context_today(self)
         week_end = today + timedelta(days=7)
-        base = [('is_template', '=', False), ('project_id', '!=', False)]
+        base = [('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False)]
         if not subtasks:
             base.append(('parent_id', '=', False))
         if department_id:

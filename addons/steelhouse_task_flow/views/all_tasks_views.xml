@@ -13,6 +13,7 @@
                 <field name="sh_department_id" string="დეპარტამენტი" operator="child_of"/>
                 <field name="partner_id" string="კლიენტი"/>
                 <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[('sh_is_overdue', '=', True)]"/>
+                <filter name="sh_main_only" string="მხოლოდ მთავარი დავალებები" domain="[('sh_is_step', '=', False)]"/>
                 <filter name="sh_confidential" string="🔒 კონფიდენციალური" domain="[('sh_confidential', '=', True)]"/>
             </search>
         </field>
@@ -23,7 +24,7 @@
         <field name="path">sh-all-tasks</field>
         <field name="res_model">project.task</field>
         <field name="domain">[('project_id', '!=', False), ('is_template', '=', False)]</field>
-        <field name="context">{'sh_all_tasks': True, 'sh_picker': True, 'default_group_by': 'stage_id'}</field>
+        <field name="context">{'sh_all_tasks': True, 'sh_picker': True, 'default_group_by': 'stage_id', 'search_default_sh_main_only': 1}</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="search_view_id" ref="view_sh_all_tasks_search"/>
     </record>
