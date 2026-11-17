@@ -53,7 +53,7 @@ class ProjectTask(models.Model):
         Task = self.env['project.task'].sudo()
         for node in res.get('nodes', []):
             task = Task.browse(node['id'])
-            node['can_check'] = (not node['current'] and node['status'] != 'cancelled'
+            node['can_check'] = (node['status'] != 'cancelled'
                                  and not res.get('readonly') and task._sh_can_check(self))
             prev = task._sh_all_previous()
             node['prev_total'] = len(prev)
@@ -63,7 +63,7 @@ class ProjectTask(models.Model):
     def sh_chain_toggle_done(self, task_id):
         """The switch on a step card: done <-> back in progress (no reviewer step)."""
         task = self._sh_chain_member(task_id)
-        if task.id == self.id or not task.with_user(self.env.user)._sh_can_check(self):
+        if not task.with_user(self.env.user)._sh_can_check(self):
             raise UserError(_("ამ ნაბიჯის მონიშვნა შეუძლია მის შემსრულებელს, მთავარ პასუხისმგებელს ან ადმინისტრატორს."))
         done = task.state != '1_done'
         stage = task._sh_stage_of_kind('done' if done else 'in_progress')
