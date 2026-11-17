@@ -93,9 +93,43 @@ class HrLeave(models.Model):
     _inherit = 'hr.leave'
 
     # ------------------------------------------------------------------
-    # Equal heads: every head of the employee approves like Odoo's single
-    # "time off approver" (first step); the first one to decide closes it.
+    # Equal heads: every head of the employee approves the first step (all of
+    # them, a head on leave replaced by his deputy); then the second step
+    # (HR / the director's assistant) - Odoo's "both" validation.
     # ------------------------------------------------------------------
+    sh_head_approved_user_ids = fields.Many2many(
+        'res.users', 'sh_leave_head_approval_rel', 'leave_id', 'user_id',
+        string='ხელმძღვანელებმა დაამტკიცეს', copy=False, readonly=True,
+        help="ვინ დაამტკიცა უკვე პირველი საფეხური; მოთხოვნა შემდეგზე გადადის, როცა ყველა ხელმძღვანელი დაამტკიცებს.")
+
+    def action_approve(self, check_state=True):
+        """A head approving while other heads still have to: only his approval is noted."""
+        user = self.env.user
+        partial = self.env['hr.leave']
+        if check_state:
+            for leave in self.filtered(lambda l: l.state == 'confirm' and l.validation_type in ('manager', 'both')):
+                required = leave.sudo().with_context(sh_all_heads=True)._get_responsible_for_approval()
+                if user in required and required - leave.sudo().sh_head_approved_user_ids - user:
+                    partial |= leave
+        if partial:
+            act_type = self.env.ref('hr_holidays.mail_act_leave_approval')
+            for leave in partial.sudo():
+                leave.sh_head_approved_user_ids = [(4, user.id)]
+                leave.activity_ids.filtered(
+                    lambda a: a.user_id == user and a.activity_type_id == act_type).action_feedback()
+                waiting = leave.with_context(sh_all_heads=True)._get_responsible_for_approval() - leave.sh_head_approved_user_ids
+                leave.message_post(body=_("%(user)s დაამტკიცა. ელოდება: %(others)s",
+                                          user=user.name, others=", ".join(waiting.mapped('name'))))
+        rest = self - partial
+        if rest:
+            return super(HrLeave, rest).action_approve(check_state)
+        return True
+
+    def _compute_can_approve(self):
+        super()._compute_can_approve()
+        user = self.env.user
+        for leave in self.filtered(lambda l: l.state == 'confirm' and user in l.sudo().sh_head_approved_user_ids):
+            leave.can_approve = False
     def _sh_user_is_co_head(self):
         self.ensure_one()
         user = self.env.user
@@ -182,6 +216,9 @@ class HrLeave(models.Model):
                 else:
                     result |= user
             responsible = result
+            # heads who already approved have nothing more to do
+            if self.state == 'confirm' and not self.env.context.get('sh_all_heads'):
+                responsible -= self.sudo().sh_head_approved_user_ids
         return responsible
 
     @api.model
@@ -215,6 +252,7 @@ class HrLeave(models.Model):
                       ('state', '=', 'validate1')]
         elif user.has_group('hr_holidays.group_hr_holidays_responsible') or                 self.env['hr.employee'].sudo().search_count([('sh_head_user_ids', 'in', [user.id])]):
             domain = [('state', '=', 'confirm'), ('validation_type', '!=', 'hr'),
+                      ('sh_head_approved_user_ids', 'not in', [user.id]),
                       '|', ('employee_id.leave_manager_id', '=', user.id),
                       ('employee_id.sh_head_user_ids', 'in', [user.id]),
                       ('employee_id.user_id', '!=', user.id)]
@@ -259,6 +297,9 @@ class HrLeave(models.Model):
         return leaves
 
     def write(self, vals):
+        if vals.get('state') in ('confirm', 'refuse', 'cancel'):
+            # a request back at the start (or closed): the heads' approvals start over
+            vals = dict(vals, sh_head_approved_user_ids=[(5, 0, 0)])
         res = super().write(vals)
         if 'delegation_ids' in vals:
             self._drop_empty_delegations()
