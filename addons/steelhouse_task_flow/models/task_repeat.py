@@ -115,6 +115,10 @@ class ProjectTask(models.Model):
         if self.date_deadline and start:
             vals['date_deadline'] = self.date_deadline + timedelta(days=(on_date - start).days)
         new = self.with_context(sh_flow_internal=True).copy(vals)
+        # sub-tasks of the new occurrence get its dates (work start and deadline)
+        if new.child_ids:
+            new.child_ids.with_context(sh_flow_internal=True).write({
+                'sh_work_start': new.sh_work_start, 'date_deadline': new.date_deadline})
         new.message_post(body=Markup(_("ავტომატურად შეიქმნა განმეორებით (%s).")) % self._get_html_link(),
                          message_type='notification', subtype_xmlid='mail.mt_note')
         return new
