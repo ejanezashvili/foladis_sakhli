@@ -1,0 +1,23 @@
+// Task card: sub-tasks / sequence buttons and the list that opens inside the card
+.o_sh_cl {
+    margin-top: 4px;
+    .o_sh_cl_btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .o_sh_cl_btn {
+        padding: 2px 8px; border: 1px solid #d9d4ec; border-radius: 8px; font-size: 0.78rem; line-height: 1.5;
+        color: #5b5093; background: #faf9ff;
+        &:hover { background: #efedf7; }
+        &.o_sh_cl_on { color: #fff; background: #6f63a6; border-color: #6f63a6; }
+    }
+    .o_sh_cl_list { margin-top: 6px; padding-top: 4px; border-top: 1px dashed #e3e1ea; }
+    .o_sh_cl_item {
+        display: flex; align-items: baseline; gap: 6px; padding: 2px 2px; border-radius: 5px;
+        font-size: 0.8rem; cursor: pointer;
+        &:hover { background: #f4f2f9; }
+        .o_sh_cl_n { flex: none; width: 14px; font-weight: 700; color: #6f63a6; }
+        .o_sh_cl_name { flex: 1 1 auto; min-width: 0; }
+        .o_sh_cl_st { flex: none; font-size: 0.72rem; color: #8b84a8; }
+        &.o_sh_cl_done .o_sh_cl_name { color: #8f8f8f; text-decoration: line-through; }
+        &.o_sh_cl_done .o_sh_cl_st { color: #2b9a4a; }
+    }
+    .o_sh_cl_more { padding: 2px; font-size: 0.75rem; color: #6f63a6; cursor: pointer; text-decoration: underline; }
+}

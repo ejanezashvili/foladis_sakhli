@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.TaskCardLists">
+        <div t-if="subTotal or stepTotal" class="o_sh_cl" t-on-click.stop="">
+            <div class="o_sh_cl_btns">
+                <button t-if="subTotal" type="button" t-att-class="'o_sh_cl_btn' + (state.open === 'subtasks' ? ' o_sh_cl_on' : '')"
+                        t-on-click.stop="() => this.toggle('subtasks')">
+                    <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="subDone"/>/<t t-esc="subTotal"/>
+                    <i t-att-class="'fa ms-1 ' + (state.open === 'subtasks' ? 'fa-caret-up' : 'fa-caret-down')"/>
+                </button>
+                <button t-if="stepTotal" type="button" t-att-class="'o_sh_cl_btn' + (state.open === 'steps' ? ' o_sh_cl_on' : '')"
+                        t-on-click.stop="() => this.toggle('steps')">
+                    <i class="fa fa-link me-1"/>თანმიმდევრობა <t t-esc="stepDone"/>/<t t-esc="stepTotal"/>
+                    <i t-att-class="'fa ms-1 ' + (state.open === 'steps' ? 'fa-caret-up' : 'fa-caret-down')"/>
+                </button>
+            </div>
+            <div t-if="state.open" class="o_sh_cl_list">
+                <div t-if="state.loading" class="text-muted small">იტვირთება...</div>
+                <t t-else="">
+                    <t t-foreach="state.items.slice(0, SHOW)" t-as="it" t-key="it.id">
+                        <div t-att-class="'o_sh_cl_item' + (it.done ? ' o_sh_cl_done' : '')" t-on-click.stop="() => this.openTask(it.id)">
+                            <span t-if="state.open === 'steps'" class="o_sh_cl_n" t-esc="it_index + 1"/>
+                            <span class="o_sh_cl_name" t-esc="it.name"/>
+                            <span class="o_sh_cl_st" t-esc="it.label"/>
+                        </div>
+                    </t>
+                    <div t-if="state.items.length &gt; SHOW" class="o_sh_cl_more" t-on-click.stop="() => this.openTask(props.record.resId)">
+                        ... კიდევ <t t-esc="state.items.length - SHOW"/> · სრულად გახსნა
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

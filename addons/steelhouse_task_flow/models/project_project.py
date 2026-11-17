@@ -80,6 +80,8 @@ class ProjectProject(models.Model):
         """Concrete project: its tasks are the ones whose "პროექტი" is this project;
         each task keeps the flow (stages) of its department (project_id)."""
         action = super().action_view_tasks()
+        # boards: only the main tasks; sequence steps are listed on their card (filter can be removed)
+        action['context'] = dict(action.get('context') or {}, search_default_sh_main_only=1)
         if self.sh_is_department:
             # a department also shows the tasks of its sub-departments
             tree = self._sh_dept_tree_ids()

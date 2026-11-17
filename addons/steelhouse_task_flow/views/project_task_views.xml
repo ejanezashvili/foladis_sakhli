@@ -240,9 +240,8 @@
                         <t t-if="record.state.raw_value === '04_waiting_normal'"> · <i class="fa fa-lock me-1" title="ელოდება წინა დავალებებს"/>ელოდება</t>
                     </div>
                     <div t-if="record.partner_id.raw_value" class="o_sh_card_sub"><i class="fa fa-user-o me-1" title="კლიენტი"/><field name="partner_id"/></div>
-                    <div t-if="record.subtask_count.raw_value" class="o_sh_card_sub" title="ქვედავალებები: დასრულებული / სულ">
-                        <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="record.closed_subtask_count.raw_value"/>/<t t-esc="record.subtask_count.raw_value"/>
-                    </div>
+                    <!-- sub-tasks / sequence: buttons, the list opens inside the card (static/src/card_lists) -->
+                    <widget name="sh_card_lists"/>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">
                         <span t-att-class="'o_sh_card_date' + (record.sh_is_overdue.raw_value ? ' text-danger fw-semibold o_sh_overdue_mark' : '')">
                             <i class="fa fa-flag-checkered me-1" title="ვადა"/>
@@ -295,6 +294,7 @@
             </xpath>
             <xpath expr="//search" position="inside">
                 <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[('sh_is_overdue', '=', True)]"/>
+                <filter name="sh_main_only" string="მხოლოდ მთავარი დავალებები" domain="[('sh_is_step', '=', False)]"/>
                 <filter name="sh_confidential" string="🔒 კონფიდენციალური" domain="[('sh_confidential', '=', True)]"/>
             </xpath>
         </field>
