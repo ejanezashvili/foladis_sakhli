@@ -2,6 +2,8 @@
 A task on "შემოწმებაზე" goes to its reviewers ("შემმოწმებლები"): confirm -> done, reject with a
 reason -> back to the assignee ("დაბრუნებული"). Same rules as the buttons on the task form.
 The reviewer is set automatically - the person who created the task; only admins change it."""
+from markupsafe import Markup
+
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
@@ -22,6 +24,27 @@ class ProjectTask(models.Model):
         for task in tasks.filtered(lambda t: not t.reviewer_ids and not t.is_template and t.project_id):
             task.sudo().with_context(sh_flow_internal=True, mail_notrack=True).reviewer_ids = [(4, self.env.uid)]
         return tasks
+
+    def write(self, vals):
+        entering = self.filtered(lambda t: t.stage_id.sh_kind != 'review') if vals.get('stage_id') else self.browse()
+        res = super().write(vals)
+        for task in entering.filtered(lambda t: t.stage_id.sh_kind == 'review' and not t.is_template):
+            task._sh_ap_notify()
+        return res
+
+    def _sh_ap_notify(self):
+        """The task went to review: its reviewers are told at once (inbox / mobile)."""
+        self.ensure_one()
+        users = (self.reviewer_ids or self.create_uid).filtered(lambda u: u.active and not u.share) - self.env.user
+        if not users:
+            return
+        body = Markup('<b>%s</b><br/>%s<br/><a href="/odoo/sh-approvals">%s</a>') % (
+            _("დასადასტურებელია: %s", self.display_name),
+            _("დავალება გადმოვიდა შემოწმებაზე. შემსრულებლები: %s", ', '.join(self.user_ids.mapped('name')) or '-'),
+            _("გახსენით „დასადასტურებელი“"))
+        self.sudo().with_context(mail_post_autofollow=False).message_post(
+            body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
+            message_type='comment', subtype_xmlid='mail.mt_comment')
 
     # ------------------------------------------------------------------ data
     def _sh_ap_item(self, since, now):

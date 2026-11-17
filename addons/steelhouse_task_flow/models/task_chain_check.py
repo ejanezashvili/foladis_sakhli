@@ -55,6 +55,8 @@ class ProjectTask(models.Model):
             task = Task.browse(node['id'])
             node['can_check'] = (node['status'] != 'cancelled'
                                  and not res.get('readonly') and task._sh_can_check(self))
+            # marked "შესრულებულია" by the assignee, waits for the reviewer
+            node['in_review'] = task.stage_id.sh_kind == 'review' and task.state not in CLOSED
             prev = task._sh_all_previous()
             node['prev_total'] = len(prev)
             node['prev_done'] = len(prev.filtered(lambda t: t.state in CLOSED))
@@ -104,18 +106,25 @@ class ProjectTask(models.Model):
         return res
 
     def sh_chain_toggle_done(self, task_id):
-        """The switch on a step card: done <-> back in progress (no reviewer step)."""
+        """The switch on a step card marks the step as performed ("შესრულებულია") from the assignee's
+        side: it goes to "შემოწმებაზე" and its reviewers confirm or reject it in the
+        "დასადასტურებელი" app. Switched off (performed or already confirmed) - back in progress."""
         task = self._sh_chain_member(task_id)
-        if not task.with_user(self.env.user)._sh_can_check(self):
+        user = self.env.user
+        if not task.with_user(user)._sh_can_check(self):
             raise UserError(_("ამ ნაბიჯის მონიშვნა შეუძლია მის შემსრულებელს, მთავარ პასუხისმგებელს ან ადმინისტრატორს."))
-        done = task.state != '1_done'
-        stage = task._sh_stage_of_kind('done' if done else 'in_progress')
+        if task.state == '1_done' or task.stage_id.sh_kind == 'review':
+            kind, icon, note = 'in_progress', '↺', _("თანმიმდევრობიდან ისევ გაიხსნა")
+        else:
+            kind, icon = 'review', '🔎'
+            note = _("თანმიმდევრობიდან მოინიშნა შესრულებულად - გადავიდა შემოწმებაზე (%s)",
+                     ', '.join((task.reviewer_ids or task.create_uid).mapped('name')))
+        stage = task._sh_stage_of_kind(kind)
         if not stage:
             raise UserError(_("ამ დეპარტამენტს არ აქვს შესაბამისი სტადია."))
-        task.with_context(sh_flow_internal=True, sh_final_given=True).write({
-            'stage_id': stage.id, 'state': '1_done' if done else '01_in_progress'})
+        task.with_context(sh_flow_internal=True, sh_final_given=True).write(
+            {'stage_id': stage.id, 'state': '01_in_progress'})
         task.message_post(
-            body=Markup('%s <b>%s</b>') % ('✔' if done else '↺', _("თანმიმდევრობიდან მოინიშნა დასრულებულად")
-                                           if done else _("თანმიმდევრობიდან ისევ გაიხსნა")),
-            author_id=self.env.user.partner_id.id, message_type='notification', subtype_xmlid='mail.mt_note')
+            body=Markup('%s <b>%s</b>') % (icon, note),
+            author_id=user.partner_id.id, message_type='notification', subtype_xmlid='mail.mt_note')
         return True
