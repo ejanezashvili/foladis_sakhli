@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- "Timeline": tasks as bars up to their deadline (static/src/task_timeline). Access rules apply. -->
+    <!-- "Timeline": tasks as bars up to their deadline (static/src/task_timeline). Access rules apply.
+         It lives only in the "რეპორტინგი" app (no separate tab inside Projects). -->
     <record id="action_sh_task_timeline" model="ir.actions.client">
         <field name="name">Timeline და დატვირთვა</field>
         <field name="tag">sh_task_timeline</field>
         <field name="path">sh-timeline</field>
     </record>
 
-    <menuitem id="menu_sh_task_timeline" name="Timeline" parent="project.menu_main_pm"
-              action="action_sh_task_timeline" sequence="3"/>
     <!-- "რეპორტინგი" is its own app on the home screen (not a menu inside Projects): the standard
          reporting menu is lifted to the top level, so its children and access groups come along.
          It opens on its first child, "Timeline და დატვირთვა". -->
