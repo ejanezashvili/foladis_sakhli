@@ -197,7 +197,9 @@
 
                             <div class="mt-3 d-flex gap-2">
                                 <button class="btn btn-primary btn-sm" t-att-disabled="state.busy" t-on-click="saveForm"><t t-esc="f.mode === 'edit' ? 'შენახვა' : 'დამატება'"/></button>
-                                <button class="btn btn-secondary btn-sm" t-on-click="cancelForm">გაუქმება</button>
+                                <button t-if="f.mode === 'edit'" class="btn btn-outline-danger btn-sm" t-att-disabled="state.busy"
+                                        title="დავალების გაუქმება (მიზეზით)" t-on-click="() => this.cancelTask(f.node)">გაუქმება</button>
+                                <button t-else="" class="btn btn-secondary btn-sm" t-on-click="cancelForm">დახურვა</button>
                             </div>
                         </div>
                     </div>
