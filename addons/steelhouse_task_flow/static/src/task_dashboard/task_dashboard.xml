@@ -17,123 +17,145 @@
                     </div>
                 </div>
 
-                <!-- company week: project administrators only -->
-                <t t-if="state.cw and state.cw.allowed">
+                <!-- company week: project administrators only - numbers on top, then company (left) + personal (right) -->
+                <t t-set="cwOn" t-value="state.cw and state.cw.allowed"/>
+                <t t-if="cwOn">
                     <t t-set="cw" t-value="state.cw"/>
                     <t t-set="k" t-value="cw.kpi"/>
-                    <div class="o_sh_db_card o_sh_cw">
-                        <div class="o_sh_cw_head">
-                            <div>
-                                <div class="o_sh_db_title">🏢 კომპანიის კვირა</div>
-                                <div class="o_sh_db_date" t-esc="cw.label"/>
-                            </div>
-                            <div class="o_sh_cw_tools">
-                                <div t-if="!state.cwFolded" class="o_sh_cw_switch">
-                                    <button t-att-class="cw.offset === 0 ? 'active' : ''" t-on-click="() => this.setWeek(0)">ეს კვირა</button>
-                                    <button t-att-class="cw.offset === 1 ? 'active' : ''" t-on-click="() => this.setWeek(1)">გასული კვირა</button>
-                                </div>
-                                <button class="o_sh_cw_fold" t-on-click="toggleCw">
-                                    <t t-if="state.cwFolded">▸ გაშლა</t><t t-else="">▾ დაკეცვა</t>
-                                </button>
+                    <div class="o_sh_cw_top">
+                        <div class="o_sh_cw_titlecard">
+                            <div class="o_sh_cw_titleline"><i class="fa fa-building-o"/> კომპანიის კვირა</div>
+                            <div class="o_sh_db_date" t-esc="cw.label"/>
+                            <div class="o_sh_cw_switch">
+                                <button t-att-class="cw.offset === 0 ? 'active' : ''" t-on-click="() => this.setWeek(0)">ეს კვირა</button>
+                                <button t-att-class="cw.offset === 1 ? 'active' : ''" t-on-click="() => this.setWeek(1)">გასული კვირა</button>
                             </div>
                         </div>
-
-                        <t t-if="!state.cwFolded">
-                        <!-- 1. key numbers -->
-                        <div class="o_sh_cw_kpis">
-                            <div class="o_sh_cw_kpi">
-                                <span class="o_sh_cw_lbl">შემოვიდა</span>
-                                <b t-esc="k.created"/>
-                                <t t-set="a1" t-value="arrow(k.created_trend)"/>
-                                <small t-att-class="a1.cls"><t t-esc="a1.icon"/> წინა: <t t-esc="k.created_prev"/></small>
-                            </div>
-                            <div class="o_sh_cw_kpi o_sh_db_click" t-on-click="() => this.openIds(k.done_ids, 'დასრულდა')">
-                                <span class="o_sh_cw_lbl">დასრულდა</span>
-                                <b t-esc="k.done"/>
-                                <t t-set="a2" t-value="arrow(k.done_trend)"/>
-                                <small t-att-class="a2.cls"><t t-esc="a2.icon"/> წინა: <t t-esc="k.done_prev"/></small>
-                            </div>
-                            <div t-attf-class="o_sh_cw_kpi o_sh_cw_lvl_{{ k.level or 'none' }}">
-                                <span class="o_sh_cw_lbl">ვადების დაცვა</span>
-                                <b t-esc="pctText(k.pct)"/>
-                                <t t-set="a3" t-value="arrow(k.pct_trend)"/>
-                                <small t-att-class="a3.cls"><t t-esc="a3.icon"/> წინა: <t t-esc="pctText(k.pct_prev)"/></small>
-                            </div>
-                            <div class="o_sh_cw_kpi o_sh_db_click" t-att-class="k.overdue ? 'o_sh_cw_bad' : ''" t-on-click="() => this.openIds(k.overdue_ids, 'ვადაგადაცილებული')">
-                                <span class="o_sh_cw_lbl">ვადაგადაცილებული ახლა</span>
-                                <b t-esc="k.overdue"/>
-                            </div>
-                            <div class="o_sh_cw_kpi o_sh_db_click" t-on-click="() => this.openIds(k.on_hold_ids, 'შეჩერებული')">
-                                <span class="o_sh_cw_lbl">შეჩერებული ახლა</span>
-                                <b t-esc="k.on_hold"/>
-                            </div>
-                            <div class="o_sh_cw_kpi">
-                                <span class="o_sh_cw_lbl">დაბრუნებები</span>
-                                <b t-esc="k.returns"/>
-                                <t t-set="a4" t-value="arrow(k.returns_trend, false)"/>
-                                <small t-att-class="a4.cls"><t t-esc="a4.icon"/> წინა: <t t-esc="k.returns_prev"/></small>
-                            </div>
+                        <div class="o_sh_cw_kpi o_sh_cw_k_purple">
+                            <span class="o_sh_cw_lbl">შემოვიდა</span>
+                            <b t-esc="k.created"/>
+                            <t t-set="a1" t-value="arrow(k.created_trend)"/>
+                            <small t-att-class="a1.cls"><t t-esc="a1.icon"/> წინა: <t t-esc="k.created_prev"/></small>
                         </div>
-
-                        <div class="o_sh_cw_grid">
-                            <!-- 2. departments -->
-                            <div class="o_sh_cw_box o_sh_cw_wide">
-                                <div class="o_sh_cw_box_title">დეპარტამენტები</div>
-                                <table class="o_sh_cw_table">
-                                    <thead><tr><th>დეპარტამენტი</th><th>ღია</th><th>დასრულდა</th><th>ვადაგადაც.</th><th>ვადების დაცვა</th></tr></thead>
-                                    <tbody>
-                                        <t t-foreach="cwDepts" t-as="dp" t-key="dp.id">
-                                            <tr>
-                                                <td t-esc="dp.name"/>
-                                                <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.open_ids, dp.name)" t-esc="dp.open"/>
-                                                <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.done_ids, dp.name)" t-esc="dp.done"/>
-                                                <td class="o_sh_db_click" t-att-class="dp.overdue ? 'o_sh_cw_bad' : ''" t-on-click="() => this.openIds(dp.overdue_ids, dp.name)" t-esc="dp.overdue"/>
-                                                <td><span t-attf-class="o_sh_cw_pill o_sh_cw_lvl_{{ dp.level or 'none' }}" t-esc="pctText(dp.pct)"/></td>
-                                            </tr>
-                                        </t>
-                                    </tbody>
-                                </table>
-                                <button t-if="cw.departments.length > 8" class="o_sh_cw_more" t-on-click="() => this.state.cwAllDepts = !this.state.cwAllDepts">
-                                    <t t-if="state.cwAllDepts">ნაკლების ნახვა</t><t t-else="">ყველას ნახვა (<t t-esc="cw.departments.length"/>)</t>
-                                </button>
-                            </div>
-
-                            <!-- 3. needs attention -->
-                            <div class="o_sh_cw_box">
-                                <div class="o_sh_cw_box_title">ყურადღება მიაქციეთ <small t-if="cw.attention_total">(<t t-esc="cw.attention_total"/>)</small></div>
-                                <div t-if="!cw.attention.length" class="o_sh_cw_empty">ყველაფერი რიგზეა 👍</div>
-                                <t t-foreach="cw.attention" t-as="it" t-key="it.id">
-                                    <div class="o_sh_cw_item o_sh_db_click" t-on-click="() => this.openTask(it.id)">
-                                        <span t-attf-class="o_sh_cw_tag o_sh_cw_tag_{{ it.kind }}" t-esc="it.tag"/>
-                                        <div>
-                                            <div class="o_sh_cw_item_name"><t t-esc="it.number"/> <t t-esc="it.name"/></div>
-                                            <div class="o_sh_cw_item_note"><t t-esc="it.department"/> · <t t-esc="it.note"/></div>
-                                        </div>
-                                    </div>
-                                </t>
-                            </div>
-
-                            <!-- 4. deadlines of this week + 5. time off -->
-                            <div class="o_sh_cw_box">
-                                <div class="o_sh_cw_box_title o_sh_db_click" t-on-click="() => this.openIds(cw.due_ids, 'ამ კვირის ვადები')">ამ კვირის ვადები: <t t-esc="cw.due_total"/></div>
-                                <t t-foreach="cw.due_rows" t-as="r" t-key="r.name">
-                                    <div class="o_sh_cw_line o_sh_db_click" t-on-click="() => this.openIds(r.ids, r.name)"><span t-esc="r.name"/><b t-esc="r.count"/></div>
-                                </t>
-                                <div class="o_sh_cw_box_title mt-3">შვებულება</div>
-                                <div class="o_sh_cw_line"><span>დამტკიცებას ელოდება</span><b t-esc="cw.leave_pending"/></div>
-                                <div class="o_sh_cw_sub">ამ კვირაში: <t t-if="!cw.away_now.length">არავინ</t></div>
-                                <t t-foreach="cw.away_now" t-as="aw" t-key="aw_index">
-                                    <div class="o_sh_cw_away"><span t-esc="aw.name"/><small t-if="aw.head" class="o_sh_cw_head_tag">ხელმძღვ.</small><small t-esc="aw.dates"/></div>
-                                </t>
-                                <div class="o_sh_cw_sub">მომავალ კვირაში: <t t-if="!cw.away_next.length">არავინ</t></div>
-                                <t t-foreach="cw.away_next" t-as="an" t-key="an_index">
-                                    <div class="o_sh_cw_away"><span t-esc="an.name"/><small t-if="an.head" class="o_sh_cw_head_tag">ხელმძღვ.</small><small t-esc="an.dates"/></div>
-                                </t>
-                            </div>
+                        <div class="o_sh_cw_kpi o_sh_cw_k_green o_sh_db_click" t-on-click="() => this.openIds(k.done_ids, 'დასრულდა')">
+                            <span class="o_sh_cw_lbl">დასრულდა</span>
+                            <b t-esc="k.done"/>
+                            <t t-set="a2" t-value="arrow(k.done_trend)"/>
+                            <small t-att-class="a2.cls"><t t-esc="a2.icon"/> წინა: <t t-esc="k.done_prev"/></small>
                         </div>
-                        </t>
+                        <div t-attf-class="o_sh_cw_kpi o_sh_cw_k_green o_sh_cw_lvl_{{ k.level or 'none' }}">
+                            <span class="o_sh_cw_lbl">ვადების დაცვა</span>
+                            <b t-esc="pctText(k.pct)"/>
+                            <t t-set="a3" t-value="arrow(k.pct_trend)"/>
+                            <small t-att-class="a3.cls"><t t-esc="a3.icon"/> წინა: <t t-esc="pctText(k.pct_prev)"/></small>
+                        </div>
+                        <div class="o_sh_cw_kpi o_sh_cw_k_red o_sh_db_click" t-on-click="() => this.openIds(k.overdue_ids, 'ვადაგადაცილებული')">
+                            <span class="o_sh_cw_lbl">ვადაგადაცილებული ახლა</span>
+                            <b t-att-class="k.overdue ? 'o_sh_cw_redtxt' : ''" t-esc="k.overdue"/>
+                        </div>
+                        <div class="o_sh_cw_kpi o_sh_cw_k_yellow o_sh_db_click" t-on-click="() => this.openIds(k.on_hold_ids, 'შეჩერებული')">
+                            <span class="o_sh_cw_lbl">შეჩერებული ახლა</span>
+                            <b t-esc="k.on_hold"/>
+                        </div>
+                        <div class="o_sh_cw_kpi o_sh_cw_k_red">
+                            <span class="o_sh_cw_lbl">დაბრუნებები</span>
+                            <b t-esc="k.returns"/>
+                            <t t-set="a4" t-value="arrow(k.returns_trend, false)"/>
+                            <small t-att-class="a4.cls"><t t-esc="a4.icon"/> წინა: <t t-esc="k.returns_prev"/></small>
+                        </div>
                     </div>
                 </t>
+
+                <div t-att-class="cwOn ? 'o_sh_cw_layout' : ''">
+                <t t-if="cwOn">
+                    <div class="o_sh_cw_main">
+                        <!-- departments -->
+                        <div class="o_sh_db_card o_sh_cw_box o_sh_cw_depts">
+                            <div class="o_sh_db_head">
+                                <div class="o_sh_db_title">დეპარტამენტები</div>
+                                <a t-if="cw.departments.length > 8" href="#" class="o_sh_db_link" t-on-click.prevent="() => this.state.cwAllDepts = !this.state.cwAllDepts">
+                                    <t t-if="state.cwAllDepts">ნაკლები</t><t t-else="">ყველა</t> <i class="fa fa-chevron-right"/>
+                                </a>
+                            </div>
+                            <table class="o_sh_cw_table">
+                                <thead><tr><th>დეპარტამენტი</th><th/><th>ღია</th><th>დასრულდა</th><th>ვადაგადაც.</th><th>ვადების დაცვა</th></tr></thead>
+                                <tbody>
+                                    <t t-foreach="cwDepts" t-as="dp" t-key="dp.id">
+                                        <tr>
+                                            <td class="o_sh_cw_dname" t-att-title="dp.name" t-esc="dp.name"/>
+                                            <td class="o_sh_cw_barcell"><div class="o_sh_cw_bar"><div t-att-style="'width:' + barPct(dp.open, cwMaxOpen) + '%'"/></div></td>
+                                            <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.open_ids, dp.name)"><b t-esc="dp.open"/></td>
+                                            <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.done_ids, dp.name)" t-esc="dp.done"/>
+                                            <td class="o_sh_db_click" t-att-class="dp.overdue ? 'o_sh_cw_redtxt' : 'o_sh_cw_mutedtxt'" t-on-click="() => this.openIds(dp.overdue_ids, dp.name)" t-esc="dp.overdue"/>
+                                            <td><span t-attf-class="o_sh_cw_pill o_sh_cw_lvl_{{ dp.level or 'none' }}" t-esc="pctText(dp.pct)"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- needs attention -->
+                        <div class="o_sh_db_card o_sh_cw_box o_sh_cw_attn">
+                            <div class="o_sh_db_head">
+                                <div class="o_sh_db_title">ყურადღება მიაქციეთ <span t-if="cw.attention_total" class="o_sh_db_badge" t-esc="cw.attention_total"/></div>
+                                <a t-if="cw.attention_total" href="#" class="o_sh_db_link" t-on-click.prevent="() => this.openIds(cw.attention_ids, 'ყურადღება მიაქციეთ')">ყველა <i class="fa fa-chevron-right"/></a>
+                            </div>
+                            <div t-if="!cw.attention.length" class="o_sh_db_empty">ყველაფერი რიგზეა 👍</div>
+                            <t t-foreach="cw.attention" t-as="it" t-key="it.id">
+                                <div t-attf-class="o_sh_cw_item o_sh_cw_item_{{ it.kind }} o_sh_db_click" t-on-click="() => this.openTask(it.id)">
+                                    <span t-attf-class="o_sh_cw_tag o_sh_cw_tag_{{ it.kind }}" t-esc="it.tag"/>
+                                    <div class="o_sh_cw_item_body">
+                                        <div class="o_sh_cw_item_name"><span class="o_sh_cw_num" t-esc="it.number"/> <t t-esc="it.name"/></div>
+                                        <div class="o_sh_cw_item_note"><t t-esc="it.department"/> · <span t-attf-class="o_sh_cw_note_{{ it.kind }}" t-esc="it.note"/></div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- this week's deadlines -->
+                        <div class="o_sh_db_card o_sh_cw_box o_sh_cw_due">
+                            <div class="o_sh_db_head o_sh_db_click" t-on-click="() => this.openIds(cw.due_ids, 'ამ კვირის ვადები')">
+                                <div class="o_sh_db_title">ამ კვირის ვადები</div>
+                                <span class="o_sh_cw_bignum" t-esc="cw.due_total"/>
+                            </div>
+                            <t t-foreach="cw.due_rows" t-as="r" t-key="r.name">
+                                <div class="o_sh_cw_dueline o_sh_db_click" t-on-click="() => this.openIds(r.ids, r.name)">
+                                    <span class="o_sh_cw_dname" t-att-title="r.name" t-esc="r.name"/>
+                                    <div class="o_sh_cw_bar o_sh_cw_bar_orange"><div t-att-style="'width:' + barPct(r.count, cwMaxDue) + '%'"/></div>
+                                    <b t-esc="r.count"/>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- time off -->
+                        <div class="o_sh_db_card o_sh_cw_box o_sh_cw_leave">
+                            <div class="o_sh_db_title mb-2">შვებულება</div>
+                            <div class="o_sh_cw_pending">
+                                <span>დამტკიცებას ელოდება</span>
+                                <b t-esc="cw.leave_pending"/>
+                            </div>
+                            <div class="o_sh_cw_sub">ამ კვირაში: <b t-if="!cw.away_now.length">არავინ</b></div>
+                            <t t-foreach="cw.away_now" t-as="aw" t-key="aw_index">
+                                <div class="o_sh_cw_away">
+                                    <span class="o_sh_cw_avatar" t-esc="aw.name.slice(0, 1)"/>
+                                    <span t-esc="aw.name"/>
+                                    <small t-if="aw.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
+                                    <small class="o_sh_cw_dates" t-esc="aw.dates"/>
+                                </div>
+                            </t>
+                            <div class="o_sh_cw_sub">მომავალ კვირაში: <b t-if="!cw.away_next.length">არავინ</b></div>
+                            <t t-foreach="cw.away_next" t-as="an" t-key="an_index">
+                                <div class="o_sh_cw_away">
+                                    <span class="o_sh_cw_avatar" t-esc="an.name.slice(0, 1)"/>
+                                    <span t-esc="an.name"/>
+                                    <small t-if="an.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
+                                    <small class="o_sh_cw_dates" t-esc="an.dates"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </t>
+                <div class="o_sh_db_personal">
 
                 <!-- row 1 -->
                 <div class="o_sh_db_row o_sh_db_row1">
@@ -286,6 +308,8 @@
                         </div>
                     </t>
                 </div>
+                </div><!-- /personal -->
+                </div><!-- /layout -->
             </t>
         </div>
     </t>

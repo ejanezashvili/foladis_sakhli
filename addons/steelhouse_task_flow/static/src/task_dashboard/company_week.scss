@@ -1,212 +1,339 @@
-// "კომპანიის კვირა" - company weekly summary on top of "მთავარი" (project administrators only)
-.o_sh_db .o_sh_cw {
-    margin-bottom: 20px;
-    padding: 18px 20px;
+// "კომპანიის კვირა" on "მთავარი" (project administrators only):
+// numbers across the top, then company boxes on the left and the personal dashboard on the right.
+$cw-ink: #1f1d2b;
+$cw-muted: #7a7790;
+$cw-line: #eeebf6;
+$cw-purple: #6b4fd8;
+$cw-green: #1f8a57;
+$cw-red: #d64550;
+$cw-yellow: #e0a12f;
+$cw-orange: #f08a3c;
 
-    .o_sh_cw_head {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        margin-bottom: 14px;
-    }
-    .o_sh_cw_tools {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-    .o_sh_cw_fold,
-    .o_sh_cw_more {
-        padding: 5px 12px;
-        border: 1px solid #ece8f6;
-        border-radius: 10px;
-        font-weight: 600;
-        color: #6b4fd8;
+.o_sh_db {
+    // ---------- numbers row
+    .o_sh_cw_top {
+        display: grid;
+        grid-template-columns: minmax(220px, 1.3fr) repeat(6, minmax(120px, 1fr));
+        gap: 12px;
+        margin-bottom: 18px;
+        padding: 14px;
+        border-radius: 22px;
         background: #fff;
+        box-shadow: 0 6px 24px rgba(60, 40, 120, 0.06);
+
+        @media (max-width: 1400px) {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        }
     }
-    .o_sh_cw_more {
-        margin-top: 8px;
-        width: 100%;
+    .o_sh_cw_titlecard {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        justify-content: center;
+    }
+    .o_sh_cw_titleline {
+        font-size: 1.05rem;
+        font-weight: 700;
+
+        .fa {
+            margin-right: 6px;
+            color: $cw-purple;
+        }
     }
     .o_sh_cw_switch {
         display: inline-flex;
+        align-self: flex-start;
         gap: 4px;
-        padding: 4px;
-        border-radius: 12px;
+        margin-top: 6px;
+        padding: 3px;
+        border-radius: 10px;
         background: #f1eef8;
 
         button {
-            padding: 5px 14px;
+            padding: 4px 12px;
             border: 0;
-            border-radius: 9px;
+            border-radius: 8px;
+            font-size: 12px;
             font-weight: 600;
-            color: #7a7790;
+            color: $cw-muted;
             background: none;
 
             &.active {
-                color: #6b4fd8;
+                color: $cw-purple;
                 background: #fff;
                 box-shadow: 0 1px 4px rgba(40, 20, 80, 0.12);
             }
         }
     }
-
-    // key numbers
-    .o_sh_cw_kpis {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 10px;
-        margin-bottom: 16px;
-    }
     .o_sh_cw_kpi {
         display: flex;
         flex-direction: column;
         gap: 2px;
-        padding: 12px 14px;
+        padding: 10px 14px;
+        border-left: 4px solid $cw-line;
         border-radius: 14px;
-        background: #f7f5fd;
+        background: #faf9fd;
 
         b {
-            font-size: 1.6rem;
-            line-height: 1.2;
+            font-size: 1.75rem;
+            line-height: 1.15;
+            color: $cw-ink;
         }
         small {
-            color: #7a7790;
+            font-size: 11px;
+            color: $cw-muted;
         }
     }
+    .o_sh_cw_k_purple { border-left-color: $cw-purple; }
+    .o_sh_cw_k_green { border-left-color: $cw-green; }
+    .o_sh_cw_k_red { border-left-color: $cw-red; }
+    .o_sh_cw_k_yellow { border-left-color: $cw-yellow; }
+    .o_sh_cw_kpi.o_sh_cw_lvl_good { background: #e8f7ee; b { color: $cw-green; } }
+    .o_sh_cw_kpi.o_sh_cw_lvl_mid { background: #fff4e0; b { color: #b26a00; } }
+    .o_sh_cw_kpi.o_sh_cw_lvl_bad { background: #fdecec; b { color: $cw-red; } }
     .o_sh_cw_lbl {
         font-size: 12px;
-        color: #7a7790;
+        color: $cw-muted;
     }
-    .o_sh_cw_up {
-        color: #1f8a57 !important;
-    }
-    .o_sh_cw_down {
-        color: #d64550 !important;
-    }
-    .o_sh_cw_bad {
-        color: #d64550;
+    .o_sh_cw_up { color: $cw-green !important; }
+    .o_sh_cw_down { color: $cw-red !important; }
+    .o_sh_cw_redtxt { color: $cw-red !important; font-weight: 700; }
+    .o_sh_cw_mutedtxt { color: #c5c1d3; }
 
-        b {
-            color: #d64550;
-        }
-    }
-    .o_sh_cw_lvl_good b, .o_sh_cw_pill.o_sh_cw_lvl_good { color: #1f8a57; }
-    .o_sh_cw_lvl_mid b, .o_sh_cw_pill.o_sh_cw_lvl_mid { color: #b26a00; }
-    .o_sh_cw_lvl_bad b, .o_sh_cw_pill.o_sh_cw_lvl_bad { color: #d64550; }
-    .o_sh_cw_kpi.o_sh_cw_lvl_good { background: #e8f7ee; }
-    .o_sh_cw_kpi.o_sh_cw_lvl_mid { background: #fff4e0; }
-    .o_sh_cw_kpi.o_sh_cw_lvl_bad { background: #fdecec; }
-
-    // three boxes: departments (wide), attention, deadlines + time off
-    .o_sh_cw_grid {
+    // ---------- company (left, 2 columns) + personal (right)
+    .o_sh_cw_layout {
         display: grid;
-        grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr) minmax(0, 1fr);
-        gap: 14px;
+        grid-template-columns: minmax(0, 2fr) minmax(360px, 1fr);
+        gap: 18px;
+        align-items: start;
 
-        @media (max-width: 1200px) {
+        @media (max-width: 1400px) {
             grid-template-columns: minmax(0, 1fr);
         }
     }
+    .o_sh_cw_main {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "depts attn"
+            "bottom attn";
+        gap: 18px;
+        align-items: start;
+
+        @media (max-width: 1000px) {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-areas: "depts" "attn" "bottom";
+        }
+    }
+    .o_sh_cw_depts { grid-area: depts; }
+    .o_sh_cw_attn { grid-area: attn; }
+    .o_sh_cw_due, .o_sh_cw_leave { min-width: 0; }
+    .o_sh_cw_main {
+        // deadlines + time off side by side under the departments
+        .o_sh_cw_due { grid-area: bottom; width: calc(50% - 9px); }
+        .o_sh_cw_leave { grid-area: bottom; width: calc(50% - 9px); justify-self: end; }
+    }
     .o_sh_cw_box {
         min-width: 0;
-        padding: 12px 14px;
-        border: 1px solid #ece8f6;
-        border-radius: 14px;
-        background: #fff;
+        margin: 0;
     }
-    .o_sh_cw_box_title {
-        margin-bottom: 8px;
-        font-weight: 700;
+
+    // personal dashboard in the narrow right column: compact rows
+    .o_sh_cw_layout .o_sh_db_personal {
+        .o_sh_db_row1 {
+            grid-template-columns: 1fr 1fr;
+
+            > .o_sh_db_overall {
+                grid-column: 1 / -1;
+            }
+        }
+        .o_sh_db_row2 {
+            grid-template-columns: 1fr 1fr;
+        }
+        .o_sh_db_tasks {
+            grid-template-columns: 1fr;
+        }
+        .o_sh_db_projects {
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
     }
+
+    // ---------- departments table
     .o_sh_cw_table {
         width: 100%;
         font-size: 13px;
 
         th {
-            padding: 4px 6px;
+            padding: 4px 6px 8px;
+            font-size: 11px;
             font-weight: 500;
-            color: #7a7790;
+            color: $cw-muted;
             text-align: right;
+            white-space: nowrap;
         }
         td {
-            padding: 6px;
-            border-top: 1px solid #f1eef8;
+            padding: 8px 6px;
+            border-top: 1px solid $cw-line;
             text-align: right;
+            white-space: nowrap;
         }
         th:first-child, td:first-child {
             text-align: left;
         }
     }
+    .o_sh_cw_dname {
+        max-width: 230px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: 600;
+    }
+    .o_sh_cw_barcell {
+        width: 22%;
+    }
+    .o_sh_cw_bar {
+        height: 6px;
+        border-radius: 999px;
+        background: #f1eef8;
+
+        > div {
+            height: 100%;
+            border-radius: 999px;
+            background: $cw-purple;
+        }
+        &.o_sh_cw_bar_orange > div {
+            background: $cw-orange;
+        }
+    }
     .o_sh_cw_pill {
         display: inline-block;
-        min-width: 44px;
+        min-width: 46px;
         padding: 1px 8px;
         border-radius: 999px;
+        font-size: 12px;
         font-weight: 700;
         text-align: center;
-        background: #f1eef8;
+        color: #b4afc4;
+        background: #f3f1f8;
+
+        &.o_sh_cw_lvl_good { color: $cw-green; background: #e8f7ee; }
+        &.o_sh_cw_lvl_mid { color: #b26a00; background: #fff4e0; }
+        &.o_sh_cw_lvl_bad { color: $cw-red; background: #fdecec; }
     }
+
+    // ---------- needs attention
     .o_sh_cw_item {
         display: flex;
         align-items: flex-start;
-        gap: 8px;
-        padding: 7px 0;
-        border-top: 1px solid #f1eef8;
+        gap: 10px;
+        margin-bottom: 8px;
+        padding: 9px 12px;
+        border: 1px solid $cw-line;
+        border-radius: 12px;
+        background: #fff;
+
+        &.o_sh_cw_item_late { border-color: #f6d6da; background: #fffafa; }
+        &.o_sh_cw_item_hold { border-color: #f5e3c2; background: #fffcf6; }
+        &.o_sh_cw_item_review { border-color: #d6e3fb; background: #f9fbff; }
+    }
+    .o_sh_cw_item_body {
+        min-width: 0;
     }
     .o_sh_cw_item_name {
-        font-weight: 600;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-size: 13px;
+        font-weight: 600;
+    }
+    .o_sh_cw_num {
+        color: $cw-muted;
+        font-weight: 700;
     }
     .o_sh_cw_item_note {
         font-size: 12px;
-        color: #7a7790;
+        color: $cw-muted;
     }
+    .o_sh_cw_note_late { color: $cw-red; font-weight: 600; }
+    .o_sh_cw_note_hold { color: #b26a00; font-weight: 600; }
+    .o_sh_cw_note_review { color: #2f6fd6; font-weight: 600; }
     .o_sh_cw_tag {
         flex: 0 0 auto;
         padding: 1px 8px;
         border-radius: 999px;
         font-size: 11px;
-        font-weight: 600;
+        font-weight: 700;
         white-space: nowrap;
     }
-    .o_sh_cw_tag_late { color: #d64550; background: #fdecec; }
+    .o_sh_cw_tag_late { color: $cw-red; background: #fdecec; }
     .o_sh_cw_tag_hold { color: #b26a00; background: #fff4e0; }
     .o_sh_cw_tag_review { color: #2f6fd6; background: #e8f0fe; }
-    .o_sh_cw_tag_return { color: #6b4fd8; background: #f1eef8; }
-    .o_sh_cw_empty {
-        color: #7a7790;
+    .o_sh_cw_tag_return { color: $cw-purple; background: #f1eef8; }
+
+    // ---------- deadlines + time off
+    .o_sh_cw_bignum {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: $cw-purple;
     }
-    .o_sh_cw_line {
+    .o_sh_cw_dueline {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 70px 30px;
+        align-items: center;
+        gap: 8px;
+        padding: 5px 0;
+        font-size: 12.5px;
+
+        .o_sh_cw_dname {
+            font-weight: 500;
+        }
+        b {
+            text-align: right;
+        }
+    }
+    .o_sh_cw_pending {
         display: flex;
         justify-content: space-between;
-        gap: 8px;
-        padding: 4px 0;
-        font-size: 13px;
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #8a5a00;
+        background: #fff4e0;
     }
     .o_sh_cw_sub {
-        margin-top: 8px;
+        margin-top: 10px;
         font-size: 12px;
-        color: #7a7790;
+        color: $cw-muted;
     }
     .o_sh_cw_away {
         display: flex;
         align-items: center;
         gap: 6px;
-        padding: 2px 0;
+        padding: 4px 0;
         font-size: 13px;
-
-        small:last-child {
-            margin-left: auto;
-            color: #7a7790;
-        }
+        font-weight: 600;
+    }
+    .o_sh_cw_avatar {
+        width: 22px;
+        height: 22px;
+        border-radius: 7px;
+        font-size: 11px;
+        line-height: 22px;
+        text-align: center;
+        color: #fff;
+        background: #b04fa8;
+    }
+    .o_sh_cw_dates {
+        margin-left: auto;
+        font-weight: 400;
+        color: $cw-muted;
     }
     .o_sh_cw_head_tag {
         padding: 0 6px;
         border-radius: 999px;
         font-size: 10px;
-        color: #6b4fd8;
+        font-weight: 600;
+        color: $cw-purple;
         background: #f1eef8;
     }
 }

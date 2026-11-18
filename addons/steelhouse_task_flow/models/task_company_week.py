@@ -163,6 +163,7 @@ class ProjectTask(models.Model):
             'departments': dept_rows,
             'attention': attention[:ATTENTION],
             'attention_total': len(attention),
+            'attention_ids': [a['id'] for a in attention],
             'due_total': len(due), 'due_ids': due.ids, 'due_rows': due_rows[:6],
             'away_now': away(c_start, c_end),
             'away_next': away(c_end + timedelta(days=1), c_end + timedelta(days=7)),

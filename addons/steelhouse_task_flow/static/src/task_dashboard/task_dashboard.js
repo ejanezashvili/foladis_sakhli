@@ -50,6 +50,15 @@ export class TaskDashboard extends Component {
         const rows = (this.state.cw && this.state.cw.departments) || [];
         return this.state.cwAllDepts ? rows : rows.slice(0, 8);
     }
+    get cwMaxOpen() {
+        return Math.max(1, ...((this.state.cw && this.state.cw.departments) || []).map((d) => d.open));
+    }
+    get cwMaxDue() {
+        return Math.max(1, ...((this.state.cw && this.state.cw.due_rows) || []).map((r) => r.count));
+    }
+    barPct(value, max) {
+        return value ? Math.max(4, Math.round((100 * value) / max)) : 0;
+    }
 
     async load() {
         const [d, cw] = await Promise.all([
