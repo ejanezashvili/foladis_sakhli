@@ -28,6 +28,10 @@ export class TaskCardLists extends Component {
         return this.data.closed_subtask_count || 0;
     }
     get stepTotal() {
+        // a step's own card shows the step badge instead (models/task_card_lists.py)
+        if (this.data.sh_is_step) {
+            return 0;
+        }
         return this.data.sh_step_total || 0;
     }
     get stepDone() {
@@ -62,5 +66,6 @@ registry.category("view_widgets").add("sh_card_lists", {
         { name: "closed_subtask_count", type: "integer" },
         { name: "sh_step_total", type: "integer" },
         { name: "sh_step_done", type: "integer" },
+        { name: "sh_is_step", type: "boolean" },
     ],
 });

@@ -8,7 +8,8 @@
             'my_tasks': 1,
             'default_user_ids': [(4, uid)],
         }</field>
-        <field name="domain">[('user_ids', 'in', uid), ('has_template_ancestor', '=', False), ('has_project_template', '=', False), ('sh_is_step', '=', False)]</field>
+        <!-- "ჩემი დავალებები": my own sequence steps are shown too (with the step badge) -->
+        <field name="domain">[('user_ids', 'in', uid), ('has_template_ancestor', '=', False), ('has_project_template', '=', False)]</field>
     </record>
     <record id="project.action_view_all_task" model="ir.actions.act_window">
         <field name="context">{'search_default_open_tasks': 1, 'default_user_ids': [(4, uid)]}</field>

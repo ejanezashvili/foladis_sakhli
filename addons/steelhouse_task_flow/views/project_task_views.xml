@@ -18,7 +18,9 @@
                         <i class="fa fa-lock me-1"/>ხედავენ მხოლოდ ადმინისტრატორები, მთავარი პასუხისმგებელი, შემსრულებლები, შემმოწმებლები, შემქმნელი და „დამატებით ხედავენ“
                     </span>
                 </div>
-                <div class="d-flex align-items-center gap-2 mb-3 o_sh_conf_viewers" invisible="not sh_confidential or is_template">
+                <!-- non-administrators see the extra viewers only when there are some -->
+                <div class="d-flex align-items-center gap-2 mb-3 o_sh_conf_viewers"
+                     invisible="not sh_confidential or is_template or (not sh_is_admin and not sh_confidential_viewer_ids)">
                     <label for="sh_confidential_viewer_ids" string="დამატებით ხედავენ" class="mb-0 text-nowrap"/>
                     <field name="sh_confidential_viewer_ids" widget="many2many_avatar_user" nolabel="1" options="{'no_create': True}"
                            readonly="not sh_can_confidential" class="flex-grow-1"/>
