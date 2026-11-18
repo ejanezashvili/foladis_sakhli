@@ -10,7 +10,7 @@
                 <field name="active" invisible="1"/>
                 <field name="allocated_hours" invisible="1"/>
                 <div class="mb-2" invisible="not sh_number"><span class="o_sh_num_pill">№ <field name="sh_number" class="d-inline"/></span></div>
-                <div class="d-flex align-items-center gap-2 mb-2" invisible="is_template">
+                <div class="d-flex align-items-center gap-2 mb-2" invisible="is_template" groups="project.group_project_manager">
                     <field name="sh_can_confidential" invisible="1"/>
                     <field name="sh_confidential" widget="boolean_toggle" nolabel="1" readonly="not sh_can_confidential"/>
                     <label for="sh_confidential" string="🔒 კონფიდენციალური" class="mb-0"/>
