@@ -212,7 +212,7 @@
             <!-- Card in the "pill" style: status pill + number, title, department line, assignees,
                  deadline + priority, footer with comments / files / sub-tasks / activities / state -->
             <xpath expr="//t[@t-name='card']/main" position="replace">
-                <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '')">
+                <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '') + (record.sh_step_badge.raw_value === 'wait' ? ' o_sh_card_waitstep' : '')">
                     <field name="sh_kind" invisible="1"/>
                     <field name="priority" invisible="1"/>
                     <field name="sh_deadline_str" invisible="1"/>
@@ -246,6 +246,17 @@
                         <t t-if="record.state.raw_value === '04_waiting_normal'"> · <i class="fa fa-lock me-1" title="ელოდება წინა დავალებებს"/>ელოდება</t>
                     </div>
                     <div t-if="record.partner_id.raw_value" class="o_sh_card_sub"><i class="fa fa-user-o me-1" title="კლიენტი"/><field name="partner_id"/></div>
+                    <!-- a sequence step shown to its performer: its place in the sequence and what it waits for -->
+                    <field name="sh_step_badge" invisible="1"/>
+                    <field name="sh_step_pos" invisible="1"/>
+                    <field name="sh_step_info" invisible="1"/>
+                    <div t-if="record.sh_step_badge.raw_value" t-att-class="'o_sh_step_badge o_sh_step_' + record.sh_step_badge.raw_value">
+                        <div class="o_sh_step_head">
+                            <i class="fa fa-link me-1"/>ნაბიჯი <t t-esc="record.sh_step_pos.raw_value"/> -
+                            <t t-esc="record.sh_step_badge.value"/>
+                        </div>
+                        <div class="o_sh_step_line" t-esc="record.sh_step_info.raw_value"/>
+                    </div>
                     <!-- sub-tasks / sequence: buttons, the list opens inside the card (static/src/card_lists) -->
                     <widget name="sh_card_lists"/>
                     <footer t-if="!selection_mode" class="o_sh_card_foot">

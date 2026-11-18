@@ -170,3 +170,17 @@
 .o_control_panel .o_sh_btn_repeat { color: #5b5093 !important; background: #efedf7 !important; border-color: #cfc8ea !important; }
 .o_control_panel .o_sh_btn_conf { color: #a61e4d !important; background: #fdeef3 !important; border-color: #f3c2d2 !important; }
 .o_control_panel .o_sh_btn_repeat, .o_control_panel .o_sh_btn_conf { padding: 2px 8px !important; font-size: 0.8rem !important; white-space: nowrap; }
+
+// sequence step on its performer's board: place in the sequence and what it waits for
+.o_sh_step_badge {
+    margin: 6px 0 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    line-height: 1.35;
+    .o_sh_step_head { font-weight: 600; margin-bottom: 2px; }
+    .o_sh_step_line { color: #4a4858; white-space: pre-line; }
+    &.o_sh_step_wait { background: #fff4e0; .o_sh_step_head { color: #b7791f; } }
+    &.o_sh_step_turn { background: #e6f6ec; .o_sh_step_head { color: #2f855a; } }
+}
+.o_sh_card_waitstep { opacity: 0.8; }
