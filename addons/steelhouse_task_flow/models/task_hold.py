@@ -13,6 +13,8 @@ from odoo import api, fields, models, _
 from odoo.exceptions import UserError
 
 CLOSED = ('1_done', '1_canceled')
+# leaving "შეჩერებული" for one of these stages = resume -> "ახალი"
+RESUME_KINDS = ('new', 'accepted', 'in_progress', 'review', 'done')
 
 
 class ProjectTask(models.Model):
@@ -83,6 +85,13 @@ class ProjectTask(models.Model):
             author_id=user.partner_id.id, message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
+    def sh_chain_toggle_done(self, task_id):
+        """The switch on a step card does not skip "განახლება": a held step is resumed first."""
+        task = self._sh_chain_member(task_id)
+        if task._sh_is_held():
+            raise UserError(_("„%s“ შეჩერებულია - ჯერ განაახლეთ (დაბრუნდება „ახალში“).", task.name))
+        return super().sh_chain_toggle_done(task_id)
+
     # ------------------------------------------------------------------ hold: tell the next task
     def _sh_apply_reason(self, kind, reason, resume_date=False):
         res = super()._sh_apply_reason(kind, reason, resume_date=resume_date)
@@ -114,7 +123,8 @@ class ProjectTask(models.Model):
                 or self.env.context.get('sh_resume_new')):
             return super().write(vals)
         kind = self.env['project.task.type'].browse(vals['stage_id']).sh_kind
-        resumed = self.filtered(lambda t: t.stage_id.sh_kind == 'on_hold') if kind and kind != 'on_hold' else self.browse()
+        # cancelling / returning a held task keeps its own way; any working stage means "resume"
+        resumed = self.filtered(lambda t: t.stage_id.sh_kind == 'on_hold') if kind in RESUME_KINDS else self.browse()
         if not resumed:
             return super().write(vals)
         res = True
