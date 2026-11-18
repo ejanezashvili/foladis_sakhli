@@ -35,7 +35,7 @@ class ProjectTask(models.Model):
         pct = round(100 * on / (on + late)) if on + late else None
         returns = self.env['sh.task.flow.event'].sudo().search_count(
             [('kind', '=', 'return'), ('date', '>=', start), ('date', '<', stop),
-             ('task_id.is_template', '=', False)])
+             ('task_id.is_template', '=', False), ('task_id.sh_is_step', '=', False)])
         return {'created': created, 'done': len(done), 'done_ids': done.ids, 'ontime': on, 'late': late,
                 'pct': pct, 'level': _level(pct), 'returns': returns, 'split': split}
 
@@ -49,8 +49,9 @@ class ProjectTask(models.Model):
         w_end = w_start + timedelta(days=6)
         start, stop = _utc(w_start), _utc(w_end + timedelta(days=1))
         Task = self.sudo()
-        base = [('is_template', '=', False), ('project_id', '!=', False)]
-        cur = self._sh_cw_counts(Task, base, start, stop)
+        # main tasks only (sequence steps are shown inside their task), the same in every box
+        base = [('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False)]
+        cur =self._sh_cw_counts(Task, base, start, stop)
         prev = self._sh_cw_counts(Task, base, _utc(w_start - timedelta(days=7)), start)
         open_tasks = Task.search(base + [('state', 'not in', CLOSED)])
         overdue = open_tasks.filtered('sh_is_overdue')
