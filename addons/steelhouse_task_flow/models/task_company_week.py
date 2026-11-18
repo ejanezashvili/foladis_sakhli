@@ -127,7 +127,9 @@ class ProjectTask(models.Model):
         # ---- deadlines of this week (always the current week)
         c_start = today - timedelta(days=today.weekday())
         c_end = c_start + timedelta(days=6)
-        due = open_tasks.filtered(lambda t: t.date_deadline and c_start <= day(t.date_deadline) <= c_end)
+        # main tasks only: sequence steps are shown inside their task
+        due = open_tasks.filtered(lambda t: t.date_deadline and not t.sh_is_step
+                                  and c_start <= day(t.date_deadline) <= c_end)
         due_by = {}
         for t in due:
             due_by.setdefault(t.project_id.name or '', []).append(t.id)
