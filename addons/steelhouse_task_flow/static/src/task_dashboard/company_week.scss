@@ -221,6 +221,12 @@ $cw-orange: #f08a3c;
         &.o_sh_cw_lvl_bad { color: $cw-red; background: #fdecec; }
     }
 
+    .o_sh_cw_frac {
+        margin-right: 6px;
+        font-size: 11px;
+        color: $cw-muted;
+    }
+
     // ---------- needs attention
     .o_sh_cw_item {
         display: flex;

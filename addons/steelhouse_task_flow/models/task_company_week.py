@@ -70,7 +70,7 @@ class ProjectTask(models.Model):
         def dept_of(task):
             p = task.project_id
             return depts.setdefault(p.id, {'id': p.id, 'name': p.name, 'open_ids': [], 'overdue_ids': [],
-                                           'done_ids': [], 'ontime': 0, 'late': 0})
+                                           'done_ids': [], 'ontime': 0, 'late': 0, 'pending': 0})
         for task in open_tasks:
             d = dept_of(task)
             d['open_ids'].append(task.id)
@@ -79,9 +79,7 @@ class ProjectTask(models.Model):
         for task in Task.browse(cur['done_ids']):
             dept_of(task)['done_ids'].append(task.id)
         for info in cur['split']:
-            d = dept_of(info['task'])
-            if info['state'] in ('ontime', 'late'):
-                d[info['state']] += 1
+            dept_of(info['task'])[info['state']] += 1
         dept_rows = []
         for d in depts.values():
             n = d['ontime'] + d['late']

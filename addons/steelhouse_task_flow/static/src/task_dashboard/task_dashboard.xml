@@ -87,7 +87,10 @@
                                             <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.open_ids, dp.name)"><b t-esc="dp.open"/></td>
                                             <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.done_ids, dp.name)" t-esc="dp.done"/>
                                             <td class="o_sh_db_click" t-att-class="dp.overdue ? 'o_sh_cw_redtxt' : 'o_sh_cw_mutedtxt'" t-on-click="() => this.openIds(dp.overdue_ids, dp.name)" t-esc="dp.overdue"/>
-                                            <td><span t-attf-class="o_sh_cw_pill o_sh_cw_lvl_{{ dp.level or 'none' }}" t-esc="pctText(dp.pct)"/></td>
+                                            <td t-att-title="'ამ კვირის ვადიანი დავალებები: დროულად ' + dp.ontime + ' · დაგვიანებით ან ვადაგასული ' + dp.late + ' · ვადა ჯერ არ დასდგომია ' + dp.pending + ' (უვადო დავალებები არ ითვლება)'">
+                                                <small t-if="dp.ontime + dp.late" class="o_sh_cw_frac"><t t-esc="dp.ontime"/>/<t t-esc="dp.ontime + dp.late"/></small>
+                                                <span t-attf-class="o_sh_cw_pill o_sh_cw_lvl_{{ dp.level or 'none' }}" t-esc="pctText(dp.pct)"/>
+                                            </td>
                                         </tr>
                                     </t>
                                 </tbody>
