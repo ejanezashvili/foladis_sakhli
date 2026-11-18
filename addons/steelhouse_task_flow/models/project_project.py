@@ -49,6 +49,12 @@ class ProjectProject(models.Model):
             for dept, tree in trees.items():
                 dept[field] = sum(counts.get(i, 0) for i in tree)
 
+    # departments page, filter "ვადაგადაცილებული": the card shows this number instead of the task count
+    sh_overdue_count = fields.Integer('ვადაგადაცილებული', compute='_compute_sh_overdue_count')
+
+    def _compute_sh_overdue_count(self):
+        self._sh_count('sh_overdue_count', [('sh_is_overdue', '=', True), ('sh_is_step', '=', False)])
+
     def _compute_task_count(self):
         super()._compute_task_count()
         self._sh_count('task_count', [])
@@ -88,6 +94,13 @@ class ProjectProject(models.Model):
             if len(tree) > 1:
                 action['domain'] = [('project_id', 'in', tree), ('has_template_ancestor', '=', False)]
             action['domain'] = self._sh_main_only(action.get('domain'))
+            if self.env.context.get('sh_overdue'):
+                # opened from the departments page with the overdue filter: only overdue tasks (removable)
+                ctx = action.get('context') or {}
+                if isinstance(ctx, str):
+                    from odoo.tools.safe_eval import safe_eval
+                    ctx = safe_eval(ctx, {'active_id': self.id, 'uid': self.env.uid})
+                action['context'] = dict(ctx, search_default_sh_overdue=1)
             return action
         ctx = dict(action['context'])
         ctx.pop('default_project_id', None)

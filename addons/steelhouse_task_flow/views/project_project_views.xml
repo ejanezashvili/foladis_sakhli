@@ -48,6 +48,32 @@
             <!-- no project status (on track / at risk ...) - a department is not a project -->
             <xpath expr="//field[@name='last_update_status'][@widget='project_state_selection']" position="replace"/>
             <xpath expr="//span[contains(@t-att-class, 'o_status_bubble')]" position="replace"/>
+            <!-- filter "ვადაგადაცილებული": the card shows the overdue count, the click opens only overdue tasks -->
+            <xpath expr="//a[hasclass('o_project_kanban_box')][@name='action_view_tasks']" position="attributes">
+                <attribute name="invisible">context.get('sh_overdue')</attribute>
+            </xpath>
+            <xpath expr="//a[hasclass('o_project_kanban_box')][@name='action_view_tasks']" position="after">
+                <a invisible="not context.get('sh_overdue')" name="action_view_tasks" type="object"
+                   context="{'sh_overdue': True}"
+                   t-attf-class="o_project_kanban_box me-1 o_sh_overdue_box {{ record.sh_overdue_count.raw_value ? 'o_sh_overdue_on' : 'o_sh_overdue_zero' }}">
+                    <div>
+                        <field name="sh_overdue_count" class="o_value"/>
+                        <span class="ms-1">ვადაგადაცილებული</span>
+                    </div>
+                </a>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sh_project_search_overdue" model="ir.ui.view">
+        <field name="name">project.project.search.sh.overdue</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.view_project_project_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <separator/>
+                <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[]" context="{'sh_overdue': True}"/>
+            </xpath>
         </field>
     </record>
 

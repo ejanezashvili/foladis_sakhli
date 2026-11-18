@@ -46,3 +46,10 @@
     .o_kanban_record:nth-child(6n + 5) { &::before { background: #2b8a3e; } footer a { background: #e6f7ec; color: #2b8a3e; } }
     .o_kanban_record:nth-child(6n + 6) { &::before { background: #0c8599; } footer a { background: #e3f6f8; color: #0c8599; } }
 }
+
+// filter "ვადაგადაცილებული" on the departments page: red pill with the overdue count, grey when 0
+.o_sh_dept_kanban .o_kanban_record footer a.o_sh_overdue_box {
+    &.o_sh_overdue_on { background: #fde2e3 !important; color: #d9363e !important; }
+    &.o_sh_overdue_zero { background: #eeeeee !important; color: #8a8a8a !important; }
+    .o_value, span { color: inherit !important; }
+}
