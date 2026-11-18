@@ -4,3 +4,4 @@ access_steelhouse_task_template_wizard,steelhouse.task.template.wizard,model_ste
 access_steelhouse_task_final_wizard,steelhouse.task.final.wizard,model_steelhouse_task_final_wizard,base.group_user,1,1,1,1
 access_steelhouse_task_section,steelhouse.task.section,model_steelhouse_task_section,base.group_user,1,1,1,1
 access_sh_task_flow_event_admin,sh.task.flow.event.admin,model_sh_task_flow_event,base.group_system,1,1,1,1
+access_steelhouse_project_hold_wizard,steelhouse.project.hold.wizard,model_steelhouse_project_hold_wizard,project.group_project_user,1,1,1,1

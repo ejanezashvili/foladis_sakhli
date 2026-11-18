@@ -56,7 +56,7 @@ class ProjectTask(models.Model):
             def who(t):
                 return ', '.join(t.user_ids.mapped('name')) or '-'
 
-            open_prev = me._sh_all_previous().filtered(lambda t: t.state not in CLOSED)
+            open_prev = me._sh_drop_held(me._sh_all_previous().filtered(lambda t: t.state not in CLOSED))
             if task.state in CLOSED:
                 continue
             lines = []

@@ -24,3 +24,4 @@ from . import task_card_lists
 from . import task_reports
 from . import task_approvals
 from . import task_company_week
+from . import task_hold

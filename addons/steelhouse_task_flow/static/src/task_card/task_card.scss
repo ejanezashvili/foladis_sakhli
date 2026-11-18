@@ -184,3 +184,25 @@
     &.o_sh_step_turn { background: #e6f6ec; .o_sh_step_head { color: #2f855a; } }
 }
 .o_sh_card_waitstep { opacity: 0.8; }
+
+// previous task on hold: optional "▶ გაგრძელება" (views/task_hold_views.xml)
+.o_sh_held_strip {
+    margin: 6px 0 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    background: #fff4e0;
+    color: #b7791f;
+    font-size: 0.8rem;
+    font-weight: 600;
+    .o_sh_held_hint { font-weight: 400; color: #6b5a3a; }
+}
+.o_sh_project_held {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: #eeeeee;
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
