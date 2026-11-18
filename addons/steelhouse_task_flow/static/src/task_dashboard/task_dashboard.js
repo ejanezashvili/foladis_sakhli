@@ -28,12 +28,32 @@ export class TaskDashboard extends Component {
         this.KIND_LABEL = KIND_LABEL;
         this.CHART_W = CHART_W;
         this.CHART_H = CHART_H;
-        this.state = useState({ d: null });
+        this.state = useState({ d: null, cw: null });
         onWillStart(() => this.load());
     }
 
     async load() {
-        this.state.d = await this.orm.call("project.task", "sh_dashboard_data", []);
+        const [d, cw] = await Promise.all([
+            this.orm.call("project.task", "sh_dashboard_data", []),
+            this.orm.call("project.task", "sh_company_week_data", [0]),
+        ]);
+        this.state.d = d;
+        this.state.cw = cw;
+    }
+
+    // ------------------------------------------------------------ "კომპანიის კვირა" (administrators)
+    async setWeek(offset) {
+        this.state.cw = await this.orm.call("project.task", "sh_company_week_data", [offset]);
+    }
+    arrow(trend, goodWhenUp = true) {
+        if (!trend) {
+            return { icon: "", cls: "" };
+        }
+        const good = goodWhenUp ? trend > 0 : trend < 0;
+        return { icon: trend > 0 ? "▲" : "▼", cls: good ? "o_sh_cw_up" : "o_sh_cw_down" };
+    }
+    pctText(p) {
+        return p === null || p === undefined ? "-" : `${p}%`;
     }
 
     // ------------------------------------------------------------ weekly chart (SVG)
