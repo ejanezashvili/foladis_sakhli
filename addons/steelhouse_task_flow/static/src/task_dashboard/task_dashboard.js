@@ -34,7 +34,7 @@ export class TaskDashboard extends Component {
         } catch {
             folded = false;
         }
-        this.state = useState({ d: null, cw: null, cwFolded: folded, cwAllDepts: false });
+        this.state = useState({ d: null, cw: null, cwFolded: folded, cwAllDepts: false, cwLeave: { now: false, next: false } });
         onWillStart(() => this.load());
     }
 
@@ -44,6 +44,12 @@ export class TaskDashboard extends Component {
             window.localStorage.setItem("sh_cw_folded", this.state.cwFolded ? "1" : "0");
         } catch {
             // private window: only for this visit
+        }
+    }
+    toggleLeave(key) {
+        const list = this.state.cw && this.state.cw[key === "now" ? "away_now" : "away_next"];
+        if (list && list.length) {
+            this.state.cwLeave[key] = !this.state.cwLeave[key];
         }
     }
     get cwDepts() {

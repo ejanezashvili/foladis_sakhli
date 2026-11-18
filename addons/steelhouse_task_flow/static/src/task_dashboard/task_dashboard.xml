@@ -137,23 +137,35 @@
                                 <span>დამტკიცებას ელოდება</span>
                                 <b t-esc="cw.leave_pending"/>
                             </div>
-                            <div class="o_sh_cw_sub">ამ კვირაში: <b t-if="!cw.away_now.length">არავინ</b></div>
-                            <t t-foreach="cw.away_now" t-as="aw" t-key="aw_index">
-                                <div class="o_sh_cw_away">
-                                    <span class="o_sh_cw_avatar" t-esc="aw.name.slice(0, 1)"/>
-                                    <span t-esc="aw.name"/>
-                                    <small t-if="aw.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
-                                    <small class="o_sh_cw_dates" t-esc="aw.dates"/>
-                                </div>
+                            <div t-attf-class="o_sh_cw_fold {{ cw.away_now.length ? 'o_sh_db_click' : '' }}" t-on-click="() => this.toggleLeave('now')">
+                                <span>ამ კვირაში შვებულებაშია</span>
+                                <b t-esc="cw.away_now.length or 'არავინ'"/>
+                                <i t-if="cw.away_now.length" t-att-class="'fa ' + (state.cwLeave.now ? 'fa-chevron-up' : 'fa-chevron-down')"/>
+                            </div>
+                            <t t-if="state.cwLeave.now">
+                                <t t-foreach="cw.away_now" t-as="aw" t-key="aw_index">
+                                    <div class="o_sh_cw_away">
+                                        <span class="o_sh_cw_avatar" t-esc="aw.name.slice(0, 1)"/>
+                                        <span t-esc="aw.name" t-att-title="aw.type"/>
+                                        <small t-if="aw.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
+                                        <small class="o_sh_cw_dates" t-esc="aw.dates"/>
+                                    </div>
+                                </t>
                             </t>
-                            <div class="o_sh_cw_sub">მომავალ კვირაში: <b t-if="!cw.away_next.length">არავინ</b></div>
-                            <t t-foreach="cw.away_next" t-as="an" t-key="an_index">
-                                <div class="o_sh_cw_away">
-                                    <span class="o_sh_cw_avatar" t-esc="an.name.slice(0, 1)"/>
-                                    <span t-esc="an.name"/>
-                                    <small t-if="an.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
-                                    <small class="o_sh_cw_dates" t-esc="an.dates"/>
-                                </div>
+                            <div t-attf-class="o_sh_cw_fold {{ cw.away_next.length ? 'o_sh_db_click' : '' }}" t-on-click="() => this.toggleLeave('next')">
+                                <span>მომავალ კვირაში</span>
+                                <b t-esc="cw.away_next.length or 'არავინ'"/>
+                                <i t-if="cw.away_next.length" t-att-class="'fa ' + (state.cwLeave.next ? 'fa-chevron-up' : 'fa-chevron-down')"/>
+                            </div>
+                            <t t-if="state.cwLeave.next">
+                                <t t-foreach="cw.away_next" t-as="an" t-key="an_index">
+                                    <div class="o_sh_cw_away">
+                                        <span class="o_sh_cw_avatar" t-esc="an.name.slice(0, 1)"/>
+                                        <span t-esc="an.name" t-att-title="an.type"/>
+                                        <small t-if="an.head" class="o_sh_cw_head_tag">ხელმძღვ.</small>
+                                        <small class="o_sh_cw_dates" t-esc="an.dates"/>
+                                    </div>
+                                </t>
                             </t>
                         </div>
                     </div>
