@@ -1,6 +1,7 @@
 """Reports of the "რეპორტინგი" app (static/src/task_reports):
-- deadline compliance: tasks finished in the period - handed over on time or late, by department /
-  project / employee, with a monthly trend. "Handed over" = the last move to "შემოწმებაზე" (the
+- deadline compliance: tasks whose DEADLINE falls in the period - handed over on time, late, or not
+  handed over although the deadline passed (see _sh_due_split), by department / project / employee,
+  with a monthly trend. "Handed over" = the last move to "შემოწმებაზე" (the
   reviewer's own time does not make the assignee late); no review step -> the moment it was closed.
 - holds and cancellations: how often, for how long and why tasks are put on hold or cancelled.
 Hold / resume / cancel moments are kept in sh.task.flow.event (see task_returns.write)."""
@@ -91,6 +92,41 @@ class ProjectTask(models.Model):
         return out
 
     @api.model
+    def _sh_due_split(self, base, start, stop, now=None):
+        """Deadline compliance by DEADLINE: every task whose deadline falls in [start, stop) (UTC) is
+        counted once, in the period of its deadline:
+        - ontime: handed over to review (or done) by the deadline;
+        - late: handed over after the deadline, or not handed over yet although the deadline passed
+          (an unfinished late task lowers the %, it can no longer improve it);
+        - pending: deadline still ahead, nothing to judge yet.
+        -> [{'task', 'state', 'late' (seconds), 'handed' (datetime or False)}]"""
+        now = now or fields.Datetime.now()
+        tasks = self.search(base + [('date_deadline', '>=', start), ('date_deadline', '<', stop),
+                                    ('state', '!=', '1_canceled')])
+        last_review = {}
+        for event in self.env['sh.task.flow.event'].sudo().search(
+                [('task_id', 'in', tasks.ids), ('kind', '=', 'review')], order='date'):
+            last_review[event.task_id.id] = event.date
+        out = []
+        for task in tasks:
+            if task.state == '1_done':
+                closed = task.date_last_stage_update or task.write_date
+                handed = min(last_review.get(task.id) or closed, closed)
+            elif task.stage_id.sh_kind == 'review':
+                handed = last_review.get(task.id) or task.date_last_stage_update or task.write_date
+            else:
+                handed = False
+            if handed:
+                late = (handed - task.date_deadline).total_seconds()
+                state = 'late' if late > 0 else 'ontime'
+            elif task.date_deadline < now:
+                late, state = (now - task.date_deadline).total_seconds(), 'late'
+            else:
+                late, state = 0, 'pending'
+            out.append({'task': task, 'state': state, 'late': max(late, 0), 'handed': handed})
+        return out
+
+    @api.model
     def sh_deadline_data(self, date_from, date_to, mine=False, group_by='department', department_id=False,
                          user_id=False):
         manager, base = self._sh_rep_scope(mine, department_id, user_id)
@@ -100,10 +136,9 @@ class ProjectTask(models.Model):
         # trend: the 6 months up to the end of the period (the whole period when it is longer)
         last_month = d_to.replace(day=1)
         first_month = max(min(_month_add(last_month, -5), d_from.replace(day=1)), _month_add(last_month, -23))
-        done = self.search(base + [('state', '=', '1_done'), ('date_last_stage_update', '>=', _utc(first_month)),
-                                   ('date_last_stage_update', '<', stop)])
-        infos = done._sh_deadline_split()
-        period = [i for i in infos if start <= i['closed'] < stop]
+        # counted by deadline: every task whose deadline falls in the period (see _sh_due_split)
+        infos = self._sh_due_split(base, _utc(first_month), stop, now)
+        period = [i for i in infos if start <= i['task'].date_deadline < stop]
         overdue = self.search(base + [('sh_is_overdue', '=', True)])
 
         def ids(items):
@@ -112,7 +147,7 @@ class ProjectTask(models.Model):
         def stats(key, label, items, over, sub=''):
             on = [i for i in items if i['state'] == 'ontime']
             late = [i for i in items if i['state'] == 'late']
-            nodl = [i for i in items if i['state'] == 'nodl']
+            nodl = [i for i in items if i['state'] == 'pending']  # deadline still ahead
             n = len(on) + len(late)
             pct = round(100 * len(on) / n) if n else None
             secs = [i['late'] for i in late]
@@ -134,10 +169,11 @@ class ProjectTask(models.Model):
         rows = []
         for key, g in groups.items():
             row = stats(key, g['label'], g['items'], g['over'], g['sub'])
-            late = sorted((i for i in g['items'] if i['state'] == 'late'), key=lambda i: -i['late'])
+            # handed over late (the late ones not handed over yet are in the overdue list below)
+            late = sorted((i for i in g['items'] if i['state'] == 'late' and i['handed']), key=lambda i: -i['late'])
             items = [{'id': i['task'].id, 'label': i['task']._sh_rep_label(), 'kind': 'late',
                       'amount': _fmt_secs(i['late']), 'who': ', '.join(i['task'].user_ids.mapped('name')),
-                      'date': _local(i['closed']).strftime('%d.%m.%Y')} for i in late]
+                      'date': _local(i['handed']).strftime('%d.%m.%Y')} for i in late]
             items += [{'id': t.id, 'label': t._sh_rep_label(), 'kind': 'overdue',
                        'amount': _fmt_secs((now - t.date_deadline).total_seconds()),
                        'who': ', '.join(t.user_ids.mapped('name')),
@@ -152,7 +188,8 @@ class ProjectTask(models.Model):
         trend = []
         month = first_month
         while month <= last_month:
-            items = [i for i in infos if (_local(i['closed']).year, _local(i['closed']).month) == (month.year, month.month)]
+            items = [i for i in infos if (_local(i['task'].date_deadline).year,
+                                          _local(i['task'].date_deadline).month) == (month.year, month.month)]
             on = [i for i in items if i['state'] == 'ontime']
             late = [i for i in items if i['state'] == 'late']
             n = len(on) + len(late)

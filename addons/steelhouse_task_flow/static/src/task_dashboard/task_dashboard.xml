@@ -43,7 +43,7 @@
                             <t t-set="a2" t-value="arrow(k.done_trend)"/>
                             <small t-att-class="a2.cls"><t t-esc="a2.icon"/> წინა: <t t-esc="k.done_prev"/></small>
                         </div>
-                        <div t-attf-class="o_sh_cw_kpi o_sh_cw_k_green o_sh_cw_lvl_{{ k.level or 'none' }}">
+                        <div t-attf-class="o_sh_cw_kpi o_sh_cw_k_green o_sh_cw_lvl_{{ k.level or 'none' }}" title="ამ კვირაში ვისაც ვადა ეწურებოდა, მათგან რამდენი ჩააბარა დროულად (ვადაგასული და ჯერ ჩაუბარებელი - დაგვიანებულად ითვლება)">
                             <span class="o_sh_cw_lbl">ვადების დაცვა</span>
                             <b t-esc="pctText(k.pct)"/>
                             <t t-set="a3" t-value="arrow(k.pct_trend)"/>
@@ -78,7 +78,7 @@
                                 </a>
                             </div>
                             <table class="o_sh_cw_table">
-                                <thead><tr><th>დეპარტამენტი</th><th/><th>ღია</th><th>დასრულდა</th><th>ვადაგადაც.</th><th>ვადების დაცვა</th></tr></thead>
+                                <thead><tr><th>დეპარტამენტი</th><th/><th>ღია</th><th>დასრულდა</th><th>ვადაგადაც.</th><th title="ამ კვირაში ვისაც ვადა ეწურებოდა, მათგან დროულად ჩაბარებულის %">ვადების დაცვა</th></tr></thead>
                                 <tbody>
                                     <t t-foreach="cwDepts" t-as="dp" t-key="dp.id">
                                         <tr>

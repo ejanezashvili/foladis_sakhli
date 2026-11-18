@@ -186,8 +186,8 @@ export class TaskReports extends Component {
     }
     exportDeadline() {
         const d = this.d;
-        const out = [[this.groupLabel, "დავალება", "დასრულდა", "დროულად", "დაგვიანებით", "დროულად %", "საშუალო დაგვიანება",
-            "ყველაზე დიდი დაგვიანება", "ვადის გარეშე", "ახლა ვადაგადაცილებული", "შემსრულებლები"]];
+        const out = [[this.groupLabel, "დავალება", "ვადა ეწურებოდა", "დროულად", "დაგვიანებით ან ჩაუბარებელი", "დროულად %", "საშუალო დაგვიანება",
+            "ყველაზე დიდი დაგვიანება", "ვადა ჯერ არ მოსულა", "ახლა ვადაგადაცილებული", "შემსრულებლები"]];
         const row = (r) => [r.label, "", r.done, r.ontime, r.late, this.pctLabel(r), r.avg_late, r.max_late, r.nodl, r.overdue, ""];
         for (const r of d.rows) {
             out.push(row(r));

@@ -24,11 +24,12 @@ class ProjectTask(models.Model):
 
     @api.model
     def _sh_cw_counts(self, Task, base, start, stop):
-        """created / done / on time % / returns of one week (start, stop: UTC datetimes)."""
+        """created / done / on time % / returns of one week (start, stop: UTC datetimes).
+        On time % is by deadline: of the tasks due this week, how many were handed over in time."""
         created = Task.search_count(base + [('create_date', '>=', start), ('create_date', '<', stop)])
         done = Task.search(base + [('state', '=', '1_done'), ('date_last_stage_update', '>=', start),
                                    ('date_last_stage_update', '<', stop)])
-        split = done._sh_deadline_split()
+        split = Task._sh_due_split(base, start, stop)
         on = sum(1 for i in split if i['state'] == 'ontime')
         late = sum(1 for i in split if i['state'] == 'late')
         pct = round(100 * on / (on + late)) if on + late else None
@@ -75,9 +76,10 @@ class ProjectTask(models.Model):
             d['open_ids'].append(task.id)
             if task.sh_is_overdue:
                 d['overdue_ids'].append(task.id)
+        for task in Task.browse(cur['done_ids']):
+            dept_of(task)['done_ids'].append(task.id)
         for info in cur['split']:
             d = dept_of(info['task'])
-            d['done_ids'].append(info['task'].id)
             if info['state'] in ('ontime', 'late'):
                 d[info['state']] += 1
         dept_rows = []

@@ -192,10 +192,12 @@ class ProjectTask(models.Model):
             d_due = d_open.filtered(lambda t: t.date_deadline and now <= t.date_deadline < week_end)
             d_hold = d_open.filtered(lambda t: t.stage_id.sh_kind == 'on_hold')
             d_review = d_open.filtered(lambda t: t.stage_id.sh_kind == 'review')
-            # deadline compliance of the tasks finished last week (same rule as the "ვადების დაცვა" report)
-            split = d_done._sh_deadline_split()
-            on_time = sum(1 for i in split if i['state'] == 'ontime')
-            late_ids = {i['task'].id for i in split if i['state'] == 'late'}
+            # deadline compliance of the tasks DUE last week (same rule as the "ვადების დაცვა" report)
+            due_split = Task._sh_due_split(base + dom, week_ago, now, now)
+            on_time = sum(1 for i in due_split if i['state'] == 'ontime')
+            due_late = sum(1 for i in due_split if i['state'] == 'late')
+            # "დაგვიანებით" note on the finished ones
+            late_ids = {i['task'].id for i in d_done._sh_deadline_split() if i['state'] == 'late'}
             rows = []
             for emp_user in (d_open | d_done).user_ids.sorted('name'):
                 o = d_open.filtered(lambda t: emp_user in t.user_ids)
@@ -210,10 +212,10 @@ class ProjectTask(models.Model):
                           '⏰ ვადაგადაცილებული: <b>%d</b> &nbsp; 🔎 შემოწმებაზე: <b>%d</b></p>') % (
                 period, ', '.join(mine_depts.mapped('name')), len(d_new), len(d_done), len(d_open),
                 len(d_over), len(d_review))
-            if on_time or late_ids:
-                body += Markup('<p>🎯 ვადების დაცვა გასულ კვირას: დროულად <b>%d</b>, დაგვიანებით <b>%d</b> '
-                               '(დროულად <b>%d%%</b>)</p>') % (
-                    on_time, len(late_ids), round(100 * on_time / (on_time + len(late_ids))))
+            if on_time or due_late:
+                body += Markup('<p>🎯 ვადების დაცვა გასულ კვირას (ვისაც ვადა ეწურებოდა): დროულად <b>%d</b>, '
+                               'დაგვიანებით ან ჯერ ჩაუბარებელი <b>%d</b> (დროულად <b>%d%%</b>)</p>') % (
+                    on_time, due_late, round(100 * on_time / (on_time + due_late)))
             body += table
             body += self._sh_digest_section(
                 '✅ გასულ კვირას დასრულდა', d_done, now, limit=10, who=True,

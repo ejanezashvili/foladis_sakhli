@@ -50,16 +50,16 @@
                 <!-- ============ DEADLINE COMPLIANCE ============ -->
                 <t t-if="d and state.view === 'deadline'">
                     <div class="o_sh_wt_cards">
-                        <div class="o_sh_wt_card o_sh_rep_blue o_sh_rep_link" t-on-click="() => this.openIds(d.total.done_ids, 'დასრულებული დავალებები')">
-                            <small>დასრულებული დავალებები</small><b t-esc="d.total.done"/>
-                            <small t-if="d.total.nodl">მათგან ვადის გარეშე: <t t-esc="d.total.nodl"/></small>
+                        <div class="o_sh_wt_card o_sh_rep_blue o_sh_rep_link" t-on-click="() => this.openIds(d.total.done_ids, 'პერიოდში ვადა ეწურებოდა')">
+                            <small>პერიოდში ვადა ეწურებოდა</small><b t-esc="d.total.done"/>
+                            <small t-if="d.total.nodl">მათგან ვადა ჯერ არ მოსულა: <t t-esc="d.total.nodl"/></small>
                         </div>
-                        <div class="o_sh_wt_card o_sh_rep_green o_sh_rep_link" t-on-click="() => this.openIds(d.total.ontime_ids, 'დროულად დასრულებული')">
+                        <div class="o_sh_wt_card o_sh_rep_green o_sh_rep_link" t-on-click="() => this.openIds(d.total.ontime_ids, 'დროულად ჩაბარებული')">
                             <small>დროულად</small>
                             <b><t t-esc="d.total.ontime"/> <span t-if="d.total.pct !== null" class="o_sh_rep_pct">(<t t-esc="d.total.pct"/>%)</span></b>
                         </div>
-                        <div class="o_sh_wt_card o_sh_rep_red o_sh_rep_link" t-on-click="() => this.openIds(d.total.late_ids, 'დაგვიანებით დასრულებული')">
-                            <small>დაგვიანებით</small><b t-esc="d.total.late"/>
+                        <div class="o_sh_wt_card o_sh_rep_red o_sh_rep_link" t-on-click="() => this.openIds(d.total.late_ids, 'დაგვიანებით ან ჩაუბარებელი')">
+                            <small>დაგვიანებით ან ჯერ ჩაუბარებელი</small><b t-esc="d.total.late"/>
                             <small t-if="d.total.late">საშუალოდ <t t-esc="d.total.avg_late"/> · ყველაზე დიდი <t t-esc="d.total.max_late"/></small>
                         </div>
                         <div class="o_sh_wt_card o_sh_rep_orange o_sh_rep_link" t-on-click="() => this.openIds(d.total.overdue_ids, 'ახლა ვადაგადაცილებული')">
@@ -72,7 +72,7 @@
                             <b>თვეების ტრენდი</b>
                             <span><i class="o_sh_rep_sw o_sh_rep_on"/>დროულად</span>
                             <span><i class="o_sh_rep_sw o_sh_rep_late"/>დაგვიანებით</span>
-                            <span class="text-muted">ზემოთ - დროულად დასრულებულის %</span>
+                            <span class="text-muted">ზემოთ - დროულად ჩაბარებულის % (თვე - ვადის თვე)</span>
                         </div>
                         <div class="o_sh_rep_bars">
                             <t t-foreach="trendBars" t-as="m" t-key="m.key">
@@ -103,16 +103,16 @@
                     <table class="o_sh_wt_table o_sh_rep_table">
                         <thead><tr>
                             <th t-esc="groupLabel"/><th t-if="state.group === 'project'">დეპარტამენტი</th>
-                            <th>დასრულდა</th><th>დროულად</th><th>დაგვიანებით</th><th>დროულად %</th><th>საშუალო დაგვიანება</th><th>ახლა ვადაგადაცილებული</th>
+                            <th>ვადა ეწურებოდა</th><th>დროულად</th><th>დაგვიანებით</th><th>დროულად %</th><th>საშუალო დაგვიანება</th><th>ახლა ვადაგადაცილებული</th>
                         </tr></thead>
                         <tbody>
-                            <tr t-if="!d.rows.length"><td t-att-colspan="cols" class="text-muted">ამ პერიოდში დასრულებული ან ვადაგადაცილებული დავალება არ არის.</td></tr>
+                            <tr t-if="!d.rows.length"><td t-att-colspan="cols" class="text-muted">ამ პერიოდში ვადიანი ან ვადაგადაცილებული დავალება არ არის.</td></tr>
                             <t t-foreach="d.rows" t-as="r" t-key="r.key">
                                 <tr class="o_sh_wt_dept">
                                     <td class="o_sh_rep_link" t-on-click="() => this.toggle(r.key)">
                                         <i t-att-class="'fa me-1 ' + (state.open[r.key] ? 'fa-caret-down' : 'fa-caret-right')"/><t t-esc="r.label"/></td>
                                     <td t-if="state.group === 'project'" t-esc="r.sub or '-'"/>
-                                    <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.done_ids, r.label + ': დასრულებული')" t-esc="r.done"/>
+                                    <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.done_ids, r.label + ': ვადა ეწურებოდა')" t-esc="r.done"/>
                                     <td class="o_sh_rep_link" t-on-click="() => this.openIds(r.ontime_ids, r.label + ': დროულად')" t-esc="r.ontime"/>
                                     <td t-att-class="'o_sh_rep_link' + (r.late ? ' o_sh_rep_bad' : '')" t-on-click="() => this.openIds(r.late_ids, r.label + ': დაგვიანებით')" t-esc="r.late"/>
                                     <td t-att-class="'o_sh_rep_' + r.level">
@@ -127,7 +127,7 @@
                                         <tr class="o_sh_wt_emp">
                                             <td class="o_sh_rep_link" t-on-click="() => this.openTask(it.id)"><i class="fa fa-file-text-o me-1"/><t t-esc="it.label"/></td>
                                             <td t-att-colspan="cols - 1">
-                                                <t t-if="it.kind === 'late'">დასრულდა <b class="o_sh_rep_bad"><t t-esc="it.amount"/></b> დაგვიანებით · <t t-esc="it.date"/></t>
+                                                <t t-if="it.kind === 'late'">ჩააბარა <b class="o_sh_rep_bad"><t t-esc="it.amount"/></b> დაგვიანებით · <t t-esc="it.date"/></t>
                                                 <t t-else="">⏰ ჯერ დაუსრულებელია, ვადა (<t t-esc="it.date"/>) გავიდა <b class="o_sh_rep_bad"><t t-esc="it.amount"/></b>-ის წინ</t>
                                                 <span t-if="it.who" class="text-muted"> · <t t-esc="it.who"/></span>
                                             </td>
@@ -138,7 +138,7 @@
                             </t>
                         </tbody>
                     </table>
-                    <div class="text-muted small mt-2">დროულად = შემსრულებელმა დავალება ვადამდე ჩააბარა შემოწმებაზე (შემმოწმებლის დრო დაგვიანებად არ ითვლება); თუ შემოწმება არ ყოფილა - დასრულების დრო. პერიოდში ხვდება ის, რაც ამ პერიოდში დასრულდა. ციფრზე დაჭერა - დავალებების სია.</div>
+                    <div class="text-muted small mt-2">დროულად = შემსრულებელმა დავალება ვადამდე ჩააბარა შემოწმებაზე (შემმოწმებლის დრო დაგვიანებად არ ითვლება); თუ შემოწმება არ ყოფილა - დასრულების დრო. პერიოდში ხვდება ყველა დავალება, რომელსაც ვადა ამ პერიოდში ეწურებოდა; თუ ვადა გავიდა და ჯერ არ ჩაუბარებია - დაგვიანებულად ითვლება, თუ ვადა ჯერ არ მოსულა - ჯერ არ ითვლება. ციფრზე დაჭერა - დავალებების სია.</div>
                 </t>
 
                 <!-- ============ HOLDS AND CANCELLATIONS ============ -->
