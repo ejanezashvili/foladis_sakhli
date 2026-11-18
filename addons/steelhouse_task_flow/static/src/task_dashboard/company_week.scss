@@ -11,6 +11,24 @@
         gap: 10px;
         margin-bottom: 14px;
     }
+    .o_sh_cw_tools {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .o_sh_cw_fold,
+    .o_sh_cw_more {
+        padding: 5px 12px;
+        border: 1px solid #ece8f6;
+        border-radius: 10px;
+        font-weight: 600;
+        color: #6b4fd8;
+        background: #fff;
+    }
+    .o_sh_cw_more {
+        margin-top: 8px;
+        width: 100%;
+    }
     .o_sh_cw_switch {
         display: inline-flex;
         gap: 4px;

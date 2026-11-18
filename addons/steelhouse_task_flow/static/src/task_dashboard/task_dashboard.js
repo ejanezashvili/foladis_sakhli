@@ -28,8 +28,27 @@ export class TaskDashboard extends Component {
         this.KIND_LABEL = KIND_LABEL;
         this.CHART_W = CHART_W;
         this.CHART_H = CHART_H;
-        this.state = useState({ d: null, cw: null });
+        let folded = false;
+        try {
+            folded = window.localStorage.getItem("sh_cw_folded") === "1";
+        } catch {
+            folded = false;
+        }
+        this.state = useState({ d: null, cw: null, cwFolded: folded, cwAllDepts: false });
         onWillStart(() => this.load());
+    }
+
+    toggleCw() {
+        this.state.cwFolded = !this.state.cwFolded;
+        try {
+            window.localStorage.setItem("sh_cw_folded", this.state.cwFolded ? "1" : "0");
+        } catch {
+            // private window: only for this visit
+        }
+    }
+    get cwDepts() {
+        const rows = (this.state.cw && this.state.cw.departments) || [];
+        return this.state.cwAllDepts ? rows : rows.slice(0, 8);
     }
 
     async load() {

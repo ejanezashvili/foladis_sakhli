@@ -27,12 +27,18 @@
                                 <div class="o_sh_db_title">🏢 კომპანიის კვირა</div>
                                 <div class="o_sh_db_date" t-esc="cw.label"/>
                             </div>
-                            <div class="o_sh_cw_switch">
-                                <button t-att-class="cw.offset === 0 ? 'active' : ''" t-on-click="() => this.setWeek(0)">ეს კვირა</button>
-                                <button t-att-class="cw.offset === 1 ? 'active' : ''" t-on-click="() => this.setWeek(1)">გასული კვირა</button>
+                            <div class="o_sh_cw_tools">
+                                <div t-if="!state.cwFolded" class="o_sh_cw_switch">
+                                    <button t-att-class="cw.offset === 0 ? 'active' : ''" t-on-click="() => this.setWeek(0)">ეს კვირა</button>
+                                    <button t-att-class="cw.offset === 1 ? 'active' : ''" t-on-click="() => this.setWeek(1)">გასული კვირა</button>
+                                </div>
+                                <button class="o_sh_cw_fold" t-on-click="toggleCw">
+                                    <t t-if="state.cwFolded">▸ გაშლა</t><t t-else="">▾ დაკეცვა</t>
+                                </button>
                             </div>
                         </div>
 
+                        <t t-if="!state.cwFolded">
                         <!-- 1. key numbers -->
                         <div class="o_sh_cw_kpis">
                             <div class="o_sh_cw_kpi">
@@ -76,7 +82,7 @@
                                 <table class="o_sh_cw_table">
                                     <thead><tr><th>დეპარტამენტი</th><th>ღია</th><th>დასრულდა</th><th>ვადაგადაც.</th><th>ვადების დაცვა</th></tr></thead>
                                     <tbody>
-                                        <t t-foreach="cw.departments" t-as="dp" t-key="dp.id">
+                                        <t t-foreach="cwDepts" t-as="dp" t-key="dp.id">
                                             <tr>
                                                 <td t-esc="dp.name"/>
                                                 <td class="o_sh_db_click" t-on-click="() => this.openIds(dp.open_ids, dp.name)" t-esc="dp.open"/>
@@ -87,6 +93,9 @@
                                         </t>
                                     </tbody>
                                 </table>
+                                <button t-if="cw.departments.length > 8" class="o_sh_cw_more" t-on-click="() => this.state.cwAllDepts = !this.state.cwAllDepts">
+                                    <t t-if="state.cwAllDepts">ნაკლების ნახვა</t><t t-else="">ყველას ნახვა (<t t-esc="cw.departments.length"/>)</t>
+                                </button>
                             </div>
 
                             <!-- 3. needs attention -->
@@ -122,6 +131,7 @@
                                 </t>
                             </div>
                         </div>
+                        </t>
                     </div>
                 </t>
 
