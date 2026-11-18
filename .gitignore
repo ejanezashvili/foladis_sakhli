@@ -5,3 +5,8 @@ __pycache__/
 ~$*
 
 .claude/settings.local.json
+
+# personal data and passwords - never in git
+Docs/HR/
+Docs/*პაროლ*
+Docs/თანამშრომლების სია*.xlsx
