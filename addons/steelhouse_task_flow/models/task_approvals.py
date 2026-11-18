@@ -46,6 +46,27 @@ class ProjectTask(models.Model):
             body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
             message_type='comment', subtype_xmlid='mail.mt_comment')
 
+    def _sh_apply_reason(self, kind, reason, resume_date=False):
+        res = super()._sh_apply_reason(kind, reason, resume_date=resume_date)
+        if kind == 'returned' and not self.is_template:
+            self._sh_return_notify(reason)
+        return res
+
+    def _sh_return_notify(self, reason):
+        """The task came back from review (approvals app or the stage bar): its assignees are
+        told at once, with the reason - like the reviewers are told when it goes to review."""
+        self.ensure_one()
+        users = self.user_ids.filtered(lambda u: u.active and not u.share) - self.env.user
+        if not users:
+            return
+        body = Markup('<b>%s</b><br/>%s<br/>%s') % (
+            _("დაგიბრუნდათ შესასწორებლად: %s", self.display_name),
+            _("მიზეზი: %s", reason or '-'),
+            _("დააბრუნა: %s", self.env.user.name))
+        self.sudo().with_context(mail_post_autofollow=False).message_post(
+            body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
+            message_type='comment', subtype_xmlid='mail.mt_comment')
+
     # ------------------------------------------------------------------ data
     def _sh_ap_item(self, since, now):
         self.ensure_one()
