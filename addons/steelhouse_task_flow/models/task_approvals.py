@@ -48,9 +48,32 @@ class ProjectTask(models.Model):
 
     def _sh_apply_reason(self, kind, reason, resume_date=False):
         res = super()._sh_apply_reason(kind, reason, resume_date=resume_date)
-        if kind == 'returned' and not self.is_template:
-            self._sh_return_notify(reason)
+        if not self.is_template:
+            if kind == 'returned':
+                self._sh_return_notify(reason)
+            elif kind in ('on_hold', 'cancelled'):
+                self._sh_stop_notify(kind, reason)
         return res
+
+    def _sh_stop_notify(self, kind, reason):
+        """On hold: the reviewers are told (the assignee usually puts it on hold).
+        Cancelled: the assignees are told (the reviewer / admin cancels it)."""
+        self.ensure_one()
+        if kind == 'on_hold':
+            users = self.reviewer_ids or self.create_uid
+            title = _("დავალება შეჩერდა: %s", self.display_name)
+            who = _("შეაჩერა: %s", self.env.user.name)
+        else:
+            users = self.user_ids
+            title = _("დავალება გაუქმდა: %s", self.display_name)
+            who = _("გააუქმა: %s", self.env.user.name)
+        users = users.filtered(lambda u: u.active and not u.share) - self.env.user
+        if not users:
+            return
+        body = Markup('<b>%s</b><br/>%s<br/>%s') % (title, _("მიზეზი: %s", reason or '-'), who)
+        self.sudo().with_context(mail_post_autofollow=False).message_post(
+            body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
+            message_type='comment', subtype_xmlid='mail.mt_comment')
 
     def _sh_return_notify(self, reason):
         """The task came back from review (approvals app or the stage bar): its assignees are
