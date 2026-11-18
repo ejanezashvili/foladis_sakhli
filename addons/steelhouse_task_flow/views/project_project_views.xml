@@ -70,6 +70,11 @@
         <field name="model">project.project</field>
         <field name="inherit_id" ref="project.view_project_project_filter"/>
         <field name="arch" type="xml">
+            <!-- typed text + Enter: the project / department name, or a task in it (name or number) -->
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">ძიება (პროექტი / დავალება)</attribute>
+                <attribute name="filter_domain">['|', '|', '|', '|', ('name', 'ilike', self), ('task_ids.name', 'ilike', self), ('task_ids.sh_number', 'ilike', self), ('sh_task_ids.name', 'ilike', self), ('sh_task_ids.sh_number', 'ilike', self)]</attribute>
+            </xpath>
             <xpath expr="//search" position="inside">
                 <separator/>
                 <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[]" context="{'sh_overdue': True}"/>

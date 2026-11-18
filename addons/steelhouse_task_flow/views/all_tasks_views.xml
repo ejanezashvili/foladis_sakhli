@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- "პროექტები" (button on the departments page): all department tasks on one page, by stage.
-         No default filter; search only by employee / department / customer.
+         No default filter; search by text (task / number / project), employee, department, customer.
          Access rules still apply: employees see only their own tasks. -->
     <record id="view_sh_all_tasks_search" model="ir.ui.view">
         <field name="name">project.task.search.sh.all</field>
@@ -9,6 +9,9 @@
         <field name="priority">99</field>
         <field name="arch" type="xml">
             <search string="ყველა დავალება">
+                <!-- typed text + Enter: task name, number, project or department -->
+                <field name="name" string="ძიება (დავალება / ნომერი / პროექტი)"
+                       filter_domain="['|', '|', '|', ('name', 'ilike', self), ('sh_number', 'ilike', self), ('sh_project_id.name', 'ilike', self), ('project_id.name', 'ilike', self)]"/>
                 <field name="user_ids" string="თანამშრომელი"/>
                 <field name="sh_department_id" string="დეპარტამენტი" operator="child_of"/>
                 <field name="partner_id" string="კლიენტი"/>
