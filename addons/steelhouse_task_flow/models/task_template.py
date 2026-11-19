@@ -36,7 +36,7 @@ class ProjectTask(models.Model):
         values = {'name': self.name}
         if first:
             values['stage_id'] = first.id
-        task_id = self.action_create_from_template(values)
+        task_id = self.with_context(sh_conf_internal=True).action_create_from_template(values)
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'project.task',
@@ -59,7 +59,8 @@ class TaskTemplateWizard(models.TransientModel):
         task = self.task_id
         if not task.project_id:
             raise UserError(_("შაბლონად შენახვისთვის დავალებას დეპარტამენტი უნდა ჰქონდეს."))
-        template = task.with_context(sh_flow_internal=True).copy({
+        # a copy keeps the task's confidentiality - that is not "setting" it (task_confidential.create)
+        template = task.with_context(sh_flow_internal=True, sh_conf_internal=True).copy({
             'name': self.name.strip(),
             'is_template': True,
             'sh_repeat': False,
