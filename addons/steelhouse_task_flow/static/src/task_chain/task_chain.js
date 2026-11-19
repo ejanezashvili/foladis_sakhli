@@ -3,6 +3,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
+import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
 import { user } from "@web/core/user";
 import { ShUserPicker } from "../task_steps/task_steps";
 
@@ -255,14 +256,19 @@ export class TaskChain extends Component {
             this.notification.add("ამ დავალების გახსნის უფლება არ გაქვთ.", { type: "warning" });
             return;
         }
-        if (await this.props.record.save()) {
-            this.action.doAction({
-                type: "ir.actions.act_window",
-                res_model: "project.task",
-                res_id: node.id,
-                views: [[false, "form"]],
-            });
-        }
+        // the real task form in a big window over the sequence (no leaving the page);
+        // closing it refreshes the steps
+        this.state.form = null;
+        this.dialog.add(
+            FormViewDialog,
+            {
+                resModel: "project.task",
+                resId: node.id,
+                title: [node.number, node.name].filter(Boolean).join(" · "),
+                size: "xl",
+            },
+            { onClose: () => this.refresh() }
+        );
     }
 
     // ---------------------------------------------------------- new step

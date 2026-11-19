@@ -6,6 +6,9 @@ from odoo.fields import Domain
 
 CLOSED = ('1_done', '1_canceled')
 STATE_LABEL = {'1_done': '✔ დასრულდა', '1_canceled': 'გაუქმდა', '04_waiting_normal': '🔒 ელოდება'}
+# stage of a step, shown next to its name in the card list
+KIND_LABEL = {'new': '🆕 ახალი', 'accepted': '📥 მიღებული', 'in_progress': '▶ მიმდინარე',
+              'on_hold': '⏸ შეჩერებული', 'review': '🔎 შემოწმებაზე', 'returned': '↩ დაბრუნებული'}
 
 
 class ProjectTask(models.Model):
@@ -119,5 +122,18 @@ class ProjectTask(models.Model):
             'name': t.name,
             'number': t.sh_number or '',
             'done': t.state in CLOSED,
-            'label': STATE_LABEL.get(t.state, ''),
+            'label': self._sh_card_stage(t)[1],
+            'kind': self._sh_card_stage(t)[0],
         } for t in tasks if t.state != '1_canceled']
+
+    @staticmethod
+    def _sh_card_stage(task):
+        """(kind, label) of an item in the card list: where the step stands right now."""
+        kind = task.stage_id.sh_kind
+        if task.state == '1_done':
+            return 'done', STATE_LABEL['1_done']
+        if kind in ('on_hold', 'review', 'returned'):
+            return kind, KIND_LABEL[kind]
+        if task.state == '04_waiting_normal':
+            return 'waiting', STATE_LABEL['04_waiting_normal']
+        return kind or '', KIND_LABEL.get(kind, '')

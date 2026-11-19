@@ -21,7 +21,7 @@
                         <div t-att-class="'o_sh_cl_item' + (it.done ? ' o_sh_cl_done' : '')" t-on-click.stop="() => this.openTask(it.id)">
                             <span t-if="state.open === 'steps'" class="o_sh_cl_n" t-esc="it_index + 1"/>
                             <span class="o_sh_cl_name" t-esc="it.name"/>
-                            <span class="o_sh_cl_st" t-esc="it.label"/>
+                            <span t-att-class="'o_sh_cl_st o_sh_cl_k_' + (it.kind || 'none')" t-esc="it.label"/>
                         </div>
                     </t>
                     <div t-if="state.items.length &gt; SHOW" class="o_sh_cl_more" t-on-click.stop="() => this.openTask(props.record.resId)">
