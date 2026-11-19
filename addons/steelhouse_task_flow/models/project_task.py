@@ -115,9 +115,10 @@ class ProjectTask(models.Model):
     # no longer shown or used in the progress (kept so old values are not lost)
     sh_manual_progress = fields.Integer('ხელით პროგრესი (%)')
     sh_progress = fields.Integer(
-        'პროგრესი (%)', compute='_compute_sh_progress', store=True,
+        'პროგრესი (%)', compute='_compute_sh_progress', store=True, recursive=True,
         help="ავტომატურად: დასრულებული = 100%; სხვა შემთხვევაში ქვედავალებებისა და საკონტროლო "
-             "სიის საშუალო; თუ არცერთი არ არის - სტადიით. „შემოწმებაზე“ - მინიმუმ 90%.")
+             "სიის საშუალო; თუ არცერთი არ არის - სტადიით. „შემოწმებაზე“ - მინიმუმ 90%. "
+             "თანმიმდევრობის მთავარ დავალებაზე - მისი და ყველა ნაბიჯის საშუალო.")
 
     # ------------------------------------------------------------------
     # Automatic progress (requirement 3.3)
@@ -135,7 +136,8 @@ class ProjectTask(models.Model):
                     done += 1
         return round(100 * done / total) if total else None
 
-    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description')
+    @api.depends('stage_id.sh_kind', 'state', 'child_ids.state', 'description',
+                 'sh_is_step', 'depend_on_ids.sh_progress', 'depend_on_ids.state')
     def _compute_sh_progress(self):
         for task in self:
             kind = task.stage_id.sh_kind
@@ -150,6 +152,12 @@ class ProjectTask(models.Model):
             if checklist is not None:
                 sources.append(checklist)
             value = round(sum(sources) / len(sources)) if sources else KIND_PROGRESS.get(kind, 0)
+            # main task of a sequence: the average of the task itself and all its steps
+            # (a step keeps its own value, so the steps are not counted twice)
+            if task.id and not task.sh_is_step and task.depend_on_ids:
+                steps = task._sh_all_previous().filtered(lambda t: t.state != '1_canceled')
+                if steps:
+                    value = round((value + sum(steps.mapped('sh_progress'))) / (len(steps) + 1))
             if kind == 'review':
                 value = max(value, 90)
             task.sh_progress = value
