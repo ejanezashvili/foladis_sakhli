@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <templates xml:space="preserve">
     <!-- fold icon on every open kanban column, next to "+" (folding no longer needs the column's menu);
-         a folded column opens with its own arrows, as before -->
+         a folded column opens with its own arrows, as before.
+         Task boards use mail.RottingKanbanHeader (a primary copy of web.KanbanHeader), so both get it;
+         if both ever apply, the scss hides the second icon. -->
+    <t t-name="steelhouse_task_flow.ColumnFoldButton">
+        <button t-if="!env.isSmall and !props.list.model.useSampleModel"
+                class="o_sh_column_fold btn px-1 d-print-none" t-on-click.stop="() => this.toggleGroup()">
+            <i class="fa fa-compress opacity-75 opacity-100-hover" role="img" aria-label="ჩაკეცვა" title="ჩაკეცვა"/>
+        </button>
+    </t>
     <t t-inherit="web.KanbanHeader" t-inherit-mode="extension">
         <xpath expr="//GroupConfigMenu" position="after">
-            <button t-if="!env.isSmall and !props.list.model.useSampleModel"
-                    class="o_sh_column_fold btn px-1 d-print-none" t-on-click.stop="() => this.toggleGroup()">
-                <i class="fa fa-compress opacity-75 opacity-100-hover" role="img" aria-label="ჩაკეცვა" title="ჩაკეცვა"/>
-            </button>
+            <t t-call="steelhouse_task_flow.ColumnFoldButton"/>
+        </xpath>
+    </t>
+    <t t-inherit="mail.RottingKanbanHeader" t-inherit-mode="extension">
+        <xpath expr="//GroupConfigMenu" position="after">
+            <t t-call="steelhouse_task_flow.ColumnFoldButton"/>
         </xpath>
     </t>
 </templates>

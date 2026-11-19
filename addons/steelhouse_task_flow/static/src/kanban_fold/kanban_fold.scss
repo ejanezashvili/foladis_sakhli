@@ -3,3 +3,8 @@
     color: inherit;
     line-height: 1;
 }
+
+// never twice (web.KanbanHeader and its copy mail.RottingKanbanHeader both get the icon)
+.o_kanban_header .o_sh_column_fold ~ .o_sh_column_fold {
+    display: none;
+}
