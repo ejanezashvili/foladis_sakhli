@@ -1,0 +1,5 @@
+// fold icon in the kanban column header (kanban_fold.xml): same look as the "+" next to it
+.o_kanban_header .o_sh_column_fold {
+    color: inherit;
+    line-height: 1;
+}
