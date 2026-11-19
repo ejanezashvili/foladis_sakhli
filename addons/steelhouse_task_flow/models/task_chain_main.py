@@ -5,7 +5,9 @@ strip above them ("მთავარი დავალება: ... · ნა
 two tasks ("between": after the anchor, before the anchor's next tasks), so "+ ნაბიჯის დამატება"
 adds the last step before the main task instead of a branch after it.
 """
-from odoo import api, models
+from markupsafe import Markup
+
+from odoo import _, api, models
 
 CLOSED = ('1_done', '1_canceled')
 
@@ -82,10 +84,31 @@ class ProjectTask(models.Model):
             self = self.filtered(lambda t: not t._sh_is_main())
         return super()._sh_check_not_waiting(kind)
 
+    def _sh_steps_all_closed(self):
+        prev = self._sh_all_previous()
+        return bool(prev) and all(t.state in CLOSED for t in prev)
+
     def write(self, vals):
+        # the main tasks right after these tasks: were all their steps closed before this write?
+        watch = {}
+        if 'state' in vals or 'stage_id' in vals:
+            for main in self.sudo().dependent_ids.filtered(lambda t: t._sh_is_main() and t.state not in CLOSED):
+                watch[main.id] = main._sh_steps_all_closed()
         res = super().write(vals)
+        for main in self.env['project.task'].sudo().browse([i for i, closed in watch.items() if not closed]):
+            if main._sh_steps_all_closed():
+                main._sh_notify_steps_done()
         if vals.get('state') == '04_waiting_normal' or 'depend_on_ids' in vals or 'dependent_ids' in vals:
             mains = self.sudo().filtered(lambda t: t.state == '04_waiting_normal' and t._sh_is_main())
             if mains:
                 mains.with_context(sh_flow_internal=True).write({'state': '01_in_progress'})
         return res
+
+    def _sh_notify_steps_done(self):
+        """All steps of the main task are finished: its people may send it to review."""
+        self.ensure_one()
+        partners = (self.user_ids | self.sh_responsible_id).filtered(lambda u: u.active and not u.share).partner_id
+        body = Markup("✅ <b>%s</b>") % _("ყველა ნაბიჯი დასრულდა - შეგიძლიათ შემოწმებაზე გაგზავნა.")
+        self.with_context(mail_post_autofollow=False).message_post(
+            body=body, partner_ids=partners.ids, message_type='comment' if partners else 'notification',
+            subtype_xmlid='mail.mt_comment' if partners else 'mail.mt_note')
