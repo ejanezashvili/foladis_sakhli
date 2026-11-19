@@ -27,15 +27,19 @@ export class TaskCardLists extends Component {
     get subDone() {
         return this.data.closed_subtask_count || 0;
     }
+    // an employee's step card lists all steps of its main task ("chain"; models/task_card_step.py),
+    // a main task card lists its own steps
+    get isStep() {
+        return Boolean(this.data.sh_is_step);
+    }
+    get listKind() {
+        return this.isStep ? "chain" : "steps";
+    }
     get stepTotal() {
-        // a step's own card shows the step badge instead (models/task_card_lists.py)
-        if (this.data.sh_is_step) {
-            return 0;
-        }
-        return this.data.sh_step_total || 0;
+        return this.isStep ? this.data.sh_step_chain_total || 0 : this.data.sh_step_total || 0;
     }
     get stepDone() {
-        return this.data.sh_step_done || 0;
+        return this.isStep ? this.data.sh_step_chain_done || 0 : this.data.sh_step_done || 0;
     }
 
     async toggle(kind) {
@@ -67,5 +71,7 @@ registry.category("view_widgets").add("sh_card_lists", {
         { name: "sh_step_total", type: "integer" },
         { name: "sh_step_done", type: "integer" },
         { name: "sh_is_step", type: "boolean" },
+        { name: "sh_step_chain_total", type: "integer" },
+        { name: "sh_step_chain_done", type: "integer" },
     ],
 });

@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse Task Flow',
-    'version': '19.0.1.146.0',
+    'version': '19.0.1.147.0',
     'category': 'Services/Project',
     'summary': 'ფოლადის სახლი: სტადია-სტატუსი, მიზეზები, შემმოწმებელი, მტკიცებულება',
     'description': """
@@ -33,6 +33,7 @@
         'views/all_tasks_views.xml',
         'views/task_hold_views.xml',
         'views/task_stagebar_views.xml',
+        'views/task_card_step_views.xml',
         'data/ka_names.xml',
     ],
     'assets': {

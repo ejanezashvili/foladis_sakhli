@@ -27,3 +27,4 @@ from . import task_company_week
 from . import task_hold
 from . import task_chain_main
 from . import task_stagebar
+from . import task_card_step

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- employee's step card: 1. main task on top, 2. stage, 3. the sequence (drop-down); the rest as is -->
+    <record id="view_task_kanban_sh_card_step" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.card.step</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="steelhouse_task_flow.view_task_kanban_steelhouse_flow"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('o_sh_card_top')]" position="before">
+                <field name="sh_is_step" invisible="1"/>
+                <field name="sh_step_main_label" invisible="1"/>
+                <div t-if="record.sh_step_main_label.raw_value" class="o_sh_step_main">
+                    <span class="o_sh_step_main_k">მთავარი დავალება:</span>
+                    <span class="o_sh_step_main_v" t-esc="record.sh_step_main_label.raw_value"/>
+                </div>
+            </xpath>
+            <xpath expr="//div[hasclass('o_sh_card_top')]" position="after">
+                <t t-if="record.sh_step_main_label.raw_value">
+                    <div class="o_sh_step_stage"><span>სტადია: <t t-esc="record.stage_id.value"/></span></div>
+                    <widget name="sh_card_lists"/>
+                </t>
+            </xpath>
+            <xpath expr="//main/widget[@name='sh_card_lists']" position="attributes">
+                <attribute name="t-if">!record.sh_step_main_label.raw_value</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

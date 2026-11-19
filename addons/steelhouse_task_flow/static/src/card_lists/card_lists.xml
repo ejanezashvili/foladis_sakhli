@@ -8,18 +8,18 @@
                     <i class="fa fa-check-square-o me-1"/>ქვედავალებები <t t-esc="subDone"/>/<t t-esc="subTotal"/>
                     <i t-att-class="'fa ms-1 ' + (state.open === 'subtasks' ? 'fa-caret-up' : 'fa-caret-down')"/>
                 </button>
-                <button t-if="stepTotal" type="button" t-att-class="'o_sh_cl_btn' + (state.open === 'steps' ? ' o_sh_cl_on' : '')"
-                        t-on-click.stop="() => this.toggle('steps')">
+                <button t-if="stepTotal" type="button" t-att-class="'o_sh_cl_btn' + (state.open === listKind ? ' o_sh_cl_on' : '')"
+                        t-on-click.stop="() => this.toggle(listKind)">
                     <i class="fa fa-link me-1"/>თანმიმდევრობა <t t-esc="stepDone"/>/<t t-esc="stepTotal"/>
-                    <i t-att-class="'fa ms-1 ' + (state.open === 'steps' ? 'fa-caret-up' : 'fa-caret-down')"/>
+                    <i t-att-class="'fa ms-1 ' + (state.open === listKind ? 'fa-caret-up' : 'fa-caret-down')"/>
                 </button>
             </div>
             <div t-if="state.open" class="o_sh_cl_list">
                 <div t-if="state.loading" class="text-muted small">იტვირთება...</div>
                 <t t-else="">
                     <t t-foreach="state.items.slice(0, SHOW)" t-as="it" t-key="it.id">
-                        <div t-att-class="'o_sh_cl_item' + (it.done ? ' o_sh_cl_done' : '')" t-on-click.stop="() => this.openTask(it.id)">
-                            <span t-if="state.open === 'steps'" class="o_sh_cl_n" t-esc="it_index + 1"/>
+                        <div t-att-class="'o_sh_cl_item' + (it.done ? ' o_sh_cl_done' : '') + (it.mine ? ' o_sh_cl_mine' : '')" t-on-click.stop="() => this.openTask(it.id)">
+                            <span t-if="state.open !== 'subtasks'" class="o_sh_cl_n" t-esc="it_index + 1"/>
                             <span class="o_sh_cl_name" t-esc="it.name"/>
                             <span t-att-class="'o_sh_cl_st o_sh_cl_k_' + (it.kind || 'none')" t-esc="it.label"/>
                         </div>
