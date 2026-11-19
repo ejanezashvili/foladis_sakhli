@@ -5,7 +5,7 @@ strip above them ("მთავარი დავალება: ... · ნა
 two tasks ("between": after the anchor, before the anchor's next tasks), so "+ ნაბიჯის დამატება"
 adds the last step before the main task instead of a branch after it.
 """
-from odoo import models
+from odoo import api, models
 
 CLOSED = ('1_done', '1_canceled')
 
@@ -58,3 +58,34 @@ class ProjectTask(models.Model):
         super()._sh_chain_connect('next', other)
         for nxt in nexts:
             nxt.sudo().write({'depend_on_ids': [(3, self.id), (4, other.id)]})
+
+    # ------------------------------------------------------------------ the main task is never "waiting"
+    # It is the whole job; its steps are its parts. It can be accepted and worked on at any time;
+    # "შემოწმებაზე" / "დასრულებული" still wait for all its steps (_sh_check_not_waiting,
+    # _sh_open_before_review). Steps keep waiting for each other.
+    def _sh_is_main(self):
+        return bool(not self.sh_is_step and self.depend_on_ids and not self.is_template)
+
+    def is_blocked_by_dependences(self):
+        if self._sh_is_main():
+            return False
+        return super().is_blocked_by_dependences()
+
+    @api.depends('dependent_ids')
+    def _compute_state(self):
+        super()._compute_state()
+        for task in self.filtered(lambda t: t.state == '04_waiting_normal' and t._sh_is_main()):
+            task.state = '01_in_progress'
+
+    def _sh_check_not_waiting(self, kind):
+        if kind in ('accepted', 'in_progress'):
+            self = self.filtered(lambda t: not t._sh_is_main())
+        return super()._sh_check_not_waiting(kind)
+
+    def write(self, vals):
+        res = super().write(vals)
+        if vals.get('state') == '04_waiting_normal' or 'depend_on_ids' in vals or 'dependent_ids' in vals:
+            mains = self.sudo().filtered(lambda t: t.state == '04_waiting_normal' and t._sh_is_main())
+            if mains:
+                mains.with_context(sh_flow_internal=True).write({'state': '01_in_progress'})
+        return res
