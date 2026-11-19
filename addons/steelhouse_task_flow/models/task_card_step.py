@@ -31,9 +31,15 @@ class ProjectTask(models.Model):
             task.sh_step_chain_done = len(steps.filtered(lambda t: t.state in CLOSED))
 
     def sh_card_list(self, kind):
-        """'chain' (on a step card): all steps of its main task, the user's own marked as mine."""
+        """'chain' (on a step card): all steps of its main task; on every list the user's own
+        tasks are marked as mine (blue, bold)."""
         if kind != 'chain':
-            return super().sh_card_list(kind)
+            items = super().sh_card_list(kind)
+            mine = set(self.env['project.task'].sudo().search(
+                [('id', 'in', [i['id'] for i in items]), ('user_ids', 'in', self.env.uid)]).ids)
+            for item in items:
+                item['mine'] = item['id'] in mine
+            return items
         self.ensure_one()
         main = self._sh_chain_main()
         uid = self.env.uid
