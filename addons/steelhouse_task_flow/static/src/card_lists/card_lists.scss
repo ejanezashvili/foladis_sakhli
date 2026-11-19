@@ -27,9 +27,7 @@
     .o_sh_cl_more { padding: 2px; font-size: 0.75rem; color: #6f63a6; cursor: pointer; text-decoration: underline; }
 }
 
-// step card (employee): the user's own steps in the sequence list - blue and bold
+// sequence list on a card: the user's own steps - blue bold text (no background)
 .o_sh_cl_item.o_sh_cl_mine {
-    background: #dbe8fb;
-    border-radius: 6px;
     .o_sh_cl_n, .o_sh_cl_name { color: #1f5fbf; font-weight: 700; }
 }
