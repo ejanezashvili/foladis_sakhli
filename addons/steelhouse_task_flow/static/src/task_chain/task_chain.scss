@@ -349,3 +349,21 @@
     .form-check-input { width: 1.8em; height: 1em; margin-top: 0; margin-left: -2.1em; cursor: pointer; }
 }
 .o_sh_chain_card .o_sh_chain_prevdone { margin-top: 2px; font-weight: 600; }
+
+// the main task above the steps (models/task_chain_main.py)
+.o_sh_chain_mainbar {
+    margin-bottom: 8px;
+    padding: 7px 12px;
+    border-radius: 8px;
+    background: #ece8f5;
+    color: #5b4d86;
+    font-size: 0.9rem;
+    a { font-weight: 600; }
+}
+.o_sh_chain_empty {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 2px;
+}
+.o_sh_chain .o_sh_chain_slot span { text-align: center; line-height: 1.15; padding: 0 4px; }

@@ -10,8 +10,25 @@
                     <t t-if="!state.readonly and state.nodes.length > 1"> · <i class="fa fa-arrows me-1" title="გადაადგილება"/>რიგის შესაცვლელად ბარათი გადაათრიეთ სხვა ნაბიჯზე ან ნაბიჯებს შორის.</t>
                 </div>
 
+                <!-- the main task: not a step, shown above the steps -->
+                <div t-if="state.main" class="o_sh_chain_mainbar">
+                    <i class="fa fa-flag-checkered me-1"/>მთავარი დავალება:
+                    <a t-if="!state.main.current and state.main.can_open" href="#" t-on-click.prevent="() => this.openTask(state.main)">
+                        <t t-if="state.main.number"><t t-esc="state.main.number"/> </t>„<t t-esc="state.main.name"/>“</a>
+                    <b t-else=""><t t-if="state.main.number"><t t-esc="state.main.number"/> </t>„<t t-esc="state.main.name"/>“</b>
+                    <span class="ms-1">· <t t-esc="state.main.stage"/></span>
+                    <span t-if="state.main.prev_total" t-att-class="'ms-1' + (state.main.prev_done === state.main.prev_total ? ' text-success' : '')">
+                        · ნაბიჯები: <t t-esc="state.main.prev_done"/> / <t t-esc="state.main.prev_total"/> შესრულებულია</span>
+                    <span t-else="" class="ms-1">· ნაბიჯები არ აქვს</span>
+                </div>
+                <div t-if="!state.nodes.length and !state.form and !state.link" class="o_sh_chain_empty">
+                    <span class="text-muted">თანმიმდევრობა ცარიელია.</span>
+                    <button t-if="!state.readonly" type="button" class="btn btn-outline-secondary btn-sm o_sh_chain_addbtn"
+                            t-on-click="() => this.addLast()">+ ნაბიჯის დამატება</button>
+                </div>
+
                 <!-- numbered steps -->
-                <div class="o_sh_chain_scroll" t-ref="scroll">
+                <div t-if="state.nodes.length or state.form or state.link" class="o_sh_chain_scroll" t-ref="scroll">
                     <t t-set="lay" t-value="layout"/>
                     <div t-att-class="'o_sh_chain_canvas' + (state.drag ? ' o_sh_dragging' : '')" t-att-style="canvasStyle"
                          t-on-dragover="onDragOver" t-on-drop="onDrop">
@@ -42,12 +59,12 @@
                         <!-- "+ before" / "+ after" -->
                         <t t-if="!state.readonly">
                             <div class="o_sh_chain_slot" t-att-style="startSlotStyle"
-                                 t-on-click="() => this.openForm('prev', this.firstNode)" title="ნაბიჯის დამატება დასაწყისში">
+                                 t-on-click="() => this.addFirst()" title="ნაბიჯის დამატება დასაწყისში">
                                 <span>+ წინ</span>
                             </div>
                             <div class="o_sh_chain_slot" t-att-style="endSlotStyle"
-                                 t-on-click="() => this.openForm('next', this.lastNode)" title="ნაბიჯის დამატება ბოლოში">
-                                <span>+ შემდეგ</span>
+                                 t-on-click="() => this.addLast()" title="ნაბიჯის დამატება ბოლოში (მთავარი დავალების წინ)">
+                                <span>+ ნაბიჯის დამატება</span>
                             </div>
                         </t>
 
@@ -88,7 +105,7 @@
                                 <i class="fa fa-clock-o me-1" title="ვადა"/><t t-esc="node.deadline"/>
                             </div>
                             <button t-if="!state.readonly" class="o_sh_card_plus" title="ნაბიჯის დამატება ამის შემდეგ"
-                                    t-on-click.stop="() => this.openForm('next', node)">+</button>
+                                    t-on-click.stop="() => this.openForm('between', node)">+</button>
                         </div>
 
                         <!-- remove a link: ✕ on the arrow -->

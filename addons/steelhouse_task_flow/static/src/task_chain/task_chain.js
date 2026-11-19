@@ -38,6 +38,7 @@ export class TaskChain extends Component {
             loaded: false,
             nodes: [],
             edges: [],
+            main: null,
             readonly: false,
             truncated: false,
             project: "",
@@ -75,6 +76,7 @@ export class TaskChain extends Component {
         Object.assign(this.state, {
             nodes: data.nodes,
             edges: data.edges,
+            main: data.main || null,
             readonly: data.readonly,
             truncated: data.truncated,
             project: data.project || "",
@@ -157,11 +159,24 @@ export class TaskChain extends Component {
         return `left:${this.layout.endX}px;top:${PAD + HEAD + (H - SLOT_H) / 2}px;width:${SLOT}px;height:${SLOT_H}px;`;
     }
     // the first step's first task gets "+ previous step"; the last step's first task gets "+ step N"
+    // the main task is not a step: shown above the steps; new steps go before it
+    get mainAnchor() {
+        return this.state.main || { id: this.taskId, level: 0, name: "" };
+    }
+    addFirst() {
+        return this.openForm("prev", this.firstNode || this.mainAnchor);
+    }
+    addLast() {
+        return this.lastNode ? this.openForm("between", this.lastNode) : this.openForm("prev", this.mainAnchor);
+    }
     get firstNode() {
         const first = this.state.nodes.filter((n) => n.level === 0);
         return first.find((n) => n.current) || first[0];
     }
     get lastNode() {
+        if (!this.state.nodes.length) {
+            return undefined;
+        }
         const maxLevel = Math.max(...this.state.nodes.map((n) => n.level));
         const last = this.state.nodes.filter((n) => n.level === maxLevel);
         return last.find((n) => n.current) || last[0];
@@ -283,7 +298,7 @@ export class TaskChain extends Component {
             direction,
             anchor_id: anchor ? anchor.id : this.taskId,
             anchor_name: anchor ? anchor.name : "",
-            step: direction === "next" ? level + 2 : Math.max(1, level),
+            step: direction === "prev" ? Math.max(1, level) : level + 2,
             name: "",
             project_id: this.currentProjectId,
             user_id: false,
