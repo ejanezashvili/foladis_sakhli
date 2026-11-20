@@ -48,6 +48,66 @@ class HrLeave(models.Model):
             hr = (employee.company_id or self.env.company).sh_hr_user_id
             leave.sh_is_hr = user == hr or user.has_group('base.group_system')
 
+    sh_approval_path = fields.Char(
+        string='დაამტკიცებს', compute='_compute_sh_approval_path',
+        help="ვინ დაამტკიცებს ამ მოთხოვნას: პირველი და (ორსაფეხურიანზე) მეორე დამტკიცება.")
+
+    @api.depends('employee_id', 'holiday_status_id', 'sh_invited_approver_id', 'state')
+    def _compute_sh_approval_path(self):
+        for leave in self:
+            leave.sh_approval_path = leave._sh_approval_text()
+
+    def _sh_stage1_users(self):
+        """First approvers of a request (also before it is saved): same rule as
+        _get_responsible_for_approval at "to approve"."""
+        employee = self.employee_id.sudo()
+        final = self._sh_final_users()
+        if self.validation_type == 'both' and self._sh_is_founder():
+            return final
+        if self.sh_no_head:
+            return self.sudo().sh_invited_approver_id
+        heads = employee._sh_heads().user_id
+        responsible = employee.leave_manager_id
+        if responsible in heads:
+            responsible |= heads
+        result = self.env['res.users']
+        for user in responsible:
+            head = user.sudo().employee_id
+            absence = head and head._sh_current_absence()
+            deputy = absence and absence._sh_deputy_for(employee)
+            result |= deputy.user_id if deputy and deputy.user_id and deputy != employee else user
+        if self.validation_type == 'both':
+            if heads & final:
+                return heads & final
+            if result - final:
+                result -= final
+        return result
+
+    def _sh_approval_text(self):
+        self.ensure_one()
+        leave_type = self.holiday_status_id
+        if not self.employee_id or not leave_type:
+            return False
+        names = lambda users: ", ".join(users.mapped('name')) or '-'
+        kind = self.validation_type
+        if kind == 'no_validation':
+            return "დამტკიცება არ სჭირდება"
+        final = self._sh_final_users()
+        if kind == 'hr':
+            return names(final) if final else "HR"
+        if self.sh_no_head and not self.sudo().sh_invited_approver_id:
+            hr = (self.employee_id.company_id or self.env.company).sh_hr_user_id
+            first = "HR (%s) მოიწვევს დამმტკიცებელს" % hr.name if hr else "HR მოიწვევს დამმტკიცებელს"
+        else:
+            first_users = self._sh_stage1_users()
+            if kind == 'both' and first_users and first_users <= final and (
+                    self._sh_is_founder() or first_users & self.employee_id.sudo()._sh_heads().user_id):
+                return "%s (ერთი დასტურით)" % names(first_users)
+            first = names(first_users)
+        if kind == 'manager':
+            return first
+        return "1. %s → 2. %s" % (first, names(final) if final else "HR")
+
     # ------------------------------------------------------------------ who approves
     def _sh_final_users(self):
         # archived users count too (else an archived founder would fall back to the first step)
