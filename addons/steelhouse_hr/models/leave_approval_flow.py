@@ -98,6 +98,12 @@ class HrLeave(models.Model):
         self.ensure_one()
         if user.has_group('base.group_system'):
             return self.state in ('confirm', 'validate1')
+        if self.validation_type == 'hr':
+            # approved directly by the type's responsible (e.g. compensatory days - the founder)
+            final = self._sh_final_users()
+            if not final:
+                return None
+            return self.state == 'confirm' and user in final
         if self.validation_type not in ('manager', 'both'):
             return None   # other types: Odoo's own rule
         if self.state == 'confirm':
@@ -139,7 +145,7 @@ class HrLeave(models.Model):
             allowed = leave._sh_user_can_approve(user)
             if allowed is None:
                 continue
-            last_step = leave.state == 'validate1' or leave.validation_type == 'manager'
+            last_step = leave.state == 'validate1' or leave.validation_type in ('manager', 'hr')
             leave.can_validate = bool(allowed) and last_step
 
     def action_approve(self, check_state=True):
@@ -210,3 +216,45 @@ class HrLeave(models.Model):
         if 'sh_invited_approver_id' in vals or 'state' in vals or 'employee_id' in vals:
             self._sh_hr_todo()
         return res
+
+
+class HrLeaveAllocation(models.Model):
+    _inherit = 'hr.leave.allocation'
+
+    def _sh_final_users(self):
+        return self.sudo().with_context(active_test=False).holiday_status_id.responsible_ids
+
+    def _sh_user_can_approve(self, user):
+        """Days requests of a type approved "by HR" with a responsible set (compensatory days): only the
+        responsible (the founder) or a system administrator; other cases - Odoo's own rule."""
+        self.ensure_one()
+        if self.state not in ('confirm', 'validate1'):
+            return None
+        if user.has_group('base.group_system'):
+            return True
+        final = self._sh_final_users()
+        if self.validation_type != 'hr' or not final:
+            return None
+        return user in final
+
+    def _compute_can_approve(self):
+        super()._compute_can_approve()
+        for allocation in self:
+            allowed = allocation._sh_user_can_approve(self.env.user)
+            if allowed is False:
+                allocation.can_approve = False
+
+    def _compute_can_validate(self):
+        super()._compute_can_validate()
+        for allocation in self:
+            allowed = allocation._sh_user_can_approve(self.env.user)
+            if allowed is False:
+                allocation.can_validate = False
+
+    def action_approve(self):
+        if not self.env.su:
+            for allocation in self:
+                if allocation._sh_user_can_approve(self.env.user) is False:
+                    raise UserError(_("ამ მოთხოვნის დამტკიცება შეუძლია მხოლოდ: %s",
+                                      ", ".join(allocation._sh_final_users().mapped('name'))))
+        return super().action_approve()
