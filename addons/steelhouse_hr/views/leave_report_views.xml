@@ -33,8 +33,10 @@
     <record id="hr_holidays.menu_hr_holidays_summary_all" model="ir.ui.menu">
         <field name="sequence">4</field>
     </record>
+    <!-- Odoo's "balance" is hidden too: "თანამშრომლების ბალანსი" shows it by period, with history (2026-11-20) -->
     <record id="hr_holidays.menu_hr_holidays_balance" model="ir.ui.menu">
         <field name="sequence">5</field>
+        <field name="active" eval="False"/>
     </record>
 
     <!-- PDF: exactly what the page shows -->
