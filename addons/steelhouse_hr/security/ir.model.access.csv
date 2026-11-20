@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_leave_delegation_user,leave.delegation.user,model_steelhouse_leave_delegation,base.group_user,1,1,1,1
 access_leave_balance_user,leave.balance.user,model_steelhouse_leave_balance,base.group_user,1,0,0,0
+access_sh_leave_report_wizard,sh.leave.report.wizard,model_sh_leave_report_wizard,hr_holidays.group_hr_holidays_user,1,1,1,1

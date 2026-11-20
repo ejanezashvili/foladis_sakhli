@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- which column of HR's report a time off type goes to -->
+    <record id="edit_holiday_status_form_sh_report" model="ir.ui.view">
+        <field name="name">hr.leave.type.form.sh.report</field>
+        <field name="model">hr.leave.type</field>
+        <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_requests']" position="after">
+                <field name="sh_report_kind"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sh_leave_report_wizard_form" model="ir.ui.view">
+        <field name="name">sh.leave.report.wizard.form</field>
+        <field name="model">sh.leave.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="შვებულება თვეების მიხედვით">
+                <p class="text-muted">
+                    დამტკიცებული ანაზღაურებადი და ანაზღაურების გარეშე შვებულება თანამშრომლებისა და თვეების
+                    მიხედვით, ბოლოს - ჯამი პერიოდში. რამდენიმე თვეზე გადასული შვებულება თვეებად იყოფა.
+                </p>
+                <group>
+                    <group>
+                        <label for="date_from" string="პერიოდი"/>
+                        <div class="o_row">
+                            <field name="date_from"/> - <field name="date_to"/>
+                        </div>
+                        <field name="only_with_leave"/>
+                    </group>
+                    <group>
+                        <field name="department_id" options="{'no_create': True}"/>
+                        <field name="employee_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_excel" type="object" string="Excel" icon="fa-file-excel-o" class="btn-success"/>
+                    <button name="action_pdf" type="object" string="PDF" icon="fa-file-pdf-o" class="btn-primary"/>
+                    <button name="action_view" type="object" string="ნახვა" icon="fa-table" class="btn-secondary"/>
+                    <button special="cancel" string="დახურვა" class="btn-light"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_leave_report_wizard" model="ir.actions.act_window">
+        <field name="name">შვებულება თვეების მიხედვით</field>
+        <field name="res_model">sh.leave.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sh_leave_report_month" name="თვეების მიხედვით (Excel / PDF)"
+              parent="hr_holidays.menu_hr_holidays_report" action="action_sh_leave_report_wizard"
+              groups="hr_holidays.group_hr_holidays_user" sequence="1"/>
+
+    <!-- PDF -->
+    <record id="action_report_sh_leave_month" model="ir.actions.report">
+        <field name="name">შვებულება თვეების მიხედვით</field>
+        <field name="model">sh.leave.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">steelhouse_hr.report_sh_leave_month</field>
+        <field name="report_file">steelhouse_hr.report_sh_leave_month</field>
+        <field name="print_report_name">'შვებულება თვეების მიხედვით'</field>
+        <field name="paperformat_id" ref="steelhouse_hr.paperformat_sh_landscape"/>
+    </record>
+
+    <template id="report_sh_leave_month">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-set="d" t-value="wizard_data[doc.id]"/>
+                <t t-call="web.internal_layout">
+                    <div class="page" style="font-size: 9px;">
+                        <h5>შვებულება თვეების მიხედვით</h5>
+                        <p><t t-esc="d['period']"/> · <t t-esc="d['department']"/></p>
+                        <table class="table table-sm table-bordered" style="font-size: 8px;">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">თანამშრომელი</th>
+                                    <th rowspan="2">დეპარტამენტი</th>
+                                    <th t-foreach="d['months']" t-as="m" colspan="2" class="text-center" t-esc="month_label(m)"/>
+                                    <th colspan="2" class="text-center">სულ</th>
+                                </tr>
+                                <tr>
+                                    <t t-foreach="d['months']" t-as="m"><th>ანაზღ.</th><th>უხელფ.</th></t>
+                                    <th>ანაზღ.</th><th>უხელფ.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="d['rows']" t-as="r">
+                                    <td t-esc="r['employee']"/>
+                                    <td t-esc="r['department']"/>
+                                    <t t-foreach="d['months']" t-as="m">
+                                        <td class="text-end" t-esc="num(r['months'][m]['paid'])"/>
+                                        <td class="text-end" t-esc="num(r['months'][m]['unpaid'])"/>
+                                    </t>
+                                    <td class="text-end"><b t-esc="num(r['paid'])"/></td>
+                                    <td class="text-end"><b t-esc="num(r['unpaid'])"/></td>
+                                </tr>
+                                <tr t-if="not d['rows']"><td t-att-colspan="4 + 2 * len(d['months'])">ამ პერიოდში დამტკიცებული შვებულება არ არის.</td></tr>
+                                <tr t-if="d['rows']" style="font-weight: bold;">
+                                    <td colspan="2">სულ</td>
+                                    <t t-foreach="d['months']" t-as="m">
+                                        <td class="text-end" t-esc="num(d['totals']['months'][m]['paid'])"/>
+                                        <td class="text-end" t-esc="num(d['totals']['months'][m]['unpaid'])"/>
+                                    </t>
+                                    <td class="text-end" t-esc="num(d['totals']['paid'])"/>
+                                    <td class="text-end" t-esc="num(d['totals']['unpaid'])"/>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h6 style="margin-top: 14px;">ჯამი პერიოდში</h6>
+                        <table class="table table-sm table-bordered" style="font-size: 9px; width: 70%;">
+                            <thead>
+                                <tr><th>თანამშრომელი</th><th>დეპარტამენტი</th><th>ანაზღაურებადი</th>
+                                    <th>ანაზღაურების გარეშე</th><th>სულ</th><th>მოთხოვნები</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="d['rows']" t-as="r">
+                                    <td t-esc="r['employee']"/>
+                                    <td t-esc="r['department']"/>
+                                    <td class="text-end" t-esc="num(r['paid'])"/>
+                                    <td class="text-end" t-esc="num(r['unpaid'])"/>
+                                    <td class="text-end"><b t-esc="num(r['paid'] + r['unpaid'])"/></td>
+                                    <td class="text-end" t-esc="r['requests']"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
