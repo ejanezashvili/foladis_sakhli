@@ -59,8 +59,8 @@
     </record>
 
     <menuitem id="menu_steelhouse_leave_balance_all" name="თანამშრომლების ბალანსი"
-              parent="hr_holidays.menu_hr_holidays_management" action="steelhouse_leave_balance_action_all"
-              groups="hr_holidays.group_hr_holidays_user" sequence="40"/>
+              parent="hr_holidays.menu_hr_holidays_report" action="steelhouse_leave_balance_action_all"
+              groups="hr_holidays.group_hr_holidays_user" sequence="2"/>
 
     <!-- class for the new look of the days (allocation) request forms; fields unchanged -->
     <record id="hr_leave_allocation_view_form_steelhouse" model="ir.ui.view">

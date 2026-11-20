@@ -23,6 +23,17 @@
               parent="hr_holidays.menu_hr_holidays_report" action="action_sh_leave_report"
               groups="hr_holidays.group_hr_holidays_user" sequence="1"/>
 
+    <!-- "რეპორტინგი": our report and the balance first, then Odoo's own reports (allocated days, any grouping, graphs) -->
+    <record id="hr_holidays.menu_hr_available_holidays_report_tree" model="ir.ui.menu">
+        <field name="sequence">3</field>
+    </record>
+    <record id="hr_holidays.menu_hr_holidays_summary_all" model="ir.ui.menu">
+        <field name="sequence">4</field>
+    </record>
+    <record id="hr_holidays.menu_hr_holidays_balance" model="ir.ui.menu">
+        <field name="sequence">5</field>
+    </record>
+
     <!-- PDF: exactly what the page shows -->
     <record id="action_report_sh_leave" model="ir.actions.report">
         <field name="name">შვებულების რეპორტი</field>
