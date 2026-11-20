@@ -367,3 +367,12 @@
     padding: 10px 2px;
 }
 .o_sh_chain .o_sh_chain_slot span { text-align: center; line-height: 1.15; padding: 0 4px; }
+
+// step window open: the box must not clip it - the people list of "პასუხისმგებელი" / "შემმოწმებელი"
+// opens below the field and was hidden inside the scrolling box (it seemed that typing found nothing)
+.o_sh_chain .o_sh_chain_scroll:has(.o_sh_chain_pop) {
+    overflow: visible;
+}
+.o_sh_chain .o_sh_chain_pop .o_sh_user_menu {
+    z-index: 1060;
+}
