@@ -4,7 +4,9 @@
 - an employee whose heads include the final approver (the founder - the department heads right under
   "ფოლადის სახლი", where დავითი and ზეზვა სალთხუციშვილი are the heads): only the founder approves,
   once (his approval goes straight to "approved");
-- an employee without a head: HR (the company's "HR" user) does not decide - HR invites the person
+- the founders themselves (heads of the top department "ფოლადის სახლი", no head above them): the
+  final approver approves their time off with one approval (his own too);
+- any other employee without a head: HR (the company's "HR" user) does not decide - HR invites the person
   who approves (field "დამმტკიცებელი (HR-ის მოწვეული)"); that person gives the first approval;
 - second approval ("მეორე დამტკიცება"): only the time off type's responsible (the founder);
 - HR officers no longer approve just because of their rights (they see every request);
@@ -42,7 +44,7 @@ class HrLeave(models.Model):
         user = self.env.user
         for leave in self:
             employee = leave.employee_id.sudo()
-            leave.sh_no_head = bool(employee) and not employee._sh_heads()
+            leave.sh_no_head = bool(employee) and not employee._sh_heads() and not leave._sh_is_founder()
             hr = (employee.company_id or self.env.company).sh_hr_user_id
             leave.sh_is_hr = user == hr or user.has_group('base.group_system')
 
@@ -51,10 +53,23 @@ class HrLeave(models.Model):
         # archived users count too (else an archived founder would fall back to the first step)
         return self.sudo().with_context(active_test=False).holiday_status_id.responsible_ids
 
+    def _sh_is_founder(self):
+        """The employee heads a top-level department and has no head himself."""
+        employee = self.employee_id.sudo()
+        return bool(employee) and not employee._sh_heads() and bool(self.env['hr.department'].sudo().search_count(
+            [('parent_id', '=', False), ('manager_ids', 'in', employee.ids)]))
+
+    def _sh_single_final(self, user):
+        """One approval by the final approver is enough: he is the employee's own head, or a founder's."""
+        return user in self._sh_final_users() and (
+            user in self.employee_id.sudo()._sh_heads().user_id or self._sh_is_founder())
+
     def _get_responsible_for_approval(self):
         responsible = super()._get_responsible_for_approval()
         if self.validation_type == 'manager' or (self.validation_type == 'both' and self.state == 'confirm'):
-            if self.sh_no_head:
+            if self.validation_type == 'both' and self._sh_is_founder():
+                responsible = self._sh_final_users()
+            elif self.sh_no_head:
                 responsible = self.sudo().sh_invited_approver_id
             elif self.validation_type == 'both':
                 final = self._sh_final_users()
@@ -140,8 +155,7 @@ class HrLeave(models.Model):
                     raise UserError(_("ამ მოთხოვნის დამტკიცება თქვენ არ შეგიძლიათ."))
         res = super().action_approve(check_state)
         # the founder as the employee's own head: one approval is enough
-        once = self.filtered(lambda l: l.state == 'validate1' and user in l._sh_final_users()
-                             and user in l.employee_id.sudo()._sh_heads().user_id)
+        once = self.filtered(lambda l: l.state == 'validate1' and l._sh_single_final(user))
         if once:
             once.action_approve(check_state)
         return res
