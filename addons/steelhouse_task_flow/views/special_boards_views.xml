@@ -35,24 +35,60 @@
         <field name="act_window_id" ref="action_sh_recurring_tasks"/>
     </record>
 
-    <!-- confidential: with and without a cycle; an overdue one stays here until it is closed -->
+    <!-- confidential: the only place where confidential tasks are shown (models/task_conf_board.py) -
+         columns ახალი / მუშავდება / შემოწმებაზე / დასრულებული, departments on the left, numbers on top -->
+    <record id="view_sh_conf_board_kanban" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.conf.board</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <kanban position="attributes">
+                <attribute name="js_class">sh_conf_board</attribute>
+                <attribute name="default_group_by">sh_phase</attribute>
+                <attribute name="default_order">date_deadline asc, id desc</attribute>
+                <attribute name="quick_create">0</attribute>
+                <attribute name="group_create">0</attribute>
+                <attribute name="group_delete">0</attribute>
+                <attribute name="group_edit">0</attribute>
+                <attribute name="class" add="o_sh_conf_board" separator=" "/>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_sh_conf_board_search" model="ir.ui.view">
+        <field name="name">project.task.search.sh.conf.board</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="mode">primary</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <searchpanel>
+                    <field name="project_id" string="დეპარტამენტები" icon="fa-building" enable_counters="1"/>
+                </searchpanel>
+            </xpath>
+        </field>
+    </record>
     <record id="action_sh_confidential_tasks" model="ir.actions.act_window">
         <field name="name">კონფიდენციალური</field>
         <field name="res_model">project.task</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('sh_confidential', '=', True), ('is_template', '=', False)]</field>
-        <field name="context">{'create': False, 'group_by': 'sh_kind'}</field>
+        <field name="context">{'create': False, 'sh_conf_board': True}</field>
+        <field name="search_view_id" ref="view_sh_conf_board_search"/>
     </record>
     <record id="action_sh_confidential_tasks_kanban" model="ir.actions.act_window.view">
         <field name="sequence">1</field>
         <field name="view_mode">kanban</field>
-        <field name="view_id" ref="view_sh_special_task_kanban"/>
+        <field name="view_id" ref="view_sh_conf_board_kanban"/>
         <field name="act_window_id" ref="action_sh_confidential_tasks"/>
     </record>
 
     <!-- top menu, right after "კონფიგურაცია" -->
     <menuitem id="menu_sh_recurring_tasks" name="⟳ განმეორებადი" parent="project.menu_main_pm"
               action="action_sh_recurring_tasks" sequence="101"/>
+    <!-- only for the role and for people on a confidential task (group kept in sync by task_conf_board.py) -->
     <menuitem id="menu_sh_confidential_tasks" name="🔒 კონფიდენციალური" parent="project.menu_main_pm"
-              action="action_sh_confidential_tasks" sequence="102"/>
+              action="action_sh_confidential_tasks" sequence="102" groups="steelhouse_task_flow.group_sh_conf_viewer"/>
 </odoo>

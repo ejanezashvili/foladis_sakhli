@@ -37,4 +37,6 @@
               sequence="50" groups="project.group_project_manager,base.group_system"/>
 
     <function model="hr.employee.public" name="_sh_conf_init_members"/>
+    <!-- who sees the confidential board (role + people on a confidential task) -->
+    <function model="project.task" name="_sh_conf_sync_viewers"/>
 </odoo>

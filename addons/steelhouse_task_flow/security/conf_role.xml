@@ -5,4 +5,9 @@
         <field name="name">კონფიდენციალური</field>
         <field name="comment">ხედავს ყველა კონფიდენციალურ დავალებას - „დამატებით ხედავენ“-ში ჩაწერის გარეშე.</field>
     </record>
+    <!-- who sees the "🔒 კონფიდენციალური" board: the role + people on a confidential task (synced automatically) -->
+    <record id="group_sh_conf_viewer" model="res.groups">
+        <field name="name">კონფიდენციალური დაფის ნახვა</field>
+        <field name="comment">ავტომატურად: როლი „კონფიდენციალური“ და ვინც რომელიმე კონფიდენციალურ დავალებაზეა.</field>
+    </record>
 </odoo>

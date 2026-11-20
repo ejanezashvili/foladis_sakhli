@@ -1,0 +1,17 @@
+// "🔒 კონფიდენციალური" board (views/special_boards_views.xml)
+// the numbers sit inside the board, above the columns (the board leaves room for them)
+.o_kanban_renderer:has(> .o_sh_conf_summary) { position: relative; padding-top: 62px !important; }
+.o_sh_conf_summary {
+    position: absolute; top: 8px; left: 12px; right: 12px; z-index: 1;
+    display: flex; flex-wrap: wrap; gap: 28px; padding: 10px 16px;
+    background: #fff; border: 1px solid #e2dcef; border-radius: 10px; font-size: 0.95rem;
+    b { margin-left: 4px; }
+    .o_sh_cs_total { color: #333; }
+    .o_sh_cs_new { color: #5b7fd0; }
+    .o_sh_cs_wip { color: #8a63b6; }
+    .o_sh_cs_review { color: #e0883a; }
+    .o_sh_cs_late { color: #d9363e; }
+}
+.o_sh_conf_board .o_kanban_record:not(.o_kanban_ghost) {
+    border-left: 5px solid #d9363e !important;
+}
