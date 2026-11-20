@@ -50,7 +50,9 @@
     .o_sh_card_pills { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; flex: 1 1 auto; min-width: 0; .o_sh_tpill { max-width: 100%; } }
     .o_sh_tag_wait { background: #eef1f6; color: #4a5568; }
     .o_sh_card_num { font-size: 0.72rem; font-weight: 700; color: #8b84a8; white-space: nowrap; padding-top: 2px; }
-    .o_sh_card_title { font-size: 0.98rem; font-weight: 700; color: #1f1d2b; line-height: 1.3; min-width: 0; }
+    .o_sh_card_title { font-size: 0.98rem; font-weight: 500; color: #1f1d2b; line-height: 1.3; min-width: 0; }
+    // bold: the tasks where I am an assignee or the main responsible
+    .o_sh_card_mine .o_sh_card_title { font-weight: 700; }
     .o_sh_seg {
         display: flex;
         gap: 4px;

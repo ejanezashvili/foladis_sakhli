@@ -4,7 +4,8 @@
          Project administrators (and the system admin) see everything.
          Others see:
          - tasks: assigned to them, where they are the reviewer / main responsible, created by them,
-           and all tasks of the departments they head (sub-departments included);
+           all tasks of the departments they head (sub-departments included),
+           and the tasks given to several departments, theirs among them (sh_view_department_ids);
          - department projects: their own department, the ones they head, the ones with their tasks;
          - concrete projects: where they are assignee / reviewer of a task, the project manager,
            or head of a department working in it. -->
@@ -14,9 +15,10 @@
         <field name="global" eval="True"/>
         <field name="perm_create" eval="False"/>
         <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.share else [
-            '|', '|', '|', '|', '|', '|', '|',
+            '|', '|', '|', '|', '|', '|', '|', '|',
             ('is_template', '=', True),
             ('project_id', '=', False),
+            ('sh_view_department_ids.member_ids.user_id', '=', user.id),
             ('sh_responsible_id', '=', user.id),
             ('sh_confidential_viewer_ids', 'in', user.id),
             ('user_ids', 'in', user.id),
@@ -31,8 +33,9 @@
         <field name="global" eval="True"/>
         <field name="perm_create" eval="False"/>
         <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.share else [
-            '|', '|', '|', '|', '|', '|', '|', '|', '|', '|',
+            '|', '|', '|', '|', '|', '|', '|', '|', '|', '|', '|',
             ('is_template', '=', True),
+            ('task_ids.sh_view_department_ids.member_ids.user_id', '=', user.id),
             ('task_ids.sh_responsible_id', '=', user.id),
             ('task_ids.sh_confidential_viewer_ids', 'in', user.id),
             ('task_ids.user_ids', 'in', user.id),
