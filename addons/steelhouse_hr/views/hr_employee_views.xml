@@ -24,6 +24,7 @@
             <!-- quarterly time off: the date each employee's quarters are counted from -->
             <xpath expr="//group[@name='managers']" position="inside">
                 <field name="sh_quarter_start"/>
+                <field name="sh_quarter_next_day"/>
             </xpath>
         </field>
     </record>

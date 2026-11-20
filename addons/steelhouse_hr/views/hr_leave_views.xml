@@ -7,6 +7,13 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='supported_attachment_ids']/.." position="after">
                 <field name="department_id" invisible="1"/>
+                <!-- employee without a head: HR invites who gives the first approval -->
+                <field name="sh_no_head" invisible="1"/>
+                <field name="sh_is_hr" invisible="1"/>
+                <field name="sh_invited_approver_id" widget="many2one_avatar_user" options="{'no_create': True}"
+                       invisible="not sh_no_head or validation_type not in ['manager', 'both']"
+                       readonly="not sh_is_hr or state != 'confirm'"
+                       placeholder="HR იწვევს, ვინ დაამტკიცებს"/>
                 <separator string="შემცვლელები"/>
                 <field name="delegation_ids" nolabel="1" colspan="2"
                        readonly="state in ['cancel', 'refuse']"

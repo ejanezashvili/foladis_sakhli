@@ -5,6 +5,9 @@
 - a time off type can ignore mandatory working days (sick leave, business trip);
 - quarterly days: a type gives N days for every 3 months counted from each employee's own
   start date; unused days are lost when the quarter ends (the allocation expires).
+  Periods (HR, 2026-11-20): the first one is start .. start + 3 months (that day included), every
+  next one starts the day after: 01.07-01.10, 02.10-01.01, 02.01-01.04 ...; a new employee's start
+  is the hire date + 6 months.
 """
 from datetime import timedelta
 
@@ -34,7 +37,22 @@ class HrEmployee(models.Model):
 
     sh_quarter_start = fields.Date(
         string='შვებულების კვარტლის ათვლა', groups='hr.group_hr_user',
-        help="თარიღი, საიდანაც თანამშრომელს შვებულების კვარტლები ეთვლება (ყოველი 3 თვე ამ დღიდან).")
+        help="პირველი საშვებულებო პერიოდის პირველი დღე (ახალ თანამშრომელს - აყვანიდან 6 თვის შემდეგ). "
+             "პერიოდი 3 თვეა, ბოლო დღის ჩათვლით; შემდეგი იწყება მეორე დღიდან.")
+    sh_quarter_next_day = fields.Boolean(
+        string='ათვლის დღე წინა პერიოდს ეკუთვნის', groups='hr.group_hr_user',
+        help="ჩართულია, თუ ათვლის თარიღი წინა პერიოდის ბოლო დღეა (მოქმედი თანამშრომელი) - "
+             "პირველი პერიოდი მაშინ მეორე დღიდან იწყება.")
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        employees = super().create(vals_list)
+        # a new employee: the first time off period starts 6 months after the hire date
+        for employee, vals in zip(employees, vals_list):
+            if not vals.get('sh_quarter_start'):
+                hired = employee.sudo().date_start or fields.Date.context_today(self)
+                employee.sudo().sh_quarter_start = hired + relativedelta(months=6)
+        return employees
 
 
 class HrLeaveAllocation(models.Model):
@@ -45,15 +63,20 @@ class HrLeaveAllocation(models.Model):
         help="ავტომატურად შექმნილი კვარტლის მინიჭება - რომელი კვარტლისაა.")
 
     @api.model
-    def _sh_quarter_bounds(self, anchor, today):
-        """The quarter (start, end) of `anchor`'s 3-month cycle that contains `today`."""
-        if not anchor or anchor > today:
+    def _sh_quarter_bounds(self, anchor, today, next_day=False):
+        """The period (start, end) of `anchor`'s 3-month cycle that contains `today`: the first one is
+        anchor .. anchor + 3 months (or from the next day when the anchor ends the previous period),
+        then always from the day after the previous end."""
+        if not anchor or anchor + timedelta(days=1 if next_day else 0) > today:
             return None, None
-        start, step = anchor, 0
-        while anchor + relativedelta(months=3 * (step + 1)) <= today:
+        step = 0
+        while anchor + relativedelta(months=3 * (step + 1)) < today:
             step += 1
-        start = anchor + relativedelta(months=3 * step)
-        end = anchor + relativedelta(months=3 * (step + 1)) - timedelta(days=1)
+        if step:
+            start = anchor + relativedelta(months=3 * step) + timedelta(days=1)
+        else:
+            start = anchor + timedelta(days=1 if next_day else 0)
+        end = anchor + relativedelta(months=3 * (step + 1))
         return start, end
 
     @api.model
@@ -71,7 +94,8 @@ class HrLeaveAllocation(models.Model):
             for employee in employees:
                 if leave_type.company_id and employee.company_id != leave_type.company_id:
                     continue
-                start, end = self._sh_quarter_bounds(employee.sh_quarter_start, today)
+                start, end = self._sh_quarter_bounds(employee.sh_quarter_start, today,
+                                                     employee.sh_quarter_next_day)
                 if not start:
                     continue
                 if Allocation.search_count([('employee_id', '=', employee.id),
