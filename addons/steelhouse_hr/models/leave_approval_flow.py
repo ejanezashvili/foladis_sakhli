@@ -1,112 +1,45 @@
 """Who approves a time off request (HR's process, Docs/HR "შვებულების პროცესი", 2026-11-20):
 
 - first approval ("პირველი დამტკიცება"): the employee's direct head(s) - equal heads all approve;
-- an employee whose heads include the final approver (the founder - the department heads right under
-  "ფოლადის სახლი", where დავითი and ზეზვა სალთხუციშვილი are the heads): only the founder approves,
-  once (his approval goes straight to "approved");
-- the founders themselves (heads of the top department "ფოლადის სახლი", no head above them): the
-  final approver approves their time off with one approval (his own too);
-- any other employee without a head: HR (the company's "HR" user) does not decide - HR invites the person
-  who approves (field "დამმტკიცებელი (HR-ის მოწვეული)"); that person gives the first approval;
+- the employee card's time off approver ("სამუშაო ინფორმაცია" - "დამმტკიცებლები" - "შვებულება"), set by
+  HR in advance, wins when it is someone else than the heads (e.g. მარიამ პაპაშვილი -> სოფიკო ერაძე);
+  an employee without a head is approved by that person; nobody there -> the request is not created
+  ("მიმართეთ HR-ს");
+- when the first approvers are the final approver himself (the department heads right under
+  "ფოლადის სახლი", the founders' own time off, or the card says ზეზვა): one approval is enough;
 - second approval ("მეორე დამტკიცება"): only the time off type's responsible (the founder);
 - HR officers no longer approve just because of their rights (they see every request);
   a system administrator still can (until the launch).
 """
-from markupsafe import Markup
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
-
-HR_TODO = "აირჩიეთ დამმტკიცებელი"
 
 
 class ResCompany(models.Model):
     _inherit = 'res.company'
 
-    sh_hr_user_id = fields.Many2one(
-        'res.users', string='HR (შვებულებები)',
-        help="ვინ იწვევს დამმტკიცებელს იმ თანამშრომლის შვებულებაზე, ვისაც ხელმძღვანელი არ ჰყავს.")
+    # no longer used (HR sets the approver on the employee card in advance); kept for the column
+    sh_hr_user_id = fields.Many2one('res.users', string='HR (შვებულებები)')
 
 
 class HrLeave(models.Model):
     _inherit = 'hr.leave'
 
-    sh_invited_approver_id = fields.Many2one(
-        'res.users', string='დამმტკიცებელი (HR-ის მოწვეული)', copy=False, tracking=True,
-        domain=[('share', '=', False)],
-        help="თანამშრომელს ხელმძღვანელი არ ჰყავს: HR ირჩევს, ვინ დაამტკიცებს პირველ საფეხურზე.")
     sh_no_head = fields.Boolean(compute='_compute_sh_no_head')
-    sh_is_hr = fields.Boolean(compute='_compute_sh_no_head')
-
-    @api.depends('employee_id')
-    @api.depends_context('uid')
-    def _compute_sh_no_head(self):
-        user = self.env.user
-        for leave in self:
-            employee = leave.employee_id.sudo()
-            leave.sh_no_head = bool(employee) and not employee._sh_heads() and not leave._sh_is_founder()
-            hr = (employee.company_id or self.env.company).sh_hr_user_id
-            leave.sh_is_hr = user == hr or user.has_group('base.group_system')
-
     sh_approval_path = fields.Char(
         string='დაამტკიცებს', compute='_compute_sh_approval_path',
         help="ვინ დაამტკიცებს ამ მოთხოვნას: პირველი და (ორსაფეხურიანზე) მეორე დამტკიცება.")
 
-    @api.depends('employee_id', 'holiday_status_id', 'sh_invited_approver_id', 'state')
+    @api.depends('employee_id')
+    def _compute_sh_no_head(self):
+        for leave in self:
+            employee = leave.employee_id.sudo()
+            leave.sh_no_head = bool(employee) and not employee._sh_heads() and not leave._sh_is_founder()
+
+    @api.depends('employee_id', 'holiday_status_id', 'state')
     def _compute_sh_approval_path(self):
         for leave in self:
             leave.sh_approval_path = leave._sh_approval_text()
-
-    def _sh_stage1_users(self):
-        """First approvers of a request (also before it is saved): same rule as
-        _get_responsible_for_approval at "to approve"."""
-        employee = self.employee_id.sudo()
-        final = self._sh_final_users()
-        if self.validation_type == 'both' and self._sh_is_founder():
-            return final
-        if self.sh_no_head:
-            return self.sudo().sh_invited_approver_id
-        heads = employee._sh_heads().user_id
-        responsible = employee.leave_manager_id
-        if responsible in heads:
-            responsible |= heads
-        result = self.env['res.users']
-        for user in responsible:
-            head = user.sudo().employee_id
-            absence = head and head._sh_current_absence()
-            deputy = absence and absence._sh_deputy_for(employee)
-            result |= deputy.user_id if deputy and deputy.user_id and deputy != employee else user
-        if self.validation_type == 'both':
-            if heads & final:
-                return heads & final
-            if result - final:
-                result -= final
-        return result
-
-    def _sh_approval_text(self):
-        self.ensure_one()
-        leave_type = self.holiday_status_id
-        if not self.employee_id or not leave_type:
-            return False
-        names = lambda users: ", ".join(users.mapped('name')) or '-'
-        kind = self.validation_type
-        if kind == 'no_validation':
-            return "დამტკიცება არ სჭირდება"
-        final = self._sh_final_users()
-        if kind == 'hr':
-            return names(final) if final else "HR"
-        if self.sh_no_head and not self.sudo().sh_invited_approver_id:
-            hr = (self.employee_id.company_id or self.env.company).sh_hr_user_id
-            first = "HR (%s) მოიწვევს დამმტკიცებელს" % hr.name if hr else "HR მოიწვევს დამმტკიცებელს"
-        else:
-            first_users = self._sh_stage1_users()
-            if kind == 'both' and first_users and first_users <= final and (
-                    self._sh_is_founder() or first_users & self.employee_id.sudo()._sh_heads().user_id):
-                return "%s (ერთი დასტურით)" % names(first_users)
-            first = names(first_users)
-        if kind == 'manager':
-            return first
-        return "1. %s → 2. %s" % (first, names(final) if final else "HR")
 
     # ------------------------------------------------------------------ who approves
     def _sh_final_users(self):
@@ -119,38 +52,69 @@ class HrLeave(models.Model):
         return bool(employee) and not employee._sh_heads() and bool(self.env['hr.department'].sudo().search_count(
             [('parent_id', '=', False), ('manager_ids', 'in', employee.ids)]))
 
+    def _sh_stage1_users(self):
+        """First approvers (also before the request is saved; a head on leave -> his deputy)."""
+        employee = self.employee_id.sudo()
+        final = self._sh_final_users()
+        if self.validation_type == 'both' and self._sh_is_founder():
+            return final
+        heads = employee._sh_heads().user_id
+        card = employee.leave_manager_id
+        if self.sh_no_head or (card and card not in heads):
+            base = card
+        else:
+            base = heads or card
+        result = self.env['res.users']
+        for user in base:
+            head = user.sudo().employee_id
+            absence = head and head._sh_current_absence()
+            deputy = absence and absence._sh_deputy_for(employee)
+            result |= deputy.user_id if deputy and deputy.user_id and deputy != employee else user
+        if self.validation_type == 'both' and result & final:
+            return result & final
+        return result
+
     def _sh_single_final(self, user):
-        """One approval by the final approver is enough: he is the employee's own head, or a founder's."""
-        return user in self._sh_final_users() and (
-            user in self.employee_id.sudo()._sh_heads().user_id or self._sh_is_founder())
+        """One approval is enough: the first approvers are the final approver himself."""
+        final = self._sh_final_users()
+        first = self._sh_stage1_users()
+        return user in final and bool(first) and first <= final
 
     def _get_responsible_for_approval(self):
         responsible = super()._get_responsible_for_approval()
         if self.validation_type == 'manager' or (self.validation_type == 'both' and self.state == 'confirm'):
-            if self.validation_type == 'both' and self._sh_is_founder():
-                responsible = self._sh_final_users()
-            elif self.sh_no_head:
-                responsible = self.sudo().sh_invited_approver_id
-            elif self.validation_type == 'both':
-                final = self._sh_final_users()
-                heads = self.employee_id.sudo()._sh_heads().user_id
-                if heads & final:
-                    responsible = heads & final
-                elif responsible - final:
-                    responsible -= final
+            responsible = self._sh_stage1_users()
+            if self.state == 'confirm' and not self.env.context.get('sh_all_heads'):
+                responsible -= self.sudo().sh_head_approved_user_ids
         elif self.validation_type == 'both' and self.state == 'validate1':
             responsible = self._sh_final_users() or responsible
         return responsible
 
+    def _sh_approval_text(self):
+        self.ensure_one()
+        if not self.employee_id or not self.holiday_status_id:
+            return False
+        names = lambda users: ", ".join(users.mapped('name')) or '-'
+        kind = self.validation_type
+        if kind == 'no_validation':
+            return "დამტკიცება არ სჭირდება"
+        final = self._sh_final_users()
+        if kind == 'hr':
+            return names(final) if final else "HR"
+        first = self._sh_stage1_users()
+        if not first:
+            return "დამმტკიცებელი არ არის მითითებული - მიმართეთ HR-ს"
+        if kind == 'both' and first <= final:
+            return "%s (ერთი დასტურით)" % names(first)
+        if kind == 'manager':
+            return names(first)
+        return "1. %s → 2. %s" % (names(first), names(final) if final else "HR")
+
     def _check_double_validation_rules(self, employees, state):
-        """Odoo: only time off officers give the last approval, only the employee's time off manager the
-        first one. Here: the founder on the requests he finally approves, the invited person on hers."""
+        """Odoo: only time off officers give the last approval; here the founder too, on his requests."""
         user = self.env.user
         if state == 'validate' and self and all(user in leave._sh_final_users() for leave in self):
             return
-        if state == 'validate1':
-            invited = self.filtered(lambda l: l.sh_no_head and l.sudo().sh_invited_approver_id == user)
-            employees = employees - invited.employee_id
         return super()._check_double_validation_rules(employees, state)
 
     def _sh_user_can_approve(self, user):
@@ -175,16 +139,10 @@ class HrLeave(models.Model):
 
     def _get_next_states_by_state(self):
         """Odoo lets only time off officers give the last approval of a two-step request: the founder
-        (the type's responsible) and the person HR invited get their own step too."""
+        (the type's responsible) gets it too."""
         result = super()._get_next_states_by_state()
-        user = self.env.user
-        if self.validation_type == 'both' and user in self._sh_final_users():
+        if self.validation_type == 'both' and self.env.user in self._sh_final_users():
             result['validate1'].update({'validate', 'refuse'})
-        if self.sh_no_head and user == self.sudo().sh_invited_approver_id:
-            if self.validation_type == 'both':
-                result['confirm'].update({'validate1', 'refuse'})
-            elif self.validation_type == 'manager':
-                result['confirm'].update({'validate', 'refuse'})
         return result
 
     # Odoo 19: "can_approve" = the first approval (confirm -> validate1 of a two-step type),
@@ -216,11 +174,9 @@ class HrLeave(models.Model):
                     if leave.state == 'validate1':
                         raise UserError(_("მეორე დამტკიცება შეუძლია მხოლოდ: %s",
                                           ", ".join(leave._sh_final_users().mapped('name')) or '-'))
-                    if leave.sh_no_head and not leave.sudo().sh_invited_approver_id:
-                        raise UserError(_("თანამშრომელს ხელმძღვანელი არ ჰყავს: ჯერ HR-მა უნდა აირჩიოს დამმტკიცებელი."))
                     raise UserError(_("ამ მოთხოვნის დამტკიცება თქვენ არ შეგიძლიათ."))
         res = super().action_approve(check_state)
-        # the founder as the employee's own head: one approval is enough
+        # the final approver was also the first one: one approval is enough
         once = self.filtered(lambda l: l.state == 'validate1' and l._sh_single_final(user))
         if once:
             once.action_approve(check_state)
@@ -238,43 +194,25 @@ class HrLeave(models.Model):
             return -1
         return mine
 
-    # ------------------------------------------------------------------ HR invites the approver
-    def _sh_hr_todo(self):
-        """No head and nobody invited yet: a to-do for HR; removed once someone is invited."""
-        todo = self.env.ref('mail.mail_activity_data_todo')
-        for leave in self.sudo():
-            hr = (leave.employee_id.company_id or self.env.company).sh_hr_user_id
-            mine = leave.activity_ids.filtered(lambda a: a.activity_type_id == todo and a.user_id == hr
-                                               and a.summary == HR_TODO)
-            need = (leave.state == 'confirm' and leave.sh_no_head and not leave.sh_invited_approver_id
-                    and leave.validation_type in ('manager', 'both'))
-            if need and hr and not mine:
-                leave.activity_schedule(
-                    'mail.mail_activity_data_todo', user_id=hr.id, summary=HR_TODO,
-                    note=_("%(employee)s-ს ხელმძღვანელი არ ჰყავს - მოიწვიეთ, ვინ დაამტკიცებს.",
-                           employee=leave.employee_id.name))
-            elif not need and mine:
-                mine.unlink()
+    # ------------------------------------------------------------------ nobody to approve
+    def _sh_check_has_approver(self):
+        for leave in self:
+            if (leave.state == 'confirm' and leave.validation_type in ('manager', 'both')
+                    and leave.employee_id and not leave._sh_stage1_users()):
+                raise UserError(_("%s: ბარათზე შვებულების დამმტკიცებელი არ არის მითითებული - მიმართეთ HR-ს "
+                                  "(ბარათი: „სამუშაო ინფორმაცია“ - „დამმტკიცებლები“ - „შვებულება“).",
+                                  leave.employee_id.name))
 
     @api.model_create_multi
     def create(self, vals_list):
         leaves = super().create(vals_list)
-        leaves._sh_hr_todo()
+        leaves._sh_check_has_approver()
         return leaves
 
     def write(self, vals):
-        if 'sh_invited_approver_id' in vals and not self.env.su:
-            for leave in self:
-                if not leave.sh_is_hr:
-                    raise UserError(_("დამმტკიცებელს იწვევს მხოლოდ HR."))
         res = super().write(vals)
-        if 'sh_invited_approver_id' in vals:
-            for leave in self.filtered('sh_invited_approver_id'):
-                leave.sudo().message_post(body=Markup("<p>%s</p>") % _(
-                    "HR-მა დამმტკიცებლად მოიწვია: %s", leave.sudo().sh_invited_approver_id.name))
-            self.env['hr.leave']._sh_sync_approval_activities()
-        if 'sh_invited_approver_id' in vals or 'state' in vals or 'employee_id' in vals:
-            self._sh_hr_todo()
+        if 'employee_id' in vals or 'holiday_status_id' in vals:
+            self._sh_check_has_approver()
         return res
 
 
