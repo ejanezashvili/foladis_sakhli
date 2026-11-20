@@ -107,10 +107,13 @@ class ShLeaveReport(models.AbstractModel):
     @api.model
     def sh_lists(self):
         self._sh_check()
-        depts = self.env['hr.department'].search([], order='complete_name')
+        # complete_name is not stored here (steelhouse_hr computes it) - sort in Python
+        depts = self.env['hr.department'].search([])
+        names = sorted(((d.id, (d.complete_name or d.name or '').replace('ფოლადის სახლი / ', '')) for d in depts),
+                       key=lambda x: x[1])
         emps = self.env['hr.employee'].search([], order='name')
         return {
-            'departments': [{'id': d.id, 'name': d.complete_name.replace('ფოლადის სახლი / ', '')} for d in depts],
+            'departments': [{'id': i, 'name': n} for i, n in names],
             'employees': [{'id': e.id, 'name': e.name, 'department_id': e.department_id.id} for e in emps],
             'states': [{'key': k, 'label': v} for k, v in STATES],
             'views': [{'key': k, 'label': v} for k, v in VIEWS.items()],
