@@ -29,9 +29,11 @@
                 <group name="sh_who">
                     <group>
                         <!-- project_id is the department (gives the flow); "პროექტი" is the concrete project -->
-                        <field name="project_id" string="დეპარტამენტი" widget="project"
-                               domain="[('active', '=', True), ('sh_is_department', '=', True), '|', ('company_id', '=', False), ('company_id', '=?', company_id)]"
-                               required="not is_template"/>
+                        <!-- several departments can be chosen; project_id (hidden) is the main one - the first chosen -->
+                        <field name="project_id" invisible="1"/>
+                        <field name="sh_department_project_ids" string="დეპარტამენტი" widget="many2many_tags"
+                               options="{'no_create': True}" required="not is_template"
+                               domain="[('active', '=', True), ('sh_is_department', '=', True), ('is_template', '=', False), '|', ('company_id', '=', False), ('company_id', '=?', company_id)]"/>
                         <field name="sh_project_id" options="{'no_create': True}" placeholder="არ ეკუთვნის პროექტს"/>
                         <field name="milestone_id" placeholder="e.g. Product Launch" context="{'default_project_id': project_id}"
                                invisible="not project_id or not allow_milestones"/>
@@ -214,7 +216,8 @@
             <!-- Card in the "pill" style: status pill + number, title, department line, assignees,
                  deadline + priority, footer with comments / files / sub-tasks / activities / state -->
             <xpath expr="//t[@t-name='card']/main" position="replace">
-                <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '') + (record.sh_step_badge.raw_value === 'wait' ? ' o_sh_card_waitstep' : '')">
+                <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '') + (record.sh_step_badge.raw_value === 'wait' ? ' o_sh_card_waitstep' : '') + (record.sh_is_mine.raw_value ? ' o_sh_card_mine' : '')">
+                    <field name="sh_is_mine" invisible="1"/>
                     <field name="sh_kind" invisible="1"/>
                     <field name="priority" invisible="1"/>
                     <field name="sh_deadline_str" invisible="1"/>
@@ -297,9 +300,11 @@
                 <field name="sh_progress" widget="progressbar" optional="show"/>
                 <field name="sh_confidential" string="🔒" widget="boolean_icon" options="{'icon': 'fa-lock'}" optional="show" readonly="1"/>
                 <field name="sh_is_overdue" column_invisible="1"/>
+                <field name="sh_is_mine" column_invisible="1"/>
             </xpath>
             <xpath expr="/list" position="attributes">
                 <attribute name="decoration-danger">sh_is_overdue</attribute>
+                <attribute name="decoration-bf">sh_is_mine</attribute>
             </xpath>
         </field>
     </record>

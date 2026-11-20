@@ -90,9 +90,10 @@ class ProjectProject(models.Model):
         # boards: only the main tasks - sequence steps are seen only inside their main card
         if self.sh_is_department:
             # a department also shows the tasks of its sub-departments
-            tree = self._sh_dept_tree_ids()
-            if len(tree) > 1:
-                action['domain'] = [('project_id', 'in', tree), ('has_template_ancestor', '=', False)]
+            # ... and the tasks where it is one of several chosen departments
+            tree = self._sh_dept_tree_ids() or self.ids
+            action['domain'] = ['|', ('project_id', 'in', tree), ('sh_department_project_ids', 'in', tree),
+                                ('has_template_ancestor', '=', False)]
             action['domain'] = self._sh_main_only(action.get('domain'))
             if self.env.context.get('sh_overdue'):
                 # opened from the departments page with the overdue filter: only overdue tasks (removable)
