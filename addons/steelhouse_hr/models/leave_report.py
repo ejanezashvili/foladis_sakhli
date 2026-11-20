@@ -17,8 +17,10 @@ from odoo.exceptions import AccessError, UserError
 
 MONTHS = ['იანვარი', 'თებერვალი', 'მარტი', 'აპრილი', 'მაისი', 'ივნისი', 'ივლისი', 'აგვისტო',
           'სექტემბერი', 'ოქტომბერი', 'ნოემბერი', 'დეკემბერი']
-KINDS = [('paid', 'ანაზღაურებადი'), ('unpaid', 'ანაზღაურების გარეშე')]
-KIND_SHORT = {'paid': 'ანაზღ.', 'unpaid': 'უხელფ.', 'other': 'სხვა'}
+KINDS = [('paid', 'ანაზღაურებადი'), ('unpaid', 'ანაზღაურების გარეშე'), ('sick', 'ბიულეტენი'),
+         ('maternity', 'დეკრეტი'), ('compensatory', 'საკომპენსაციო'), ('trip', 'მივლინება')]
+KIND_SHORT = {'paid': 'ანაზღ.', 'unpaid': 'უხელფ.', 'sick': 'ბიულ.', 'maternity': 'დეკრ.',
+              'compensatory': 'საკომპ.', 'trip': 'მივლ.', 'other': 'სხვა'}
 STATES = [('validate', 'დამტკიცებული'), ('waiting', 'დასამტკიცებელი'), ('refuse', 'უარყოფილი'),
           ('cancel', 'გაუქმებული')]
 STATE_OF = {'validate': 'validate', 'confirm': 'waiting', 'validate1': 'waiting', 'refuse': 'refuse',
@@ -31,7 +33,8 @@ class HrLeaveType(models.Model):
 
     sh_report_kind = fields.Selection(
         KINDS, string='HR-ის რეპორტში',
-        help="თვეების რეპორტში რომელ სვეტშია ეს ტიპი: ანაზღაურებადი / ანაზღაურების გარეშე (ცარიელი - „სხვა“).")
+        help="შვებულების რეპორტის სვეტი: ტიპი ყოველთვის ჩანს (ნულოვანიც), თვეების ჭრილში - ამ კატეგორიაში; "
+             "ცარიელი - ჩანს მხოლოდ თუ პერიოდში გამოიყენეს (თვეებში - „სხვა“).")
 
 
 def _num(value):
@@ -142,7 +145,7 @@ class ShLeaveReport(models.AbstractModel):
         cache = {}
         rows, totals = {}, {}
         kinds_used, types_used = set(), {}
-        kpi = {'days': 0.0, 'paid': 0.0, 'unpaid': 0.0, 'other': 0.0}
+        kpi = dict({k: 0.0 for k, _l in KINDS}, days=0.0, other=0.0)
         employees_used = set()
         for leave in leaves:
             days = {d: w for d, w in self._sh_leave_days(leave, cache).items() if date_from <= d <= date_to}
@@ -192,13 +195,20 @@ class ShLeaveReport(models.AbstractModel):
         # columns
         groups, columns = [], []
         if p['view'] == 'month':
-            kinds = [k for k in ('paid', 'unpaid', 'other') if k in kinds_used] or ['paid', 'unpaid']
+            # every category always (zero too); "other" only when such a type was used
+            kinds = [k for k, _l in KINDS] + (['other'] if 'other' in kinds_used else [])
             for month in months:
                 cols = [{'key': '%s|%s' % (month.strftime('%Y-%m'), k), 'label': KIND_SHORT[k]} for k in kinds]
                 groups.append({'label': '%s %s' % (MONTHS[month.month - 1], month.year), 'span': len(cols)})
                 columns += cols
         elif p['view'] == 'type':
-            columns = [{'key': 't%s' % tid, 'label': name} for tid, name in sorted(types_used.items(), key=lambda x: x[1])]
+            # the company's types always (zero too), then any other type used in the period
+            order = {k: i for i, (k, _l) in enumerate(KINDS)}
+            shown = self.env['hr.leave.type'].search([('sh_report_kind', '!=', False)])
+            shown = shown.sorted(lambda t: (order.get(t.sh_report_kind, 99), t.sequence, t.name))
+            columns = [{'key': 't%s' % t.id, 'label': t.name} for t in shown]
+            columns += [{'key': 't%s' % tid, 'label': name}
+                        for tid, name in sorted(types_used.items(), key=lambda x: x[1]) if tid not in shown.ids]
         else:
             columns = [{'key': k, 'label': dict(STATES)[k]} for k in [s for s, _l in STATES if s in p['states']]]
 
