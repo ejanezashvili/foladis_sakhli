@@ -30,3 +30,4 @@ from . import task_stagebar
 from . import task_card_step
 from . import task_edit_lock
 from . import task_view_departments
+from . import task_phase

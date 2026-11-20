@@ -123,6 +123,13 @@
 .o_sh_tpill_cancelled { background: #f1f1f1; color: #6c757d; }
 .o_sh_tpill_late { background: #fdecea; color: #dc3545; }
 
+// stage pill on the cards of the column "მუშავდება"
+.o_sh_stpill { display: inline-block; font-size: 0.75rem; font-weight: 600; color: #fff; padding: 1px 10px; border-radius: 11px; }
+.o_sh_stpill_accepted { background: #3d8fd6; }
+.o_sh_stpill_in_progress { background: #7d5ba6; }
+.o_sh_stpill_on_hold { background: #d4a017; }
+.o_sh_stpill_returned { background: #d6336c; }
+
 // priority pill
 .o_sh_prio { font-size: 0.78rem; font-weight: 500; padding: 2px 11px; border-radius: 11px; white-space: nowrap; }
 .o_sh_prio_0 { background: #eef0ff; color: #4f46e5; }
