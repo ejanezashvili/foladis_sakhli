@@ -24,8 +24,11 @@
               groups="hr_holidays.group_hr_holidays_user" sequence="1"/>
 
     <!-- "რეპორტინგი": our report and the balance first, then Odoo's own reports (allocated days, any grouping, graphs) -->
+    <!-- Odoo's "by employee" is hidden: its allocated / used / remaining days are in "თანამშრომლების ბალანსი",
+         the used days by month / type / status in our report (user's choice, 2026-11-20) -->
     <record id="hr_holidays.menu_hr_available_holidays_report_tree" model="ir.ui.menu">
         <field name="sequence">3</field>
+        <field name="active" eval="False"/>
     </record>
     <record id="hr_holidays.menu_hr_holidays_summary_all" model="ir.ui.menu">
         <field name="sequence">4</field>
