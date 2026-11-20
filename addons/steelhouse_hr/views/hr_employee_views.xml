@@ -6,6 +6,13 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
+            <!-- on leave now: from - to and the deputy, on top of the card -->
+            <xpath expr="//sheet/*[1]" position="before">
+                <div class="alert alert-warning d-flex align-items-center gap-2 mb-3 py-2" role="status" invisible="not sh_absence_info">
+                    <i class="fa fa-plane"/>
+                    <field name="sh_absence_info" readonly="1" nolabel="1"/>
+                </div>
+            </xpath>
             <xpath expr="//div[@id='o_work_information']//field[@name='parent_id']" position="attributes">
                 <attribute name="invisible">sh_co_manager_ids</attribute>
             </xpath>
@@ -62,6 +69,13 @@
         <field name="model">hr.employee.public</field>
         <field name="inherit_id" ref="hr.hr_employee_public_view_form"/>
         <field name="arch" type="xml">
+            <!-- on leave now: from - to and the deputy, on top of the card -->
+            <xpath expr="//sheet/*[1]" position="before">
+                <div class="alert alert-warning d-flex align-items-center gap-2 mb-3 py-2" role="status" invisible="not sh_absence_info">
+                    <i class="fa fa-plane"/>
+                    <field name="sh_absence_info" readonly="1" nolabel="1"/>
+                </div>
+            </xpath>
             <xpath expr="//div[@id='o_work_employee_main']//field[@name='parent_id']" position="attributes">
                 <attribute name="invisible">sh_co_manager_ids</attribute>
             </xpath>
