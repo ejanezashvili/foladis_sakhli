@@ -1,4 +1,4 @@
-import { Component, onWillStart, useState } from "@odoo/owl";
+import { Component, markup, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 
@@ -8,7 +8,8 @@ const TABS = [
     { key: "history", label: "ისტორია" },
 ];
 
-// "დასადასტურებელი": tasks on "შემოწმებაზე" that wait for me as a reviewer (models/task_approvals.py).
+// "დადასტურებები": tasks on "შემოწმებაზე" that wait for me as a reviewer (models/task_approvals.py).
+// Outside - the queue (long waiting first); inside - the review page of one task.
 // Confirm -> done; reject -> back to the assignee, the reason is required.
 export class TaskApprovals extends Component {
     static template = "steelhouse_task_flow.TaskApprovals";
@@ -24,7 +25,9 @@ export class TaskApprovals extends Component {
             search: "",
             loading: true,
             dialog: null, // { mode: "ok" | "no", item, reason, error, busy }
+            detail: null, // review page: { id, data, loading, reason, error, busy }
         });
+        this.descMarkup = "";
         onWillStart(() => this.load());
     }
 
@@ -52,6 +55,14 @@ export class TaskApprovals extends Component {
     get history() {
         return this.state.data.history.filter((h) => this.matches(h));
     }
+    // long waiting first, then the fresh ones
+    get groups() {
+        const items = this.items;
+        return [
+            { key: "late", label: "დიდხანს ელოდება", late: true, items: items.filter((i) => i.late) },
+            { key: "new", label: "ახალი", late: false, items: items.filter((i) => !i.late) },
+        ].filter((g) => g.items.length);
+    }
     count(tab) {
         const counts = this.state.data && this.state.data.counts;
         return counts && counts[tab] !== undefined ? counts[tab] : null;
@@ -65,6 +76,89 @@ export class TaskApprovals extends Component {
             views: [[false, "form"]],
             target: "current",
         });
+    }
+
+    // ---------------------------------------------------------------- review page (inside)
+    async openReview(id) {
+        this.descMarkup = "";
+        this.state.detail = { id, data: null, loading: true, reason: "", error: "", busy: false };
+        try {
+            const data = await this.orm.call("project.task", "sh_approval_detail", [[id]]);
+            this.descMarkup = data.description ? markup(data.description) : "";
+            this.state.detail.data = data;
+            this.state.detail.loading = false;
+        } catch (e) {
+            this.state.detail = null;
+            throw e;
+        }
+    }
+    closeReview() {
+        this.state.detail = null;
+    }
+    // position of the opened task in the list on screen (-1: opened from the history)
+    get reviewIndex() {
+        const id = this.state.detail.id;
+        return this.state.tab === "history" ? -1 : this.items.findIndex((i) => i.id === id);
+    }
+    get reviewPosition() {
+        return `${this.reviewIndex + 1} / ${this.items.length}`;
+    }
+    get hasPrev() {
+        return this.reviewIndex > 0;
+    }
+    get hasNext() {
+        const idx = this.reviewIndex;
+        return idx >= 0 && idx < this.items.length - 1;
+    }
+    reviewStep(delta) {
+        const next = this.items[this.reviewIndex + delta];
+        if (next) {
+            this.openReview(next.id);
+        }
+    }
+    onDetailReason(ev) {
+        this.state.detail.reason = ev.target.value;
+        this.state.detail.error = "";
+    }
+    // the task to show after a decision made on the review page: the next one, else the previous
+    neighbourId(id) {
+        const list = this.items;
+        const idx = list.findIndex((i) => i.id === id);
+        const other = idx >= 0 ? list[idx + 1] || list[idx - 1] : null;
+        return other ? other.id : null;
+    }
+    async afterDecision(id, done, nextId) {
+        await this.load();
+        if (this.state.detail && this.state.detail.id === id) {
+            if (done && nextId && this.items.some((i) => i.id === nextId)) {
+                await this.openReview(nextId);
+            } else if (done) {
+                this.closeReview();
+            } else {
+                await this.openReview(id);
+            }
+        }
+    }
+    async rejectInside() {
+        const det = this.state.detail;
+        if (det.busy) {
+            return;
+        }
+        const reason = det.reason.trim();
+        if (!reason) {
+            det.error = "მიუთითეთ მიზეზი - მის გარეშე უარყოფა არ შეიძლება.";
+            return;
+        }
+        det.busy = true;
+        const nextId = this.neighbourId(det.id);
+        let done = false;
+        try {
+            await this.orm.call("project.task", "sh_approval_reject", [[det.id], reason]);
+            done = true;
+        } finally {
+            det.busy = false;
+            await this.afterDecision(det.id, done, nextId);
+        }
     }
 
     // ---------------------------------------------------------------- decisions
@@ -90,16 +184,20 @@ export class TaskApprovals extends Component {
             return;
         }
         dlg.busy = true;
+        const id = dlg.item.id;
+        const nextId = this.neighbourId(id);
+        let done = false;
         try {
             if (dlg.mode === "ok") {
-                await this.orm.call("project.task", "sh_approval_approve", [[dlg.item.id]]);
+                await this.orm.call("project.task", "sh_approval_approve", [[id]]);
             } else {
-                await this.orm.call("project.task", "sh_approval_reject", [[dlg.item.id], dlg.reason.trim()]);
+                await this.orm.call("project.task", "sh_approval_reject", [[id], dlg.reason.trim()]);
             }
+            done = true;
         } finally {
             // on an error Odoo shows its own message; the list is refreshed either way
             this.state.dialog = null;
-            await this.load();
+            await this.afterDecision(id, done, nextId);
         }
     }
 }

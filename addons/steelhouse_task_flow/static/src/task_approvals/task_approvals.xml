@@ -2,93 +2,239 @@
 <templates xml:space="preserve">
     <t t-name="steelhouse_task_flow.TaskApprovals">
         <div class="o_action o_sh_ap">
-            <div class="o_sh_ap_tabs">
-                <t t-foreach="TABS" t-as="tb" t-key="tb.key">
-                    <button t-att-class="'o_sh_ap_tab' + (state.tab === tb.key ? ' active' : '')" t-on-click="() => this.setTab(tb.key)">
-                        <t t-esc="tb.label"/><span t-if="count(tb.key) !== null" class="o_sh_ap_badge" t-esc="count(tb.key)"/>
-                    </button>
-                </t>
-                <input class="o_sh_ap_search form-control" type="text" placeholder="ძებნა..." t-att-value="state.search" t-on-input="onSearch"/>
-            </div>
-
-            <div class="o_sh_ap_body" t-att-class="{'o_sh_ap_loading': state.loading}">
-                <t t-if="state.data">
-                    <!-- ============ waiting for my decision ============ -->
-                    <t t-if="state.tab === 'todo'">
-                        <div class="o_sh_ap_sub">დავალებები, რომლებიც შემსრულებელმა შემოწმებაზე გადმოგიგზავნათ და თქვენს გადაწყვეტილებას ელოდება.</div>
-                        <div t-if="state.data.stats" class="o_sh_ap_stats">
-                            <div class="o_sh_ap_stat"><small>სულ ელოდება</small><b t-esc="state.data.stats.total"/></div>
-                            <div class="o_sh_ap_stat o_sh_ap_s_late"><small>2 დღე ან მეტია ელოდება</small><b t-esc="state.data.stats.late"/></div>
-                            <div class="o_sh_ap_stat o_sh_ap_s_due"><small>ვადა უკვე გასულია</small><b t-esc="state.data.stats.overdue"/></div>
-                            <div class="o_sh_ap_stat o_sh_ap_s_again"><small>ადრე დაბრუნებული იყო</small><b t-esc="state.data.stats.again"/></div>
+            <!-- =====================================================================
+                 OUTSIDE: the queue
+                 ===================================================================== -->
+            <div t-if="!state.detail" class="o_sh_ap_body" t-att-class="{'o_sh_ap_loading': state.loading}">
+                <div class="o_sh_ap_wrap">
+                    <div class="o_sh_ap_head">
+                        <div class="o_sh_ap_headtext">
+                            <h1>დადასტურებები</h1>
+                            <p t-if="state.tab === 'todo'">დავალებები, რომლებიც შემსრულებელმა შემოწმებაზე გადმოგიგზავნათ და თქვენს გადაწყვეტილებას ელოდება.</p>
+                            <p t-elif="state.tab === 'sent'">თქვენი შესრულებული დავალებები, რომლებიც შემმოწმებლის გადაწყვეტილებას ელოდება.</p>
+                            <p t-else="">თქვენი ბოლო გადაწყვეტილებები: რა დაადასტურეთ და რა უარყავით.</p>
                         </div>
-                    </t>
-                    <div t-elif="state.tab === 'sent'" class="o_sh_ap_sub">თქვენი შესრულებული დავალებები, რომლებიც შემმოწმებლის გადაწყვეტილებას ელოდება.</div>
-                    <div t-else="" class="o_sh_ap_sub">თქვენი ბოლო გადაწყვეტილებები: რა დაადასტურეთ და რა უარყავით.</div>
-
-                    <!-- ============ cards ============ -->
-                    <t t-if="state.tab !== 'history'">
-                        <div t-if="!items.length" class="o_sh_ap_empty">
-                            <i class="fa fa-check-circle"/>
-                            <t t-if="state.search">ძებნით არაფერი მოიძებნა.</t>
-                            <t t-elif="state.tab === 'todo'">დასადასტურებელი არაფერი გაქვთ.</t>
-                            <t t-else="">შემოწმებაზე გაგზავნილი დავალება არ გაქვთ.</t>
+                        <div class="o_sh_ap_searchbox">
+                            <i class="fa fa-search"/>
+                            <input class="o_sh_ap_search" type="text" placeholder="ძებნა ნომრით, სახელით, შემსრულებლით"
+                                   aria-label="ძებნა" t-att-value="state.search" t-on-input="onSearch"/>
                         </div>
-                        <t t-foreach="items" t-as="it" t-key="it.id">
-                            <div class="o_sh_ap_card">
-                                <div class="o_sh_ap_ico"><i class="fa fa-clipboard"/></div>
-                                <div class="o_sh_ap_main" t-on-click="() => this.openTask(it.id)">
-                                    <div class="o_sh_ap_kind">დავალება შემოწმებაზე
-                                        <span t-att-class="'o_sh_ap_wait' + (it.late ? ' o_sh_ap_wait_late' : '')">ელოდება <t t-esc="it.wait"/></span>
-                                        <span t-if="it.returns" class="o_sh_ap_wait o_sh_ap_wait_again">↩ ადრე დაბრუნდა <t t-esc="it.returns"/>-ჯერ</span>
+                    </div>
+
+                    <div class="o_sh_ap_tabs">
+                        <t t-foreach="TABS" t-as="tb" t-key="tb.key">
+                            <button type="button" t-att-class="'o_sh_ap_tab' + (state.tab === tb.key ? ' active' : '')" t-on-click="() => this.setTab(tb.key)">
+                                <t t-esc="tb.label"/><span t-if="count(tb.key) !== null" class="o_sh_ap_badge" t-esc="count(tb.key)"/>
+                            </button>
+                        </t>
+                    </div>
+
+                    <t t-if="state.data">
+                        <!-- numbers: one strip -->
+                        <div t-if="state.tab === 'todo' and state.data.stats" class="o_sh_ap_stats">
+                            <div class="o_sh_ap_stat"><b t-esc="state.data.stats.total"/><small>სულ ელოდება</small></div>
+                            <div class="o_sh_ap_stat o_sh_ap_s_late"><b t-esc="state.data.stats.late"/><small>2 დღე ან მეტია ელოდება</small></div>
+                            <div class="o_sh_ap_stat o_sh_ap_s_due"><b t-esc="state.data.stats.overdue"/><small>ვადა უკვე გასულია</small></div>
+                            <div class="o_sh_ap_stat o_sh_ap_s_again"><b t-esc="state.data.stats.again"/><small>ადრე დაბრუნებული იყო</small></div>
+                        </div>
+
+                        <!-- ============ queue cards ============ -->
+                        <t t-if="state.tab !== 'history'">
+                            <div t-if="!items.length" class="o_sh_ap_empty">
+                                <i class="fa fa-check-circle"/>
+                                <t t-if="state.search">ძებნით არაფერი მოიძებნა.</t>
+                                <t t-elif="state.tab === 'todo'">დასადასტურებელი არაფერი გაქვთ.</t>
+                                <t t-else="">შემოწმებაზე გაგზავნილი დავალება არ გაქვთ.</t>
+                            </div>
+                            <t t-foreach="groups" t-as="g" t-key="g.key">
+                                <div class="o_sh_ap_group">
+                                    <div t-att-class="'o_sh_ap_grouphead' + (g.late ? ' o_sh_ap_grouphead_late' : '')">
+                                        <h2 t-esc="g.label"/><span><t t-esc="g.items.length"/> დავალება</span><div class="o_sh_ap_rule"/>
                                     </div>
-                                    <div class="o_sh_ap_title"><t t-if="it.number"><t t-esc="it.number"/> </t><t t-esc="it.name"/></div>
-                                    <div class="o_sh_ap_meta">
-                                        <span>შეასრულა: <b t-esc="it.users"/></span>
-                                        <span t-if="state.tab === 'sent'">ამოწმებს: <b t-esc="it.reviewers"/></span>
-                                        <span>ვადა: <b t-att-class="it.overdue ? 'o_sh_ap_red' : ''" t-esc="it.deadline or 'არ აქვს'"/></span>
-                                        <span>დეპარტამენტი: <b t-esc="it.department"/></span>
-                                        <span t-if="it.project">პროექტი: <b t-esc="it.project"/></span>
-                                        <span t-if="it.work_time">სამუშაო დრო: <b t-esc="it.work_time"/></span>
-                                        <span t-if="it.files"><i class="fa fa-paperclip"/> <t t-esc="it.files"/> ფაილი</span>
-                                        <span t-if="it.since">გამოგზავნილია: <t t-esc="it.since"/></span>
-                                    </div>
-                                </div>
-                                <div class="o_sh_ap_btns">
-                                    <button class="btn o_sh_ap_open" t-on-click="() => this.openTask(it.id)">გახსნა</button>
-                                    <t t-if="state.tab === 'todo'">
-                                        <button class="btn o_sh_ap_no" t-on-click="() => this.ask('no', it)">უარყოფა</button>
-                                        <button class="btn o_sh_ap_ok" t-on-click="() => this.ask('ok', it)">დადასტურება</button>
+                                    <t t-foreach="g.items" t-as="it" t-key="it.id">
+                                        <div class="o_sh_ap_card">
+                                            <div t-att-class="'o_sh_ap_days' + (it.late ? ' o_sh_ap_days_late' : '')">
+                                                <t t-if="it.days > 0"><b t-esc="it.days"/><small>დღეა</small></t>
+                                                <t t-else=""><span>დღეს</span></t>
+                                            </div>
+                                            <div class="o_sh_ap_main">
+                                                <div class="o_sh_ap_chips">
+                                                    <span t-if="it.number" class="o_sh_ap_num" t-esc="it.number"/>
+                                                    <span t-if="it.overdue" class="o_sh_ap_chip o_sh_ap_chip_due">ვადა გასულია · <t t-esc="it.deadline"/></span>
+                                                    <span t-elif="it.deadline" class="o_sh_ap_chip">ვადა <t t-esc="it.deadline"/></span>
+                                                    <span t-else="" class="o_sh_ap_chip">ვადა არ აქვს</span>
+                                                    <span t-if="it.returns" class="o_sh_ap_chip o_sh_ap_chip_again">ადრე დაბრუნდა <t t-esc="it.returns"/>-ჯერ</span>
+                                                </div>
+                                                <button type="button" class="o_sh_ap_title" t-on-click="() => this.openReview(it.id)" t-esc="it.name"/>
+                                                <div class="o_sh_ap_meta">
+                                                    <span class="o_sh_ap_person"><span t-if="it.initials" t-att-class="'o_sh_ap_ava o_sh_ap_ava_' + it.color" t-esc="it.initials"/><t t-esc="it.users"/></span>
+                                                    <span t-if="state.tab === 'sent'">ამოწმებს: <t t-esc="it.reviewers"/></span>
+                                                    <span t-esc="it.department"/>
+                                                    <span t-if="it.project" t-esc="it.project"/>
+                                                    <span t-if="it.work_time">სამუშაო დრო <t t-esc="it.work_time"/></span>
+                                                    <span t-if="it.files"><t t-esc="it.files"/> ფაილი</span>
+                                                </div>
+                                            </div>
+                                            <div class="o_sh_ap_btns">
+                                                <t t-if="state.tab === 'todo'">
+                                                    <button type="button" class="btn o_sh_ap_no" t-on-click="() => this.ask('no', it)">უარყოფა</button>
+                                                    <button type="button" class="btn o_sh_ap_ok" t-on-click="() => this.ask('ok', it)"><i class="fa fa-check"/> დადასტურება</button>
+                                                </t>
+                                                <button t-else="" type="button" class="btn o_sh_ap_no" t-on-click="() => this.openReview(it.id)">ნახვა</button>
+                                            </div>
+                                        </div>
                                     </t>
                                 </div>
-                            </div>
+                            </t>
                         </t>
-                    </t>
 
-                    <!-- ============ history ============ -->
-                    <t t-else="">
-                        <div t-if="!history.length" class="o_sh_ap_empty"><i class="fa fa-history"/>
-                            <t t-if="state.search">ძებნით არაფერი მოიძებნა.</t><t t-else="">ჯერ არაფერი დაგიდასტურებიათ და არ უარგიყვიათ.</t>
-                        </div>
-                        <t t-foreach="history" t-as="h" t-key="h_index">
-                            <div class="o_sh_ap_card o_sh_ap_hist" t-on-click="() => this.openTask(h.id)">
-                                <div t-att-class="'o_sh_ap_ico ' + (h.kind === 'ok' ? 'o_sh_ap_ico_ok' : 'o_sh_ap_ico_no')">
-                                    <i t-att-class="'fa ' + (h.kind === 'ok' ? 'fa-check' : 'fa-undo')"/></div>
-                                <div class="o_sh_ap_main">
-                                    <div t-att-class="'o_sh_ap_kind ' + (h.kind === 'ok' ? 'o_sh_ap_green' : 'o_sh_ap_red')">
-                                        <t t-if="h.kind === 'ok'">დადასტურებულია</t><t t-else="">უარყოფილია</t>
-                                        <span class="o_sh_ap_wait" t-esc="h.date"/>
+                        <!-- ============ history ============ -->
+                        <t t-else="">
+                            <div t-if="!history.length" class="o_sh_ap_empty"><i class="fa fa-history"/>
+                                <t t-if="state.search">ძებნით არაფერი მოიძებნა.</t><t t-else="">ჯერ არაფერი დაგიდასტურებიათ და არ უარგიყვიათ.</t>
+                            </div>
+                            <div t-if="history.length" class="o_sh_ap_group">
+                                <t t-foreach="history" t-as="h" t-key="h_index">
+                                    <div class="o_sh_ap_card">
+                                        <div t-att-class="'o_sh_ap_days ' + (h.kind === 'ok' ? 'o_sh_ap_days_ok' : 'o_sh_ap_days_no')">
+                                            <i t-att-class="'fa ' + (h.kind === 'ok' ? 'fa-check' : 'fa-undo')"/>
+                                        </div>
+                                        <div class="o_sh_ap_main">
+                                            <div class="o_sh_ap_chips">
+                                                <span t-if="h.number" class="o_sh_ap_num" t-esc="h.number"/>
+                                                <span t-att-class="'o_sh_ap_chip ' + (h.kind === 'ok' ? 'o_sh_ap_chip_ok' : 'o_sh_ap_chip_again')">
+                                                    <t t-if="h.kind === 'ok'">დადასტურებულია</t><t t-else="">უარყოფილია</t> · <t t-esc="h.date"/>
+                                                </span>
+                                            </div>
+                                            <button type="button" class="o_sh_ap_title" t-on-click="() => this.openReview(h.id)" t-esc="h.name"/>
+                                            <div class="o_sh_ap_meta">
+                                                <span>შეასრულა: <t t-esc="h.users"/></span>
+                                                <span t-if="h.kind === 'no'">მიზეზი: <t t-esc="h.reason or 'მითითებული არ არის'"/></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="o_sh_ap_title"><t t-if="h.number"><t t-esc="h.number"/> </t><t t-esc="h.name"/></div>
-                                    <div class="o_sh_ap_meta">
-                                        <span>შეასრულა: <b t-esc="h.users"/></span>
-                                        <span t-if="h.kind === 'no'">მიზეზი: <b t-esc="h.reason or 'მითითებული არ არის'"/></span>
-                                    </div>
-                                </div>
+                                </t>
                             </div>
                         </t>
                     </t>
-                </t>
+                </div>
+            </div>
+
+            <div t-else="" class="o_sh_ap_body" t-att-class="{'o_sh_ap_loading': state.detail.loading}">
+                <!-- =====================================================================
+                     INSIDE: the review page of one task
+                     ===================================================================== -->
+                <div class="o_sh_ap_wrap">
+                    <div class="o_sh_ap_topbar">
+                        <button type="button" class="o_sh_ap_back" t-on-click="closeReview"><i class="fa fa-chevron-left"/> დადასტურებები</button>
+                        <div class="o_sh_ap_grow"/>
+                        <t t-if="reviewIndex >= 0">
+                            <span class="o_sh_ap_pos"><t t-esc="reviewPosition"/></span>
+                            <button type="button" class="o_sh_ap_nav" aria-label="წინა დავალება" t-att-disabled="!hasPrev" t-on-click="() => this.reviewStep(-1)"><i class="fa fa-chevron-left"/></button>
+                            <button type="button" class="o_sh_ap_nav" aria-label="შემდეგი დავალება" t-att-disabled="!hasNext" t-on-click="() => this.reviewStep(1)"><i class="fa fa-chevron-right"/></button>
+                        </t>
+                    </div>
+
+                    <t t-if="state.detail.data">
+                        <t t-set="d" t-value="state.detail.data"/>
+                        <div class="o_sh_ap_dhead">
+                            <div class="o_sh_ap_chips">
+                                <span t-if="d.number" class="o_sh_ap_num" t-esc="d.number"/>
+                                <span t-if="d.in_review" t-att-class="'o_sh_ap_chip' + (d.late ? ' o_sh_ap_chip_late' : '')">
+                                    <t t-if="d.days > 0"><t t-esc="d.days"/> დღეა ელოდება</t><t t-else="">დღეს გამოიგზავნა</t>
+                                </span>
+                                <span t-else="" class="o_sh_ap_chip" t-esc="d.stage"/>
+                                <span t-if="d.overdue" class="o_sh_ap_chip o_sh_ap_chip_due">ვადა გასულია · <t t-esc="d.deadline"/></span>
+                                <span t-if="d.returns" class="o_sh_ap_chip o_sh_ap_chip_again">ადრე დაბრუნდა <t t-esc="d.returns"/>-ჯერ</span>
+                            </div>
+                            <h1 t-esc="d.name"/>
+                        </div>
+
+                        <div class="o_sh_ap_cols">
+                            <!-- left: the work -->
+                            <div class="o_sh_ap_left">
+                                <section class="o_sh_ap_panel">
+                                    <h2>რა იყო დავალება</h2>
+                                    <div t-if="d.description" class="o_sh_ap_desc" t-out="descMarkup"/>
+                                    <p t-else="" class="o_sh_ap_none">აღწერა არ აქვს.</p>
+                                    <t t-if="d.subtasks.length">
+                                        <div class="o_sh_ap_subs">
+                                            <t t-foreach="d.subtasks" t-as="sub" t-key="sub.id">
+                                                <div class="o_sh_ap_sub">
+                                                    <span t-att-class="'o_sh_ap_box' + (sub.done ? ' o_sh_ap_box_on' : '')"><i t-if="sub.done" class="fa fa-check"/></span>
+                                                    <span t-esc="sub.name"/>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <div class="o_sh_ap_prog">
+                                            <div class="o_sh_ap_bar"><div t-attf-style="width: {{ 100 * d.subs_done / d.subtasks.length }}%"/></div>
+                                            <span><t t-esc="d.subs_done"/> / <t t-esc="d.subtasks.length"/> ქვედავალება</span>
+                                        </div>
+                                    </t>
+                                </section>
+
+                                <section class="o_sh_ap_panel">
+                                    <h2>მიმაგრებული ფაილები</h2>
+                                    <p t-if="d.final_note" class="o_sh_ap_note" t-esc="d.final_note"/>
+                                    <div t-if="d.files_list.length" class="o_sh_ap_files">
+                                        <t t-foreach="d.files_list" t-as="f" t-key="f.id">
+                                            <a class="o_sh_ap_file" t-att-href="f.url" target="_blank">
+                                                <i t-att-class="'fa ' + (f.image ? 'fa-picture-o' : 'fa-file-text-o')"/>
+                                                <span><b t-esc="f.name"/><small t-esc="f.size"/></span>
+                                            </a>
+                                        </t>
+                                    </div>
+                                    <p t-else="" class="o_sh_ap_none">ფაილი მიმაგრებული არ არის.</p>
+                                </section>
+
+                                <section class="o_sh_ap_panel">
+                                    <h2>დავალების გზა</h2>
+                                    <div class="o_sh_ap_line">
+                                        <t t-foreach="d.timeline" t-as="ev" t-key="ev_index">
+                                            <div class="o_sh_ap_ev">
+                                                <div class="o_sh_ap_rail"><span t-att-class="'o_sh_ap_dot o_sh_ap_dot_' + ev.kind"/><span t-if="!ev_last" class="o_sh_ap_stem"/></div>
+                                                <div class="o_sh_ap_evtext">
+                                                    <b t-esc="ev.label"/>
+                                                    <small><t t-esc="ev.who"/> · <t t-esc="ev.date"/></small>
+                                                    <div t-if="ev.reason" class="o_sh_ap_reason">მიზეზი: <t t-esc="ev.reason"/></div>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </section>
+                            </div>
+
+                            <!-- right: decision + facts -->
+                            <div class="o_sh_ap_right">
+                                <section t-if="d.can_decide" class="o_sh_ap_panel">
+                                    <h2>თქვენი გადაწყვეტილება</h2>
+                                    <label for="o_sh_ap_reason">უარყოფის მიზეზი</label>
+                                    <textarea id="o_sh_ap_reason" rows="4" placeholder="უარყოფისას სავალდებულოა: რა არის გასასწორებელი?"
+                                              t-att-value="state.detail.reason" t-on-input="onDetailReason"/>
+                                    <div t-if="state.detail.error" class="o_sh_ap_err" t-esc="state.detail.error"/>
+                                    <small class="o_sh_ap_hint">მიზეზს დაინახავს შემსრულებელი.</small>
+                                    <button type="button" class="btn o_sh_ap_ok o_sh_ap_big" t-att-disabled="state.detail.busy" t-on-click="() => this.ask('ok', d)"><i class="fa fa-check"/> დადასტურება</button>
+                                    <button type="button" class="btn o_sh_ap_no o_sh_ap_big" t-att-disabled="state.detail.busy" t-on-click="rejectInside"><i class="fa fa-undo"/> უარყოფა და დაბრუნება</button>
+                                    <small class="o_sh_ap_hint">დადასტურების შემდეგ დავალება გადავა დასრულებულში და გაიხსნება შემდეგი.</small>
+                                </section>
+
+                                <section class="o_sh_ap_panel">
+                                    <h2>მოკლედ</h2>
+                                    <dl class="o_sh_ap_facts">
+                                        <dt>შეასრულა</dt><dd><span t-if="d.initials" t-att-class="'o_sh_ap_ava o_sh_ap_ava_' + d.color" t-esc="d.initials"/><t t-esc="d.users"/></dd>
+                                        <dt>ამოწმებს</dt><dd t-esc="d.reviewers"/>
+                                        <dt>დეპარტამენტი</dt><dd t-esc="d.department"/>
+                                        <t t-if="d.project"><dt>პროექტი</dt><dd t-esc="d.project"/></t>
+                                        <dt>ვადა</dt><dd t-att-class="d.overdue ? 'o_sh_ap_red' : ''"><t t-esc="d.deadline or 'არ აქვს'"/><t t-if="d.overdue"> · გასულია</t></dd>
+                                        <t t-if="d.work_time"><dt>სამუშაო დრო</dt><dd t-esc="d.work_time"/></t>
+                                        <t t-if="d.in_review and d.since"><dt>გამოგზავნილია</dt><dd t-esc="d.since"/></t>
+                                    </dl>
+                                    <button type="button" class="o_sh_ap_full" t-on-click="() => this.openTask(d.id)">დავალების სრულად გახსნა <i class="fa fa-chevron-right"/></button>
+                                </section>
+                            </div>
+                        </div>
+                    </t>
+                </div>
             </div>
 
             <!-- ============ confirm / reject window ============ -->
@@ -110,9 +256,9 @@
                         </t>
                     </div>
                     <div class="o_sh_ap_dlg_foot">
-                        <button class="btn o_sh_ap_open" t-att-disabled="state.dialog.busy" t-on-click="closeDialog">გაუქმება</button>
-                        <button t-if="state.dialog.mode === 'ok'" class="btn o_sh_ap_ok" t-att-disabled="state.dialog.busy" t-on-click="confirm">კი, დადასტურდეს</button>
-                        <button t-else="" class="btn o_sh_ap_rej" t-att-disabled="state.dialog.busy" t-on-click="confirm">უარყოფა</button>
+                        <button type="button" class="btn o_sh_ap_no" t-att-disabled="state.dialog.busy" t-on-click="closeDialog">გაუქმება</button>
+                        <button t-if="state.dialog.mode === 'ok'" type="button" class="btn o_sh_ap_ok" t-att-disabled="state.dialog.busy" t-on-click="confirm">კი, დადასტურდეს</button>
+                        <button t-else="" type="button" class="btn o_sh_ap_rej" t-att-disabled="state.dialog.busy" t-on-click="confirm">უარყოფა</button>
                     </div>
                 </div>
             </div>

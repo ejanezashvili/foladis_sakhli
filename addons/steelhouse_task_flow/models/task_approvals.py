@@ -2,6 +2,8 @@
 A task on "შემოწმებაზე" goes to its reviewers ("შემმოწმებლები"): confirm -> done, reject with a
 reason -> back to the assignee ("დაბრუნებული"). Same rules as the buttons on the task form.
 The reviewer is set automatically - the person who created the task; only admins change it."""
+import re
+
 from markupsafe import Markup
 
 from odoo import api, fields, models, _
@@ -12,6 +14,11 @@ from .task_worktime import _fmt_secs
 
 LATE_DAYS = 2      # waiting this many days or more is shown in red
 HISTORY_LIMIT = 80
+
+
+def _html_text(html):
+    """Plain text of an HTML value (to tell an empty description from a filled one)."""
+    return re.sub(r'<[^>]+>', '', html or '').replace('&nbsp;', ' ').strip()
 
 
 class ProjectTask(models.Model):
@@ -96,11 +103,16 @@ class ProjectTask(models.Model):
         days = (_local(now).date() - _local(since).date()).days if since else 0
         returns = self.env['sh.task.flow.event'].sudo().search_count(
             [('task_id', '=', self.id), ('kind', '=', 'return')])
+        first = self.user_ids[:1]
         return {
             'id': self.id,
             'number': self.sh_number or '',
             'name': self.name,
             'users': ', '.join(self.user_ids.mapped('name')) or '-',
+            # round badge with the first assignee's initials (the colour follows the person)
+            # (no .upper(): Georgian capitals are missing in many fonts)
+            'initials': ''.join(w[0] for w in (first.name or '').split()[:2]),
+            'color': first.id % 6,
             'reviewers': ', '.join(self.reviewer_ids.mapped('name')) or '-',
             'department': self.project_id.name or '',
             'project': self.sh_project_id.name or '',
@@ -171,6 +183,58 @@ class ProjectTask(models.Model):
                                           'reason': (event.reason or '').strip()}))
         rows.sort(key=lambda r: r[0], reverse=True)
         return [dict(row, date=_local(when).strftime('%d.%m.%Y %H:%M')) for when, row in rows[:HISTORY_LIMIT]]
+
+    # ------------------------------------------------------------------ one task, for the review page
+    EVENT_LABELS = {'review': 'გამოგზავნილია შემოწმებაზე', 'return': 'დაბრუნდა შესასწორებლად',
+                    'hold': 'შეჩერდა', 'resume': 'გაგრძელდა', 'cancel': 'გაუქმდა'}
+
+    def sh_approval_detail(self):
+        """Everything the reviewer needs to decide without opening the task form: what was asked,
+        sub-tasks, files, the way of the task (sent / returned with reasons) and the short facts."""
+        self.ensure_one()
+        self.check_access('read')
+        now = fields.Datetime.now()
+        events = self.env['sh.task.flow.event'].sudo().search([('task_id', '=', self.id)], order='date desc, id desc')
+        since = events.filtered(lambda e: e.kind == 'review')[:1].date or self.date_last_stage_update
+        data = self._sh_ap_item(since, now)
+        uid = self.env.uid
+
+        def who(user):
+            return 'თქვენ' if user.id == uid else (user.name or '-')
+
+        timeline = [{'kind': e.kind, 'label': self.EVENT_LABELS.get(e.kind, e.kind), 'who': who(e.user_id),
+                     'date': _local(e.date).strftime('%d.%m.%Y %H:%M'), 'reason': (e.reason or '').strip()}
+                    for e in events]
+        timeline.append({'kind': 'create', 'label': 'დავალება შეიქმნა', 'who': who(self.create_uid),
+                         'date': _local(self.create_date).strftime('%d.%m.%Y %H:%M'), 'reason': ''})
+        subs = self.sudo().child_ids.filtered(lambda t: t.state != '1_canceled').sorted(lambda t: (t.sequence, t.id))
+        files = self.env['ir.attachment'].sudo().search(
+            [('res_model', '=', 'project.task'), ('res_id', '=', self.id)], order='id desc')
+
+        def size(num):
+            num = num or 0
+            return '%.1f MB' % (num / 1048576) if num >= 1048576 else '%d KB' % max(1, round(num / 1024))
+
+        description = str(self.description or '')
+        # an empty editor leaves "<p><br></p>" behind
+        if not _html_text(description) and '<img' not in description:
+            description = ''
+        data.update({
+            'description': description,
+            'subtasks': [{'id': t.id, 'name': t.name, 'done': t.state == '1_done'} for t in subs],
+            'subs_done': len(subs.filtered(lambda t: t.state == '1_done')),
+            'files_list': [{'id': f.id, 'name': f.name, 'size': size(f.file_size),
+                            'image': (f.mimetype or '').startswith('image/'),
+                            'url': '/web/content/%d?download=true' % f.id} for f in files],
+            'final_note': (self.sh_final_note or '').strip(),
+            'timeline': timeline,
+            'stage': self.stage_id.name or '',
+            'in_review': self.stage_id.sh_kind == 'review' and self.state not in ('1_done', '1_canceled'),
+            'can_decide': (self.stage_id.sh_kind == 'review' and self.state not in ('1_done', '1_canceled')
+                           and bool(self.reviewer_ids and self.env.user in self.reviewer_ids
+                                    or not self.reviewer_ids and self.create_uid.id == uid)),
+        })
+        return data
 
     # ------------------------------------------------------------------ decisions
     def _sh_ap_check(self):
