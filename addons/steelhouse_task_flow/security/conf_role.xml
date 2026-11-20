@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- role "კონფიდენციალური": sees every confidential task (models/task_conf_role.py) -->
+    <record id="group_sh_confidential" model="res.groups">
+        <field name="name">კონფიდენციალური</field>
+        <field name="comment">ხედავს ყველა კონფიდენციალურ დავალებას - „დამატებით ხედავენ“-ში ჩაწერის გარეშე.</field>
+    </record>
+</odoo>

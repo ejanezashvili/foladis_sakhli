@@ -48,7 +48,7 @@ class ProjectTask(models.Model):
             for follower in task.message_follower_ids:
                 users = follower.partner_id.user_ids
                 if users and not (users & allowed) and not any(
-                        u.has_group('project.group_project_manager') for u in users):
+                        u.has_group('steelhouse_task_flow.group_sh_confidential') for u in users):
                     follower.unlink()
             if task.sh_channel_id:
                 missing = task.sh_confidential_viewer_ids.partner_id - task.sh_channel_id.channel_member_ids.partner_id
