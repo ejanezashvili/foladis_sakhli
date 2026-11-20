@@ -1,8 +1,16 @@
 // "🔒 კონფიდენციალური" board (views/special_boards_views.xml)
-// the numbers sit inside the board, above the columns (the board leaves room for them)
-.o_kanban_renderer:has(> .o_sh_conf_summary) { position: relative; padding-top: 62px !important; }
+// layout: departments on the left (both rows), the numbers on top right, the board under them;
+// the board keeps its own scrolling, so the column headers stay pinned at its top
+.o_content:has(> .o_sh_conf_summary) {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    > .o_search_panel { grid-column: 1; grid-row: 1 / span 2; }
+    > .o_sh_conf_summary { grid-column: 2; grid-row: 1; }
+    > .o_kanban_renderer { grid-column: 2; grid-row: 2; min-height: 0; }
+}
 .o_sh_conf_summary {
-    position: absolute; top: 8px; left: 12px; right: 12px; z-index: 1;
+    flex: 0 0 auto; margin: 10px 12px 2px;
     display: flex; flex-wrap: wrap; gap: 28px; padding: 10px 16px;
     background: #fff; border: 1px solid #e2dcef; border-radius: 10px; font-size: 0.95rem;
     b { margin-left: 4px; }
