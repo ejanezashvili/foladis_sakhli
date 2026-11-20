@@ -15,7 +15,7 @@ from odoo import _, models
 from odoo.exceptions import UserError
 
 # what anyone who sees the task may still change from the screen (the flow has its own rules)
-FREE_FIELDS = frozenset({'stage_id', 'state', 'personal_stage_type_id', 'personal_stage_type_ids'})
+FREE_FIELDS = frozenset({'stage_id', 'sh_phase', 'state', 'personal_stage_type_id', 'personal_stage_type_ids'})
 
 
 def _desc_signature(html):

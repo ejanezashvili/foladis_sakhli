@@ -9,6 +9,7 @@ const KIND_BY_NAME = {
     "ახალი": "new",
     "მიღებული": "accepted",
     "მიმდინარე": "in_progress",
+    "მუშავდება": "in_progress",
     "შეჩერებული": "on_hold",
     "შემოწმებაზე": "review",
     "დაბრუნებული": "returned",

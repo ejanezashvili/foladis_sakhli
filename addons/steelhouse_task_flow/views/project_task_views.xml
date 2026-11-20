@@ -215,6 +215,10 @@
         <field name="arch" type="xml">
             <!-- Card in the "pill" style: status pill + number, title, department line, assignees,
                  deadline + priority, footer with comments / files / sub-tasks / activities / state -->
+            <!-- board columns: ახალი / მუშავდება / შემოწმებაზე / დასრულებული (models/task_phase.py) -->
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="default_group_by">sh_phase</attribute>
+            </xpath>
             <xpath expr="//t[@t-name='card']/main" position="replace">
                 <main t-att-class="'o_sh_card' + (['1_done', '1_canceled'].includes(record.state.raw_value) ? ' o_sh_card_closed' : '') + (record.sh_step_badge.raw_value === 'wait' ? ' o_sh_card_waitstep' : '') + (record.sh_is_mine.raw_value ? ' o_sh_card_mine' : '')">
                     <field name="sh_is_mine" invisible="1"/>
@@ -238,6 +242,12 @@
                         <i t-if="record.sh_confidential.raw_value" class="fa fa-lock text-danger o_sh_card_lock" title="კონფიდენციალური"/>
                         <field name="name" class="o_sh_card_title"/>
                         <field name="sh_number" class="o_sh_card_num"/>
+                    </div>
+                    <!-- "მუშავდება" holds four stages: the card says which one. A main task of a sequence
+                         has no single stage of its own - each step shows where it stands in the list below -->
+                    <field name="sh_step_total" invisible="1"/>
+                    <div t-if="!record.sh_step_total.raw_value and ['accepted', 'in_progress', 'on_hold', 'returned'].includes(record.sh_kind.raw_value)">
+                        <span t-att-class="'o_sh_stpill o_sh_stpill_' + record.sh_kind.raw_value" t-esc="record.stage_id.value"/>
                     </div>
                     <div t-if="record.project_id.raw_value or record.parent_id.raw_value" class="o_sh_card_sub">
                         <i class="fa fa-building-o me-1" title="დეპარტამენტი"/>

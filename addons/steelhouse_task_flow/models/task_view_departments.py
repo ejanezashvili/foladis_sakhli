@@ -99,7 +99,7 @@ class ProjectTask(models.Model):
         return tasks
 
     def write(self, vals):
-        if ('stage_id' in vals or 'state' in vals) and not self.env.context.get('sh_flow_internal'):
+        if ('stage_id' in vals or 'state' in vals or 'sh_phase' in vals) and not self.env.context.get('sh_flow_internal'):
             self._sh_check_viewer_move()
         res = super().write(vals)
         if ('project_id' in vals or 'sh_department_project_ids' in vals) \

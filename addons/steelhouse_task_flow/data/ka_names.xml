@@ -3,5 +3,7 @@
     <!-- Georgian names of the renamed Project menus/actions: a module upgrade resets them,
          so they are written again on every install/upgrade -->
     <function model="project.project" name="_sh_set_ka_names"/>
+    <!-- main tasks whose step is already started leave "ახალი" (models/task_phase.py) -->
+    <function model="project.task" name="_sh_sync_main_phase"/>
     <function model="project.task" name="_sh_init_numbers"/>
 </odoo>

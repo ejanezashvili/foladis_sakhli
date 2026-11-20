@@ -5,7 +5,8 @@
   tasks go to "შეჩერებული"; resuming the project brings back to "ახალი" only the tasks the project
   hold stopped (a task held on its own stays held, a finished one stays finished);
 - a single task on hold: only it stops. The next task(s) in its sequence get a notice and a
-  "▶ გაგრძელება" button: pressing it (optional) lets them work without waiting for the held one.
+  permission button (optional, manual): the performer, main responsible or reviewer of the HELD
+  task (or an administrator) may let the next one start without waiting. Nobody else can.
 """
 from markupsafe import Markup
 
@@ -26,8 +27,14 @@ class ProjectTask(models.Model):
     sh_continue_ok = fields.Boolean('გაგრძელდა შეჩერებული წინა დავალების გარეშე', copy=False, readonly=True)
     sh_prev_held = fields.Boolean(compute='_compute_sh_prev_held')
     sh_prev_held_info = fields.Char(compute='_compute_sh_prev_held')
+    # on the waiting task: I may give it the permission to start
+    sh_can_continue = fields.Boolean(compute='_compute_sh_can_continue')
+    # on the held task: its next task(s) wait for a permission I may give
+    sh_can_allow_next = fields.Boolean(compute='_compute_sh_can_allow_next')
+    sh_allow_next_info = fields.Char(compute='_compute_sh_can_allow_next')
 
     def _sh_is_held(self):
+        self.ensure_one()
         return self.state not in CLOSED and self.stage_id.sh_kind == 'on_hold'
 
     @api.depends('depend_on_ids.stage_id', 'depend_on_ids.state')
@@ -68,21 +75,78 @@ class ProjectTask(models.Model):
         prev, subs = super()._sh_open_before_review()
         return self._sh_drop_held(prev), subs
 
+    # the permission is given by the people of the HELD task, never by the next one itself
+    def _sh_may_allow_after(self):
+        """The user may let the next task start: performer, main responsible or reviewer of the
+        held task(s) in self, or an administrator."""
+        user = self.env.user
+        held = self.sudo()
+        return (user.has_group('project.group_project_manager')
+                or user in (held.user_ids | held.sh_responsible_id | held.reviewer_ids))
+
+    def _sh_next_waiting_permission(self):
+        """Next tasks that only wait for this held one and have no permission yet."""
+        self.ensure_one()
+        me = self.sudo()
+        if not me._sh_is_held():
+            return me.browse()
+        return me.dependent_ids.filtered(
+            lambda t: t.state not in CLOSED and not t.sh_continue_ok and t.sh_prev_held)
+
+    @api.depends('depend_on_ids.stage_id', 'depend_on_ids.state', 'sh_continue_ok')
+    @api.depends_context('uid')
+    def _compute_sh_can_continue(self):
+        for task in self:
+            held = task.sudo().depend_on_ids.filtered(lambda t: t._sh_is_held())
+            task.sh_can_continue = bool(task.sh_prev_held and not task.sh_continue_ok and held._sh_may_allow_after())
+
+    @api.depends('stage_id', 'state', 'dependent_ids.sh_continue_ok', 'dependent_ids.state')
+    @api.depends_context('uid')
+    def _compute_sh_can_allow_next(self):
+        for task in self:
+            nxt = task._sh_next_waiting_permission()
+            task.sh_can_allow_next = bool(nxt) and task._sh_may_allow_after()
+            task.sh_allow_next_info = ', '.join(
+                '%s%s' % (t.sh_number and t.sh_number + ' ' or '', t.name) for t in nxt)
+
     def action_sh_continue(self):
-        """"▶ გაგრძელება": work on this task although the previous one is on hold."""
+        """"▶ დაწყების ნებართვა" on the waiting task: it may start although the previous one is on hold."""
         self.ensure_one()
         user = self.env.user
-        if not (user in self.user_ids or user == self.sh_responsible_id
-                or user.has_group('project.group_project_manager')):
-            raise UserError(_("გაგრძელება შეუძლია დავალების შემსრულებელს, მთავარ პასუხისმგებელს ან ადმინისტრატორს."))
         if not self.sh_prev_held:
             raise UserError(_("წინა დავალება აღარ არის შეჩერებული."))
+        held_tasks = self.sudo().depend_on_ids.filtered(lambda t: t._sh_is_held())
+        if not held_tasks._sh_may_allow_after():
+            raise UserError(_("დაწყების ნებართვას იძლევა შეჩერებული წინა დავალების შემსრულებელი, "
+                              "მთავარი პასუხისმგებელი, შემმოწმებელი ან ადმინისტრატორი."))
         held = self.sh_prev_held_info
-        self.sudo().with_context(sh_flow_internal=True).write({'sh_continue_ok': True})
-        self.message_post(
+        me = self.sudo()
+        me.with_context(sh_flow_internal=True).write({'sh_continue_ok': True})
+        users = (me.user_ids | me.sh_responsible_id).filtered(lambda u: u.active and not u.share) - user
+        me.with_context(mail_post_autofollow=False).message_post(
             body=Markup('▶ <b>%s</b><br/>%s') % (
-                _("გაგრძელდა შეჩერებული წინა დავალების გარეშე - %s", user.name), held),
-            author_id=user.partner_id.id, message_type='notification', subtype_xmlid='mail.mt_note')
+                _("%s-მ დართო ნება: დავალება შეიძლება დაიწყოს შეჩერებული წინა დავალების გარეშე", user.name), held),
+            partner_ids=users.partner_id.ids, author_id=user.partner_id.id,
+            message_type='comment' if users else 'notification',
+            subtype_xmlid='mail.mt_comment' if users else 'mail.mt_note')
+        return True
+
+    def action_sh_allow_next(self):
+        """"▶ შემდეგის დაშვება" on the held task: its next task(s) may start without waiting for it."""
+        self.ensure_one()
+        if not self._sh_may_allow_after():
+            raise UserError(_("შემდეგი დავალების დაშვება შეუძლია ამ დავალების შემსრულებელს, "
+                              "მთავარ პასუხისმგებელს, შემმოწმებელს ან ადმინისტრატორს."))
+        nxt = self._sh_next_waiting_permission()
+        if not nxt:
+            raise UserError(_("შემდეგი დავალება არ ელოდება ნებართვას."))
+        for task in nxt:
+            task.action_sh_continue()
+        self.sudo().message_post(
+            body=Markup('▶ <b>%s</b><br/>%s') % (
+                _("%s-მ დაუშვა შემდეგი დავალების დაწყება", self.env.user.name),
+                ', '.join(nxt.mapped('display_name'))),
+            author_id=self.env.user.partner_id.id, message_type='notification', subtype_xmlid='mail.mt_note')
         return True
 
     def sh_chain_toggle_done(self, task_id):
@@ -111,8 +175,8 @@ class ProjectTask(models.Model):
             body = Markup('<b>%s</b><br/>%s<br/>%s') % (
                 _("შენი წინა დავალება შეჩერდა: %s", self.display_name),
                 _("მიზეზი: %s", reason or '-'),
-                _("შეგიძლია გააგრძელო შენი დავალება „%s“ - დააჭირე „▶ გაგრძელებას“ დავალებაზე. "
-                  "სავალდებულო არ არის.", nxt.name))
+                _("შენი დავალება „%s“ ელოდება. დაიწყება მხოლოდ მაშინ, თუ შეჩერებული დავალების "
+                  "შემსრულებელი, მთავარი პასუხისმგებელი ან შემმოწმებელი დართავს ნებას.", nxt.name))
             nxt.with_context(mail_post_autofollow=False).message_post(
                 body=body, partner_ids=users.partner_id.ids, author_id=self.env.user.partner_id.id,
                 message_type='comment', subtype_xmlid='mail.mt_comment')

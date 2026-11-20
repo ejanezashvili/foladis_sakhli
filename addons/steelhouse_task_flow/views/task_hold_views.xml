@@ -9,14 +9,27 @@
             <xpath expr="//t[@name='warning_section']" position="after">
                 <field name="sh_prev_held" invisible="1"/>
                 <field name="sh_continue_ok" invisible="1"/>
+                <field name="sh_can_continue" invisible="1"/>
+                <field name="sh_can_allow_next" invisible="1"/>
                 <div class="alert alert-warning mb-0 d-flex align-items-center gap-3" role="alert"
                      invisible="not sh_prev_held or sh_continue_ok or state in ('1_done', '1_canceled')">
                     <div class="flex-grow-1">
                         <i class="fa fa-pause me-1"/><b>წინა დავალება შეჩერებულია:</b>
                         <field name="sh_prev_held_info" readonly="1" class="d-inline"/>
-                        <span> - შეგიძლია გააგრძელო შენი დავალება (სავალდებულო არ არის).</span>
+                        <span> - ეს დავალება დაიწყება მხოლოდ მისი შემსრულებლის, პასუხისმგებლის ან შემმოწმებლის ნებართვით.</span>
                     </div>
-                    <button name="action_sh_continue" type="object" string="▶ გაგრძელება" class="btn btn-success btn-sm"/>
+                    <button name="action_sh_continue" type="object" string="▶ დაწყების ნებართვა" class="btn btn-success btn-sm"
+                            invisible="not sh_can_continue"/>
+                </div>
+                <!-- on the held task itself: let the next one start -->
+                <div class="alert alert-info mb-0 d-flex align-items-center gap-3" role="alert" invisible="not sh_can_allow_next">
+                    <div class="flex-grow-1">
+                        <i class="fa fa-lock me-1"/><b>შემდეგი დავალება ელოდება:</b>
+                        <field name="sh_allow_next_info" readonly="1" class="d-inline"/>
+                        <span> - თუ საჭიროა, შეგიძლიათ დაუშვათ მისი დაწყება (სავალდებულო არ არის).</span>
+                    </div>
+                    <button name="action_sh_allow_next" type="object" string="▶ შემდეგის დაშვება" class="btn btn-success btn-sm"
+                            confirm="შემდეგი დავალება დაიწყება ამ შეჩერებული დავალების გარეშე. გავაგრძელოთ?"/>
                 </div>
             </xpath>
         </field>
@@ -31,11 +44,19 @@
             <xpath expr="//widget[@name='sh_card_lists']" position="before">
                 <field name="sh_prev_held" invisible="1"/>
                 <field name="sh_continue_ok" invisible="1"/>
+                <field name="sh_can_continue" invisible="1"/>
+                <field name="sh_can_allow_next" invisible="1"/>
                 <div t-if="record.sh_prev_held.raw_value and !record.sh_continue_ok.raw_value and !['1_done', '1_canceled'].includes(record.state.raw_value)"
                      class="o_sh_held_strip">
                     <div><i class="fa fa-pause me-1"/>წინა დავალება შეჩერებულია</div>
-                    <div class="o_sh_held_hint">შეგიძლია გააგრძელო შენი დავალება</div>
-                    <button name="action_sh_continue" type="object" class="btn btn-success btn-sm mt-1">▶ გაგრძელება</button>
+                    <div class="o_sh_held_hint">დაიწყება მხოლოდ წინა დავალების ნებართვით</div>
+                    <button t-if="record.sh_can_continue.raw_value" name="action_sh_continue" type="object"
+                            class="btn btn-success btn-sm mt-1">▶ დაწყების ნებართვა</button>
+                </div>
+                <div t-if="record.sh_can_allow_next.raw_value" class="o_sh_held_strip">
+                    <div><i class="fa fa-lock me-1"/>შემდეგი დავალება ელოდება</div>
+                    <div class="o_sh_held_hint">შეგიძლიათ დაუშვათ მისი დაწყება</div>
+                    <button name="action_sh_allow_next" type="object" class="btn btn-success btn-sm mt-1">▶ შემდეგის დაშვება</button>
                 </div>
             </xpath>
         </field>
