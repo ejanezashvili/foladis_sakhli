@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_hr.LeaveReport">
+        <div class="o_sh_lr o_action">
+            <div class="o_sh_lr_scroll" t-att-class="{'o_sh_lr_loading': state.loading}">
+                <!-- title + exports -->
+                <div class="o_sh_lr_head">
+                    <div>
+                        <h2>შვებულების რეპორტი</h2>
+                        <div class="o_sh_lr_muted" t-if="state.data"><t t-esc="state.data.period"/> · <t t-esc="state.data.filter_label"/></div>
+                    </div>
+                    <div class="o_sh_lr_exports">
+                        <button class="btn o_sh_lr_excel" t-on-click="exportExcel" t-att-disabled="state.busy">
+                            <i t-att-class="'fa me-1 ' + (state.busy === 'excel' ? 'fa-spinner fa-spin' : 'fa-file-excel-o')"/>Excel
+                        </button>
+                        <button class="btn o_sh_lr_pdf" t-on-click="exportPdf" t-att-disabled="state.busy">
+                            <i t-att-class="'fa me-1 ' + (state.busy === 'pdf' ? 'fa-spinner fa-spin' : 'fa-file-pdf-o')"/>PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- filters -->
+                <div class="o_sh_lr_card o_sh_lr_filters">
+                    <div class="o_sh_lr_field">
+                        <label>პერიოდი</label>
+                        <div class="d-flex align-items-center gap-1">
+                            <input type="date" class="form-control form-control-sm" t-att-value="state.params.date_from" t-on-change="(ev) => this.onDate('date_from', ev)"/>
+                            <span>-</span>
+                            <input type="date" class="form-control form-control-sm" t-att-value="state.params.date_to" t-on-change="(ev) => this.onDate('date_to', ev)"/>
+                        </div>
+                        <div class="o_sh_lr_quick">
+                            <a href="#" t-on-click.prevent="() => this.quick('month')">ეს თვე</a>
+                            <a href="#" t-on-click.prevent="() => this.quick('quarter')">ეს კვარტალი</a>
+                            <a href="#" t-on-click.prevent="() => this.quick('year')">ეს წელი</a>
+                            <a href="#" t-on-click.prevent="() => this.quick('last_year')">გასული წელი</a>
+                        </div>
+                    </div>
+                    <div class="o_sh_lr_field">
+                        <label>დეპარტამენტი</label>
+                        <select class="form-select form-select-sm" t-on-change="(ev) => this.onSelect('department_id', ev)">
+                            <option value="0">ყველა</option>
+                            <option t-foreach="state.lists.departments" t-as="d" t-key="d.id" t-att-value="d.id"
+                                    t-att-selected="d.id === state.params.department_id" t-esc="d.name"/>
+                        </select>
+                    </div>
+                    <div class="o_sh_lr_field">
+                        <label>თანამშრომელი</label>
+                        <select class="form-select form-select-sm" t-on-change="(ev) => this.onSelect('employee_id', ev)">
+                            <option value="0">ყველა</option>
+                            <option t-foreach="employees" t-as="e" t-key="e.id" t-att-value="e.id"
+                                    t-att-selected="e.id === state.params.employee_id" t-esc="e.name"/>
+                        </select>
+                    </div>
+                    <div class="o_sh_lr_field">
+                        <label>სტატუსი</label>
+                        <div class="o_sh_lr_chips">
+                            <button t-foreach="state.lists.states" t-as="s" t-key="s.key"
+                                    t-att-class="'o_sh_lr_chip o_sh_lr_st_' + s.key + (state.params.states.includes(s.key) ? ' active' : '')"
+                                    t-on-click="() => this.toggleState(s.key)" t-esc="s.label"/>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- cut + grouping -->
+                <div class="o_sh_lr_tools">
+                    <div class="o_sh_lr_seg">
+                        <button t-foreach="state.lists.views" t-as="v" t-key="v.key"
+                                t-att-class="state.params.view === v.key ? 'active' : ''"
+                                t-on-click="() => this.setParam('view', v.key)" t-esc="v.label"/>
+                    </div>
+                    <div class="o_sh_lr_seg o_sh_lr_seg_small">
+                        <span class="o_sh_lr_muted me-1">რიგები:</span>
+                        <button t-att-class="state.params.group === 'employee' ? 'active' : ''" t-on-click="() => this.setParam('group', 'employee')">თანამშრომლები</button>
+                        <button t-att-class="state.params.group === 'department' ? 'active' : ''" t-on-click="() => this.setParam('group', 'department')">დეპარტამენტები</button>
+                    </div>
+                </div>
+
+                <t t-if="state.data">
+                    <t t-set="d" t-value="state.data"/>
+                    <!-- numbers -->
+                    <div class="o_sh_lr_kpis">
+                        <div class="o_sh_lr_kpi o_sh_lr_k_purple"><b t-esc="num(d.kpi.days) or '0'"/><span>დღე სულ (დამტკიცებული)</span></div>
+                        <div class="o_sh_lr_kpi o_sh_lr_k_green"><b t-esc="num(d.kpi.paid) or '0'"/><span>ანაზღაურებადი</span></div>
+                        <div class="o_sh_lr_kpi o_sh_lr_k_orange"><b t-esc="num(d.kpi.unpaid) or '0'"/><span>ანაზღაურების გარეშე</span></div>
+                        <div class="o_sh_lr_kpi"><b t-esc="d.kpi.employees"/><span>თანამშრომელი</span></div>
+                        <div class="o_sh_lr_kpi"><b t-esc="d.kpi.requests"/><span>მოთხოვნა</span></div>
+                    </div>
+
+                    <!-- table -->
+                    <div class="o_sh_lr_card o_sh_lr_tablebox">
+                        <t t-set="emp" t-value="d.params.group === 'employee'"/>
+                        <table class="o_sh_lr_table">
+                            <thead>
+                                <t t-if="d.groups.length">
+                                    <tr>
+                                        <th rowspan="2" class="o_sh_lr_first" t-esc="d.group_label"/>
+                                        <th t-foreach="d.groups" t-as="g" t-key="g_index" t-att-colspan="g.span" class="o_sh_lr_group" t-esc="g.label"/>
+                                        <th rowspan="2" class="o_sh_lr_total">სულ</th>
+                                    </tr>
+                                    <tr><th t-foreach="d.columns" t-as="c" t-key="c.key" class="o_sh_lr_sub" t-esc="c.label"/></tr>
+                                </t>
+                                <tr t-else="">
+                                    <th class="o_sh_lr_first" t-esc="d.group_label"/>
+                                    <th t-foreach="d.columns" t-as="c" t-key="c.key" t-esc="c.label"/>
+                                    <th class="o_sh_lr_total">სულ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="!d.rows.length"><td t-att-colspan="2 + d.columns.length" class="o_sh_lr_empty">ამ პერიოდში და ფილტრებით შვებულება არ არის.</td></tr>
+                                <t t-foreach="d.rows" t-as="r" t-key="r.key">
+                                    <tr class="o_sh_lr_row" t-on-click="() => this.toggle(r.key)">
+                                        <td class="o_sh_lr_first">
+                                            <i t-att-class="'fa me-1 ' + (state.open[r.key] ? 'fa-caret-down' : 'fa-caret-right')"/>
+                                            <b t-esc="r.label"/>
+                                            <div t-if="emp and r.sub" class="o_sh_lr_muted small" t-esc="r.sub"/>
+                                        </td>
+                                        <td t-foreach="d.columns" t-as="c" t-key="c.key" t-att-class="r.values[c.key] ? 'o_sh_lr_val' : ''" t-esc="num(r.values[c.key])"/>
+                                        <td class="o_sh_lr_total" t-esc="num(r.total)"/>
+                                    </tr>
+                                    <tr t-if="state.open[r.key]" class="o_sh_lr_items">
+                                        <td t-att-colspan="2 + d.columns.length">
+                                            <div t-foreach="r.items" t-as="it" t-key="it.id" class="o_sh_lr_item" t-on-click="() => this.openLeave(it.id)">
+                                                <span t-if="!emp" class="o_sh_lr_item_emp" t-esc="it.employee"/>
+                                                <span class="o_sh_lr_item_type" t-esc="it.type"/>
+                                                <span class="o_sh_lr_muted" t-esc="it.dates"/>
+                                                <b t-esc="num(it.days) + ' დღე'"/>
+                                                <span t-att-class="'o_sh_lr_badge o_sh_lr_st_' + it.state_key" t-esc="it.state"/>
+                                                <span t-if="it.approvers" class="o_sh_lr_muted">დაამტკიცა: <t t-esc="it.approvers"/></span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot t-if="d.rows.length">
+                                <tr>
+                                    <td class="o_sh_lr_first">სულ</td>
+                                    <td t-foreach="d.columns" t-as="c" t-key="c.key" t-esc="num(d.totals[c.key])"/>
+                                    <td class="o_sh_lr_total" t-esc="num(d.total)"/>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <div class="o_sh_lr_muted small mt-2">
+                        დღეები ითვლება არჩეულ პერიოდში: რამდენიმე თვეზე გადასული შვებულება თვეებად იყოფა (ანაზღაურების გარეშე - კალენდარული დღეებით,
+                        სხვა - სამუშაო დღეებით). სტრიქონზე დაჭერა - მოთხოვნების სია, მოთხოვნაზე დაჭერა - მისი გახსნა.
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,173 @@
+// "შვებულების რეპორტი" page (leave_report.xml)
+$lr-ink: #1f1d2b;
+$lr-muted: #7a7790;
+$lr-line: #eeebf6;
+$lr-purple: #6b4fd8;
+$lr-green: #1f8a57;
+$lr-orange: #e07b28;
+$lr-red: #d64550;
+
+.o_sh_lr {
+    height: 100%;
+    background: #f6f5fb;
+    color: $lr-ink;
+
+    .o_sh_lr_scroll {
+        height: 100%;
+        overflow: auto;
+        padding: 20px 24px 32px;
+        transition: opacity 0.15s;
+        &.o_sh_lr_loading { opacity: 0.55; }
+    }
+    .o_sh_lr_muted { color: $lr-muted; }
+
+    .o_sh_lr_head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+        h2 { margin: 0 0 2px; font-size: 1.45rem; font-weight: 700; }
+    }
+    .o_sh_lr_exports {
+        display: flex;
+        gap: 8px;
+        .btn { border-radius: 10px; font-weight: 600; padding: 6px 16px; color: #fff; border: 0; }
+        .o_sh_lr_excel { background: $lr-green; }
+        .o_sh_lr_pdf { background: $lr-red; }
+        .btn:disabled { opacity: 0.7; }
+    }
+
+    .o_sh_lr_card {
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 18px rgba(60, 40, 120, 0.06);
+    }
+    .o_sh_lr_filters {
+        display: grid;
+        grid-template-columns: minmax(260px, 1.3fr) repeat(2, minmax(180px, 1fr)) minmax(260px, 1.4fr);
+        gap: 14px 18px;
+        padding: 14px 18px;
+        margin-bottom: 14px;
+        @media (max-width: 1100px) { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 640px) { grid-template-columns: 1fr; }
+        label { display: block; font-size: 11px; font-weight: 600; color: $lr-muted; margin-bottom: 4px; }
+    }
+    .o_sh_lr_quick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 5px;
+        font-size: 12px;
+        a { color: $lr-purple; }
+    }
+    .o_sh_lr_chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .o_sh_lr_chip {
+        border: 1px solid $lr-line;
+        background: #faf9fd;
+        color: $lr-muted;
+        border-radius: 999px;
+        padding: 3px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        &.active { color: #fff; border-color: transparent; }
+        &.active.o_sh_lr_st_validate { background: $lr-green; }
+        &.active.o_sh_lr_st_waiting { background: $lr-orange; }
+        &.active.o_sh_lr_st_refuse { background: $lr-red; }
+        &.active.o_sh_lr_st_cancel { background: #8b88a0; }
+    }
+
+    .o_sh_lr_tools {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+    .o_sh_lr_seg {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        border-radius: 12px;
+        background: #ebe8f5;
+        button {
+            border: 0;
+            background: none;
+            border-radius: 9px;
+            padding: 6px 16px;
+            font-weight: 600;
+            color: $lr-muted;
+            &.active { background: #fff; color: $lr-purple; box-shadow: 0 1px 4px rgba(40, 20, 80, 0.12); }
+        }
+        &.o_sh_lr_seg_small button { padding: 4px 12px; font-size: 12px; }
+    }
+
+    .o_sh_lr_kpis {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(140px, 1fr));
+        gap: 12px;
+        margin-bottom: 14px;
+        @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+    }
+    .o_sh_lr_kpi {
+        display: flex;
+        flex-direction: column;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: #fff;
+        border-left: 4px solid $lr-line;
+        box-shadow: 0 4px 18px rgba(60, 40, 120, 0.05);
+        b { font-size: 1.6rem; line-height: 1.2; }
+        span { font-size: 12px; color: $lr-muted; }
+        &.o_sh_lr_k_purple { border-left-color: $lr-purple; }
+        &.o_sh_lr_k_green { border-left-color: $lr-green; }
+        &.o_sh_lr_k_orange { border-left-color: $lr-orange; }
+    }
+
+    .o_sh_lr_tablebox { padding: 6px 4px; overflow-x: auto; }
+    .o_sh_lr_table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        font-size: 13px;
+        th, td { padding: 8px 10px; text-align: right; white-space: nowrap; border-bottom: 1px solid $lr-line; }
+        th { font-size: 11px; font-weight: 600; color: $lr-muted; background: #fff; position: sticky; top: 0; }
+        .o_sh_lr_group { text-align: center; color: $lr-ink; border-left: 1px solid $lr-line; }
+        .o_sh_lr_sub { text-align: center; }
+        .o_sh_lr_first { text-align: left; position: sticky; left: 0; background: #fff; min-width: 210px; z-index: 1; }
+        .o_sh_lr_total { font-weight: 700; background: #f6f4fb; }
+        .o_sh_lr_val { color: $lr-purple; font-weight: 600; }
+        .o_sh_lr_row { cursor: pointer; &:hover td { background: #faf9fd; } }
+        tfoot td { font-weight: 700; background: #f6f4fb; border-bottom: 0; }
+        .o_sh_lr_empty { text-align: center; color: $lr-muted; padding: 24px; }
+    }
+    .o_sh_lr_items > td { text-align: left; background: #fbfaff; padding: 6px 12px 10px 34px; }
+    .o_sh_lr_item {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 10px;
+        margin-top: 4px;
+        border-radius: 10px;
+        background: #fff;
+        border: 1px solid $lr-line;
+        font-size: 12.5px;
+        cursor: pointer;
+        &:hover { border-color: $lr-purple; }
+        .o_sh_lr_item_emp { font-weight: 700; }
+        .o_sh_lr_item_type { font-weight: 600; }
+    }
+    .o_sh_lr_badge {
+        padding: 1px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+        &.o_sh_lr_st_validate { color: $lr-green; background: #e8f7ee; }
+        &.o_sh_lr_st_waiting { color: #b26a00; background: #fff4e0; }
+        &.o_sh_lr_st_refuse { color: $lr-red; background: #fdecec; }
+        &.o_sh_lr_st_cancel { color: $lr-muted; background: #f1eef8; }
+    }
+}
