@@ -1,8 +1,9 @@
 """Who approves a time off request (HR's process, Docs/HR "შვებულების პროცესი", 2026-11-20):
 
-- first approval ("პირველი დამტკიცება"): the employee's direct head(s); the final approver (the
-  founder) is left out of this step when the employee has another head, so a department head is
-  approved first by დავითი სალთხუციშვილი and then by ზეზვა სალთხუციშვილი;
+- first approval ("პირველი დამტკიცება"): the employee's direct head(s) - equal heads all approve;
+- an employee whose heads include the final approver (the founder - the department heads right under
+  "ფოლადის სახლი", where დავითი and ზეზვა სალთხუციშვილი are the heads): only the founder approves,
+  once (his approval goes straight to "approved");
 - an employee without a head: HR (the company's "HR" user) does not decide - HR invites the person
   who approves (field "დამმტკიცებელი (HR-ის მოწვეული)"); that person gives the first approval;
 - second approval ("მეორე დამტკიცება"): only the time off type's responsible (the founder);
@@ -57,7 +58,10 @@ class HrLeave(models.Model):
                 responsible = self.sudo().sh_invited_approver_id
             elif self.validation_type == 'both':
                 final = self._sh_final_users()
-                if responsible - final:
+                heads = self.employee_id.sudo()._sh_heads().user_id
+                if heads & final:
+                    responsible = heads & final
+                elif responsible - final:
                     responsible -= final
         elif self.validation_type == 'both' and self.state == 'validate1':
             responsible = self._sh_final_users() or responsible
@@ -134,7 +138,13 @@ class HrLeave(models.Model):
                     if leave.sh_no_head and not leave.sudo().sh_invited_approver_id:
                         raise UserError(_("თანამშრომელს ხელმძღვანელი არ ჰყავს: ჯერ HR-მა უნდა აირჩიოს დამმტკიცებელი."))
                     raise UserError(_("ამ მოთხოვნის დამტკიცება თქვენ არ შეგიძლიათ."))
-        return super().action_approve(check_state)
+        res = super().action_approve(check_state)
+        # the founder as the employee's own head: one approval is enough
+        once = self.filtered(lambda l: l.state == 'validate1' and user in l._sh_final_users()
+                             and user in l.employee_id.sudo()._sh_heads().user_id)
+        if once:
+            once.action_approve(check_state)
+        return res
 
     @api.model
     def sh_waiting_for_me_count(self):
