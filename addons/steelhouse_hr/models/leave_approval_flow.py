@@ -147,9 +147,16 @@ class HrLeave(models.Model):
 
     # Odoo 19: "can_approve" = the first approval (confirm -> validate1 of a two-step type),
     # "can_validate" = the last one (validate1 -> validate, or confirm -> validate of a one-step type)
+    def _sh_refused_locked(self, user):
+        """A refused request is not approved straight away (it would skip the heads and the founder):
+        it goes back to "to approve" first; only a system administrator may approve it directly."""
+        return self.state == 'refuse' and not user.has_group('base.group_system')
+
     def _compute_can_approve(self):
         super()._compute_can_approve()
         user = self.env.user
+        for leave in self.filtered(lambda l: l._sh_refused_locked(user)):
+            leave.can_approve = False
         for leave in self.filtered(lambda l: l.state in ('confirm', 'validate1')):
             allowed = leave._sh_user_can_approve(user)
             if allowed is None:
@@ -159,6 +166,8 @@ class HrLeave(models.Model):
     def _compute_can_validate(self):
         super()._compute_can_validate()
         user = self.env.user
+        for leave in self.filtered(lambda l: l._sh_refused_locked(user)):
+            leave.can_validate = False
         for leave in self.filtered(lambda l: l.state in ('confirm', 'validate1')):
             allowed = leave._sh_user_can_approve(user)
             if allowed is None:
@@ -170,6 +179,8 @@ class HrLeave(models.Model):
         user = self.env.user
         if check_state and not self.env.su:
             for leave in self:
+                if leave._sh_refused_locked(user):
+                    raise UserError(_("უარყოფილი მოთხოვნა ჯერ „დასამტკიცებელზე“ უნდა დაბრუნდეს - მერე ჩვეულებრივ გზას გაივლის."))
                 if leave.state in ('confirm', 'validate1') and leave._sh_user_can_approve(user) is False:
                     if leave.state == 'validate1':
                         raise UserError(_("მეორე დამტკიცება შეუძლია მხოლოდ: %s",
