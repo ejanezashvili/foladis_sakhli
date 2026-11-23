@@ -52,8 +52,8 @@
                         </select>
                     </div>
                     <div class="o_sh_lr_field">
-                        <label>სტატუსი</label>
-                        <div class="o_sh_lr_chips">
+                        <label>სტატუსი <span t-if="state.params.view === 'state'" class="o_sh_lr_muted fw-normal">(სტატუსების ჭრილში ყველა ჩანს)</span></label>
+                        <div t-att-class="'o_sh_lr_chips' + (state.params.view === 'state' ? ' opacity-50 pe-none' : '')">
                             <button t-foreach="state.lists.states" t-as="s" t-key="s.key"
                                     t-att-class="'o_sh_lr_chip o_sh_lr_st_' + s.key + (state.params.states.includes(s.key) ? ' active' : '')"
                                     t-on-click="() => this.toggleState(s.key)" t-esc="s.label"/>

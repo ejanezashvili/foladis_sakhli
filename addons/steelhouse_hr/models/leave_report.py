@@ -127,7 +127,9 @@ class ShLeaveReport(models.AbstractModel):
         self._sh_check()
         p = self._sh_params(params)
         date_from, date_to = p['date_from'], p['date_to']
-        state_values = [s for s, k in STATE_OF.items() if k in p['states']]
+        # the status cut shows every status (zero too), whatever the status filter says
+        wanted = [k for k, _l in STATES] if p['view'] == 'state' else p['states']
+        state_values = [s for s, k in STATE_OF.items() if k in wanted]
         domain = [('state', 'in', state_values),
                   ('request_date_from', '<=', date_to), ('request_date_to', '>=', date_from)]
         if p['employee_id']:
@@ -210,7 +212,7 @@ class ShLeaveReport(models.AbstractModel):
             columns += [{'key': 't%s' % tid, 'label': name}
                         for tid, name in sorted(types_used.items(), key=lambda x: x[1]) if tid not in shown.ids]
         else:
-            columns = [{'key': k, 'label': dict(STATES)[k]} for k in [s for s, _l in STATES if s in p['states']]]
+            columns = [{'key': k, 'label': v} for k, v in STATES]
 
         result_rows = sorted(rows.values(), key=lambda r: (r['label'] or ''))
         for row in result_rows:
@@ -237,7 +239,8 @@ class ShLeaveReport(models.AbstractModel):
             parts.append(self.env['hr.department'].browse(p['department_id']).name)
         if p['employee_id']:
             parts.append(self.env['hr.employee'].browse(p['employee_id']).name)
-        parts.append(', '.join(dict(STATES)[s] for s in p['states']))
+        if p['view'] != 'state':
+            parts.append(', '.join(dict(STATES)[s] for s in p['states']))
         return ' · '.join(parts)
 
     # ------------------------------------------------------------------ exports
