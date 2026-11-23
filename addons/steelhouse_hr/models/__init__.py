@@ -8,3 +8,4 @@ from . import leave_rules
 from . import leave_approval_flow
 from . import leave_report
 from . import employee_absence
+from . import mandatory_day_monthly
