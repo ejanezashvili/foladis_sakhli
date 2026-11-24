@@ -10,21 +10,6 @@
                 <field name="active" invisible="1"/>
                 <field name="allocated_hours" invisible="1"/>
                 <div class="mb-2" invisible="not sh_number"><span class="o_sh_num_pill">№ <field name="sh_number" class="d-inline"/></span></div>
-                <div class="d-flex align-items-center gap-2 mb-2" invisible="is_template" groups="project.group_project_manager">
-                    <field name="sh_can_confidential" invisible="1"/>
-                    <field name="sh_confidential" widget="boolean_toggle" nolabel="1" readonly="not sh_can_confidential"/>
-                    <label for="sh_confidential" string="🔒 კონფიდენციალური" class="mb-0"/>
-                    <span class="ms-auto o_sh_conf_note" invisible="not sh_confidential">
-                        <i class="fa fa-lock me-1"/>ხედავენ მხოლოდ როლი „კონფიდენციალური“, მთავარი პასუხისმგებელი, შემსრულებლები, შემმოწმებლები, შემქმნელი და „დამატებით ხედავენ“
-                    </span>
-                </div>
-                <!-- non-administrators see the extra viewers only when there are some -->
-                <div class="d-flex align-items-center gap-2 mb-3 o_sh_conf_viewers"
-                     invisible="not sh_confidential or is_template or (not sh_is_admin and not sh_confidential_viewer_ids)">
-                    <label for="sh_confidential_viewer_ids" string="დამატებით ხედავენ" class="mb-0 text-nowrap"/>
-                    <field name="sh_confidential_viewer_ids" widget="many2many_avatar_user" nolabel="1" options="{'no_create': True}"
-                           readonly="not sh_can_confidential" class="flex-grow-1"/>
-                </div>
                 <separator string="ვინ"/>
                 <group name="sh_who">
                     <group>
@@ -52,6 +37,9 @@
                         <!-- set automatically (the creator of the task); only admins change it -->
                         <field name="reviewer_ids" widget="many2many_avatar_user" options="{'no_create': True, 'no_quick_create': True}" invisible="is_template"
                                readonly="not sh_is_admin"/>
+                        <!-- people let in to this one job (models/task_visibility.py); they only see it -->
+                        <field name="sh_extra_viewer_ids" widget="many2many_avatar_user" invisible="is_template"
+                               options="{'no_create': True, 'no_quick_create': True}"/>
                     </group>
                 </group>
                 <separator string="როდის და სად დგას"/>
@@ -237,9 +225,7 @@
                     <field name="message_attachment_count" invisible="1"/>
                     <field name="project_id" invisible="1"/>
                     <field name="sh_progress" invisible="1"/>
-                    <field name="sh_confidential" invisible="1"/>
                     <div class="o_sh_card_top">
-                        <i t-if="record.sh_confidential.raw_value" class="fa fa-lock text-danger o_sh_card_lock" title="კონფიდენციალური"/>
                         <field name="name" class="o_sh_card_title"/>
                         <field name="sh_number" class="o_sh_card_num"/>
                     </div>
@@ -308,7 +294,6 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='tag_ids']" position="after">
                 <field name="sh_progress" widget="progressbar" optional="show"/>
-                <field name="sh_confidential" string="🔒" widget="boolean_icon" options="{'icon': 'fa-lock'}" optional="show" readonly="1"/>
                 <field name="sh_is_overdue" column_invisible="1"/>
                 <field name="sh_is_mine" column_invisible="1"/>
             </xpath>
@@ -332,7 +317,6 @@
             <xpath expr="//search" position="inside">
                 <filter name="sh_overdue" string="ვადაგადაცილებული" domain="[('sh_is_overdue', '=', True)]"/>
                 <filter name="sh_main_only" string="მხოლოდ მთავარი დავალებები" domain="[('sh_is_step', '=', False)]"/>
-                <filter name="sh_confidential" string="🔒 კონფიდენციალური" domain="[('sh_confidential', '=', True)]"/>
             </xpath>
         </field>
     </record>

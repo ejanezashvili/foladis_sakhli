@@ -50,8 +50,7 @@ class ProjectTask(models.Model):
         start, stop = _utc(w_start), _utc(w_end + timedelta(days=1))
         Task = self.sudo()
         # main tasks only (sequence steps are shown inside their task), the same in every box
-        base = [('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False),
-                ('sh_confidential', '=', False)]  # confidential: only on their own board
+        base = [('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False)]
         cur =self._sh_cw_counts(Task, base, start, stop)
         prev = self._sh_cw_counts(Task, base, _utc(w_start - timedelta(days=7)), start)
         open_tasks = Task.search(base + [('state', 'not in', CLOSED)])

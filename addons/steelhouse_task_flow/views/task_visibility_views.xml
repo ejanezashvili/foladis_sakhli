@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Projects - Configuration - "დავალებების ხილვა": who sees more than the jobs they take part in
+         (models/task_visibility.py). One line per person, edited in place. -->
+    <record id="view_sh_task_visibility_list" model="ir.ui.view">
+        <field name="name">res.users.list.sh.task.visibility</field>
+        <field name="model">res.users</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" create="0" delete="0" default_order="name">
+                <field name="name" string="თანამშრომელი" readonly="1"/>
+                <field name="sh_see_all_tasks" widget="boolean_toggle"/>
+                <field name="sh_see_department_ids" widget="many2many_tags" options="{'no_create': True}"
+                       invisible="sh_see_all_tasks"/>
+                <field name="sh_see_subordinates" widget="boolean_toggle" invisible="sh_see_all_tasks"/>
+                <field name="sh_see_user_ids" widget="many2many_tags" options="{'no_create': True}"
+                       invisible="sh_see_all_tasks"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sh_task_visibility_search" model="ir.ui.view">
+        <field name="name">res.users.search.sh.task.visibility</field>
+        <field name="model">res.users</field>
+        <field name="priority">99</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="თანამშრომელი"/>
+                <field name="sh_see_department_ids"/>
+                <field name="sh_see_user_ids"/>
+                <filter name="sh_see_all" string="ყველა დავალებას ხედავს" domain="[('sh_see_all_tasks', '=', True)]"/>
+                <filter name="sh_see_more" string="თავისზე მეტს ხედავს"
+                        domain="['|', '|', '|', ('sh_see_all_tasks', '=', True), ('sh_see_subordinates', '=', True), ('sh_see_department_ids', '!=', False), ('sh_see_user_ids', '!=', False)]"/>
+                <filter name="sh_see_own" string="მხოლოდ თავისას ხედავს"
+                        domain="[('sh_see_all_tasks', '=', False), ('sh_see_subordinates', '=', False), ('sh_see_department_ids', '=', False), ('sh_see_user_ids', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_sh_task_visibility" model="ir.actions.act_window">
+        <field name="name">დავალებების ხილვა</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_sh_task_visibility_list"/>
+        <field name="search_view_id" ref="view_sh_task_visibility_search"/>
+        <field name="domain">[('share', '=', False)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+    <menuitem id="menu_sh_task_visibility" name="დავალებების ხილვა" parent="project.menu_project_config"
+              action="action_sh_task_visibility" sequence="5" groups="base.group_system"/>
+
+    <!-- the tasks made before "დავალების მონაწილეები" (once) -->
+    <function model="project.task" name="_sh_party_init"/>
+</odoo>

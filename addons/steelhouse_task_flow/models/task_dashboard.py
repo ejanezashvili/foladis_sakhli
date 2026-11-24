@@ -18,7 +18,6 @@ class ProjectTask(models.Model):
         uid = self.env.uid
         today = fields.Date.context_today(self)
         day = lambda dt: fields.Datetime.context_timestamp(self, dt).date() if dt else False
-        # confidential tasks count too when the user may see them (access rules decide)
         mine = self.search([('is_template', '=', False), ('project_id', '!=', False), ('sh_is_step', '=', False),
                             '|', ('user_ids', 'in', [uid]), ('sh_responsible_id', '=', uid)])
         done = mine.filtered(lambda t: t.state == '1_done')

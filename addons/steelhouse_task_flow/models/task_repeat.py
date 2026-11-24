@@ -152,12 +152,11 @@ class ProjectTask(models.Model):
         for step in steps.sorted('id'):
             vals = {'name': step.name, 'sh_repeat': False, 'sh_work_start': new.sh_work_start,
                     'date_deadline': new.date_deadline, 'state': '01_in_progress',
-                    'reviewer_ids': [(6, 0, step.reviewer_ids.ids)], 'user_ids': [(6, 0, step.user_ids.ids)],
-                    'sh_confidential_viewer_ids': [(6, 0, step.sh_confidential_viewer_ids.ids)]}
+                    'reviewer_ids': [(6, 0, step.reviewer_ids.ids)], 'user_ids': [(6, 0, step.user_ids.ids)]}
             stage = step.project_id.type_ids.filtered(lambda s: s.sh_kind == 'new')[:1]
             if stage:
                 vals['stage_id'] = stage.id
-            mapping[step.id] = step.with_context(sh_flow_internal=True, sh_conf_internal=True).copy(vals)
+            mapping[step.id] = step.with_context(sh_flow_internal=True).copy(vals)
         mapping[self.id] = new
         # links only inside the new sequence (Odoo's copy would also tie the copies to the old tasks)
         for old_id, copy in mapping.items():

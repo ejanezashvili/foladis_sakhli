@@ -25,11 +25,11 @@ class ProjectTask(models.Model):
     sh_department_project_ids = fields.Many2many(
         'project.project', 'sh_task_department_project_rel', 'task_id', 'project_id',
         string='დეპარტამენტები', domain=DEPT_DOMAIN, tracking=True,
-        help="რამდენიმე დეპარტამენტის არჩევისას დავალებას ხედავს ამ დეპარტამენტების ყველა თანამშრომელი "
-             "(მხოლოდ სანახავად). პირველი არჩეული - ძირითადი დეპარტამენტია. "
-             "კონფიდენციალურ დავალებაზე არ მოქმედებს.")
-    # used by the access rules (security/project_rules.xml): HR departments whose every employee
-    # sees the task - filled only when several departments are chosen (one department: as before)
+        help="პირველი არჩეული - ძირითადი დეპარტამენტია. რამდენიმე დეპარტამენტის არჩევისას დავალება ჩანს "
+             "თითოეული მათგანის დაფაზე - მათთვის, ვინც ამ დეპარტამენტის ყველა დავალებას ხედავს "
+             "(„დავალებების ხილვა“), მხოლოდ სანახავად.")
+    # used by the access rules (security/project_rules.xml): the HR departments of a task given to
+    # several departments - who sees every task of one of them sees this task too
     sh_view_department_ids = fields.Many2many(
         'hr.department', 'sh_task_view_department_rel', 'task_id', 'department_id',
         string='ხედავენ დეპარტამენტები', compute='_compute_sh_view_department_ids', store=True)
@@ -109,22 +109,24 @@ class ProjectTask(models.Model):
         return res
 
     # ------------------------------------------------------------------ view only
-    def _sh_sees_by_department_only(self):
-        """The user reaches the task only as an employee of one of its departments."""
+    def _sh_is_viewer_only(self):
+        """The user sees the task but is not one of its own people: he takes part in another part
+        of the job, or sees it by the page "დავალებების ხილვა" (models/task_visibility.py)."""
         self.ensure_one()
         user = self.env.user
         task = self.sudo()
+        if task.is_template or not task.project_id:
+            return False
         return not (
             user in task.user_ids or user in task.reviewer_ids or user == task.sh_responsible_id
-            or user == task.create_uid or user in task.sh_confidential_viewer_ids
-            or user in task.project_id.sh_department_id.sh_all_manager_user_ids
-        ) and user in task.sh_view_department_ids.member_ids.user_id
+            or user == task.create_uid
+            or user in task.project_id.sh_department_id.sh_all_manager_user_ids)
 
     def _sh_check_viewer_move(self):
         if self.env.su or self._sh_is_edit_admin():
             return
         for task in self:
-            if task._sh_sees_by_department_only():
+            if task._sh_is_viewer_only():
                 raise UserError(_(
-                    "„%s“ თქვენთვის მხოლოდ სანახავადაა (დეპარტამენტის მიხედვით) - სტადიას ვერ შეცვლით.",
+                    "„%s“ თქვენთვის მხოლოდ სანახავადაა - სტადიას ვერ შეცვლით.",
                     task.name))

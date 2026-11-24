@@ -18,7 +18,6 @@ from . import hr_department
 from . import task_personal
 from . import task_worktime
 from . import task_returns
-from . import task_confidential
 from . import task_chain_check
 from . import task_card_lists
 from . import task_reports
@@ -31,6 +30,5 @@ from . import task_card_step
 from . import task_edit_lock
 from . import task_view_departments
 from . import task_phase
-from . import task_conf_role
-from . import task_conf_board
+from . import task_visibility
 from . import task_pdf

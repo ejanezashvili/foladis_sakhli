@@ -166,19 +166,9 @@
     .o_kanban_group[data-sh-stage="c5"] { background: #e6f6f8 !important; .o_kanban_header { background: #0c8599; } }
 }
 
-// 8.3 confidential: lock before the card title
-.o_sh_card_lock { margin: 4px 6px 0 0; flex: none; }
-
-// 8.3: compact confidential note on the form, right side under the priority
-.o_sh_conf_note {
-    max-width: 460px; font-size: 0.78rem; line-height: 1.3; color: #a61e4d;
-    background: #fdeef3; border-radius: 6px; padding: 3px 8px; text-align: right;
-}
-
-// departments page: "⟳ განმეორებადი" / "🔒 კონფიდენციალური" buttons
+// departments page: "⟳ განმეორებადი" button
 .o_control_panel .o_sh_btn_repeat { color: #5b5093 !important; background: #efedf7 !important; border-color: #cfc8ea !important; }
-.o_control_panel .o_sh_btn_conf { color: #a61e4d !important; background: #fdeef3 !important; border-color: #f3c2d2 !important; }
-.o_control_panel .o_sh_btn_repeat, .o_control_panel .o_sh_btn_conf { padding: 2px 8px !important; font-size: 0.8rem !important; white-space: nowrap; }
+.o_control_panel .o_sh_btn_repeat { padding: 2px 8px !important; font-size: 0.8rem !important; white-space: nowrap; }
 
 // sequence step on its performer's board: place in the sequence and what it waits for
 .o_sh_step_badge {
