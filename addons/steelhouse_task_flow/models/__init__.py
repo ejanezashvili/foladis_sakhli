@@ -33,3 +33,4 @@ from . import task_view_departments
 from . import task_phase
 from . import task_conf_role
 from . import task_conf_board
+from . import task_pdf

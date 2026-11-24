@@ -98,7 +98,8 @@
                                 <button t-att-class="'btn ' + (state.group === g ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setGroup(g)"><t t-esc="GROUPS[g]"/></button>
                             </t>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportDeadline"><i class="fa fa-download me-1"/>Excel</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.exportDeadline(false)"><i class="fa fa-download me-1"/>Excel</button>
+                        <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.exportDeadline(true)"><i class="fa fa-file-pdf-o me-1"/>PDF</button>
                     </div>
                     <table class="o_sh_wt_table o_sh_rep_table">
                         <thead><tr>
@@ -167,7 +168,8 @@
                                 <button t-att-class="'btn ' + (state.group === g ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setGroup(g)"><t t-esc="GROUPS[g]"/></button>
                             </t>
                         </div>
-                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportStops"><i class="fa fa-download me-1"/>Excel</button>
+                        <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.exportStops(false)"><i class="fa fa-download me-1"/>Excel</button>
+                        <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.exportStops(true)"><i class="fa fa-file-pdf-o me-1"/>PDF</button>
                     </div>
                     <div class="o_sh_rep_wrap">
                         <table class="o_sh_wt_table o_sh_rep_table o_sh_rep_stops">

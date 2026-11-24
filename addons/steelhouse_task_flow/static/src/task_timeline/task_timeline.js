@@ -1,6 +1,7 @@
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { downloadTablePdf } from "@steelhouse_task_flow/sh_pdf/sh_pdf";
 
 const DAY = 86400000;
 const LABEL_W = 320;
@@ -320,21 +321,29 @@ export class TaskTimeline extends Component {
     get retGroupLabel() {
         return { project: "პროექტი", department: "დეპარტამენტი", user: "თანამშრომელი" }[this.state.retGroup];
     }
-    exportRet() {
+    exportRet(pdf = false) {
         const r = this.state.ret;
-        const line = (a) => a.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(",");
-        const out = [line([this.retGroupLabel, "დავალება", "შემოწმებაზე", "დაბრუნებული დავალება", "დაბრუნება სულ", "დაბრუნების %", "ახლა ხელახლა კეთდება"])];
+        const out = [[this.retGroupLabel, "დავალება", "შემოწმებაზე", "დაბრუნებული დავალება", "დაბრუნება სულ", "დაბრუნების %", "ახლა ხელახლა კეთდება"]];
         for (const row of r.rows) {
-            out.push(line([row.label, "", row.reviewed, row.returned, row.returns, row.pct + "%", row.rework]));
+            out.push([row.label, "", row.reviewed, row.returned, row.returns, row.pct + "%", row.rework]);
             for (const it of row.items) {
-                out.push(line([row.label, it.label, "", "", it.returns, "", it.stage]));
+                out.push([row.label, it.label, "", "", it.returns, "", it.stage]);
             }
         }
-        out.push(line(["სულ", "", r.total.reviewed, r.total.returned, r.total.returns, r.total.pct + "%", r.total.rework]));
-        const blob = new Blob(["\ufeff" + out.join("\r\n")], { type: "text/csv;charset=utf-8" });
+        out.push(["სულ", "", r.total.reviewed, r.total.returned, r.total.returns, r.total.pct + "%", r.total.rework]);
+        this.outputTable("დაბრუნებები", out, pdf);
+    }
+    // Excel (CSV) or PDF of the same rows
+    outputTable(name, rows, pdf) {
+        if (pdf) {
+            const who = this.state.scope === "mine" ? "ჩემი დავალებები" : "ყველა";
+            return downloadTablePdf(this.orm, this.action, name, `${this.periodLabel} · ${who}`, rows);
+        }
+        const line = (a) => a.map((v) => '"' + String(v === null || v === undefined ? "" : v).replace(/"/g, '""') + '"').join(",");
+        const blob = new Blob(["\ufeff" + rows.map(line).join("\r\n")], { type: "text/csv;charset=utf-8" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = `დაბრუნებები ${iso(this.range.from)} - ${iso(this.range.to)}.csv`;
+        a.download = `${name} ${iso(this.range.from)} - ${iso(this.range.to)}.csv`;
         a.click();
         URL.revokeObjectURL(a.href);
     }
@@ -342,24 +351,17 @@ export class TaskTimeline extends Component {
         this.state.wtOpen[key] = !this.state.wtOpen[key];
     }
     // Excel: the table as a CSV file (opens in Excel)
-    exportWt() {
+    exportWt(pdf = false) {
         const wt = this.state.wt;
-        const head = ["დეპარტამენტი", "თანამშრომელი", "დავალება", "საშუალო სამუშაო დრო", "ყველაზე სწრაფი", "ყველაზე გრძელი", "ახლა მიმდინარე"];
-        const line = (a) => a.map((v) => '"' + String(v).replace(/"/g, '""') + '"').join(",");
-        const out = [line(head)];
+        const out = [["დეპარტამენტი", "თანამშრომელი", "დავალება", "საშუალო სამუშაო დრო", "ყველაზე სწრაფი", "ყველაზე გრძელი", "ახლა მიმდინარე"]];
         for (const r of wt.rows) {
-            out.push(line([r.label, "", r.count, r.avg_str, r.min_str, r.max_str, r.running]));
+            out.push([r.label, "", r.count, r.avg_str, r.min_str, r.max_str, r.running]);
             for (const u of r.users) {
-                out.push(line([r.label, u.label, u.count, u.avg_str, u.min_str, u.max_str, u.running]));
+                out.push([r.label, u.label, u.count, u.avg_str, u.min_str, u.max_str, u.running]);
             }
         }
-        out.push(line(["სულ", "", wt.total.count, wt.total.avg_str, wt.total.min_str, wt.total.max_str, wt.total.running]));
-        const blob = new Blob(["\ufeff" + out.join("\r\n")], { type: "text/csv;charset=utf-8" });
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = `სამუშაო დრო ${iso(this.range.from)} - ${iso(this.range.to)}.csv`;
-        a.click();
-        URL.revokeObjectURL(a.href);
+        out.push(["სულ", "", wt.total.count, wt.total.avg_str, wt.total.min_str, wt.total.max_str, wt.total.running]);
+        this.outputTable("სამუშაო დრო", out, pdf);
     }
     // "ჩემი": one flat list sorted by deadline; "ყველა": grouped
     get flatTasks() {

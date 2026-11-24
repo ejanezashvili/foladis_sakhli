@@ -1,6 +1,7 @@
 import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
+import { downloadTablePdf } from "@steelhouse_task_flow/sh_pdf/sh_pdf";
 
 const MONTHS = ["იანვარი", "თებერვალი", "მარტი", "აპრილი", "მაისი", "ივნისი", "ივლისი",
     "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
@@ -184,7 +185,14 @@ export class TaskReports extends Component {
         a.click();
         URL.revokeObjectURL(a.href);
     }
-    exportDeadline() {
+    // Excel (CSV) or PDF of the same rows
+    output(name, lines, pdf) {
+        if (pdf) {
+            return downloadTablePdf(this.orm, this.action, name, `${this.periodLabel} · ${this.groupLabel}`, lines);
+        }
+        this.download(name, lines);
+    }
+    exportDeadline(pdf = false) {
         const d = this.d;
         const out = [[this.groupLabel, "დავალება", "ვადა ეწურებოდა", "დროულად", "დაგვიანებით ან ჩაუბარებელი", "დროულად %", "საშუალო დაგვიანება",
             "ყველაზე დიდი დაგვიანება", "ვადა ჯერ არ მოსულა", "ახლა ვადაგადაცილებული", "შემსრულებლები"]];
@@ -202,9 +210,9 @@ export class TaskReports extends Component {
         for (const m of d.trend) {
             out.push([m.label, "", "", m.ontime, m.late, m.pct === null ? "-" : m.pct + "%"]);
         }
-        this.download("ვადების დაცვა", out);
+        this.output("ვადების დაცვა", out, pdf);
     }
-    exportStops() {
+    exportStops(pdf = false) {
         const d = this.d;
         const out = [[this.groupLabel, "დავალება", "შეჩერება", "საშუალო ხანგრძლივობა", "ყველაზე გრძელი", "ახლა შეჩერებული",
             "გაუქმებული", "მიზეზი", "თარიღი"]];
@@ -227,7 +235,7 @@ export class TaskReports extends Component {
         for (const r of d.cancel_reasons) {
             out.push([r.reason, "", r.count]);
         }
-        this.download("შეჩერება და გაუქმება", out);
+        this.output("შეჩერება და გაუქმება", out, pdf);
     }
 }
 

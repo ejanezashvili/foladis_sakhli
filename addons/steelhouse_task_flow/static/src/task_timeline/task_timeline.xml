@@ -172,7 +172,8 @@
                         </div>
                         <div class="o_sh_wt_tools">
                             <span class="text-muted">სამუშაო დრო = „მიღებული“ → „შემოწმებაზე“ (შეჩერებული დრო არ ითვლება). ციფრზე დაჭერა - დავალებების სია.</span>
-                            <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportWt"><i class="fa fa-download me-1"/>Excel</button>
+                            <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.exportWt(false)"><i class="fa fa-download me-1"/>Excel</button>
+                            <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.exportWt(true)"><i class="fa fa-file-pdf-o me-1"/>PDF</button>
                         </div>
                         <table class="o_sh_wt_table">
                             <thead><tr>
@@ -215,7 +216,8 @@
                                 <button t-att-class="'btn ' + (state.retGroup === 'project' ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setRetGroup('project')">პროექტებით</button>
                                 <button t-att-class="'btn ' + (state.retGroup === 'user' ? 'btn-primary' : 'btn-outline-primary')" t-on-click="() => this.setRetGroup('user')">თანამშრომლებით</button>
                             </div>
-                            <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="exportRet"><i class="fa fa-download me-1"/>Excel</button>
+                            <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.exportRet(false)"><i class="fa fa-download me-1"/>Excel</button>
+                            <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.exportRet(true)"><i class="fa fa-file-pdf-o me-1"/>PDF</button>
                         </div>
                         <div class="o_sh_rt_wrap">
                             <table class="o_sh_wt_table o_sh_rt_table">

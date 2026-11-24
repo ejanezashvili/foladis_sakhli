@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 7.10: PDF of the report screens - the same rows as their Excel file (models/task_pdf.py) -->
+    <record id="action_report_sh_table" model="ir.actions.report">
+        <field name="name">რეპორტი (PDF)</field>
+        <field name="model">project.task</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">steelhouse_task_flow.report_sh_table</field>
+        <field name="report_file">steelhouse_task_flow.report_sh_table</field>
+        <field name="print_report_name">'რეპორტი'</field>
+        <field name="paperformat_id" ref="steelhouse_hr.paperformat_sh_landscape"/>
+    </record>
+
+    <template id="report_sh_table">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <div class="page" style="font-size: 11px;">
+                    <h5 style="margin-bottom: 2px;" t-esc="t['title']"/>
+                    <p t-if="t['subtitle']" style="color: #7a7790; margin-bottom: 8px;" t-esc="t['subtitle']"/>
+                    <t t-foreach="t['sections']" t-as="s">
+                        <table class="table table-sm table-bordered" style="font-size: 10px; margin-bottom: 12px;">
+                            <thead>
+                                <tr style="background: #eeebf6;">
+                                    <th t-foreach="s['head']" t-as="h" t-esc="h"/>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="s['rows']" t-as="r" t-att-style="'background: #f6f4fb; font-weight: bold;' if r['bold'] else ''">
+                                    <td t-foreach="r['cells']" t-as="c" t-att-style="'padding-left: 14px; color: #555;' if r['sub'] and c_first else ''" t-esc="c"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
