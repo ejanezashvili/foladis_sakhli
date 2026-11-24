@@ -370,7 +370,7 @@
                 <div t-if="b.visible" t-att-style="b.style" t-att-title="tooltip(t)" t-on-click="() => this.openTask(t.id)"
                      t-att-class="'o_sh_tl_barx o_sh_s_' + simpleKind(t) + (t.open_end ? ' o_sh_tl_open' : '') + (b.cutLeft ? ' o_sh_tl_cutl' : '') + (b.cutRight ? ' o_sh_tl_cutr' : '')">
                     <div class="o_sh_tl_prog" t-att-style="'width:' + t.progress + '%'"/>
-                    <span t-if="b.wide" class="o_sh_tl_btext"><t t-esc="t.progress"/>%</span>
+                    <span t-if="b.wide" class="o_sh_tl_btext"><t t-if="b.cutLeft">◂ <t t-esc="dayMonth(t.start)"/> · </t><t t-esc="t.progress"/>%</span>
                 </div>
                 <div t-if="b.mark" class="o_sh_tl_mark" t-att-style="b.mark" t-att-title="'ვადა: ' + t.deadline.split('-').reverse().join('.')"/>
             </div>

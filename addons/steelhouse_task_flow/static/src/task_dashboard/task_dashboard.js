@@ -99,8 +99,11 @@ export class TaskDashboard extends Component {
         const max = Math.max(1, ...week.map((w) => Math.max(w.new, w.done)));
         const step = CHART_W / (week.length - 1);
         const pt = (v, i) => [Math.round(i * step), Math.round(CHART_H - 12 - (v / max) * (CHART_H - 30))];
+        // days after today have no data yet: the lines stop at today
+        const todayIdx = week.findIndex((w) => w.today);
+        const shown = todayIdx >= 0 ? week.slice(0, todayIdx + 1) : week;
         const path = (key) => {
-            const pts = week.map((w, i) => pt(w[key], i));
+            const pts = shown.map((w, i) => pt(w[key], i));
             let d = `M ${pts[0][0]} ${pts[0][1]}`;
             for (let i = 1; i < pts.length; i++) {
                 const [x0, y0] = pts[i - 1];
@@ -108,9 +111,9 @@ export class TaskDashboard extends Component {
                 const cx = (x0 + x1) / 2;
                 d += ` C ${cx} ${y0}, ${cx} ${y1}, ${x1} ${y1}`;
             }
-            return { line: d, area: `${d} L ${CHART_W} ${CHART_H} L 0 ${CHART_H} Z` };
+            const lastX = pts[pts.length - 1][0];
+            return { line: d, area: `${d} L ${lastX} ${CHART_H} L 0 ${CHART_H} Z` };
         };
-        const todayIdx = week.findIndex((w) => w.today);
         const t = todayIdx >= 0 ? pt(week[todayIdx].done, todayIdx) : null;
         return {
             done: path("done"),

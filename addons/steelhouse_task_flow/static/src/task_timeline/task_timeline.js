@@ -223,6 +223,10 @@ export class TaskTimeline extends Component {
         }
         return res;
     }
+    // "17.11": a bar cut at the period start shows when the task really started
+    dayMonth(s) {
+        return s ? `${s.slice(8, 10)}.${s.slice(5, 7)}` : "";
+    }
     lateDays(t) {
         if (!t.overdue || !this.state.data) {
             return 0;
