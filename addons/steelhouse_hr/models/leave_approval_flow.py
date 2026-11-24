@@ -1,8 +1,9 @@
 """Who approves a time off request (HR's process, Docs/HR "შვებულების პროცესი", 2026-11-20):
 
-- first approval ("პირველი დამტკიცება"): the employee's direct head(s) - equal heads all approve;
+- first approval ("პირველი დამტკიცება"): the head(s) of the employee's unit right under the company
+  (2026-11-24: not the heads of the boxes inside it) - equal heads all approve;
 - the employee card's time off approver ("სამუშაო ინფორმაცია" - "დამმტკიცებლები" - "შვებულება"), set by
-  HR in advance, wins when it is someone else than the heads (e.g. მარიამ პაპაშვილი -> სოფიკო ერაძე);
+  HR in advance, wins when it is someone outside the chart's heads (e.g. მარიამ პაპაშვილი -> სოფიკო ერაძე);
   an employee without a head is approved by that person; nobody there -> the request is not created
   ("მიმართეთ HR-ს");
 - when the first approvers are the final approver himself (the department heads right under
@@ -52,14 +53,44 @@ class HrLeave(models.Model):
         return bool(employee) and not employee._sh_heads() and bool(self.env['hr.department'].sudo().search_count(
             [('parent_id', '=', False), ('manager_ids', 'in', employee.ids)]))
 
+    @api.model
+    def _sh_unit_heads(self, employee):
+        """2026-11-24 (user): time off is approved by the head(s) of the unit right under the company
+        ("ფინანსების დეპარტამენტი" - სოფიკო, "Call ცენტრი" - ანა + ნათია, ...) for everyone in it, sub-units
+        included; the heads of the boxes inside (მთავარი ბუღალტრები, ანალიტიკა, ...) do not approve.
+        Returns (unit heads, every head on the way up - to tell a card approver that only followed the chart)."""
+        dept = employee.department_id
+        chain = self.env['hr.employee']
+        top = self.env['hr.department']
+        while dept:
+            chain |= dept.manager_ids
+            if dept.parent_id and not dept.parent_id.parent_id:
+                top = dept
+            dept = dept.parent_id
+        # the head of any unit right under the company (also when he sits elsewhere, e.g. მამუკა ივანაშვილი -
+        # ბალასტი, in ავტოპარკი): the company's heads, like every unit head
+        Dept = self.env['hr.department'].sudo()
+        led = Dept.search([('manager_ids', 'in', employee.ids), ('parent_id', '!=', False),
+                           ('parent_id.parent_id', '=', False)], limit=1)
+        if led:
+            return led.parent_id.manager_ids - employee, chain | led.manager_ids
+        heads = top.manager_ids if top and employee not in top.manager_ids else self.env['hr.employee']
+        return heads, chain
+
     def _sh_stage1_users(self):
         """First approvers (also before the request is saved; a head on leave -> his deputy)."""
         employee = self.employee_id.sudo()
         final = self._sh_final_users()
         if self.validation_type == 'both' and self._sh_is_founder():
             return final
-        heads = employee._sh_heads().user_id
+        unit_heads, chain = self._sh_unit_heads(employee)
+        # a unit's own head (and anyone right under the company): the company heads, as before
+        heads = (unit_heads - employee).user_id or employee._sh_heads().user_id
         card = employee.leave_manager_id
+        # the card's approver counts only when HR set someone outside the chart's heads (e.g. სოფიკო ერაძე
+        # for მარიამ პაპაშვილი); Odoo fills it with the direct (box) head by itself
+        if card and card in chain.user_id:
+            card = self.env['res.users']
         if self.sh_no_head or (card and card not in heads):
             base = card
         else:
