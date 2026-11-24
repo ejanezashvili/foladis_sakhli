@@ -435,6 +435,13 @@ export class TaskTimeline extends Component {
     isOpen(key) {
         return this.embedded ? this.state.expanded[key] !== false : Boolean(this.state.expanded[key]);
     }
+    get allKinds() {
+        return MY_KINDS.every((k) => this.state.kinds.includes(k));
+    }
+    // "ყველა": every status on, or (when all are on already) every status off
+    toggleAllKinds() {
+        this.state.kinds = this.allKinds ? [] : [...MY_KINDS];
+    }
     toggleKind(kind) {
         const kinds = this.state.kinds;
         this.state.kinds = kinds.includes(kind) ? kinds.filter((k) => k !== kind) : [...kinds, kind];

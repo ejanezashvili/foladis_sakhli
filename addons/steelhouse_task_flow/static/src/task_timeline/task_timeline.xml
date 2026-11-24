@@ -71,6 +71,9 @@
                         <button t-att-class="'btn ' + (state.myGroup ? 'btn-outline-secondary' : 'btn-secondary')" t-on-click="() => this.state.myGroup = false"><i class="fa fa-list me-1"/>სიით</button>
                     </div>
                     <span class="text-muted me-1">სტატუსი:</span>
+                    <button t-att-class="'o_sh_tl_kind o_sh_tl_kind_all' + (allKinds ? ' active' : '')" t-on-click="toggleAllKinds">
+                        <i t-att-class="'fa me-1 ' + (allKinds ? 'fa-check-square' : (state.kinds.length ? 'fa-minus-square-o' : 'fa-square-o'))"/>ყველა
+                    </button>
                     <t t-foreach="MY_KINDS" t-as="kd" t-key="kd">
                         <button t-att-class="'o_sh_tl_kind' + (state.kinds.includes(kd) ? ' active' : '')" t-on-click="() => this.toggleKind(kd)">
                             <i t-att-class="'fa me-1 ' + (state.kinds.includes(kd) ? 'fa-check-square' : 'fa-square-o')"/><t t-esc="KINDS[kd]"/>
