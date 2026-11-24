@@ -17,9 +17,14 @@
                     </div>
                 </div>
 
-                <!-- company week: project administrators only - numbers on top, then company (left) + personal (right) -->
+                <!-- project managers: two tabs - the company's week / my own tasks; others: only their own -->
                 <t t-set="cwOn" t-value="state.cw and state.cw.allowed"/>
-                <t t-if="cwOn">
+                <t t-set="showCompany" t-value="cwOn and state.tab !== 'mine'"/>
+                <div t-if="cwOn" class="o_sh_db_tabs">
+                    <button t-att-class="showCompany ? 'active' : ''" t-on-click="() => this.setTab('company')"><i class="fa fa-building-o me-2"/>კომპანია</button>
+                    <button t-att-class="showCompany ? '' : 'active'" t-on-click="() => this.setTab('mine')"><i class="fa fa-user-o me-2"/>ჩემი</button>
+                </div>
+                <t t-if="showCompany">
                     <t t-set="cw" t-value="state.cw"/>
                     <t t-set="k" t-value="cw.kpi"/>
                     <div class="o_sh_cw_top">
@@ -66,8 +71,7 @@
                     </div>
                 </t>
 
-                <div t-att-class="cwOn ? 'o_sh_cw_layout' : ''">
-                <t t-if="cwOn">
+                <t t-if="showCompany">
                     <div class="o_sh_cw_main">
                         <!-- departments -->
                         <div class="o_sh_db_card o_sh_cw_box o_sh_cw_depts">
@@ -170,7 +174,7 @@
                         </div>
                     </div>
                 </t>
-                <div class="o_sh_db_personal">
+                <div t-else="" class="o_sh_db_personal">
 
                 <!-- row 1 -->
                 <div class="o_sh_db_row o_sh_db_row1">
@@ -324,7 +328,6 @@
                     </t>
                 </div>
                 </div><!-- /personal -->
-                </div><!-- /layout -->
             </t>
         </div>
     </t>

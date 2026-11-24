@@ -28,20 +28,21 @@ export class TaskDashboard extends Component {
         this.KIND_LABEL = KIND_LABEL;
         this.CHART_W = CHART_W;
         this.CHART_H = CHART_H;
-        let folded = false;
+        // managers: "კომპანია" / "ჩემი" tabs (the last one opened is remembered)
+        let tab = "company";
         try {
-            folded = window.localStorage.getItem("sh_cw_folded") === "1";
+            tab = window.localStorage.getItem("sh_db_tab") || "company";
         } catch {
-            folded = false;
+            tab = "company";
         }
-        this.state = useState({ d: null, cw: null, cwFolded: folded, cwAllDepts: false, cwLeave: { now: false, next: false } });
+        this.state = useState({ d: null, cw: null, tab, cwAllDepts: false, cwLeave: { now: false, next: false } });
         onWillStart(() => this.load());
     }
 
-    toggleCw() {
-        this.state.cwFolded = !this.state.cwFolded;
+    setTab(tab) {
+        this.state.tab = tab;
         try {
-            window.localStorage.setItem("sh_cw_folded", this.state.cwFolded ? "1" : "0");
+            window.localStorage.setItem("sh_db_tab", tab);
         } catch {
             // private window: only for this visit
         }

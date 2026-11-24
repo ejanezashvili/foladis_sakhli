@@ -208,3 +208,29 @@ $db-purple: #6b4fd8;
 @media (max-width: 767px) {
     .o_sh_db { padding: 16px; .o_sh_db_hi { font-size: 1.5rem; } }
 }
+
+// "კომპანია" / "ჩემი" tabs (project managers)
+.o_sh_db .o_sh_db_tabs {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: #ece8f7;
+
+    button {
+        border: 0;
+        background: transparent;
+        padding: 7px 18px;
+        border-radius: 9px;
+        font-weight: 600;
+        color: #6e6a80;
+        cursor: pointer;
+
+        &.active {
+            background: #fff;
+            color: #6b4fd8;
+            box-shadow: 0 1px 3px rgba(40, 20, 90, 0.12);
+        }
+    }
+}
