@@ -29,6 +29,7 @@
                             <input type="date" class="form-control form-control-sm" t-att-value="state.params.date_to" t-on-change="(ev) => this.onDate('date_to', ev)"/>
                         </div>
                         <div class="o_sh_lr_quick">
+                            <a href="#" t-on-click.prevent="() => this.quick('today')">დღეს</a>
                             <a href="#" t-on-click.prevent="() => this.quick('month')">ეს თვე</a>
                             <a href="#" t-on-click.prevent="() => this.quick('quarter')">ეს კვარტალი</a>
                             <a href="#" t-on-click.prevent="() => this.quick('year')">ეს წელი</a>

@@ -72,7 +72,9 @@ export class LeaveReport extends Component {
     quick(kind) {
         const now = new Date();
         let from, to;
-        if (kind === "month") {
+        if (kind === "today") {
+            from = to = now;
+        } else if (kind === "month") {
             from = new Date(now.getFullYear(), now.getMonth(), 1);
             to = new Date(now.getFullYear(), now.getMonth() + 1, 0);
         } else if (kind === "quarter") {
