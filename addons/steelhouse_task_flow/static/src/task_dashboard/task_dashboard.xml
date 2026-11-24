@@ -268,28 +268,6 @@
                     <TaskTimeline embedded="true"/>
                 </div>
 
-                <!-- row 3: projects -->
-                <div class="o_sh_db_head mt-2">
-                    <div class="o_sh_db_title o_sh_db_title_lg">ჩემი პროექტები და დეპარტამენტები</div>
-                </div>
-                <div t-if="!d.projects.length" class="o_sh_db_empty">ჯერ არცერთ დავალებაზე არ ხართ.</div>
-                <div class="o_sh_db_projects">
-                    <t t-foreach="d.projects" t-as="p" t-key="p.id">
-                        <t t-set="pr" t-value="ring(projectPct(p), 17)"/>
-                        <div t-att-class="'o_sh_db_proj o_sh_db_p' + (p_index % 4)" t-on-click="() => this.openIds(p.ids, p.name)">
-                            <div class="o_sh_db_proj_top">
-                                <div class="o_sh_db_proj_name" t-esc="p.name"/>
-                                <svg viewBox="0 0 44 44" class="o_sh_db_minir">
-                                    <circle cx="22" cy="22" r="17" class="o_sh_db_minir_bg"/>
-                                    <circle cx="22" cy="22" r="17" class="o_sh_db_minir_fg" t-att-stroke-dasharray="pr.dash" transform="rotate(-90 22 22)"/>
-                                    <text x="22" y="26" text-anchor="middle"><t t-esc="p.done"/>/<t t-esc="p.total"/></text>
-                                </svg>
-                            </div>
-                            <div class="o_sh_db_proj_status"><i class="o_sh_db_kdot"/><t t-esc="statusText(p)"/><t t-if="p.is_dept"> · დეპარტამენტი</t></div>
-                            <div t-if="p.late" class="o_sh_db_proj_late">⏰ <t t-esc="p.late"/> ვადაგადაცილებული</div>
-                        </div>
-                    </t>
-                </div>
                 </div><!-- /personal -->
             </t>
         </div>

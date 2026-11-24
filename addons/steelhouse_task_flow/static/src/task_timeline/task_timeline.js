@@ -78,6 +78,7 @@ export class TaskTimeline extends Component {
             retGroup: "project",
             scale: this.embedded ? "day7" : "month",
             kinds: [...MY_KINDS_DEFAULT],
+            myGroup: true, // home page: grouped by project / department (open), or one list
             anchor: this.today(),
             groupBy: "department",
             status: "open",
@@ -415,6 +416,23 @@ export class TaskTimeline extends Component {
         this.state.scope = scope;
         this.load();
     }
+    // home page: my tasks grouped by project (else department), groups open by default
+    get myGroups() {
+        const groups = new Map();
+        for (const t of this.flatTasks) {
+            const key = t.project ? `p_${t.project}` : `d_${t.department}`;
+            if (!groups.has(key)) {
+                groups.set(key, { key, label: t.project || t.department, isDept: !t.project, tasks: [], overdue: 0 });
+            }
+            const g = groups.get(key);
+            g.tasks.push(t);
+            g.overdue += t.overdue ? 1 : 0;
+        }
+        return [...groups.values()].sort((a, b) => b.overdue - a.overdue || a.label.localeCompare(b.label));
+    }
+    isOpen(key) {
+        return this.embedded ? this.state.expanded[key] !== false : Boolean(this.state.expanded[key]);
+    }
     toggleKind(kind) {
         const kinds = this.state.kinds;
         this.state.kinds = kinds.includes(kind) ? kinds.filter((k) => k !== kind) : [...kinds, kind];
@@ -530,7 +548,7 @@ export class TaskTimeline extends Component {
         }
     }
     toggle(key) {
-        this.state.expanded[key] = !this.state.expanded[key];
+        this.state.expanded[key] = !this.isOpen(key);
     }
     expandAll(open) {
         for (const g of this.state.data.groups) {

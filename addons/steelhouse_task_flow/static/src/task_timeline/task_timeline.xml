@@ -66,6 +66,10 @@
                 </div>
                 <!-- home page: statuses to show (open ones by default) -->
                 <div t-if="embedded" class="o_sh_tl_kinds">
+                    <div class="btn-group btn-group-sm me-2">
+                        <button t-att-class="'btn ' + (state.myGroup ? 'btn-secondary' : 'btn-outline-secondary')" t-on-click="() => this.state.myGroup = true"><i class="fa fa-folder-o me-1"/>პროექტებით</button>
+                        <button t-att-class="'btn ' + (state.myGroup ? 'btn-outline-secondary' : 'btn-secondary')" t-on-click="() => this.state.myGroup = false"><i class="fa fa-list me-1"/>სიით</button>
+                    </div>
                     <span class="text-muted me-1">სტატუსი:</span>
                     <t t-foreach="MY_KINDS" t-as="kd" t-key="kd">
                         <button t-att-class="'o_sh_tl_kind' + (state.kinds.includes(kd) ? ' active' : '')" t-on-click="() => this.toggleKind(kd)">
@@ -107,8 +111,27 @@
                             <i class="fa fa-check-circle text-success me-1"/>ამ პერიოდში დავალება არ გაქვთ.
                         </div>
 
+                        <!-- home page: my tasks grouped by project / department -->
+                        <t t-if="embedded and state.myGroup">
+                            <t t-foreach="myGroups" t-as="g" t-key="g.key">
+                                <div class="o_sh_tl_row o_sh_tl_group" t-on-click="() => this.toggle(g.key)">
+                                    <div class="o_sh_tl_label" t-att-style="'width:' + LABEL_W + 'px'">
+                                        <i t-att-class="'fa me-1 ' + (isOpen(g.key) ? 'fa-caret-down' : 'fa-caret-right')"/>
+                                        <span class="o_sh_tl_gname" t-att-title="g.label + (g.isDept ? ' (დეპარტამენტი)' : '')" t-esc="g.label"/>
+                                        <span class="o_sh_tl_gcount"><t t-esc="g.tasks.length"/></span>
+                                        <span t-if="g.overdue" class="o_sh_tl_gcount o_sh_tl_glate" title="ვადაგადაცილებული"><t t-esc="g.overdue"/></span>
+                                    </div>
+                                    <div class="o_sh_tl_track" t-att-style="'width:' + width + 'px'"/>
+                                </div>
+                                <t t-if="isOpen(g.key)">
+                                    <t t-foreach="g.tasks" t-as="t" t-key="g.key + '_' + t.id">
+                                        <t t-call="steelhouse_task_flow.TaskTimelineRow"/>
+                                    </t>
+                                </t>
+                            </t>
+                        </t>
                         <!-- my tasks: one plain list -->
-                        <t t-if="state.scope === 'mine'">
+                        <t t-elif="state.scope === 'mine'">
                             <t t-foreach="flatTasks" t-as="t" t-key="t.id">
                                 <t t-call="steelhouse_task_flow.TaskTimelineRow"/>
                             </t>
