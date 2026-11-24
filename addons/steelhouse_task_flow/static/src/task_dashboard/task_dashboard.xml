@@ -10,11 +10,7 @@
                         <h1 class="o_sh_db_hi">გამარჯობა, <t t-esc="d.name"/>! 👋</h1>
                         <div class="o_sh_db_date" t-esc="d.today_label"/>
                     </div>
-                    <div class="o_sh_db_actions">
-                        <button class="o_sh_db_btn o_sh_db_btn_light" t-on-click="openTimeline"><i class="fa fa-align-left me-2"/>Timeline</button>
-                        <button class="o_sh_db_btn o_sh_db_btn_light" t-on-click="openMyTasks"><i class="fa fa-th-large me-2"/>ჩემი დავალებები</button>
-                        <button class="o_sh_db_btn" t-on-click="newTask"><i class="fa fa-plus me-2"/>ახალი დავალება</button>
-                    </div>
+                    <!-- no buttons here: Timeline is in "რეპორტინგი", my tasks / a new task in "დავალებები" -->
                 </div>
 
                 <!-- project managers: two tabs - the company's week / my own tasks; others: only their own -->
