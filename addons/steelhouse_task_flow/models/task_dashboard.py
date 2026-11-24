@@ -34,6 +34,8 @@ class ProjectTask(models.Model):
         done_last = done.filtered(lambda t: done_day[t.id] and lm_start <= done_day[t.id] < m_start)
         planned_left = open_.filtered(lambda t: t.date_deadline and day(t.date_deadline) <= m_end)
         plan = len(done_month) + len(planned_left)
+        # open tasks without a deadline are not in the month plan: shown apart
+        no_deadline = open_.filtered(lambda t: not t.date_deadline)
         month_pct = round(100 * len(done_month) / plan) if plan else 0
         vs_last = (round(100 * (len(done_month) - len(done_last)) / len(done_last)) if done_last
                    else (100 if done_month else 0))
@@ -99,6 +101,8 @@ class ProjectTask(models.Model):
             'done_month': len(done_month),
             'month_pct': month_pct,
             'month_plan': plan,
+            'no_deadline': len(no_deadline),
+            'no_deadline_ids': no_deadline.ids,
             'vs_last': vs_last,
             'week': week,
             'week_due': [card(t) for t in week_due[:8]],

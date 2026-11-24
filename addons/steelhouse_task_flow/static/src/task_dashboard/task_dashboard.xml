@@ -244,13 +244,15 @@
                             <t t-set="r1" t-value="ring(d.month_pct, 54)"/>
                             <svg viewBox="0 0 140 140" class="o_sh_db_ring">
                                 <circle cx="70" cy="70" r="54" class="o_sh_db_ring_bg"/>
-                                <circle cx="70" cy="70" r="54" class="o_sh_db_ring_fg" t-att-stroke-dasharray="r1.dash" transform="rotate(-90 70 70)"/>
+                                <circle t-if="d.month_pct" cx="70" cy="70" r="54" class="o_sh_db_ring_fg" t-att-stroke-dasharray="r1.dash" transform="rotate(-90 70 70)"/>
                                 <text x="70" y="68" text-anchor="middle" class="o_sh_db_ring_pct"><t t-esc="d.month_pct"/>%</text>
                                 <text x="70" y="88" text-anchor="middle" class="o_sh_db_ring_lbl">შესრულდა</text>
                             </svg>
                             <div class="o_sh_db_ringinfo">
                                 <div><i class="o_sh_db_dot o_sh_db_dot_done"/>დასრულდა: <b t-esc="d.done_month"/></div>
-                                <div><i class="o_sh_db_dot o_sh_db_dot_plan"/>თვის გეგმა: <b t-esc="d.month_plan"/></div>
+                                <div title="ამ თვეში დასრულებული + ღია დავალებები, რომელთა ვადა ამ თვის ბოლომდეა"><i class="o_sh_db_dot o_sh_db_dot_plan"/>თვის გეგმა: <b t-esc="d.month_plan"/></div>
+                                <div t-if="d.no_deadline" class="o_sh_db_click" title="ვადის გარეშე ღია დავალებები თვის გეგმაში არ ითვლება - დააჭირეთ სიის სანახავად"
+                                     t-on-click="() => this.openIds(d.no_deadline_ids, 'ვადის გარეშე')"><i class="o_sh_db_dot o_sh_db_dot_new"/>ვადის გარეშე: <b t-esc="d.no_deadline"/></div>
                                 <div t-if="d.overdue"><i class="o_sh_db_dot o_sh_db_dot_late"/>გადაცილებული: <b t-esc="d.overdue"/></div>
                             </div>
                         </div>
