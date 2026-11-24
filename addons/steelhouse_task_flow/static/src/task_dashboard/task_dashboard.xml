@@ -257,52 +257,13 @@
                     </div>
                 </div>
 
-                <!-- row 2 -->
-                <div class="o_sh_db_row o_sh_db_row2">
-                    <!-- this week's deadlines -->
-                    <div class="o_sh_db_card">
-                        <div class="o_sh_db_head">
-                            <div class="o_sh_db_title">ამ კვირის ვადები</div>
-                            <span class="o_sh_db_badge"><t t-esc="d.week_due_done"/>/<t t-esc="d.week_due_total"/></span>
-                        </div>
-                        <div t-if="!d.week_due.length" class="o_sh_db_empty">ამ კვირაში ვადა არაფერს აქვს 🎉</div>
-                        <t t-foreach="d.week_due" t-as="t" t-key="t.id">
-                            <div t-att-class="'o_sh_db_check' + (t.done ? ' o_sh_db_check_done' : '') + (t.kind === 'late' ? ' o_sh_db_check_late' : '')"
-                                 t-on-click="() => this.openTask(t.id)">
-                                <i t-att-class="'fa ' + (t.done ? 'fa-check-square' : 'fa-square-o')"/>
-                                <span class="o_sh_db_check_name" t-esc="t.name"/>
-                                <span class="o_sh_db_check_due" t-esc="dueText(t)"/>
-                            </div>
-                        </t>
+                <!-- row 2: my tasks on the calendar (the Timeline component, "ჩემი" only) -->
+                <div class="o_sh_db_card o_sh_db_mytl">
+                    <div class="o_sh_db_head">
+                        <div class="o_sh_db_title">ჩემი დავალებები კალენდარზე</div>
+                        <a href="#" class="o_sh_db_link" t-on-click.prevent="openMyTasks">სიით <i class="fa fa-chevron-right"/></a>
                     </div>
-
-                    <!-- in process -->
-                    <div class="o_sh_db_inproc">
-                        <div class="o_sh_db_head">
-                            <div class="o_sh_db_title">მიმდინარე დავალებები (<t t-esc="d.in_process_total"/>)</div>
-                            <a href="#" class="o_sh_db_link" t-on-click.prevent="openMyTasks">ყველა <i class="fa fa-chevron-right"/></a>
-                        </div>
-                        <div class="o_sh_db_tasks">
-                            <t t-foreach="d.in_process" t-as="t" t-key="t.id">
-                                <div t-att-class="'o_sh_db_task o_sh_db_c' + (t_index % 3)" t-on-click="() => this.openTask(t.id)">
-                                    <div class="o_sh_db_task_top">
-                                        <span t-att-class="'o_sh_db_kind o_sh_db_kind_' + t.kind"><i class="o_sh_db_kdot"/><t t-esc="KIND_LABEL[t.kind] or t.stage"/></span>
-                                        <span class="o_sh_db_tnum" t-esc="t.number"/>
-                                    </div>
-                                    <div class="o_sh_db_task_name" t-esc="t.name"/>
-                                    <div class="o_sh_db_task_dept" t-esc="t.department"/>
-                                    <div class="o_sh_db_task_prog"><div t-att-style="'width:' + t.progress + '%'"/></div>
-                                    <div class="o_sh_db_task_bottom">
-                                        <span t-att-class="t.kind === 'late' ? 'text-danger fw-semibold' : ''" t-esc="dueText(t)"/>
-                                        <span class="o_sh_db_bell"><i class="fa fa-arrow-right"/></span>
-                                    </div>
-                                </div>
-                            </t>
-                            <div class="o_sh_db_task o_sh_db_add" t-on-click="newTask">
-                                <i class="fa fa-plus"/> ახალი დავალება
-                            </div>
-                        </div>
-                    </div>
+                    <TaskTimeline embedded="true"/>
                 </div>
 
                 <!-- row 3: projects -->

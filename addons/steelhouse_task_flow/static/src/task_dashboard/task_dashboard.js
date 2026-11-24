@@ -2,6 +2,7 @@ import { Component, onWillStart, useState } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { user } from "@web/core/user";
+import { TaskTimeline } from "@steelhouse_task_flow/task_timeline/task_timeline";
 
 const KIND_LABEL = {
     new: "ახალი",
@@ -21,6 +22,7 @@ const CHART_H = 130;
 export class TaskDashboard extends Component {
     static template = "steelhouse_task_flow.TaskDashboard";
     static props = ["*"];
+    static components = { TaskTimeline };
 
     setup() {
         this.orm = useService("orm");

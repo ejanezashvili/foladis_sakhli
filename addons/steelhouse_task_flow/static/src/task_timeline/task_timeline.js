@@ -8,6 +8,7 @@ const MONTHS = ["იანვარი", "თებერვალი", "მა�
     "აგვისტო", "სექტემბერი", "ოქტომბერი", "ნოემბერი", "დეკემბერი"];
 const WEEKDAYS = ["კვ", "ორ", "სამ", "ოთხ", "ხუთ", "პარ", "შაბ"];
 const SCALES = {
+    day7: { label: "კვირა", dayW: 150 }, // the home page ("ჩემი") only
     week: { label: "2 კვირა", dayW: 84 },
     month: { label: "თვე", dayW: 38 },
     quarter: { label: "3 თვე", dayW: 13 },
@@ -29,6 +30,9 @@ const VIEWS = [
     { key: "worktime", label: "სამუშაო დრო", icon: "fa-clock-o" },
     { key: "returns", label: "დაბრუნებები", icon: "fa-undo" },
 ];
+// home page ("მთავარი" - "ჩემი"): which statuses to show, open ones by default
+export const MY_KINDS = ["new", "accepted", "in_progress", "on_hold", "review", "returned", "done", "cancelled"];
+const MY_KINDS_DEFAULT = ["new", "accepted", "in_progress", "on_hold", "review", "returned"];
 // workload colors: open tasks running at the same time (per person for the team view)
 const LOAD_STEPS = [
     [0, ""],
@@ -54,9 +58,12 @@ export class TaskTimeline extends Component {
         this.orm = useService("orm");
         this.action = useService("action");
         // narrower name column on phones
-        this.LABEL_W = window.innerWidth < 768 ? 170 : LABEL_W;
+        // embedded on the home page ("ჩემი"): my tasks only, this week by default, statuses to pick
+        this.embedded = Boolean(this.props.embedded);
+        this.LABEL_W = window.innerWidth < 768 ? 170 : this.embedded ? 280 : LABEL_W;
         this.SCALES = SCALES;
-        this.scaleKeys = Object.keys(SCALES);
+        this.scaleKeys = Object.keys(SCALES).filter((k) => this.embedded || k !== "day7");
+        this.MY_KINDS = MY_KINDS;
         this.KINDS = KINDS;
         this.VIEWS = VIEWS;
         this.state = useState({
@@ -69,7 +76,8 @@ export class TaskTimeline extends Component {
             wtOpen: {},
             ret: null,
             retGroup: "project",
-            scale: "month",
+            scale: this.embedded ? "day7" : "month",
+            kinds: [...MY_KINDS_DEFAULT],
             anchor: this.today(),
             groupBy: "department",
             status: "open",
@@ -92,9 +100,9 @@ export class TaskTimeline extends Component {
     // ---------------------------------------------------------------- period
     get range() {
         const a = this.state.anchor;
-        if (this.state.scale === "week") {
+        if (this.state.scale === "week" || this.state.scale === "day7") {
             const from = addDays(a, -((a.getUTCDay() + 6) % 7)); // Monday
-            return { from, to: addDays(from, 13) };
+            return { from, to: addDays(from, this.state.scale === "day7" ? 6 : 13) };
         }
         if (this.state.scale === "quarter") {
             const m = a.getUTCMonth() - (a.getUTCMonth() % 3);
@@ -156,7 +164,7 @@ export class TaskTimeline extends Component {
             const s = iso(d);
             const wd = d.getUTCDay();
             let label = "";
-            if (this.state.scale === "week") {
+            if (this.state.scale === "week" || this.state.scale === "day7") {
                 label = `${WEEKDAYS[wd]} ${d.getUTCDate()}`;
             } else if (this.state.scale === "month") {
                 label = String(d.getUTCDate());
@@ -280,7 +288,7 @@ export class TaskTimeline extends Component {
         this.state.data = await this.orm.call("project.task", "sh_timeline_data", [iso(from), iso(to)], {
             mine,
             group_by: this.state.groupBy,
-            status: this.state.showDone ? "all" : "open",
+            status: this.embedded || this.state.showDone ? "all" : "open",
             department_id: this.state.departmentId ? Number(this.state.departmentId) : false,
             user_id: !mine && this.state.userId ? Number(this.state.userId) : false,
         });
@@ -360,7 +368,8 @@ export class TaskTimeline extends Component {
                 }
             }
         }
-        return all.sort((a, b) => (a.overdue === b.overdue ? 0 : a.overdue ? -1 : 1) || (a.end < b.end ? -1 : a.end > b.end ? 1 : 0));
+        const kinds = this.embedded && new Set(this.state.kinds);
+        return all.filter((t) => !kinds || kinds.has(t.kind)).sort((a, b) => (a.overdue === b.overdue ? 0 : a.overdue ? -1 : 1) || (a.end < b.end ? -1 : a.end > b.end ? 1 : 0));
     }
     // 5 simple colours instead of every stage kind
     simpleKind(t) {
@@ -401,6 +410,10 @@ export class TaskTimeline extends Component {
     setScope(scope) {
         this.state.scope = scope;
         this.load();
+    }
+    toggleKind(kind) {
+        const kinds = this.state.kinds;
+        this.state.kinds = kinds.includes(kind) ? kinds.filter((k) => k !== kind) : [...kinds, kind];
     }
     toggleDone(ev) {
         this.state.showDone = ev.target.checked;
@@ -490,8 +503,8 @@ export class TaskTimeline extends Component {
     }
     move(step) {
         const a = this.state.anchor;
-        if (this.state.scale === "week") {
-            this.state.anchor = addDays(a, 7 * step);
+        if (this.state.scale === "week" || this.state.scale === "day7") {
+            this.state.anchor = addDays(a, (this.state.scale === "day7" ? 7 : 14) * step);
         } else {
             const months = this.state.scale === "quarter" ? 3 : 1;
             this.state.anchor = new Date(Date.UTC(a.getUTCFullYear(), a.getUTCMonth() + months * step, 1));

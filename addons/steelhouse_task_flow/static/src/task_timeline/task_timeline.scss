@@ -450,3 +450,36 @@ $sh-row: 34px;
         .o_sh_rt_all { color: #3d8fd6; padding-top: 8px; border-top: 1px solid #eee; }
     }
 }
+
+// embedded on the home page ("მთავარი" - "ჩემი")
+.o_sh_tl.o_sh_tl_embedded {
+    height: auto;
+    background: transparent;
+
+    .o_sh_tl_scroll {
+        max-height: 560px;
+    }
+    .o_sh_tl_kinds {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px 10px;
+        font-size: 12px;
+    }
+    .o_sh_tl_kind {
+        border: 1px solid #dcd7ee;
+        background: #fff;
+        color: #6e6a80;
+        border-radius: 14px;
+        padding: 3px 10px;
+        cursor: pointer;
+
+        &.active {
+            border-color: $sh-purple;
+            background: #efecf8;
+            color: #4b3f80;
+            font-weight: 600;
+        }
+    }
+}
