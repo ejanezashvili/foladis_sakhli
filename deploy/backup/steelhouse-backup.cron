@@ -1,0 +1,4 @@
+# 8.5 Odoo backups (installed as /etc/cron.d/steelhouse-backup)
+# nightly backup at 02:00; restore test on the 2nd of each month at 03:30
+0 2 * * * root /usr/local/bin/steelhouse_backup.sh
+30 3 2 * * root /usr/local/bin/steelhouse_restore_test.sh > /dev/null

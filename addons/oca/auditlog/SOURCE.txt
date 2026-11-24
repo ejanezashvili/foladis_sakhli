@@ -1,0 +1,1 @@
+source: https://github.com/OCA/server-tools branch 19.0 commit 13e504f (2026-11-23), license AGPL-3; i18n/ka.po added by us
