@@ -32,3 +32,4 @@ from . import task_view_departments
 from . import task_phase
 from . import task_visibility
 from . import task_pdf
+from . import task_start_request

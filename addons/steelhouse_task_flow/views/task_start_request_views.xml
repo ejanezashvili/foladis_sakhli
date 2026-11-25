@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- a waiting task: its performer asks the people of the previous tasks to let it start (models/task_start_request.py) -->
+    <record id="view_task_form_sh_start_request" model="ir.ui.view">
+        <field name="name">project.task.form.sh.start.request</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="steelhouse_task_flow.view_task_form_steelhouse_flow"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@name='warning_section']" position="after">
+                <field name="sh_can_request_start" invisible="1"/>
+                <div class="alert alert-light border mb-0 d-flex align-items-center gap-3 o_sh_start_request" role="alert"
+                     invisible="not sh_can_request_start">
+                    <div class="flex-grow-1">
+                        <span invisible="sh_start_request_date">თუ დაწყება გჭირდებათ, სთხოვეთ წინა დავალების შემსრულებელს - ის მიიღებს შეტყობინებას.</span>
+                        <span invisible="not sh_start_request_date"><i class="fa fa-check me-1"/>დაწყება მოთხოვნილია:
+                            <field name="sh_start_request_date" readonly="1" class="d-inline"/></span>
+                    </div>
+                    <button name="action_sh_request_start" type="object" string="🙋 დაწყების მოთხოვნა" class="btn btn-primary btn-sm"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- the same button on the waiting step's card -->
+    <record id="view_task_kanban_sh_start_request" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.start.request</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="steelhouse_task_flow.view_task_kanban_steelhouse_flow"/>
+        <field name="arch" type="xml">
+            <xpath expr="//main/widget[@name='sh_card_lists']" position="before">
+                <field name="sh_can_request_start" invisible="1"/>
+                <field name="sh_start_request_date" invisible="1"/>
+                <div t-if="record.sh_can_request_start.raw_value" class="o_sh_start_request_card">
+                    <button t-if="!record.sh_start_request_date.raw_value" name="action_sh_request_start" type="object"
+                            class="btn btn-outline-primary btn-sm">🙋 დაწყების მოთხოვნა</button>
+                    <span t-else="" class="text-muted small"><i class="fa fa-check me-1"/>დაწყება მოთხოვნილია</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

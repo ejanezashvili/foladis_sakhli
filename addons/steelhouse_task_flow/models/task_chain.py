@@ -336,6 +336,14 @@ class ProjectTask(models.Model):
         if mode == 'into':
             task._sh_link_parallel(at(target_level))
 
+        # 3. the arrows of step 1 (previous -> next, over the place the task left) are dropped again
+        # where the next task now waits for that previous one through another step anyway
+        for nxt in old_next:
+            for p in old_prev & nxt.depend_on_ids:
+                others = nxt.depend_on_ids - p
+                if any(p in (o | o._sh_all_previous()) for o in others):
+                    nxt.write({'depend_on_ids': [(3, p.id)]})
+
         step = self._sh_layers(chain)[task.id] + 1
         task.message_post(body=Markup("⛓ %s: <b>%s</b>") % (_("თანმიმდევრობაში გადაადგილდა"), _("ნაბიჯი %s") % step),
                           message_type='notification', subtype_xmlid='mail.mt_note')
