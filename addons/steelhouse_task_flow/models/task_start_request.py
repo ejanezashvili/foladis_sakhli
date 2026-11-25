@@ -31,6 +31,7 @@ class ProjectTask(models.Model):
         for task in self:
             task.sh_can_request_start = bool(
                 task.id and not task.is_template and task.state not in CLOSED
+                and not task._sh_is_main()      # the main task waits for nobody: its steps are its own parts
                 and user in (task.user_ids | task.sh_responsible_id)
                 and task._sh_open_previous())
 
@@ -40,7 +41,7 @@ class ProjectTask(models.Model):
         user = self.env.user
         if user not in (self.user_ids | self.sh_responsible_id):
             raise UserError(_("დაწყების მოთხოვნა შეუძლია ამ დავალების შემსრულებელს ან მთავარ პასუხისმგებელს."))
-        prev = self._sh_open_previous()
+        prev = self.browse() if self._sh_is_main() else self._sh_open_previous()
         if not prev:
             raise UserError(_("დავალება აღარ ელოდება წინა დავალებებს - შეგიძლიათ დაიწყოთ."))
         now = fields.Datetime.now()
