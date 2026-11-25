@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- the board of the HR processes: a department board (shared columns set by the post-init hook) -->
+    <record id="project_sh_hr" model="project.project">
+        <field name="name">კადრები</field>
+        <field name="sh_is_department" eval="True"/>
+    </record>
+</odoo>

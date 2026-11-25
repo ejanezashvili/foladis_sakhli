@@ -65,3 +65,21 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
 - Decision: playwright scripts drive the live UI as three demo users in a demo department; captions and a role chip are drawn into the page; ffmpeg writes mp4 (10–12 MB each).
 - Alternatives rejected: recording by hand - has to be redone by hand after every change.
 - Consequences: the demo department and users stay on the live server until `cleanup_demo.py` is run; the mp4 files are not in git.
+
+### D-10: HR processes (vacancy, hiring, dismissal) as tasks in a module of their own
+- Date: 2026-11-25 (owner chose option „დ“, people selectable in settings)
+- Context: the client sent three processes: required fields, HR check, director's approval / refusal, then the
+  legal entity's accountant and lawyer join and sub-tasks are made.
+- Standard checked: `hr_recruitment` (vacancy and applicants - no director approval step, no required fields per
+  request); employee onboarding / offboarding activity plans (no approval, no required data, activities only);
+  the Approvals app - Enterprise only; task templates of `project` / `task_flow` (no required fields, no
+  director-only step). None of them gives „required data + director approves or refuses + sub-tasks to the
+  legal entity's people“ in one place.
+- Decision: a new module `steelhouse_hr_tasks` on top of `steelhouse_task_flow`: one board „კადრები“ with its own
+  columns (each mapped to an existing stage kind), fields per process kind, a required-field check, director-only
+  approve / refuse buttons, sub-tasks on approval; people and legal entities in settings.
+- Alternatives rejected: templates only (option „ა“ - required fields not checked); standard HR apps (option „გ“ -
+  no approval in Community, process split over three apps).
+- Consequences: personal data (ID number, bank account, salary) is kept on the task; only the job's people see it
+  (task visibility, D-4). `steelhouse_task_flow` is not edited - its stage kinds, reason windows and visibility are
+  relied on and must not change without telling.

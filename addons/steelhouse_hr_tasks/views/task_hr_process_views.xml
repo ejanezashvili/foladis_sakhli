@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- task form: the HR process block (only on an HR request, not on its sub-tasks) -->
+    <record id="view_project_task_form_sh_hr_process" model="ir.ui.view">
+        <field name="name">project.task.form.sh.hr.process</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <field name="sh_hr_kind" invisible="1"/>
+                <field name="sh_hr_is_manager" invisible="1"/>
+                <field name="sh_hr_is_director" invisible="1"/>
+                <button name="action_sh_hr_send" type="object" string="დირექტორს გაგზავნა" class="btn-primary"
+                        invisible="not sh_hr_kind or parent_id or sh_hr_state != 'new' or not sh_hr_is_manager"/>
+                <button name="action_sh_hr_approve" type="object" string="დამტკიცება" class="btn-success"
+                        invisible="not sh_hr_kind or sh_hr_state != 'director' or not sh_hr_is_director"/>
+                <button name="action_sh_hr_refuse" type="object" string="უარყოფა" class="btn-danger"
+                        invisible="not sh_hr_kind or sh_hr_state != 'director' or not sh_hr_is_director"/>
+                <button name="action_sh_hr_payment" type="object" string="გადახდაში"
+                        invisible="sh_hr_kind != 'vacancy' or sh_hr_state != 'approved' or not sh_hr_is_manager"/>
+            </xpath>
+            <xpath expr="//sheet/div[hasclass('justify-content-between')][1]" position="after">
+                <div class="o_sh_hr_block mb-3" invisible="not sh_hr_kind or parent_id">
+                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                        <span class="badge text-bg-primary fs-6"><field name="sh_hr_kind" readonly="1" nolabel="1"/></span>
+                        <span class="text-muted ms-2" invisible="not sh_hr_author_id">მომთხოვნი: <field name="sh_hr_author_id" readonly="1" nolabel="1" class="d-inline"/></span>
+                        <field name="sh_hr_state" widget="statusbar" readonly="1"
+                               statusbar_visible="new,director,approved,done"/>
+                    </div>
+                    <div class="alert alert-warning py-2 mb-2" role="alert"
+                         invisible="sh_hr_state not in ('new', 'director') or not sh_hr_missing">
+                        შესავსებია: <field name="sh_hr_missing" readonly="1" nolabel="1" class="d-inline"/>
+                    </div>
+                    <div class="alert alert-danger py-2 mb-2" role="alert" invisible="sh_hr_state != 'refused'">
+                        უარყოფის მიზეზი: <field name="sh_hr_refuse_reason" readonly="1" nolabel="1" class="d-inline"/>
+                    </div>
+                    <group invisible="sh_hr_kind != 'vacancy'" string="ვაკანსია">
+                        <group>
+                            <field name="sh_hr_position" string="თანამდებობის დასახელება"/>
+                            <field name="sh_hr_workplace"/>
+                            <field name="sh_hr_schedule"/>
+                            <field name="sh_hr_salary"/>
+                        </group>
+                        <group>
+                            <field name="sh_hr_duties"/>
+                            <field name="sh_hr_requirements"/>
+                        </group>
+                    </group>
+                    <group invisible="sh_hr_kind != 'hire'" string="ახალი თანამშრომელი">
+                        <group>
+                            <field name="sh_hr_id_number"/>
+                            <field name="sh_hr_phone"/>
+                            <field name="sh_hr_address"/>
+                            <field name="sh_hr_bank_account"/>
+                            <field name="sh_hr_email"/>
+                        </group>
+                        <group>
+                            <field name="sh_hr_position"/>
+                            <field name="sh_hr_salary"/>
+                            <field name="sh_hr_schedule"/>
+                            <field name="sh_hr_start_date"/>
+                            <field name="sh_hr_legal_entity_id" options="{'no_create': True}"/>
+                            <field name="sh_hr_org_code"/>
+                        </group>
+                    </group>
+                    <group invisible="sh_hr_kind != 'dismissal'" string="გათავისუფლება">
+                        <group>
+                            <field name="sh_hr_application" filename="sh_hr_application_name"/>
+                            <field name="sh_hr_application_name" invisible="1"/>
+                            <field name="sh_hr_last_day"/>
+                            <field name="sh_hr_legal_entity_id" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="sh_hr_reason"/>
+                            <field name="sh_hr_special"/>
+                            <field name="sh_hr_property"/>
+                        </group>
+                        <group string="დამტკიცების შემდეგ ქვედავალებები">
+                            <field name="sh_hr_need_lawyer"/>
+                            <field name="sh_hr_need_accountant"/>
+                            <field name="sh_hr_need_security"/>
+                        </group>
+                    </group>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_project_task_search_sh_hr_process" model="ir.ui.view">
+        <field name="name">project.task.search.sh.hr.process</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <filter name="sh_hr_director" string="დირექტორთან" domain="[('sh_hr_state', '=', 'director')]"/>
+                <filter name="sh_hr_open" string="ღია (კადრები)" domain="[('sh_hr_state', 'not in', ('done', 'refused'))]"/>
+                <filter name="sh_hr_group_kind" string="პროცესი" context="{'group_by': 'sh_hr_kind'}"/>
+                <filter name="sh_hr_group_state" string="პროცესის სტატუსი" context="{'group_by': 'sh_hr_state'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- the board: requests by process status -->
+    <record id="action_sh_hr_board" model="ir.actions.act_window">
+        <field name="name">კადრების მოთხოვნები</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('sh_hr_kind', '!=', False), ('parent_id', '=', False)]</field>
+        <field name="context">{'group_by': 'sh_hr_state'}</field>
+    </record>
+
+    <record id="action_sh_hr_new_vacancy" model="ir.actions.act_window">
+        <field name="name">ვაკანსიის განთავსება</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_sh_hr_kind': 'vacancy', 'default_name': 'ვაკანსიის განთავსება'}</field>
+    </record>
+    <record id="action_sh_hr_new_hire" model="ir.actions.act_window">
+        <field name="name">ახალი თანამშრომლის აყვანა</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_sh_hr_kind': 'hire', 'default_name': 'ახალი თანამშრომლის აყვანა'}</field>
+    </record>
+    <record id="action_sh_hr_new_dismissal" model="ir.actions.act_window">
+        <field name="name">თანამშრომლის გათავისუფლება</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'default_sh_hr_kind': 'dismissal', 'default_name': 'თანამშრომლის გათავისუფლება'}</field>
+    </record>
+
+    <menuitem id="menu_sh_hr_root" name="კადრები" sequence="72"
+              web_icon="steelhouse_hr_tasks,static/description/icon.svg"/>
+    <menuitem id="menu_sh_hr_board" name="მოთხოვნები" parent="menu_sh_hr_root" action="action_sh_hr_board" sequence="1"/>
+    <menuitem id="menu_sh_hr_new" name="ახალი მოთხოვნა" parent="menu_sh_hr_root" sequence="2"/>
+    <menuitem id="menu_sh_hr_new_vacancy" name="ვაკანსიის განთავსება" parent="menu_sh_hr_new" action="action_sh_hr_new_vacancy" sequence="1"/>
+    <menuitem id="menu_sh_hr_new_hire" name="ახალი თანამშრომლის აყვანა" parent="menu_sh_hr_new" action="action_sh_hr_new_hire" sequence="2"/>
+    <menuitem id="menu_sh_hr_new_dismissal" name="თანამშრომლის გათავისუფლება" parent="menu_sh_hr_new" action="action_sh_hr_new_dismissal" sequence="3"/>
+    <menuitem id="menu_sh_hr_config" name="პარამეტრები" parent="menu_sh_hr_root" action="action_sh_hr_task_config"
+              sequence="9" groups="hr.group_hr_user"/>
+</odoo>

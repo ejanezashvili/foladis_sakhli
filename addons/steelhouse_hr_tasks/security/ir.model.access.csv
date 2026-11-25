@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sh_hr_task_config_user,sh.hr.task.config user,model_steelhouse_hr_task_config,base.group_user,1,0,0,0
+access_sh_hr_task_config_hr,sh.hr.task.config hr,model_steelhouse_hr_task_config,hr.group_hr_user,1,1,1,0
+access_sh_legal_entity_user,sh.legal.entity user,model_steelhouse_legal_entity,base.group_user,1,0,0,0
+access_sh_legal_entity_hr,sh.legal.entity hr,model_steelhouse_legal_entity,hr.group_hr_user,1,1,1,1
+access_sh_hr_refuse_wizard_user,sh.hr.refuse.wizard user,model_steelhouse_hr_refuse_wizard,base.group_user,1,1,1,1

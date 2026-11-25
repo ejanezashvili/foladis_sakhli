@@ -20,6 +20,31 @@ One step per requirement whose reason for custom code was not recorded. Check th
 - [ ] Close or remove the stale `[ ]` items about confidential tasks in `Docs/გეგმა.md` (confidentiality was removed in 19.0.1.176.0) and rewrite row 8.2–8.3 of its requirements map.
 - [ ] Remaining `[ ]` items of `Docs/გეგმა.md` ("პროექტების ტესტი" and the points under it) - go through with the owner.
 
+## Milestone 3 — HR processes as tasks („კადრები“) — approved 2026-11-25 („დაიწყე“), module installed (19.0.1.3.0)
+Source: the client's three documents (2026-11-25, `Docs/HR/` - not in git): vacancy, hiring, dismissal. Option „დ“
+chosen by the owner (2026-11-25); the people are chosen in settings, not fixed in code. D-10.
+New module `addons/steelhouse_hr_tasks` (depends on `steelhouse_task_flow`, `hr`); `steelhouse_task_flow` files are
+not edited - no version / file clashes with the teammates.
+- [x] Settings „კადრები → პარამეტრები“: HR manager(s), director (approves), time keeping (მარიამ პაპაშვილი),
+      internal security; legal entities (`steelhouse.legal.entity`: name, organisation code, accountant(s),
+      lawyer(s)) - `models/hr_task_config.py`, `views/hr_task_config_views.xml`, access rows.
+- [x] Board „კადრები“ (one project) - changed while building: the shared columns stay, the process has its own status field `sh_hr_state` (own columns would show in every board's merged views). Original idea: own columns, each tied to an existing stage kind so the
+      reports / home page / calendar keep counting right: ახალი (new) → დირექტორთან (review) → დამტკიცებულია
+      (in_progress) → გადახდაში (in_progress, vacancy only) → დასრულებულია (done); უარყოფილია / გაუქმებულია
+      (cancelled, with the reason window of `task_flow`) - `data/hr_task_board.xml`.
+- [x] Task fields by kind (`sh_hr_kind`: ვაკანსია / აყვანა / გათავისუფლება) - vacancy: position, duties,
+      requirements, place, schedule, salary; hiring: ID number, phone, address, bank account, e-mail, position,
+      salary, schedule, start date, legal entity (+ its code); dismissal: scanned application (attachment),
+      real reason, special conditions, last working day, company property handed over - `models/task_hr_process.py`.
+- [x] Rule: a task leaves „ახალი“ only with every required field of its kind filled (list of the missing ones).
+- [x] Buttons: HR manager „დირექტორს გაგზავნა“; director only „დამტკიცება“ / „უარყოფა“ (reason). On approval:
+      hiring / dismissal - the legal entity's accountant + lawyer are added, sub-tasks are made (lawyer:
+      documents; time keeping: registration (hiring); accountant: RS.ge; security (dismissal, when ticked)).
+- [x] Menu „კადრები“: new vacancy / hiring / dismissal (each opens the form with its kind), the board.
+- [x] Visibility: only the people of the job (teammates' `sh_party_user_ids`, 19.0.1.176.0) - check that the
+      HR manager, the director, the invited accountant and lawyer see it, other employees do not.
+- [ ] Check on the live server with test people, then the owner; `README.md`, `addons/steelhouse_hr_tasks/README.md`.
+
 ## Milestone 2 — Housekeeping
 - [ ] Remove the demo department and the users `demo.manager` / `demo.employee` / `demo.employee2` from the live server when no more recordings are needed - `deploy/manual_video/cleanup_demo.py` (dry run first).
 - [ ] Commit the pending changes: `README.md`, `Docs/გეგმა.md`, `deploy/manual_video/v4_sequence.py`, the new docs.

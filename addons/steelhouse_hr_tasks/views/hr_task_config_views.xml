@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_steelhouse_hr_task_config_form_sh_hr" model="ir.ui.view">
+        <field name="name">steelhouse.hr.task.config.form</field>
+        <field name="model">steelhouse.hr.task.config</field>
+        <field name="arch" type="xml">
+            <form string="კადრები - პარამეტრები" create="0" delete="0">
+                <sheet>
+                    <div class="oe_title"><h1>კადრები - პარამეტრები</h1></div>
+                    <group string="ვინ რას აკეთებს">
+                        <field name="hr_manager_ids" widget="many2many_tags"/>
+                        <field name="director_id"/>
+                        <field name="timekeeping_user_ids" widget="many2many_tags"/>
+                        <field name="security_user_ids" widget="many2many_tags"/>
+                    </group>
+                    <separator string="იურიდიული პირები - ბუღალტერი და იურისტი (აყვანა / გათავისუფლება)"/>
+                    <field name="legal_entity_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="code"/>
+                            <field name="accountant_ids" widget="many2many_tags"/>
+                            <field name="lawyer_ids" widget="many2many_tags"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_hr_task_config" model="ir.actions.server">
+        <field name="name">კადრები - პარამეტრები</field>
+        <field name="model_id" ref="model_steelhouse_hr_task_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_sh_open()</field>
+    </record>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_steelhouse_hr_refuse_wizard_form_sh_hr" model="ir.ui.view">
+        <field name="name">steelhouse.hr.refuse.wizard.form</field>
+        <field name="model">steelhouse.hr.refuse.wizard</field>
+        <field name="arch" type="xml">
+            <form string="უარყოფა">
+                <field name="task_id" invisible="1"/>
+                <group>
+                    <field name="reason" placeholder="რატომ არ მტკიცდება..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="უარყოფა" class="btn-danger"/>
+                    <button special="cancel" string="გაუქმება" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
