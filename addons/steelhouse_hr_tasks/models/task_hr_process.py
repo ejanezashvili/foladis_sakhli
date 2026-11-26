@@ -10,7 +10,7 @@
 from markupsafe import Markup
 
 from odoo import _, api, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 KINDS = [('vacancy', 'ვაკანსიის განთავსება'), ('hire', 'ახალი თანამშრომლის აყვანა'),
          ('dismissal', 'თანამშრომლის გათავისუფლება')]
@@ -83,6 +83,15 @@ class ProjectTask(models.Model):
     def _compute_sh_hr_missing(self):
         for task in self:
             task.sh_hr_missing = ', '.join(task._sh_hr_missing_labels())
+
+    @api.constrains(lambda self: ['sh_hr_kind', 'sh_hr_state'] + sorted({f for fs in REQUIRED.values() for f in fs}))
+    def _check_sh_hr_required(self):
+        """The client's documents: a request without its required fields is not taken for processing - it is
+        not saved at all (so HR never gets an incomplete one)."""
+        for task in self.filtered(lambda t: t.sh_hr_kind and not t.parent_id and t.sh_hr_state in ('new', 'director')):
+            missing = task._sh_hr_missing_labels()
+            if missing:
+                raise ValidationError(_("მოთხოვნა არ შეინახა - შეავსეთ სავალდებულო ველები: %s", ', '.join(missing)))
 
     def _sh_hr_missing_labels(self):
         self.ensure_one()
