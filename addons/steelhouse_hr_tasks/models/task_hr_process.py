@@ -122,8 +122,13 @@ class ProjectTask(models.Model):
                 vals['project_id'] = project.id
             vals.setdefault('sh_hr_author_id', author.id)
             viewers = [(4, vals['sh_hr_author_id'])]
+            # the form fills in the author's department and the author as assignee by default: an HR request
+            # belongs to HR only (no department - its people must not see the personal data)
+            if project and 'sh_department_project_ids' in self._fields:
+                vals['sh_department_project_ids'] = [(6, 0, project.ids)]
+            vals.pop('sh_project_id', None)
             if config.hr_manager_ids:
-                vals['user_ids'] = [(4, u.id) for u in config.hr_manager_ids]
+                vals['user_ids'] = [(6, 0, config.hr_manager_ids.ids)]
                 vals['reviewer_ids'] = [(6, 0, config.hr_manager_ids.ids)]
             if config.director_id:
                 viewers.append((4, config.director_id.id))
