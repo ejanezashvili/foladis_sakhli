@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # Decisions
 
 Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგმა.md`; where the reasoning was not written down at the time it says "not recorded" instead of a guess.
@@ -83,3 +83,29 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
 - Consequences: personal data (ID number, bank account, salary) is kept on the task; only the job's people see it
   (task visibility, D-4). `steelhouse_task_flow` is not edited - its stage kinds, reason windows and visibility are
   relied on and must not change without telling.
+
+### D-11: Fields HR creates himself are Odoo properties, defined per process by the module
+- Date: 2026-11-26 (owner: „საჭიროების შემთხვევაში სავალდებულო ველი ... მინდა ახალი შევქმნა“)
+- Context: HR must add a field to a process (name, type) and make it required, without a developer.
+- Standard checked: Studio - not used (CLAUDE.md rule); a selection over `ir.model.fields` - HR cannot read that
+  model (access error in the settings); project task properties - kept per project, every user can change the
+  definition, no "required".
+- Decision: own model `steelhouse.hr.field` (one list per process: built-in fields + created ones, the required ones
+  ticked); `steelhouse.hr.kind.properties_definition` is rebuilt by the module from it; the request shows
+  `sh_hr_properties`. "Required" is checked by the request's constraint (properties have no required flag).
+- Consequences: deleting a created field hides its values on old requests too; a yes / no field cannot be required.
+
+### D-12: An HR request is created via sudo with fixed department and people
+- Date: 2026-11-25 (found in testing: a department head got an access error; the form defaults put the author's
+  department and the author as assignee, so that department saw the personal data)
+- Decision: `create` of an HR request runs as sudo, sets the board „კადრები“ as the only department, HR managers as
+  assignees / reviewers, author + director as extra viewers; the author is kept in `sh_hr_author_id`.
+- Consequences: the creating user does not need rights on the HR board; who sees the request is decided only here
+  and by task_flow's visibility (D-4).
+
+### D-13: „+ ახალი ველი“ always shown in the required-fields list (front-end patch)
+- Date: 2026-11-26 (owner asked for it above „მეტის ძიება...“)
+- Context: Odoo's many2many tags offer „შექმნა“ only after text is typed.
+- Decision: `static/src/hr_field_create.js` patches `Many2XAutocomplete` (`addCreateEditSuggestion`,
+  `buildCreateEditSuggestion`) only when the model is `steelhouse.hr.field`; every other field keeps the standard.
+- Consequences: an Odoo upgrade that renames these methods breaks only this item (check after upgrades).

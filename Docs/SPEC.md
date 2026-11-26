@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # Technical spec — ფოლადის სახლი (Odoo 19.0 Community)
 
 Modules: `steelhouse_task_flow` 19.0.1.178.0 (installed), `steelhouse_hr` 19.0.1.64.0 (installed), `steelhouse_project` 19.0.1.0.1 (not installed).
@@ -538,6 +538,40 @@ Version-by-version detail: `README.md`. The field and view tables below are gene
 - `mail.thread` - MODIFIED (abstract) - `models/notification_channel.py`: no fields (methods only)
 - `mail.notification` - MODIFIED - `models/notification_channel.py`: no fields (methods only)
 
+### Module `steelhouse_hr_tasks`
+
+HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრები“ (`project_sh_hr`, `sh_code` HR). D-10, D-11, D-12.
+
+**`project.task`** - MODIFIED - `models/task_hr_process.py`
+
+| field | type | required | compute/related | notes |
+|---|---|---|---|---|
+| `sh_hr_kind` | Selection |  |  | vacancy / hire / dismissal, not copied |
+| `sh_hr_state` | Selection |  |  | new / director / approved / payment / done / refused, `group_expand`, tracked |
+| `sh_hr_refuse_reason` | Text |  |  | tracked, not copied |
+| `sh_hr_author_id` | Many2one |  |  | -> `res.users`, readonly („მომთხოვნი“) |
+| `sh_hr_is_director`, `sh_hr_is_manager` | Boolean |  | compute `_compute_sh_hr_roles` |  |
+| `sh_hr_missing` | Char |  | compute `_compute_sh_hr_missing` | labels of the empty required fields |
+| `sh_hr_subtask_ids` | Many2many |  | compute (`child_ids`) | shown in the HR block (task_flow hides the sub-tasks tab) |
+| `sh_hr_required_fnames` | Char |  | compute | `,a,b,` - drives `required=` on the form |
+| `sh_hr_kind_id` | Many2one |  | compute, stored, `readonly=False` | -> `steelhouse.hr.kind` |
+| `sh_hr_properties` | Properties |  |  | definition `sh_hr_kind_id.properties_definition` - the fields HR created |
+| `sh_hr_skip_rule_ids` | Many2many |  |  | -> `steelhouse.hr.subtask.rule` („არ არის საჭირო“) |
+| `sh_hr_position` … `sh_hr_property` | Char / Text / Date / Binary / Many2one |  |  | built-in process fields (`CANDIDATES`, `models/hr_constants.py`); `sh_hr_org_code` related to the legal entity |
+| `sh_hr_need_lawyer`, `sh_hr_need_accountant`, `sh_hr_need_security` | Boolean |  |  | legacy (before 19.0.1.10.0), not on the form |
+
+**`steelhouse.hr.task.config`** - NEW (singleton `_sh_get`) - `models/hr_task_config.py`: `hr_manager_ids`, `director_id`, `timekeeping_user_ids` / `security_user_ids` (legacy), `legal_entity_ids`, `<kind>_field_ids` (Many2many -> `steelhouse.hr.field`, the required ones), `subtask_ids` + `<kind>_subtask_ids`.
+
+**`steelhouse.hr.subtask.rule`** - NEW: `kind`, `sequence`, `name`, `assignee` (only `users`), `user_ids`, `optional`, `active`.
+
+**`steelhouse.legal.entity`** - NEW: `name`, `code`, `sequence`, `active`.
+
+**`steelhouse.hr.field`** - NEW: `kind`, `sequence`, `fname` (built-in field) or `pname` (`shx<id>`, a created one), `name`, `ftype` (char / text / date / integer / boolean). A built-in one cannot be deleted; `action_sh_delete` (trash button in the „ძიება“ window) deletes a created one.
+
+**`steelhouse.hr.kind`** - NEW: one per process; `properties_definition` rebuilt by `_sh_rebuild` from the created fields (label + ` *` when required).
+
+**`steelhouse.hr.refuse.wizard`** - NEW (transient): `task_id`, `reason` (required).
+
 ### Module `steelhouse_project`
 
 
@@ -625,6 +659,11 @@ Version-by-version detail: `README.md`. The field and view tables below are gene
 | B-21 | Deputies | cron `cron_sync_leave_approvals` (hourly) | approver is on time off with a delegation | approval activities move to the deputy and back | AC-16 | custom (D-5) |
 | B-22 | Quarter allocations | cron `cron_quarter_allocations` (daily) | - | time off days granted per quarter; balance kept per period (`steelhouse.leave.balance`) | - | standard: accrual plans - reason for custom not recorded |
 | B-23 | Monthly mandatory days | cron `cron_mandatory_days_monthly` (daily) | - | `hr.leave.mandatory.day` generated every month | - | not recorded |
+| B-24 | HR request created | `project.task.create` with `sh_hr_kind` | - | created via sudo on the board „კადრები“; departments = that board, assignees / reviewers = HR managers, extra viewers = author + director; `sh_hr_kind_id` set (`models/task_hr_process.py`) | - | custom (D-12) |
+| B-25 | Required fields of a request | `@api.constrains` `_check_sh_hr_required` | main request, not during module install / upgrade | not saved while a required built-in or created field is empty | - | custom (D-10, D-11) |
+| B-26 | Send to the director | `action_sh_hr_send` | HR manager, nothing missing | `sh_hr_state` director, activity to the director | - | custom (D-10) |
+| B-27 | Approve / refuse | `action_sh_hr_approve` / `action_sh_hr_refuse` (wizard) | director only | approve: stage in_progress, sub-tasks from the rules minus the skipped ones, their people become extra viewers; refuse: reason required, `sh_hr_state` refused | - | custom (D-10) |
+| B-28 | Stage moves of an HR request | `project.task.write(stage_id)` | before approval / after refusal | refused; done -> `sh_hr_state` done | - | custom (D-10) |
 
 ## Standard-first check
 
@@ -638,6 +677,8 @@ Version-by-version detail: `README.md`. The field and view tables below are gene
 | Asking to start a waiting step | activities (`mail.activity`), @mention in the chatter | not recorded | `action_sh_request_start` (D-6) - **justification not recorded** |
 | Repeating tasks | standard recurring tasks | not recorded | `models/task_repeat.py` - **justification not recorded** |
 | Time off days per quarter | accrual plans | not recorded | `cron_quarter_allocations` - **justification not recorded** |
+| HR processes: required data, director approves / refuses, sub-tasks | `hr_recruitment`, onboarding / offboarding plans, task templates (Approvals - Enterprise) | no | `steelhouse_hr_tasks` (D-10) |
+| HR adds fields to a process himself | Studio (not allowed), `ir.model.fields` (HR cannot read it), task properties of a project | partial | Odoo properties on the task, definition kept per process by the module (D-11) |
 
 ## Views / UI
 
@@ -731,6 +772,20 @@ Menus: `menu_sh_task_dashboard`, `menu_sh_approvals_root`, `menu_sh_recurring_ta
 | `views/res_users_views.xml` | `view_users_form_steelhouse` | `res.users` | extension | `mail.view_users_form_mail` |  |
 | `views/res_users_views.xml` | `mail_activity_view_tree_steelhouse` | `mail.activity` | extension | `mail.mail_activity_view_tree` |  |
 
+### Module `steelhouse_hr_tasks`
+
+| file | xml id | model | type | inherits | groups |
+|---|---|---|---|---|---|
+| `views/task_hr_process_views.xml` | `view_project_task_form_sh_hr_process` | `project.task` | extension (HR block, buttons) | `project.view_task_form2` |  |
+| `views/task_hr_process_views.xml` | `view_project_task_search_sh_hr_process` | `project.task` | extension | `project.view_task_search_form` |  |
+| `views/task_hr_process_views.xml` | `view_project_task_kanban_sh_hr_board`, `view_project_task_list_sh_hr_board` | `project.task` | primary, no create |  |  |
+| `views/hr_task_config_views.xml` | `view_steelhouse_hr_task_config_form_sh_hr` | `steelhouse.hr.task.config` | form (tabs: people / vacancy / hire / dismissal) |  |  |
+| `views/hr_task_config_views.xml` | `view_steelhouse_hr_field_list_sh_hr`, `view_steelhouse_hr_field_form_sh_hr` | `steelhouse.hr.field` | list (trash button), form (name + type) |  |  |
+| `wizard/hr_refuse_wizard_views.xml` | `view_steelhouse_hr_refuse_wizard_form_sh_hr` | `steelhouse.hr.refuse.wizard` | form |  |  |
+
+Actions / menus: `action_sh_hr_board`, `action_sh_hr_new_vacancy` / `_hire` / `_dismissal`, `action_sh_hr_task_config` (server action); app menu „კადრები“ (მოთხოვნები / ახალი მოთხოვნა / პარამეტრები - `hr.group_hr_user`).
+Assets: `static/src/hr_tasks.scss` (red * on required labels, created fields styled like the others), `static/src/hr_field_create.js` (patch of `Many2XAutocomplete`, only for `steelhouse.hr.field`: „+ ახალი ველი“ always offered - D-13).
+
 ### Module `steelhouse_project`
 
 | file | xml id | model | type | inherits | groups |
@@ -761,6 +816,10 @@ Groups: no new groups. Used: `base.group_user`, `base.group_system`, `project.gr
 | project | `steelhouse.task.extension.request` | `project.group_project_manager` | 1 | 1 | 1 | 1 |
 | project | `steelhouse.task.reason.wizard` | `project.group_project_user` | 1 | 1 | 1 | 1 |
 | project | `steelhouse.task.extension.wizard` | `project.group_project_user` | 1 | 1 | 1 | 1 |
+| hr_tasks | `steelhouse.hr.task.config` | `base.group_user` / `hr.group_hr_user` | 1 | 0 / 1 | 0 / 1 | 0 |
+| hr_tasks | `steelhouse.legal.entity`, `steelhouse.hr.subtask.rule`, `steelhouse.hr.field` | `base.group_user` / `hr.group_hr_user` | 1 | 0 / 1 | 0 / 1 | 0 / 1 |
+| hr_tasks | `steelhouse.hr.kind` | `base.group_user` | 1 | 0 | 0 | 0 |
+| hr_tasks | `steelhouse.hr.refuse.wizard` | `base.group_user` | 1 | 1 | 1 | 1 |
 
 Record rules
 
@@ -805,6 +864,8 @@ Server cron (outside Odoo): `/etc/cron.d/steelhouse-backup` - backup 02:00 daily
 | task_flow | 19.0.1.176.0 | `post-migrate.py` | extra viewers of the old confidential tasks carried over to `sh_extra_viewer_ids` |
 | task_flow | 19.0.1.177.0 | - | new column `sh_start_request_date`, empty on existing tasks |
 | hr | 19.0.1.38.0, 46.0, 54.0 | `post-migrate.py` | see the scripts |
+| hr_tasks | 19.0.1.10.0, 11.0, 15.0 | `post-migrate.py` | `_sh_defaults()` (kinds, field records, default required lists and sub-task rules); `sh_hr_kind_id` recomputed |
+| hr_tasks | 19.0.1.14.0 | `pre-migrate.py` | lawyer / accountant sub-task rules converted to chosen people |
 
 One-off data scripts: `deploy/setup_*.py` (Odoo shell). The client's visibility list: `deploy/setup_task_visibility.py`.
 
@@ -837,8 +898,10 @@ The recording scripts in `deploy/manual_video/` act as scripted checks of the fl
 | AC-15 | `task_reports.py`, `task_pdf.py` | none |
 | AC-16 | `hr.leave`, `steelhouse.leave.delegation`, `leave_approval_flow.py` | none |
 | AC-17 | `deploy/manual_video/` | frames checked by hand |
+| - (no AC yet) | `steelhouse_hr_tasks` | shell scripts with rollback + screenshots, by hand |
 
 ## Open questions
 1. Standard-first rows marked "not recorded": the reason for custom code was not written down at the time.
 2. Migration scripts before 176 are listed without a description - read the script before relying on it.
 3. `sh.task.flow.event` and `steelhouse.task.section` do not follow the same model prefix.
+4. `steelhouse_hr_tasks` has no acceptance criterion in `Docs/PRD.md` (see PRD open questions).

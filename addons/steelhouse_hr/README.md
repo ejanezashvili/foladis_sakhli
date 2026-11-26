@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # steelhouse_hr
 
 Company structure and time off for ფოლადის სახლი on Odoo 19.0 Community: several equal heads of a department, org chart and hierarchy views, time off with deputies, approval order, balance per quarter and a report.

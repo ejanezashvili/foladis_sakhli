@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # Plan — remaining work
 
 Done work and its history: `Docs/გეგმა.md` (stages, `## Status`) and `README.md` (version by version). This file lists only what is left.
@@ -14,7 +14,7 @@ One step per requirement whose reason for custom code was not recorded. Check th
 - [ ] Overdue notifications, weekly digest, monthly mandatory days: standard automated actions / digests checked? (now: `models/task_overdue.py`, `task_notify.py`, `steelhouse_hr/models/mandatory_day_monthly.py`)
 
 ## Milestone 1 — Open items (risky / unknown first)
-- [ ] HTTPS on the server (now plain HTTP) - server config, outside the repo.
+- [ ] HTTPS on the server (now plain HTTP) - nginx config and steps ready in `deploy/https/` (2026-11-25); waits for a domain from the company.
 - [ ] SMTP for outgoing mail; then requirement 4.7 (e-mail notifications) - `Docs/გეგმა.md`.
 - [ ] Decide on `addons/steelhouse_project` (not installed): remove from the repo or mark as archived - `addons/steelhouse_project/`, `README.md`.
 - [ ] Close or remove the stale `[ ]` items about confidential tasks in `Docs/გეგმა.md` (confidentiality was removed in 19.0.1.176.0) and rewrite row 8.2–8.3 of its requirements map.
@@ -28,6 +28,8 @@ not edited - no version / file clashes with the teammates.
 - [x] Settings „კადრები → პარამეტრები“: HR manager(s), director (approves), time keeping (მარიამ პაპაშვილი),
       internal security; legal entities (`steelhouse.legal.entity`: name, organisation code, accountant(s),
       lawyer(s)) - `models/hr_task_config.py`, `views/hr_task_config_views.xml`, access rows.
+      Changed while testing (19.0.1.10.0-14.0): per process tabs - required fields and sub-task rules
+      (name, chosen people, may be skipped); the legal entity keeps only name + code (owner: „მარტო არჩეული პირი“).
 - [x] Board „კადრები“ (one project) - changed while building: the shared columns stay, the process has its own status field `sh_hr_state` (own columns would show in every board's merged views). Original idea: own columns, each tied to an existing stage kind so the
       reports / home page / calendar keep counting right: ახალი (new) → დირექტორთან (review) → დამტკიცებულია
       (in_progress) → გადახდაში (in_progress, vacancy only) → დასრულებულია (done); უარყოფილია / გაუქმებულია
@@ -43,11 +45,17 @@ not edited - no version / file clashes with the teammates.
 - [x] Menu „კადრები“: new vacancy / hiring / dismissal (each opens the form with its kind), the board.
 - [x] Visibility: only the people of the job (teammates' `sh_party_user_ids`, 19.0.1.176.0) - check that the
       HR manager, the director, the invited accountant and lawyer see it, other employees do not.
-- [ ] Check on the live server with test people, then the owner; `README.md`, `addons/steelhouse_hr_tasks/README.md`.
+- [x] HR creates fields per process himself (19.0.1.15.0-21.0, D-11): „+ ახალი ველი“ in the required-fields list,
+      shown on the request as Odoo properties, deleted from the „ძიება“ window; styled like the other fields.
+- [x] Request created via sudo on the board „კადრები“ only - the author's department does not see it (19.0.1.9.0, D-12).
+- [ ] Check on the live server with test people, then the owner (in progress with the owner, 2026-11-26).
+- [ ] Owner decisions pending: legal entity required on dismissal; move „კადრები“ under the Project menu;
+      who besides the participants may see a request (question sent to the company).
+- [ ] Before launch: delete the test requests (HR-0001…) and test fields.
 
 ## Milestone 2 — Housekeeping
 - [ ] Remove the demo department and the users `demo.manager` / `demo.employee` / `demo.employee2` from the live server when no more recordings are needed - `deploy/manual_video/cleanup_demo.py` (dry run first).
-- [ ] Commit the pending changes: `README.md`, `Docs/გეგმა.md`, `deploy/manual_video/v4_sequence.py`, the new docs.
+- [x] Commit the pending changes: `README.md`, `Docs/გეგმა.md`, `deploy/manual_video/v4_sequence.py`, the new docs (c68096d).
 - [ ] Decide where the video manuals live (44 MB of mp4; not in git now) - `Docs/ვიდეო მანუალები/`.
 - [ ] Remove `deploy/manual_video/t_dom.py` (exploration script).
 
@@ -57,4 +65,6 @@ not edited - no version / file clashes with the teammates.
 - Permission to start the next step when the previous one is not on hold (D-6).
 
 ## Status
-Not started (this list). Earlier stages: done, see `Docs/გეგმა.md`.
+Last session 2026-11-26: „კადრები“ 19.0.1.18.0-21.0 (created fields: look, delete, „+ ახალი ველი“); next: owner test of the HR processes;
+watch out: commits after c4f0cbd are on branch `sync-hr`, not pushed to `main` yet.
+Earlier stages: done, see `Docs/გეგმა.md`.

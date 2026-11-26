@@ -1,8 +1,9 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # steelhouse_task_flow
 
 Task management for ფოლადის სახლი on Odoo 19.0 Community: stages with a fixed meaning, review by the author, sequences of steps across departments, hold / resume, visibility by a list, boards, home page, approvals app, reports.
-Installed on the live server, version 19.0.1.178.0.
+Installed on the live server, version 19.0.1.179.0 (179: phone layout fixes, `static/src/mobile/mobile.scss`).
+`steelhouse_hr_tasks` builds on this module (stage kinds, `_sh_stage_of_kind`, `sh_extra_viewer_ids`, reason windows) - tell before changing them.
 
 ## Dependencies
 `project`, `hr`, `steelhouse_hr`.

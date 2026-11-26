@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-25, commit: c56cf43 -->
+<!-- last-synced: 2026-11-26, commit: f9478f0 -->
 # ფოლადის სახლი - task management on Odoo 19
 
 ## Stack
@@ -34,9 +34,10 @@ powershell -File deploy\manual_video\run.ps1 v4_sequence.py -Fast
 ## Layout
 - `addons/steelhouse_task_flow` - tasks: stages, review, sequences, boards, reports (installed).
 - `addons/steelhouse_hr` - structure, several equal heads, time off (installed).
+- `addons/steelhouse_hr_tasks` - HR processes „კადრები“ on top of task_flow (installed; task_flow files not edited).
 - `addons/steelhouse_project` - earlier task module, not installed (status: see PLAN open questions).
 - `addons/oca/` - OCA `auditlog`, `web_responsive` (installed, upstream code - do not edit).
-- `deploy/` - one-off Odoo shell scripts (`setup_*.py`), `backup/`, `manual_video/`.
+- `deploy/` - one-off Odoo shell scripts (`setup_*.py`), `backup/`, `manual_video/`, `https/` (prepared, off).
 - `i18n/ka/` - Georgian `.po` files of standard Odoo modules (loaded by `deploy/apply_ka_translations.sh`).
 - `Docs/` - requirements, plan, specs, user manuals, video manuals.
 
