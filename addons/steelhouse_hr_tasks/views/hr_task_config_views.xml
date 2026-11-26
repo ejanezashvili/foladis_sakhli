@@ -24,16 +24,16 @@
                         </page>
                         <page string="ვაკანსია" name="vacancy">
                             <group>
-                                <field name="vacancy_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="vacancy_field_ids" widget="many2many_tags" context="{'default_kind': 'vacancy'}"
+                                       options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
                             <field name="vacancy_extra_ids">
-                                <list editable="bottom">
+                                <list editable="bottom" create="0">
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="ftype"/>
-                                    <field name="required"/>
                                 </list>
                             </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
@@ -50,16 +50,16 @@
                         </page>
                         <page string="აყვანა" name="hire">
                             <group>
-                                <field name="hire_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="hire_field_ids" widget="many2many_tags" context="{'default_kind': 'hire'}"
+                                       options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
                             <field name="hire_extra_ids">
-                                <list editable="bottom">
+                                <list editable="bottom" create="0">
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="ftype"/>
-                                    <field name="required"/>
                                 </list>
                             </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
@@ -76,16 +76,16 @@
                         </page>
                         <page string="გათავისუფლება" name="dismissal">
                             <group>
-                                <field name="dismissal_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                                <field name="dismissal_field_ids" widget="many2many_tags" context="{'default_kind': 'dismissal'}"
+                                       options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
                             <field name="dismissal_extra_ids">
-                                <list editable="bottom">
+                                <list editable="bottom" create="0">
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="ftype"/>
-                                    <field name="required"/>
                                 </list>
                             </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
@@ -107,6 +107,23 @@
                         დამტკიცებებზე.
                     </div>
                 </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- „შექმნა“ in the required-fields tags: a new field of the process (name + type) -->
+    <record id="view_steelhouse_hr_field_form_sh_hr" model="ir.ui.view">
+        <field name="name">steelhouse.hr.field.form</field>
+        <field name="model">steelhouse.hr.field</field>
+        <field name="arch" type="xml">
+            <form string="ახალი ველი">
+                <group>
+                    <field name="kind" invisible="1"/>
+                    <field name="fname" invisible="1"/>
+                    <field name="name" placeholder="მაგ. გამოცდილების წლები"/>
+                    <field name="ftype" readonly="fname"/>
+                </group>
+                <div class="text-muted small">ველი გამოჩნდება ამ პროცესის მოთხოვნის ფორმაზე; შენახვისას სავალდებულოდ მოინიშნება.</div>
             </form>
         </field>
     </record>
