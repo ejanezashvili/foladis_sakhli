@@ -101,13 +101,42 @@
         </field>
     </record>
 
-    <!-- the board: requests by process status -->
+    <!-- the board: requests by process status. No "ახალი" / column "+" here: it made a plain (non-HR) task;
+         a request is made from the menu „ახალი მოთხოვნა“ (one item per process). -->
+    <record id="view_project_task_kanban_sh_hr_board" model="ir.ui.view">
+        <field name="name">project.task.kanban.sh.hr.board</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_kanban"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban" position="attributes">
+                <attribute name="create">0</attribute>
+                <attribute name="quick_create">0</attribute>
+                <attribute name="group_create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_project_task_list_sh_hr_board" model="ir.ui.view">
+        <field name="name">project.task.list.sh.hr.board</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="mode">primary</field>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="create">0</attribute>
+            </xpath>
+        </field>
+    </record>
+
     <record id="action_sh_hr_board" model="ir.actions.act_window">
         <field name="name">კადრების მოთხოვნები</field>
         <field name="res_model">project.task</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('sh_hr_kind', '!=', False), ('parent_id', '=', False)]</field>
         <field name="context">{'group_by': 'sh_hr_state'}</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'kanban', 'view_id': ref('view_project_task_kanban_sh_hr_board')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('view_project_task_list_sh_hr_board')})]"/>
     </record>
 
     <record id="action_sh_hr_new_vacancy" model="ir.actions.act_window">
