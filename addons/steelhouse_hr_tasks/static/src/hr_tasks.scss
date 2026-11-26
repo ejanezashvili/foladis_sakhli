@@ -1,0 +1,8 @@
+// „კადრები“: a red * next to the label of every required field of the request (the task form design of
+// task_flow does not show which fields are required).
+.o_sh_hr_block .o_wrap_field:has(.o_required_modifier) .o_form_label::after,
+.o_sh_hr_block .o_wrap_label:has(+ .o_wrap_input .o_required_modifier) .o_form_label::after {
+    content: ' *';
+    color: #d9534f;
+    font-weight: 700;
+}

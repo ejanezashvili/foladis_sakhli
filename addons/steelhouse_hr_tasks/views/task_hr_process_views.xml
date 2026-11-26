@@ -37,44 +37,44 @@
                     </div>
                     <group invisible="sh_hr_kind != 'vacancy'" string="ვაკანსია">
                         <group>
-                            <field name="sh_hr_position" string="თანამდებობის დასახელება"/>
-                            <field name="sh_hr_workplace"/>
-                            <field name="sh_hr_schedule"/>
-                            <field name="sh_hr_salary"/>
+                            <field name="sh_hr_position" required="sh_hr_kind == 'vacancy' and not parent_id" string="თანამდებობის დასახელება"/>
+                            <field name="sh_hr_workplace" required="sh_hr_kind == 'vacancy' and not parent_id"/>
+                            <field name="sh_hr_schedule" required="sh_hr_kind == 'vacancy' and not parent_id"/>
+                            <field name="sh_hr_salary" required="sh_hr_kind == 'vacancy' and not parent_id"/>
                         </group>
                         <group>
-                            <field name="sh_hr_duties"/>
-                            <field name="sh_hr_requirements"/>
+                            <field name="sh_hr_duties" required="sh_hr_kind == 'vacancy' and not parent_id"/>
+                            <field name="sh_hr_requirements" required="sh_hr_kind == 'vacancy' and not parent_id"/>
                         </group>
                     </group>
                     <group invisible="sh_hr_kind != 'hire'" string="ახალი თანამშრომელი">
                         <group>
-                            <field name="sh_hr_id_number"/>
-                            <field name="sh_hr_phone"/>
-                            <field name="sh_hr_address"/>
-                            <field name="sh_hr_bank_account"/>
-                            <field name="sh_hr_email"/>
+                            <field name="sh_hr_id_number" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_phone" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_address" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_bank_account" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_email" required="sh_hr_kind == 'hire' and not parent_id"/>
                         </group>
                         <group>
-                            <field name="sh_hr_position"/>
-                            <field name="sh_hr_salary"/>
-                            <field name="sh_hr_schedule"/>
-                            <field name="sh_hr_start_date"/>
-                            <field name="sh_hr_legal_entity_id" options="{'no_create': True}"/>
+                            <field name="sh_hr_position" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_salary" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_schedule" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_start_date" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_legal_entity_id" required="sh_hr_kind == 'hire' and not parent_id" options="{'no_create': True}"/>
                             <field name="sh_hr_org_code"/>
                         </group>
                     </group>
                     <group invisible="sh_hr_kind != 'dismissal'" string="გათავისუფლება">
                         <group>
-                            <field name="sh_hr_application" filename="sh_hr_application_name"/>
+                            <field name="sh_hr_application" required="sh_hr_kind == 'dismissal' and not parent_id" filename="sh_hr_application_name"/>
                             <field name="sh_hr_application_name" invisible="1"/>
-                            <field name="sh_hr_last_day"/>
+                            <field name="sh_hr_last_day" required="sh_hr_kind == 'dismissal' and not parent_id"/>
                             <field name="sh_hr_legal_entity_id" options="{'no_create': True}"/>
                         </group>
                         <group>
-                            <field name="sh_hr_reason"/>
-                            <field name="sh_hr_special"/>
-                            <field name="sh_hr_property"/>
+                            <field name="sh_hr_reason" required="sh_hr_kind == 'dismissal' and not parent_id"/>
+                            <field name="sh_hr_special" required="sh_hr_kind == 'dismissal' and not parent_id"/>
+                            <field name="sh_hr_property" required="sh_hr_kind == 'dismissal' and not parent_id"/>
                         </group>
                         <group string="დამტკიცების შემდეგ ქვედავალებები">
                             <field name="sh_hr_need_lawyer"/>
