@@ -104,6 +104,8 @@ class SteelhouseHrSubtaskRule(models.Model):
     user_ids = fields.Many2many('res.users', 'sh_hrt_subtask_rule_user_rel', 'rule_id', 'user_id',
                                 string='ადამიანები', domain=USERS,
                                 help="როცა „ვის ეწერება“ = „არჩეული ადამიანები“.")
+    department_id = fields.Many2one('hr.department', string='დეპარტამენტი',
+                                    help="როცა „ვის ეწერება“ = „დეპარტამენტი“: ქვედავალება ეწერება მის ხელმძღვანელ(ებ)ს.")
     optional = fields.Boolean('მოთხოვნაზე შეიძლება გამოტოვება',
                               help="HR მოთხოვნაზე მონიშნავს „არ არის საჭირო“ - ეს ქვედავალება არ შეიქმნება.")
     active = fields.Boolean(default=True)

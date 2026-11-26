@@ -18,4 +18,4 @@ DEFAULT_REQUIRED = {
     'dismissal': ['sh_hr_application', 'sh_hr_reason', 'sh_hr_special', 'sh_hr_last_day', 'sh_hr_property'],
 }
 ASSIGNEES = [('lawyer', 'იურიდიული პირის იურისტი'), ('accountant', 'იურიდიული პირის ბუღალტერი'),
-             ('users', 'არჩეული ადამიანები')]
+             ('users', 'არჩეული ადამიანები'), ('department', 'დეპარტამენტი (ხელმძღვანელ(ებ)ი)')]

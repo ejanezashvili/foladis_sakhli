@@ -253,7 +253,12 @@ class ProjectTask(models.Model):
         viewers = self.env['res.users']
         missing = []
         for rule in rules.sorted('sequence'):
-            users = people.get(rule.assignee, rule.user_ids) if rule.assignee != 'users' else rule.user_ids
+            if rule.assignee == 'department':
+                users = rule.department_id.sudo().manager_ids.user_id
+            elif rule.assignee == 'users':
+                users = rule.user_ids
+            else:
+                users = people.get(rule.assignee)
             name = '%s - %s' % (rule.name, whom)
             if not users:
                 missing.append(name)
