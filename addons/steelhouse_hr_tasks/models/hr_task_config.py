@@ -38,16 +38,6 @@ class SteelhouseHrTaskConfig(models.Model):
         domain=[('kind', '=', 'dismissal')])
 
     subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', string='ქვედავალებები')
-    # the fields HR created himself (to rename / delete); being required is set in the tags above
-    vacancy_extra_ids = fields.One2many('steelhouse.hr.field', 'config_id', string='ვაკანსია - შექმნილი ველები',
-                                        domain=[('kind', '=', 'vacancy'), ('pname', '!=', False)],
-                                        context={'default_kind': 'vacancy'})
-    hire_extra_ids = fields.One2many('steelhouse.hr.field', 'config_id', string='აყვანა - შექმნილი ველები',
-                                     domain=[('kind', '=', 'hire'), ('pname', '!=', False)],
-                                     context={'default_kind': 'hire'})
-    dismissal_extra_ids = fields.One2many('steelhouse.hr.field', 'config_id', string='გათავისუფლება - შექმნილი ველები',
-                                          domain=[('kind', '=', 'dismissal'), ('pname', '!=', False)],
-                                          context={'default_kind': 'dismissal'})
     vacancy_subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', domain=[('kind', '=', 'vacancy')],
                                           context={'default_kind': 'vacancy'}, string='ვაკანსია - ქვედავალებები')
     hire_subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', domain=[('kind', '=', 'hire')],
@@ -188,6 +178,11 @@ class SteelhouseHrField(models.Model):
         res = super().write(vals)
         (kinds | self._sh_kinds())._sh_rebuild()
         return res
+
+    def action_sh_delete(self):
+        """The trash button in the „ძიება“ window of the required-fields tags (created fields only)."""
+        self.unlink()
+        return True
 
     def unlink(self):
         if self.filtered('fname') and not self.env.su:

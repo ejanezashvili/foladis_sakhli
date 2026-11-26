@@ -27,15 +27,6 @@
                                 <field name="vacancy_field_ids" widget="many2many_tags" context="{'default_kind': 'vacancy'}"
                                        options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
-                            <field name="vacancy_extra_ids">
-                                <list editable="bottom" create="0">
-                                    <field name="kind" column_invisible="1"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="ftype"/>
-                                </list>
-                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="vacancy_subtask_ids">
                                 <list editable="bottom">
@@ -53,15 +44,6 @@
                                 <field name="hire_field_ids" widget="many2many_tags" context="{'default_kind': 'hire'}"
                                        options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
-                            <field name="hire_extra_ids">
-                                <list editable="bottom" create="0">
-                                    <field name="kind" column_invisible="1"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="ftype"/>
-                                </list>
-                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="hire_subtask_ids">
                                 <list editable="bottom">
@@ -79,15 +61,6 @@
                                 <field name="dismissal_field_ids" widget="many2many_tags" context="{'default_kind': 'dismissal'}"
                                        options="{'no_quick_create': True}"/>
                             </group>
-                            <separator string="შექმნილი ველები (სახელის / ტიპის შეცვლა, წაშლა) - სავალდებულოს ზემოთ, ტეგებში ნიშნავთ"/>
-                            <field name="dismissal_extra_ids">
-                                <list editable="bottom" create="0">
-                                    <field name="kind" column_invisible="1"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="ftype"/>
-                                </list>
-                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="dismissal_subtask_ids">
                                 <list editable="bottom">
@@ -112,6 +85,21 @@
     </record>
 
     <!-- „შექმნა“ in the required-fields tags: a new field of the process (name + type) -->
+    <!-- the list of the „ძიება“ window of the required-fields tags: a created field can be deleted from here -->
+    <record id="view_steelhouse_hr_field_list_sh_hr" model="ir.ui.view">
+        <field name="name">steelhouse.hr.field.list</field>
+        <field name="model">steelhouse.hr.field</field>
+        <field name="arch" type="xml">
+            <list string="ველები">
+                <field name="fname" column_invisible="1"/>
+                <field name="name"/>
+                <field name="ftype" string="ტიპი"/>
+                <button name="action_sh_delete" type="object" icon="fa-trash-o" title="წაშლა" class="text-danger"
+                        invisible="fname" confirm="ველი წაიშლება (ძველ მოთხოვნებზეც აღარ გამოჩნდება). გავაგრძელოთ?"/>
+            </list>
+        </field>
+    </record>
+
     <record id="view_steelhouse_hr_field_form_sh_hr" model="ir.ui.view">
         <field name="name">steelhouse.hr.field.form</field>
         <field name="model">steelhouse.hr.field</field>
