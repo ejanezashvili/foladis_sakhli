@@ -82,6 +82,18 @@
                             <field name="sh_hr_need_security"/>
                         </group>
                     </group>
+                    <div invisible="not sh_hr_subtask_ids" class="mt-2">
+                        <div class="o_horizontal_separator mb-2">ქვედავალებები (დამტკიცების შემდეგ)</div>
+                        <field name="sh_hr_subtask_ids" readonly="1" nolabel="1">
+                            <list create="0" delete="0" open_form_view="True">
+                                <field name="sh_number" string="№"/>
+                                <field name="name"/>
+                                <field name="user_ids" widget="many2many_avatar_user"/>
+                                <field name="stage_id"/>
+                                <field name="date_deadline"/>
+                            </list>
+                        </field>
+                    </div>
                 </div>
             </xpath>
         </field>

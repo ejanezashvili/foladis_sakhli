@@ -38,6 +38,8 @@ class ProjectTask(models.Model):
     sh_hr_is_director = fields.Boolean(compute='_compute_sh_hr_roles')
     sh_hr_is_manager = fields.Boolean(compute='_compute_sh_hr_roles')
     sh_hr_missing = fields.Char(compute='_compute_sh_hr_missing', string='შესავსებია')
+    # the form of task_flow hides the sub-tasks tab (the client uses „თანმიმდევრობა“): the HR block lists them itself
+    sh_hr_subtask_ids = fields.Many2many('project.task', compute='_compute_sh_hr_subtask_ids', string='ქვედავალებები')
 
     # vacancy / hiring
     sh_hr_position = fields.Char('თანამდებობა / პოზიცია', tracking=True)
@@ -78,6 +80,11 @@ class ProjectTask(models.Model):
         for task in self:
             task.sh_hr_is_director = user == config.director_id
             task.sh_hr_is_manager = user in config.hr_manager_ids or user.has_group('base.group_system')
+
+    @api.depends('child_ids')
+    def _compute_sh_hr_subtask_ids(self):
+        for task in self:
+            task.sh_hr_subtask_ids = task.child_ids if task.sh_hr_kind else False
 
     @api.depends(lambda self: ['sh_hr_kind'] + sorted({f for fs in REQUIRED.values() for f in fs}))
     def _compute_sh_hr_missing(self):
