@@ -1,6 +1,6 @@
 """„კადრები → პარამეტრები“: who does what in the HR processes, which fields are required and which sub-tasks
 are made after the director's approval - all set by HR here, not in code (owner, 2026-11-25 / 2026-11-26).
-One settings record (`_sh_get`), the legal entities with their accountant(s) and lawyer(s), the sub-task list."""
+One settings record (`_sh_get`), the legal entities (name + organisation code), the sub-task list."""
 from odoo import api, fields, models
 
 from .hr_constants import ASSIGNEES, CANDIDATES, DEFAULT_REQUIRED, KINDS
@@ -69,11 +69,11 @@ class SteelhouseHrTaskConfig(models.Model):
                 config['%s_field_ids' % kind] = [(6, 0, Field.search([('kind', '=', kind), ('fname', 'in', names)]).ids)]
         if not config.subtask_ids:
             rules = [
-                ('hire', 10, 'დოკუმენტების მომზადება', 'lawyer', False, False),
+                ('hire', 10, 'დოკუმენტების მომზადება', 'users', False, False),
                 ('hire', 20, 'დროის აღრიცხვის სისტემაში რეგისტრაცია', 'users', config.timekeeping_user_ids, False),
-                ('hire', 30, 'RS.ge-ზე რეგისტრაცია', 'accountant', False, False),
-                ('dismissal', 10, 'გათავისუფლების დოკუმენტები', 'lawyer', False, True),
-                ('dismissal', 20, 'RS.ge - გათავისუფლება', 'accountant', False, True),
+                ('hire', 30, 'RS.ge-ზე რეგისტრაცია', 'users', False, False),
+                ('dismissal', 10, 'გათავისუფლების დოკუმენტები', 'users', False, True),
+                ('dismissal', 20, 'RS.ge - გათავისუფლება', 'users', False, True),
                 ('dismissal', 30, 'შიდა უსაფრთხოება - გათავისუფლება', 'users', config.security_user_ids, True),
             ]
             self.env['steelhouse.hr.subtask.rule'].sudo().create([{
@@ -119,10 +119,6 @@ class SteelhouseLegalEntity(models.Model):
     sequence = fields.Integer(default=10)
     name = fields.Char('იურიდიული პირი', required=True)
     code = fields.Char('ორგანიზაციის კოდი')
-    accountant_ids = fields.Many2many('res.users', 'sh_legal_accountant_rel', 'entity_id', 'user_id',
-                                      string='ბუღალტერი', domain=USERS)
-    lawyer_ids = fields.Many2many('res.users', 'sh_legal_lawyer_rel', 'entity_id', 'user_id',
-                                  string='იურისტი', domain=USERS)
     active = fields.Boolean(default=True)
 
 

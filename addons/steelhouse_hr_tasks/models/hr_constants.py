@@ -17,5 +17,5 @@ DEFAULT_REQUIRED = {
     'hire': CANDIDATES['hire'],
     'dismissal': ['sh_hr_application', 'sh_hr_reason', 'sh_hr_special', 'sh_hr_last_day', 'sh_hr_property'],
 }
-ASSIGNEES = [('lawyer', 'იურიდიული პირის იურისტი'), ('accountant', 'იურიდიული პირის ბუღალტერი'),
-             ('users', 'არჩეული ადამიანები')]
+# 2026-11-26 (owner): only chosen people - the legal entity's lawyer / accountant options were removed
+ASSIGNEES = [('users', 'არჩეული ადამიანები')]

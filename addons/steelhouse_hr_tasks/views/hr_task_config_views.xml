@@ -13,14 +13,12 @@
                                 <field name="hr_manager_ids" widget="many2many_tags"/>
                                 <field name="director_id"/>
                             </group>
-                            <separator string="იურიდიული პირები - ბუღალტერი და იურისტი (მოთხოვნაში არჩეული პირის მიხედვით)"/>
+                            <separator string="იურიდიული პირები (მოთხოვნაში ასარჩევი; „ორგანიზაციის კოდი“ აქედან ივსება)"/>
                             <field name="legal_entity_ids">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
                                     <field name="code"/>
-                                    <field name="accountant_ids" widget="many2many_tags"/>
-                                    <field name="lawyer_ids" widget="many2many_tags"/>
                                 </list>
                             </field>
                         </page>
@@ -34,8 +32,8 @@
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
-                                    <field name="assignee"/>
-                                    <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
+                                    <field name="assignee" column_invisible="1"/>
+                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
@@ -50,8 +48,8 @@
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
-                                    <field name="assignee"/>
-                                    <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
+                                    <field name="assignee" column_invisible="1"/>
+                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
@@ -66,18 +64,17 @@
                                     <field name="kind" column_invisible="1"/>
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
-                                    <field name="assignee"/>
-                                    <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
+                                    <field name="assignee" column_invisible="1"/>
+                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
                         </page>
                     </notebook>
                     <div class="text-muted small mt-2">
-                        „ვის ეწერება“: იურიდიული პირის იურისტი / ბუღალტერი - მოთხოვნაში არჩეული იურიდიული პირის მიხედვით
-                        (ჩანართი „ადამიანები“); „არჩეული ადამიანები“ - ვინც სტრიქონშია მითითებული.
+                        „ვის ეწერება“ - ამ ადამიანებს ეწერება ქვედავალება დირექტორის დამტკიცებისას (ისინი მოთხოვნასაც ხედავენ).
                         „შეიძლება გამოტოვება“ - HR მოთხოვნაზე მონიშნავს „არ არის საჭირო“. ცვლილება მოქმედებს ახალ
-                        მოთხოვნებზე / დამტკიცებებზე.
+                        დამტკიცებებზე.
                     </div>
                 </sheet>
             </form>

@@ -4,7 +4,7 @@
   „კადრები“ (new -> in progress -> done / cancelled), so reports and the home page count it as any task.
 - ახალი -> დირექტორთან: the HR manager, only when every required field of the kind is filled;
 - დირექტორთან -> დამტკიცებულია / უარყოფილია: only the director (settings); refusing needs a reason;
-- on approval (hiring, dismissal): the legal entity's accountant and lawyer see the task, sub-tasks are made;
+- on approval: the sub-tasks set in the settings are made for the people chosen there;
 - vacancy: დამტკიცებულია -> გადახდაში -> დასრულებულია; the task can be finished only after the approval.
 """
 from markupsafe import Markup
@@ -243,26 +243,20 @@ class ProjectTask(models.Model):
 
     # ------------------------------------------------------------------ after the approval
     def _sh_hr_make_subtasks(self, config):
-        """The sub-tasks of this process from the settings („ქვედავალებები“), except the ones HR marked
-        „არ არის საჭირო“ on the request. The legal entity's accountant and lawyer see the request."""
+        """The sub-tasks of this process from the settings („ქვედავალებები“: name + the people chosen there),
+        except the ones HR marked „არ არის საჭირო“ on the request. Their people follow the request."""
         self.ensure_one()
-        entity = self.sh_hr_legal_entity_id
         whom = self.sh_hr_position or self.name
         rules = config.sudo().subtask_ids.filtered(lambda r: r.kind == self.sh_hr_kind and r.active) - self.sh_hr_skip_rule_ids
-        people = {'lawyer': entity.lawyer_ids, 'accountant': entity.accountant_ids}
         viewers = self.env['res.users']
         missing = []
         for rule in rules.sorted('sequence'):
-            if rule.assignee == 'users':
-                users = rule.user_ids
-            else:
-                users = people.get(rule.assignee)
+            users = rule.user_ids
             name = '%s - %s' % (rule.name, whom)
             if not users:
                 missing.append(name)
                 continue
-            if rule.assignee in ('lawyer', 'accountant'):
-                viewers |= users
+            viewers |= users
             self.env['project.task'].sudo().create({
                 'name': name, 'parent_id': self.id, 'project_id': self.project_id.id,
                 'user_ids': [(6, 0, users.ids)], 'reviewer_ids': [(6, 0, (config.hr_manager_ids or self.reviewer_ids).ids)],
