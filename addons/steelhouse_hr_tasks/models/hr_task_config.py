@@ -37,6 +37,13 @@ class SteelhouseHrTaskConfig(models.Model):
         domain=[('kind', '=', 'dismissal')])
 
     subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', string='ქვედავალებები')
+    extra_field_ids = fields.One2many('steelhouse.hr.extra.field', 'config_id', string='დამატებითი ველები')
+    vacancy_extra_ids = fields.One2many('steelhouse.hr.extra.field', 'config_id', domain=[('kind', '=', 'vacancy')],
+                                        context={'default_kind': 'vacancy'}, string='ვაკანსია - დამატებითი ველები')
+    hire_extra_ids = fields.One2many('steelhouse.hr.extra.field', 'config_id', domain=[('kind', '=', 'hire')],
+                                     context={'default_kind': 'hire'}, string='აყვანა - დამატებითი ველები')
+    dismissal_extra_ids = fields.One2many('steelhouse.hr.extra.field', 'config_id', domain=[('kind', '=', 'dismissal')],
+                                          context={'default_kind': 'dismissal'}, string='გათავისუფლება - დამატებითი ველები')
     vacancy_subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', domain=[('kind', '=', 'vacancy')],
                                           context={'default_kind': 'vacancy'}, string='ვაკანსია - ქვედავალებები')
     hire_subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', domain=[('kind', '=', 'hire')],
@@ -51,13 +58,21 @@ class SteelhouseHrTaskConfig(models.Model):
         return config or self.sudo().create({})
 
     def _sh_required(self, kind):
-        """Names of the required fields of a process."""
+        """Names of the required (built-in) fields of a process."""
         return (self['%s_field_ids' % kind].mapped('fname') if kind in CANDIDATES else [])
+
+    def _sh_required_extra(self, kind):
+        """Required fields HR added himself (kept as properties of the request)."""
+        return self.sudo().extra_field_ids.filtered(lambda f: f.kind == kind and f.required and f.ftype != 'boolean')
 
     @api.model
     def _sh_defaults(self):
         """First filling (install / upgrade to 19.0.1.10.0): the client's documents - only where still empty."""
         config = self._sh_get()
+        Kind = self.env['steelhouse.hr.kind'].sudo()
+        for kind, label in KINDS:
+            if not Kind.search_count([('kind', '=', kind)]):
+                Kind.create({'kind': kind, 'name': label})
         Field = self.env['steelhouse.hr.field'].sudo()
         task_fields = self.env['project.task']._fields
         for kind, names in CANDIDATES.items():
@@ -132,3 +147,63 @@ class SteelhouseHrField(models.Model):
     sequence = fields.Integer(default=10)
     fname = fields.Char('ტექნიკური სახელი', required=True)
     name = fields.Char('ველი', required=True)
+
+
+class SteelhouseHrKind(models.Model):
+    """One record per process: it holds the definition of the fields HR added (the request's properties).
+    Written only by the module (from „დამატებითი ველები“), so the list and the form never disagree."""
+    _name = 'steelhouse.hr.kind'
+    _description = 'კადრების პროცესი'
+
+    kind = fields.Selection(KINDS, required=True)
+    name = fields.Char(required=True)
+    properties_definition = fields.PropertiesDefinition('დამატებითი ველები')
+
+    def _sh_rebuild(self):
+        Extra = self.env['steelhouse.hr.extra.field'].sudo()
+        for rec in self.sudo():
+            rec.properties_definition = [
+                {'name': f.pname, 'string': f.name + (' *' if f.required and f.ftype != 'boolean' else ''),
+                 'type': f.ftype}
+                for f in Extra.search([('kind', '=', rec.kind)], order='sequence, id') if f.pname]
+
+
+class SteelhouseHrExtraField(models.Model):
+    """A field HR adds to a process („დამატებითი ველები“): shown on the request form, value kept on the request."""
+    _name = 'steelhouse.hr.extra.field'
+    _description = 'კადრების პროცესის დამატებითი ველი'
+    _order = 'kind, sequence, id'
+
+    config_id = fields.Many2one('steelhouse.hr.task.config', required=True, ondelete='cascade',
+                                default=lambda self: self.env['steelhouse.hr.task.config']._sh_get())
+    kind = fields.Selection(KINDS, string='პროცესი', required=True)
+    sequence = fields.Integer(default=10)
+    name = fields.Char('ველი', required=True)
+    ftype = fields.Selection([('char', 'ტექსტი'), ('text', 'გრძელი ტექსტი'), ('date', 'თარიღი'),
+                              ('integer', 'რიცხვი'), ('boolean', 'კი / არა')], string='ტიპი', required=True,
+                             default='char')
+    required = fields.Boolean('სავალდებულო')
+    pname = fields.Char(readonly=True, copy=False)
+
+    def _sh_kinds(self):
+        return self.env['steelhouse.hr.kind'].sudo().search([('kind', 'in', list(set(self.mapped('kind'))))])
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super().create(vals_list)
+        for rec in records:
+            rec.pname = 'shx%d' % rec.id
+        records._sh_kinds()._sh_rebuild()
+        return records
+
+    def write(self, vals):
+        kinds = self._sh_kinds()
+        res = super().write(vals)
+        (kinds | self._sh_kinds())._sh_rebuild()
+        return res
+
+    def unlink(self):
+        kinds = self._sh_kinds()
+        res = super().unlink()
+        kinds._sh_rebuild()
+        return res

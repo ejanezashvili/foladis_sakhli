@@ -79,6 +79,10 @@
                         </group>
 
                     </group>
+                    <field name="sh_hr_kind_id" invisible="1"/>
+                    <div class="mt-2" invisible="not sh_hr_kind_id">
+                        <field name="sh_hr_properties" nolabel="1" columns="2"/>
+                    </div>
                     <group invisible="sh_hr_state not in ('new', 'director')">
                         <field name="sh_hr_skip_rule_ids" widget="many2many_tags" options="{'no_create': True}"
                                domain="[('kind', '=', sh_hr_kind), ('optional', '=', True)]"

@@ -26,6 +26,16 @@
                             <group>
                                 <field name="vacancy_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
                             </group>
+                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <field name="vacancy_extra_ids">
+                                <list editable="bottom">
+                                    <field name="kind" column_invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="ftype"/>
+                                    <field name="required"/>
+                                </list>
+                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="vacancy_subtask_ids">
                                 <list editable="bottom">
@@ -42,6 +52,16 @@
                             <group>
                                 <field name="hire_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
                             </group>
+                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <field name="hire_extra_ids">
+                                <list editable="bottom">
+                                    <field name="kind" column_invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="ftype"/>
+                                    <field name="required"/>
+                                </list>
+                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="hire_subtask_ids">
                                 <list editable="bottom">
@@ -58,6 +78,16 @@
                             <group>
                                 <field name="dismissal_field_ids" widget="many2many_tags" options="{'no_create': True}"/>
                             </group>
+                            <separator string="დამატებითი ველები - HR-ის მიერ შექმნილი (ჩანს მოთხოვნის ფორმაზე)"/>
+                            <field name="dismissal_extra_ids">
+                                <list editable="bottom">
+                                    <field name="kind" column_invisible="1"/>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="ftype"/>
+                                    <field name="required"/>
+                                </list>
+                            </field>
                             <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
                             <field name="dismissal_subtask_ids">
                                 <list editable="bottom">

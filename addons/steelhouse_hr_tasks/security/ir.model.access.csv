@@ -7,3 +7,6 @@ access_sh_hr_refuse_wizard_user,sh.hr.refuse.wizard user,model_steelhouse_hr_ref
 access_sh_hr_subtask_rule_user,sh.hr.subtask.rule user,model_steelhouse_hr_subtask_rule,base.group_user,1,0,0,0
 access_sh_hr_subtask_rule_hr,sh.hr.subtask.rule hr,model_steelhouse_hr_subtask_rule,hr.group_hr_user,1,1,1,1
 access_sh_hr_field_user,sh.hr.field user,model_steelhouse_hr_field,base.group_user,1,0,0,0
+access_sh_hr_kind_user,sh.hr.kind user,model_steelhouse_hr_kind,base.group_user,1,0,0,0
+access_sh_hr_extra_field_user,sh.hr.extra.field user,model_steelhouse_hr_extra_field,base.group_user,1,0,0,0
+access_sh_hr_extra_field_hr,sh.hr.extra.field hr,model_steelhouse_hr_extra_field,hr.group_hr_user,1,1,1,1

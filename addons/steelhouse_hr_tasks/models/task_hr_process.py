@@ -33,6 +33,11 @@ class ProjectTask(models.Model):
     sh_hr_subtask_ids = fields.Many2many('project.task', compute='_compute_sh_hr_subtask_ids', string='ქვედავალებები')
     # required fields of this kind from the settings, as ",name1,name2," (the form marks them required)
     sh_hr_required_fnames = fields.Char(compute='_compute_sh_hr_required_fnames')
+    # fields HR added in the settings („დამატებითი ველები“) - Odoo properties, defined per process
+    sh_hr_kind_id = fields.Many2one('steelhouse.hr.kind', compute='_compute_sh_hr_kind_id', store=True, index=True,
+                                    readonly=False)
+    sh_hr_properties = fields.Properties('დამატებითი ველები', definition='sh_hr_kind_id.properties_definition',
+                                         copy=True)
     sh_hr_skip_rule_ids = fields.Many2many(
         'steelhouse.hr.subtask.rule', 'sh_task_hr_skip_rule_rel', 'task_id', 'rule_id', string='არ არის საჭირო',
         copy=False, help="ამ მოთხოვნაზე ეს ქვედავალებები არ შეიქმნება (პარამეტრებში „შეიძლება გამოტოვება“).")
@@ -83,21 +88,29 @@ class ProjectTask(models.Model):
             task.sh_hr_subtask_ids = task.child_ids if task.sh_hr_kind else False
 
     @api.depends('sh_hr_kind')
+    def _compute_sh_hr_kind_id(self):
+        kinds = {k.kind: k for k in self.env['steelhouse.hr.kind'].sudo().search([])}
+        for task in self:
+            task.sh_hr_kind_id = kinds.get(task.sh_hr_kind) if task.sh_hr_kind and not task.parent_id else False
+
+    @api.depends('sh_hr_kind')
     def _compute_sh_hr_required_fnames(self):
         config = self.env['steelhouse.hr.task.config']._sh_get()
         for task in self:
             names = config._sh_required(task.sh_hr_kind) if task.sh_hr_kind else []
             task.sh_hr_required_fnames = ',%s,' % ','.join(names)
 
-    @api.depends(lambda self: ['sh_hr_kind'] + ALL_CANDIDATES)
+    @api.depends(lambda self: ['sh_hr_kind', 'sh_hr_properties'] + ALL_CANDIDATES)
     def _compute_sh_hr_missing(self):
         for task in self:
             task.sh_hr_missing = ', '.join(task._sh_hr_missing_labels())
 
-    @api.constrains(lambda self: ['sh_hr_kind', 'sh_hr_state'] + ALL_CANDIDATES)
+    @api.constrains(lambda self: ['sh_hr_kind', 'sh_hr_state', 'sh_hr_properties'] + ALL_CANDIDATES)
     def _check_sh_hr_required(self):
         """The client's documents: a request without its required fields is not taken for processing - it is
         not saved at all (so HR never gets an incomplete one)."""
+        if self.env.context.get('module') or self.env.context.get('install_mode'):
+            return   # module install / upgrade recomputes fields: old requests are not checked then
         for task in self.filtered(lambda t: t.sh_hr_kind and not t.parent_id and t.sh_hr_state in ('new', 'director')):
             missing = task._sh_hr_missing_labels()
             if missing:
@@ -106,7 +119,13 @@ class ProjectTask(models.Model):
     def _sh_hr_missing_labels(self):
         self.ensure_one()
         config = self.env['steelhouse.hr.task.config']._sh_get()
-        return [self._fields[f].string for f in config._sh_required(self.sh_hr_kind) if f in self._fields and not self[f]]
+        missing = [self._fields[f].string for f in config._sh_required(self.sh_hr_kind)
+                   if f in self._fields and not self[f]]
+        values = getattr(self.sh_hr_properties, '_values', None) or {}
+        for extra in config._sh_required_extra(self.sh_hr_kind):
+            if values.get(extra.pname) in (None, False, '', []):
+                missing.append(extra.name)
+        return missing
 
     # ------------------------------------------------------------------ create: HR manager, director
     @api.model_create_multi
@@ -119,11 +138,15 @@ class ProjectTask(models.Model):
         config = self.env['steelhouse.hr.task.config']._sh_get()
         project = self.env.ref('steelhouse_hr_tasks.project_sh_hr', raise_if_not_found=False)
         author = self.env.user
+        kinds = {k.kind: k.id for k in self.env['steelhouse.hr.kind'].sudo().search([])}
         for vals, hr in zip(vals_list, is_hr):
             if not hr:
                 continue
             if project:
                 vals['project_id'] = project.id
+            # the process first: the added fields (properties) are kept only once their definition is known
+            if kinds.get(vals['sh_hr_kind']):
+                vals['sh_hr_kind_id'] = kinds[vals['sh_hr_kind']]
             vals.setdefault('sh_hr_author_id', author.id)
             viewers = [(4, vals['sh_hr_author_id'])]
             # the form fills in the author's department and the author as assignee by default: an HR request
