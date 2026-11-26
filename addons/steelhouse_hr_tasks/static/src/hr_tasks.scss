@@ -6,3 +6,43 @@
     color: #d9534f;
     font-weight: 700;
 }
+
+// The fields HR created in the settings (Odoo properties): the same look as the other fields of the form
+// (soft filled rounded boxes, muted labels); new ones are added only from the settings, not from the form.
+.o_sh_hr_block div[name="sh_hr_properties"] {
+    .o_field_property_label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #6e6a7c;
+        @media (min-width: 576px) {
+            flex: 0 0 166px;      // the same label column as the other fields
+            width: 166px;
+        }
+    }
+    .o_property_field {
+        align-items: center;
+        margin-bottom: 6px;
+    }
+    .o_property_field_value {
+        input:not(.form-check-input),
+        textarea,
+        select {
+            min-height: 37px;
+            padding: 7px 12px;
+            font-size: 14px;
+            border: 1px solid transparent !important;
+            border-radius: 10px;
+            background-color: #f5f4f9;
+
+            &:focus {
+                border-color: #6f63a6 !important;
+                background-color: #fff;
+                box-shadow: 0 0 0 3px rgba(111, 99, 166, 0.12);
+            }
+        }
+    }
+    .o_field_property_add,
+    .o_field_property_open_popover {
+        display: none !important;
+    }
+}
