@@ -36,7 +36,6 @@
                                     <field name="name"/>
                                     <field name="assignee"/>
                                     <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
-                                    <field name="department_id" invisible="assignee != 'department'" options="{'no_create': True}"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
@@ -53,7 +52,6 @@
                                     <field name="name"/>
                                     <field name="assignee"/>
                                     <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
-                                    <field name="department_id" invisible="assignee != 'department'" options="{'no_create': True}"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
@@ -70,7 +68,6 @@
                                     <field name="name"/>
                                     <field name="assignee"/>
                                     <field name="user_ids" widget="many2many_tags" invisible="assignee != 'users'"/>
-                                    <field name="department_id" invisible="assignee != 'department'" options="{'no_create': True}"/>
                                     <field name="optional"/>
                                 </list>
                             </field>
@@ -78,7 +75,7 @@
                     </notebook>
                     <div class="text-muted small mt-2">
                         „ვის ეწერება“: იურიდიული პირის იურისტი / ბუღალტერი - მოთხოვნაში არჩეული იურიდიული პირის მიხედვით
-                        (ჩანართი „ადამიანები“); „არჩეული ადამიანები“ - ვინც სტრიქონშია მითითებული; „დეპარტამენტი“ - არჩეული დეპარტამენტის ხელმძღვანელ(ებ)ი.
+                        (ჩანართი „ადამიანები“); „არჩეული ადამიანები“ - ვინც სტრიქონშია მითითებული.
                         „შეიძლება გამოტოვება“ - HR მოთხოვნაზე მონიშნავს „არ არის საჭირო“. ცვლილება მოქმედებს ახალ
                         მოთხოვნებზე / დამტკიცებებზე.
                     </div>
