@@ -4,3 +4,6 @@ access_sh_hr_task_config_hr,sh.hr.task.config hr,model_steelhouse_hr_task_config
 access_sh_legal_entity_user,sh.legal.entity user,model_steelhouse_legal_entity,base.group_user,1,0,0,0
 access_sh_legal_entity_hr,sh.legal.entity hr,model_steelhouse_legal_entity,hr.group_hr_user,1,1,1,1
 access_sh_hr_refuse_wizard_user,sh.hr.refuse.wizard user,model_steelhouse_hr_refuse_wizard,base.group_user,1,1,1,1
+access_sh_hr_subtask_rule_user,sh.hr.subtask.rule user,model_steelhouse_hr_subtask_rule,base.group_user,1,0,0,0
+access_sh_hr_subtask_rule_hr,sh.hr.subtask.rule hr,model_steelhouse_hr_subtask_rule,hr.group_hr_user,1,1,1,1
+access_sh_hr_field_user,sh.hr.field user,model_steelhouse_hr_field,base.group_user,1,0,0,0

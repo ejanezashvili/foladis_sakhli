@@ -12,18 +12,9 @@ from markupsafe import Markup
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError, ValidationError
 
-KINDS = [('vacancy', 'ვაკანსიის განთავსება'), ('hire', 'ახალი თანამშრომლის აყვანა'),
-         ('dismissal', 'თანამშრომლის გათავისუფლება')]
+from .hr_constants import ALL_CANDIDATES, KINDS
 STATES = [('new', 'ახალი'), ('director', 'დირექტორთან'), ('approved', 'დამტკიცებულია'),
           ('payment', 'გადახდაში'), ('done', 'დასრულებულია'), ('refused', 'უარყოფილია')]
-# required fields per kind (field name, label shown when missing)
-REQUIRED = {
-    'vacancy': ['sh_hr_position', 'sh_hr_duties', 'sh_hr_requirements', 'sh_hr_workplace', 'sh_hr_schedule',
-                'sh_hr_salary'],
-    'hire': ['sh_hr_id_number', 'sh_hr_phone', 'sh_hr_address', 'sh_hr_bank_account', 'sh_hr_email',
-             'sh_hr_position', 'sh_hr_salary', 'sh_hr_schedule', 'sh_hr_start_date', 'sh_hr_legal_entity_id'],
-    'dismissal': ['sh_hr_application', 'sh_hr_reason', 'sh_hr_special', 'sh_hr_last_day', 'sh_hr_property'],
-}
 APPROVED = ('approved', 'payment', 'done')
 
 
@@ -40,6 +31,11 @@ class ProjectTask(models.Model):
     sh_hr_missing = fields.Char(compute='_compute_sh_hr_missing', string='შესავსებია')
     # the form of task_flow hides the sub-tasks tab (the client uses „თანმიმდევრობა“): the HR block lists them itself
     sh_hr_subtask_ids = fields.Many2many('project.task', compute='_compute_sh_hr_subtask_ids', string='ქვედავალებები')
+    # required fields of this kind from the settings, as ",name1,name2," (the form marks them required)
+    sh_hr_required_fnames = fields.Char(compute='_compute_sh_hr_required_fnames')
+    sh_hr_skip_rule_ids = fields.Many2many(
+        'steelhouse.hr.subtask.rule', 'sh_task_hr_skip_rule_rel', 'task_id', 'rule_id', string='არ არის საჭირო',
+        copy=False, help="ამ მოთხოვნაზე ეს ქვედავალებები არ შეიქმნება (პარამეტრებში „შეიძლება გამოტოვება“).")
 
     # vacancy / hiring
     sh_hr_position = fields.Char('თანამდებობა / პოზიცია', tracking=True)
@@ -86,12 +82,19 @@ class ProjectTask(models.Model):
         for task in self:
             task.sh_hr_subtask_ids = task.child_ids if task.sh_hr_kind else False
 
-    @api.depends(lambda self: ['sh_hr_kind'] + sorted({f for fs in REQUIRED.values() for f in fs}))
+    @api.depends('sh_hr_kind')
+    def _compute_sh_hr_required_fnames(self):
+        config = self.env['steelhouse.hr.task.config']._sh_get()
+        for task in self:
+            names = config._sh_required(task.sh_hr_kind) if task.sh_hr_kind else []
+            task.sh_hr_required_fnames = ',%s,' % ','.join(names)
+
+    @api.depends(lambda self: ['sh_hr_kind'] + ALL_CANDIDATES)
     def _compute_sh_hr_missing(self):
         for task in self:
             task.sh_hr_missing = ', '.join(task._sh_hr_missing_labels())
 
-    @api.constrains(lambda self: ['sh_hr_kind', 'sh_hr_state'] + sorted({f for fs in REQUIRED.values() for f in fs}))
+    @api.constrains(lambda self: ['sh_hr_kind', 'sh_hr_state'] + ALL_CANDIDATES)
     def _check_sh_hr_required(self):
         """The client's documents: a request without its required fields is not taken for processing - it is
         not saved at all (so HR never gets an incomplete one)."""
@@ -102,7 +105,8 @@ class ProjectTask(models.Model):
 
     def _sh_hr_missing_labels(self):
         self.ensure_one()
-        return [self._fields[f].string for f in REQUIRED.get(self.sh_hr_kind, []) if not self[f]]
+        config = self.env['steelhouse.hr.task.config']._sh_get()
+        return [self._fields[f].string for f in config._sh_required(self.sh_hr_kind) if f in self._fields and not self[f]]
 
     # ------------------------------------------------------------------ create: HR manager, director
     @api.model_create_multi
@@ -204,8 +208,7 @@ class ProjectTask(models.Model):
             task.sudo().write({'sh_hr_state': 'approved'})
             task._sh_hr_move('in_progress')
             task._sh_hr_close_activities(_("დამტკიცებულია"))
-            if task.sh_hr_kind in ('hire', 'dismissal'):
-                task._sh_hr_make_subtasks(config)
+            task._sh_hr_make_subtasks(config)
             task.message_post(body=_("დირექტორმა დაამტკიცა (%s).", self.env.user.name),
                               partner_ids=config.hr_manager_ids.partner_id.ids)
         return True
@@ -240,39 +243,31 @@ class ProjectTask(models.Model):
 
     # ------------------------------------------------------------------ after the approval
     def _sh_hr_make_subtasks(self, config):
+        """The sub-tasks of this process from the settings („ქვედავალებები“), except the ones HR marked
+        „არ არის საჭირო“ on the request. The legal entity's accountant and lawyer see the request."""
         self.ensure_one()
         entity = self.sh_hr_legal_entity_id
-        accountants = entity.accountant_ids
-        lawyers = entity.lawyer_ids
         whom = self.sh_hr_position or self.name
-        jobs = []   # (name, users)
-        if self.sh_hr_kind == 'hire':
-            jobs = [
-                (_("დოკუმენტების მომზადება - %s", whom), lawyers),
-                (_("დროის აღრიცხვის სისტემაში რეგისტრაცია - %s", whom), config.timekeeping_user_ids),
-                (_("RS.ge-ზე რეგისტრაცია - %s", whom), accountants),
-            ]
-        else:
-            if self.sh_hr_need_lawyer:
-                jobs.append((_("გათავისუფლების დოკუმენტები - %s", self.name), lawyers))
-            if self.sh_hr_need_accountant:
-                jobs.append((_("RS.ge - გათავისუფლება - %s", self.name), accountants))
-            if self.sh_hr_need_security:
-                jobs.append((_("შიდა უსაფრთხოება - გათავისუფლება - %s", self.name), config.security_user_ids))
-        viewers = accountants | lawyers
-        if viewers:
-            self.sudo().write({'sh_extra_viewer_ids': [(4, u.id) for u in viewers]})
-            self.sudo().message_subscribe(partner_ids=viewers.partner_id.ids)
+        rules = config.sudo().subtask_ids.filtered(lambda r: r.kind == self.sh_hr_kind and r.active) - self.sh_hr_skip_rule_ids
+        people = {'lawyer': entity.lawyer_ids, 'accountant': entity.accountant_ids}
+        viewers = self.env['res.users']
         missing = []
-        for name, users in jobs:
+        for rule in rules.sorted('sequence'):
+            users = people.get(rule.assignee, rule.user_ids) if rule.assignee != 'users' else rule.user_ids
+            name = '%s - %s' % (rule.name, whom)
             if not users:
                 missing.append(name)
                 continue
+            if rule.assignee in ('lawyer', 'accountant'):
+                viewers |= users
             self.env['project.task'].sudo().create({
                 'name': name, 'parent_id': self.id, 'project_id': self.project_id.id,
                 'user_ids': [(6, 0, users.ids)], 'reviewer_ids': [(6, 0, (config.hr_manager_ids or self.reviewer_ids).ids)],
                 'date_deadline': self.date_deadline,
             })
+        if viewers:
+            self.sudo().write({'sh_extra_viewer_ids': [(4, u.id) for u in viewers]})
+            self.sudo().message_subscribe(partner_ids=viewers.partner_id.ids)
         if missing:
             self.message_post(body=_("ქვედავალება ვერ შეიქმნა - პარამეტრებში ადამიანი არ არის მითითებული: %s",
                                      '; '.join(missing)))

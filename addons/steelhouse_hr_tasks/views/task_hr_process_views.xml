@@ -11,6 +11,7 @@
                 <field name="sh_hr_kind" invisible="1"/>
                 <field name="sh_hr_is_manager" invisible="1"/>
                 <field name="sh_hr_is_director" invisible="1"/>
+                <field name="sh_hr_required_fnames" invisible="1"/>
                 <button name="action_sh_hr_send" type="object" string="დირექტორს გაგზავნა" class="btn-primary"
                         invisible="not sh_hr_kind or parent_id or sh_hr_state != 'new' or not sh_hr_is_manager"/>
                 <button name="action_sh_hr_approve" type="object" string="დამტკიცება" class="btn-success"
@@ -37,50 +38,51 @@
                     </div>
                     <group invisible="sh_hr_kind != 'vacancy'" string="ვაკანსია">
                         <group>
-                            <field name="sh_hr_position" required="sh_hr_kind == 'vacancy' and not parent_id" string="თანამდებობის დასახელება"/>
-                            <field name="sh_hr_workplace" required="sh_hr_kind == 'vacancy' and not parent_id"/>
-                            <field name="sh_hr_schedule" required="sh_hr_kind == 'vacancy' and not parent_id"/>
-                            <field name="sh_hr_salary" required="sh_hr_kind == 'vacancy' and not parent_id"/>
+                            <field name="sh_hr_position" required="not parent_id and ',sh_hr_position,' in (sh_hr_required_fnames or '')" string="თანამდებობის დასახელება"/>
+                            <field name="sh_hr_workplace" required="not parent_id and ',sh_hr_workplace,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_schedule" required="not parent_id and ',sh_hr_schedule,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_salary" required="not parent_id and ',sh_hr_salary,' in (sh_hr_required_fnames or '')"/>
                         </group>
                         <group>
-                            <field name="sh_hr_duties" required="sh_hr_kind == 'vacancy' and not parent_id"/>
-                            <field name="sh_hr_requirements" required="sh_hr_kind == 'vacancy' and not parent_id"/>
+                            <field name="sh_hr_duties" required="not parent_id and ',sh_hr_duties,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_requirements" required="not parent_id and ',sh_hr_requirements,' in (sh_hr_required_fnames or '')"/>
                         </group>
                     </group>
                     <group invisible="sh_hr_kind != 'hire'" string="ახალი თანამშრომელი">
                         <group>
-                            <field name="sh_hr_id_number" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_phone" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_address" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_bank_account" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_email" required="sh_hr_kind == 'hire' and not parent_id"/>
+                            <field name="sh_hr_id_number" required="not parent_id and ',sh_hr_id_number,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_phone" required="not parent_id and ',sh_hr_phone,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_address" required="not parent_id and ',sh_hr_address,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_bank_account" required="not parent_id and ',sh_hr_bank_account,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_email" required="not parent_id and ',sh_hr_email,' in (sh_hr_required_fnames or '')"/>
                         </group>
                         <group>
-                            <field name="sh_hr_position" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_salary" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_schedule" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_start_date" required="sh_hr_kind == 'hire' and not parent_id"/>
-                            <field name="sh_hr_legal_entity_id" required="sh_hr_kind == 'hire' and not parent_id" options="{'no_create': True}"/>
+                            <field name="sh_hr_position" required="not parent_id and ',sh_hr_position,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_salary" required="not parent_id and ',sh_hr_salary,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_schedule" required="not parent_id and ',sh_hr_schedule,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_start_date" required="not parent_id and ',sh_hr_start_date,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_legal_entity_id" required="not parent_id and ',sh_hr_legal_entity_id,' in (sh_hr_required_fnames or '')" options="{'no_create': True}"/>
                             <field name="sh_hr_org_code"/>
                         </group>
                     </group>
                     <group invisible="sh_hr_kind != 'dismissal'" string="გათავისუფლება">
                         <group>
-                            <field name="sh_hr_application" required="sh_hr_kind == 'dismissal' and not parent_id" filename="sh_hr_application_name"/>
+                            <field name="sh_hr_application" required="not parent_id and ',sh_hr_application,' in (sh_hr_required_fnames or '')" filename="sh_hr_application_name"/>
                             <field name="sh_hr_application_name" invisible="1"/>
-                            <field name="sh_hr_last_day" required="sh_hr_kind == 'dismissal' and not parent_id"/>
-                            <field name="sh_hr_legal_entity_id" options="{'no_create': True}"/>
+                            <field name="sh_hr_last_day" required="not parent_id and ',sh_hr_last_day,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_legal_entity_id" options="{'no_create': True}" required="not parent_id and ',sh_hr_legal_entity_id,' in (sh_hr_required_fnames or '')"/>
                         </group>
                         <group>
-                            <field name="sh_hr_reason" required="sh_hr_kind == 'dismissal' and not parent_id"/>
-                            <field name="sh_hr_special" required="sh_hr_kind == 'dismissal' and not parent_id"/>
-                            <field name="sh_hr_property" required="sh_hr_kind == 'dismissal' and not parent_id"/>
+                            <field name="sh_hr_reason" required="not parent_id and ',sh_hr_reason,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_special" required="not parent_id and ',sh_hr_special,' in (sh_hr_required_fnames or '')"/>
+                            <field name="sh_hr_property" required="not parent_id and ',sh_hr_property,' in (sh_hr_required_fnames or '')"/>
                         </group>
-                        <group string="დამტკიცების შემდეგ ქვედავალებები">
-                            <field name="sh_hr_need_lawyer"/>
-                            <field name="sh_hr_need_accountant"/>
-                            <field name="sh_hr_need_security"/>
-                        </group>
+
+                    </group>
+                    <group invisible="sh_hr_state not in ('new', 'director')">
+                        <field name="sh_hr_skip_rule_ids" widget="many2many_tags" options="{'no_create': True}"
+                               domain="[('kind', '=', sh_hr_kind), ('optional', '=', True)]"
+                               placeholder="ყველა ქვედავალება შეიქმნება (პარამეტრების მიხედვით)"/>
                     </group>
                     <div invisible="not sh_hr_subtask_ids" class="mt-2">
                         <div class="o_horizontal_separator mb-2">ქვედავალებები (დამტკიცების შემდეგ)</div>

@@ -15,4 +15,4 @@ def _sh_hr_tasks_post_init(env):
         project.privacy_visibility = other.privacy_visibility
     if 'sh_code' in project._fields and not project.sh_code:
         project.sh_code = 'HR'
-    env['steelhouse.hr.task.config']._sh_get()
+    env['steelhouse.hr.task.config']._sh_defaults()
