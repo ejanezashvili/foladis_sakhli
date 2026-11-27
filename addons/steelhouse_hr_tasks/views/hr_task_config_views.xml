@@ -47,9 +47,16 @@
                                 <field name="optional"/>
                             </list>
                         </field>
-                        <div class="mt-2">
-                            <button name="action_sh_open_kind" type="object" string="სახელი / არქივი / წაშლა"
-                                    class="btn-link p-0" icon="fa-pencil"/>
+                        <field name="kind_is_builtin" invisible="1"/>
+                        <div class="d-flex flex-wrap gap-3 mt-3">
+                            <button name="action_sh_open_kind" type="object" string="სახელის შეცვლა"
+                                    class="btn btn-secondary" icon="fa-pencil"/>
+                            <button name="action_sh_archive_kind" type="object" string="დაარქივება"
+                                    class="btn btn-secondary" icon="fa-archive"
+                                    confirm="შაბლონი გაქრება მენიუდან და ჩანართებიდან (მისი მოთხოვნები რჩება). გავაგრძელოთ?"/>
+                            <button name="action_sh_delete_kind" type="object" string="შაბლონის წაშლა"
+                                    class="btn btn-outline-danger" icon="fa-trash-o" invisible="kind_is_builtin"
+                                    confirm="შაბლონი წაიშლება სამუდამოდ - მისი ველები და ქვედავალებებიც. გავაგრძელოთ?"/>
                         </div>
                     </div>
                     <div class="text-muted small mt-2">

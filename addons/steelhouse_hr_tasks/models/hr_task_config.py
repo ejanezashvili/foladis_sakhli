@@ -38,6 +38,7 @@ class SteelhouseHrTaskConfig(models.Model):
     kind_required_field_ids = fields.Many2many(related='kind_id.required_field_ids', readonly=False,
                                                string='სავალდებულო ველები', domain=[])
     kind_subtask_ids = fields.One2many(related='kind_id.subtask_ids', readonly=False, string='ქვედავალებები')
+    kind_is_builtin = fields.Boolean(related='kind_id.is_builtin')
 
     @api.model
     def _sh_get(self):
@@ -127,6 +128,22 @@ class SteelhouseHrTaskConfig(models.Model):
         self.ensure_one()
         return {'type': 'ir.actions.act_window', 'res_model': 'steelhouse.hr.kind', 'res_id': self.kind_id.id,
                 'view_mode': 'form', 'target': 'current', 'name': self.kind_id.name}
+
+    def action_sh_archive_kind(self):
+        """Buttons on the template's tab (owner 2026-11-27: the ⚙ menu of the template form was not found).
+        The page is reloaded: the top menu and the tab line follow at once."""
+        self.ensure_one()
+        kind = self.kind_id
+        self.kind_id = False
+        kind.active = False
+        return {'type': 'ir.actions.client', 'tag': 'reload'}
+
+    def action_sh_delete_kind(self):
+        self.ensure_one()
+        kind = self.kind_id
+        self.kind_id = False
+        kind.unlink()   # refused for a built-in one and for one with requests (archive it)
+        return {'type': 'ir.actions.client', 'tag': 'reload'}
 
     def action_sh_new_kind(self):
         return self.env['ir.actions.act_window']._for_xml_id('steelhouse_hr_tasks.action_sh_hr_new_kind')
