@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-26, commit: f9478f0 -->
+<!-- last-synced: 2026-11-27, commit: 72334a1 -->
 # Plan — remaining work
 
 Done work and its history: `Docs/გეგმა.md` (stages, `## Status`) and `README.md` (version by version). This file lists only what is left.
@@ -51,7 +51,9 @@ not edited - no version / file clashes with the teammates.
 - [ ] Check on the live server with test people, then the owner (in progress with the owner, 2026-11-26).
 - [ ] Owner decisions pending: legal entity required on dismissal; move „კადრები“ under the Project menu;
       who besides the participants may see a request (question sent to the company).
-- [ ] Before launch: delete the test requests (HR-0001…) and test fields.
+- [x] HR creates request templates („ახალი მოთხოვნა → + ახალი შაბლონი“; settings: one tab per template, rename / archive /
+      delete on the tab) - 19.0.1.22.0-27.0, D-14.
+- [ ] Before launch: delete the test requests (HR-0001…) and test fields (field „ტესტ“ of „აყვანა“, 2026-11-26).
 
 ## Milestone 2 — Housekeeping
 - [ ] Remove the demo department and the users `demo.manager` / `demo.employee` / `demo.employee2` from the live server when no more recordings are needed - `deploy/manual_video/cleanup_demo.py` (dry run first).
@@ -65,6 +67,6 @@ not edited - no version / file clashes with the teammates.
 - Permission to start the next step when the previous one is not on hold (D-6).
 
 ## Status
-Last session 2026-11-26: „კადრები“ 19.0.1.18.0-21.0 (created fields: look, delete, „+ ახალი ველი“); next: owner test of the HR processes;
-watch out: commits after c4f0cbd are on branch `sync-hr`, not pushed to `main` yet.
+Last session 2026-11-27: „კადრები“ templates 19.0.1.22.0-27.0 (D-14); time off saved again + approver sees it (`steelhouse_hr` 65-68, D-15, D-16); მარიამ ჩილინგარაშვილი both approval levels (data); next: owner test of the HR processes;
+watch out: 6 commits after d611d56 on branch `sync-hr`, not pushed; who approves ზეზვა's / მარიამ's own time off - company meeting.
 Earlier stages: done, see `Docs/გეგმა.md`.

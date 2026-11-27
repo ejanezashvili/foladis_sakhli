@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-26, commit: f9478f0 -->
+<!-- last-synced: 2026-11-27, commit: 72334a1 -->
 # Decisions
 
 Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგმა.md`; where the reasoning was not written down at the time it says "not recorded" instead of a guess.
@@ -127,3 +127,28 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
 - Consequences: a new template has only the fields HR creates (properties) and the same flow (HR -> director ->
   sub-tasks; „გადახდაში“ stays vacancy only). A template with requests is not deleted, only archived (menu hidden).
   The built-in menu items stay in XML: an upgrade resets their name to the XML one if HR renamed a built-in template.
+- Later the same day (19.0.1.26.0-27.0): deleting from the ⚙ menu of the template form was not found by the owner -
+  „დაარქივება“ / „შაბლონის წაშლა“ buttons on the template's tab (the page reloads); `hr_kind_menu.js` also patches the
+  form's delete confirmation for `steelhouse.hr.kind` (back to the settings, menu + views reloaded).
+
+### D-15: Time off create flushes before OCA auditlog reads the new record
+- Date: 2026-11-27 (every new time off / allocation request failed since 2026-11-24 with a database error)
+- Context: OCA `auditlog` (D-1) wraps `create` and reads all stored fields of the new record in a throw-away cache;
+  the approval activity created in the same call still had pending values, so the read failed and nothing was saved.
+- Standard checked: an `auditlog` setting to skip these models - would lose the 8.4 log of time off; changing OCA code -
+  not allowed (CLAUDE.md).
+- Decision: `steelhouse_hr/models/leave_auditlog_flush.py` - `create` of `hr.leave` and `hr.leave.allocation` ends with
+  `self.env.flush_all()` (auditlog wraps the whole chain, so the flush runs before its read).
+- Consequences: one extra flush per request; re-check after an `auditlog` update.
+
+### D-16: The first approvers of a time off request are stored on it and may open it
+- Date: 2026-11-27 (owner: „ვინც ადასტურებს იმას უნდა ქონდეს ეგ უფლება“ - a unit head could approve but not open
+  the request)
+- Context: the first approver comes from `_sh_unit_heads` / the card approver (D-5, B-20), not from `leave_manager_id`
+  alone, so the standard `hr_holidays` rules did not let him read it or the employee's allocations (balance check).
+- Standard checked: `hr_holidays` rules for officers and the card's approver - give either every request (officer) or
+  only `leave_manager_id`.
+- Decision: `hr.leave.sh_stage1_user_ids` filled by `_sh_store_approvers` (only added, never removed);
+  `rule_hr_leave_approver` (read / approve when first approver or a responsible of the type),
+  `rule_hr_leave_allocation_approver_read`; the „მელოდება მე“ filter and the approval checks use the same list.
+- Consequences: someone who stops being a head keeps reading the requests stored before.

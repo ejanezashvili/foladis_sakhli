@@ -1,7 +1,7 @@
-<!-- last-synced: 2026-11-26, commit: f9478f0 -->
+<!-- last-synced: 2026-11-27, commit: 72334a1 -->
 # Technical spec — ფოლადის სახლი (Odoo 19.0 Community)
 
-Modules: `steelhouse_task_flow` 19.0.1.178.0 (installed), `steelhouse_hr` 19.0.1.64.0 (installed), `steelhouse_project` 19.0.1.0.1 (not installed).
+Modules: `steelhouse_task_flow` 19.0.1.178.0 (installed), `steelhouse_hr` 19.0.1.68.0 (installed), `steelhouse_hr_tasks` 19.0.1.27.0 (installed), `steelhouse_project` 19.0.1.0.1 (not installed).
 Version-by-version detail: `README.md`. The field and view tables below are generated from the sources (commit in line 1).
 
 ## Data model
@@ -463,6 +463,10 @@ Version-by-version detail: `README.md`. The field and view tables below are gene
 |---|---|---|---|---|
 | `sh_no_head` | Boolean |  | compute `_compute_sh_no_head` |  |
 | `sh_approval_path` | Char |  | compute `_compute_sh_approval_path` |  |
+| `sh_stage1_user_ids` | Many2many |  |  | -> `res.users` (`sh_hr_leave_stage1_user_rel`), readonly, not copied; first approvers stored by `_sh_store_approvers` on create / employee, type, state change - only added, never removed (19.0.1.66.0, D-16) |
+
+- `hr.leave`, `hr.leave.allocation` - MODIFIED - `models/leave_auditlog_flush.py`: `create` ends with `env.flush_all()` (D-15), no fields.
+- `hr.employee` - MODIFIED - `models/leave_approval_flow.py`: `sh_leave_ids` (One2many -> `hr.leave`, used by the allocation approver rule).
 
 - `hr.leave.allocation` - MODIFIED - `models/leave_approval_flow.py`: no fields (methods only)
 
@@ -546,7 +550,7 @@ HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრ�
 
 | field | type | required | compute/related | notes |
 |---|---|---|---|---|
-| `sh_hr_kind` | Selection |  |  | vacancy / hire / dismissal, not copied |
+| `sh_hr_kind` | Selection |  |  | choices from `steelhouse.hr.kind` (`_sh_hr_kind_selection`: vacancy / hire / dismissal + `k<id>` of the templates HR creates, D-14), not copied |
 | `sh_hr_state` | Selection |  |  | new / director / approved / payment / done / refused, `group_expand`, tracked |
 | `sh_hr_refuse_reason` | Text |  |  | tracked, not copied |
 | `sh_hr_author_id` | Many2one |  |  | -> `res.users`, readonly („მომთხოვნი“) |
@@ -560,15 +564,15 @@ HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრ�
 | `sh_hr_position` … `sh_hr_property` | Char / Text / Date / Binary / Many2one |  |  | built-in process fields (`CANDIDATES`, `models/hr_constants.py`); `sh_hr_org_code` related to the legal entity |
 | `sh_hr_need_lawyer`, `sh_hr_need_accountant`, `sh_hr_need_security` | Boolean |  |  | legacy (before 19.0.1.10.0), not on the form |
 
-**`steelhouse.hr.task.config`** - NEW (singleton `_sh_get`) - `models/hr_task_config.py`: `hr_manager_ids`, `director_id`, `timekeeping_user_ids` / `security_user_ids` (legacy), `legal_entity_ids`, `<kind>_field_ids` (Many2many -> `steelhouse.hr.field`, the required ones), `subtask_ids` + `<kind>_subtask_ids`.
+**`steelhouse.hr.task.config`** - NEW (singleton `_sh_get`) - `models/hr_task_config.py`: `hr_manager_ids`, `director_id`, `timekeeping_user_ids` / `security_user_ids` (legacy), `legal_entity_ids`, `subtask_ids`, `kind_ids` (One2many -> `steelhouse.hr.kind`), `kind_id` (the template of the open tab; empty = „ადამიანები“), `kind_required_field_ids` / `kind_subtask_ids` (related to `kind_id`, editable), `kind_is_builtin` (related). `_get_view` adds one tab button per template; `action_sh_pick_kind`, `action_sh_open_kind`, `action_sh_archive_kind`, `action_sh_delete_kind` (both reload the page), `action_sh_new_kind`. The per-process `<kind>_field_ids` / `<kind>_subtask_ids` were removed in 19.0.1.22.0.
 
-**`steelhouse.hr.subtask.rule`** - NEW: `kind`, `sequence`, `name`, `assignee` (only `users`), `user_ids`, `optional`, `active`.
+**`steelhouse.hr.subtask.rule`** - NEW: `kind_id` (required, -> `steelhouse.hr.kind`, cascade), `kind` (stored related code), `sequence`, `name`, `assignee` (only `users`), `user_ids`, `optional`, `active`.
 
 **`steelhouse.legal.entity`** - NEW: `name`, `code`, `sequence`, `active`.
 
-**`steelhouse.hr.field`** - NEW: `kind`, `sequence`, `fname` (built-in field) or `pname` (`shx<id>`, a created one), `name`, `ftype` (char / text / date / integer / boolean). A built-in one cannot be deleted; `action_sh_delete` (trash button in the „ძიება“ window) deletes a created one.
+**`steelhouse.hr.field`** - NEW: `kind_id` (-> `steelhouse.hr.kind`, cascade; empty only until a new template is saved), `kind` (stored related code), `sequence`, `fname` (built-in field) or `pname` (`shx<id>`, a created one), `name`, `ftype` (char / text / date / integer / boolean). A built-in one cannot be deleted; `action_sh_delete` (trash button in the „ძიება“ window) deletes a created one.
 
-**`steelhouse.hr.kind`** - NEW: one per process; `properties_definition` rebuilt by `_sh_rebuild` from the created fields (label + ` *` when required).
+**`steelhouse.hr.kind`** - NEW: a request template (D-14) - `kind` (code: vacancy / hire / dismissal or `k<id>`), `name`, `sequence`, `active`, `config_id`, `is_builtin` (compute), `field_ids`, `required_field_ids` (Many2many, `sh_hr_kind_required_field_rel`), `subtask_ids`, `menu_id` / `action_id` (its item in „ახალი მოთხოვნა“, made by `_sh_make_menu` for a new one, kept in step by `_sh_sync_menu`), `properties_definition` rebuilt by `_sh_rebuild` from the created fields (label + ` *` when required). A built-in one or one with requests is not deleted (`_sh_check_unlink`); create / write / unlink clear the view cache (tab line).
 
 **`steelhouse.hr.refuse.wizard`** - NEW (transient): `task_id`, `reason` (required).
 
@@ -664,6 +668,9 @@ HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრ�
 | B-26 | Send to the director | `action_sh_hr_send` | HR manager, nothing missing | `sh_hr_state` director, activity to the director | - | custom (D-10) |
 | B-27 | Approve / refuse | `action_sh_hr_approve` / `action_sh_hr_refuse` (wizard) | director only | approve: stage in_progress, sub-tasks from the rules minus the skipped ones, their people become extra viewers; refuse: reason required, `sh_hr_state` refused | - | custom (D-10) |
 | B-28 | Stage moves of an HR request | `project.task.write(stage_id)` | before approval / after refusal | refused; done -> `sh_hr_state` done | - | custom (D-10) |
+| B-29 | A template is created / renamed / archived | `steelhouse.hr.kind.create` / `write` | HR officer | new one: code `k<id>`, window action + menu item under „ახალი მოთხოვნა“; name / order / active follow to the menu item | - | custom (D-14) |
+| B-30 | A template is deleted | `steelhouse.hr.kind.unlink` | not built-in, no request with it | its fields, rules, menu item and action are deleted; otherwise archive | - | custom (D-14) |
+| B-31 | Who may open a time off request | `rule_hr_leave_approver`, `rule_hr_leave_allocation_approver_read` | - | a first approver (`sh_stage1_user_ids`) or a responsible of the type reads / approves it; first approvers read the employee's allocations | AC-16 | custom (D-16) |
 
 ## Standard-first check
 
@@ -679,6 +686,9 @@ HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრ�
 | Time off days per quarter | accrual plans | not recorded | `cron_quarter_allocations` - **justification not recorded** |
 | HR processes: required data, director approves / refuses, sub-tasks | `hr_recruitment`, onboarding / offboarding plans, task templates (Approvals - Enterprise) | no | `steelhouse_hr_tasks` (D-10) |
 | HR adds fields to a process himself | Studio (not allowed), `ir.model.fields` (HR cannot read it), task properties of a project | partial | Odoo properties on the task, definition kept per process by the module (D-11) |
+| HR creates request templates himself | task templates (`is_template`), Studio (not allowed) | no | `steelhouse.hr.kind` as the template, menu items made by the module (D-14) |
+| The one who approves a time off request can open it | `hr_holidays` rules (officer / the card's approver `leave_manager_id`) | partial | stored first approvers + record rules (D-16) |
+| Time off saved while OCA `auditlog` logs it | - (conflict between `auditlog` and the approval activity) | no | flush at the end of `create` (D-15) |
 
 ## Views / UI
 
@@ -779,12 +789,13 @@ Menus: `menu_sh_task_dashboard`, `menu_sh_approvals_root`, `menu_sh_recurring_ta
 | `views/task_hr_process_views.xml` | `view_project_task_form_sh_hr_process` | `project.task` | extension (HR block, buttons) | `project.view_task_form2` |  |
 | `views/task_hr_process_views.xml` | `view_project_task_search_sh_hr_process` | `project.task` | extension | `project.view_task_search_form` |  |
 | `views/task_hr_process_views.xml` | `view_project_task_kanban_sh_hr_board`, `view_project_task_list_sh_hr_board` | `project.task` | primary, no create |  |  |
-| `views/hr_task_config_views.xml` | `view_steelhouse_hr_task_config_form_sh_hr` | `steelhouse.hr.task.config` | form (tabs: people / vacancy / hire / dismissal) |  |  |
+| `views/hr_task_config_views.xml` | `view_steelhouse_hr_task_config_form_sh_hr` | `steelhouse.hr.task.config` | form: one line of tab buttons („ადამიანები“ + one per template from `_get_view` + „+ ახალი შაბლონი“), the template's required fields, sub-tasks, rename / archive / delete buttons |  |  |
+| `views/hr_task_config_views.xml` | `view_steelhouse_hr_kind_form_sh_hr` | `steelhouse.hr.kind` | form (name, required fields, sub-tasks) |  |  |
 | `views/hr_task_config_views.xml` | `view_steelhouse_hr_field_list_sh_hr`, `view_steelhouse_hr_field_form_sh_hr` | `steelhouse.hr.field` | list (trash button), form (name + type) |  |  |
 | `wizard/hr_refuse_wizard_views.xml` | `view_steelhouse_hr_refuse_wizard_form_sh_hr` | `steelhouse.hr.refuse.wizard` | form |  |  |
 
-Actions / menus: `action_sh_hr_board`, `action_sh_hr_new_vacancy` / `_hire` / `_dismissal`, `action_sh_hr_task_config` (server action); app menu „კადრები“ (მოთხოვნები / ახალი მოთხოვნა / პარამეტრები - `hr.group_hr_user`).
-Assets: `static/src/hr_tasks.scss` (red * on required labels, created fields styled like the others), `static/src/hr_field_create.js` (patch of `Many2XAutocomplete`, only for `steelhouse.hr.field`: „+ ახალი ველი“ always offered - D-13).
+Actions / menus: `action_sh_hr_board`, `action_sh_hr_new_vacancy` / `_hire` / `_dismissal`, `action_sh_hr_new_kind`, `action_sh_hr_task_config` (server action); app menu „კადრები“ (მოთხოვნები / ახალი მოთხოვნა / პარამეტრები - `hr.group_hr_user`); `menu_sh_hr_new_kind` „+ ახალი შაბლონი“ (`hr.group_hr_user`); the items of the templates HR creates are records made by `steelhouse.hr.kind` (no xml id).
+Assets: `static/src/hr_tasks.scss` (red * on required labels, created fields styled like the others), `static/src/hr_field_create.js` (patch of `Many2XAutocomplete`, only for `steelhouse.hr.field`: „+ ახალი ველი“ always offered - D-13), `static/src/hr_kind_menu.js` (patch of `FormController` for `steelhouse.hr.kind` / `steelhouse.hr.task.config`: after a save the top menu and the cached views reload; deleting a template returns to the settings - D-14).
 
 ### Module `steelhouse_project`
 
@@ -818,7 +829,7 @@ Groups: no new groups. Used: `base.group_user`, `base.group_system`, `project.gr
 | project | `steelhouse.task.extension.wizard` | `project.group_project_user` | 1 | 1 | 1 | 1 |
 | hr_tasks | `steelhouse.hr.task.config` | `base.group_user` / `hr.group_hr_user` | 1 | 0 / 1 | 0 / 1 | 0 |
 | hr_tasks | `steelhouse.legal.entity`, `steelhouse.hr.subtask.rule`, `steelhouse.hr.field` | `base.group_user` / `hr.group_hr_user` | 1 | 0 / 1 | 0 / 1 | 0 / 1 |
-| hr_tasks | `steelhouse.hr.kind` | `base.group_user` | 1 | 0 | 0 | 0 |
+| hr_tasks | `steelhouse.hr.kind` | `base.group_user` / `hr.group_hr_user` | 1 | 0 / 1 | 0 / 1 | 0 / 1 |
 | hr_tasks | `steelhouse.hr.refuse.wizard` | `base.group_user` | 1 | 1 | 1 | 1 |
 
 Record rules
@@ -833,6 +844,8 @@ Record rules
 | `rule_hr_leave_co_head` | `hr.leave` | `base.group_user` | - | `employee_id.sh_head_user_ids` contains me, validation by manager |
 | `rule_hr_leave_allocation_co_head_read` | `hr.leave.allocation` | - | read | `employee_id.sh_head_user_ids` contains me |
 | `rule_hr_leave_deputy_read` | `hr.leave` | - | read | I am a deputy in `delegation_ids` |
+| `rule_hr_leave_approver` | `hr.leave` | `base.group_user` | read, write | I am in `sh_stage1_user_ids` or in the type's `responsible_ids` (D-16) |
+| `rule_hr_leave_allocation_approver_read` | `hr.leave.allocation` | `base.group_user` | read | `employee_id.sh_leave_ids.sh_stage1_user_ids` contains me (D-16) |
 
 ## Integrations
 
@@ -864,8 +877,10 @@ Server cron (outside Odoo): `/etc/cron.d/steelhouse-backup` - backup 02:00 daily
 | task_flow | 19.0.1.176.0 | `post-migrate.py` | extra viewers of the old confidential tasks carried over to `sh_extra_viewer_ids` |
 | task_flow | 19.0.1.177.0 | - | new column `sh_start_request_date`, empty on existing tasks |
 | hr | 19.0.1.38.0, 46.0, 54.0 | `post-migrate.py` | see the scripts |
+| hr | 19.0.1.66.0 | `post-migrate.py` | `_sh_store_approvers()` on every existing time off request |
 | hr_tasks | 19.0.1.10.0, 11.0, 15.0 | `post-migrate.py` | `_sh_defaults()` (kinds, field records, default required lists and sub-task rules); `sh_hr_kind_id` recomputed |
 | hr_tasks | 19.0.1.14.0 | `pre-migrate.py` | lawyer / accountant sub-task rules converted to chosen people |
+| hr_tasks | 19.0.1.22.0 | `pre-migrate.py`, `post-migrate.py` | `kind_id` filled on fields and sub-task rules by SQL; required fields copied from the old `sh_hrt_cfg_reqf_<kind>_rel` tables (kept, unused) to the template; built-in templates get order 1-3, settings and their XML menu items |
 
 One-off data scripts: `deploy/setup_*.py` (Odoo shell). The client's visibility list: `deploy/setup_task_visibility.py`.
 
@@ -896,7 +911,7 @@ The recording scripts in `deploy/manual_video/` act as scripted checks of the fl
 | AC-12 | `sh_start_request_date`, `sh_can_request_start`, `action_sh_request_start` | `v4_sequence.py` |
 | AC-13, AC-14 | `sh_party_user_ids`, `sh_job_viewer_ids`, `res.users.sh_see_*`, `rule_sh_task_department*` | none |
 | AC-15 | `task_reports.py`, `task_pdf.py` | none |
-| AC-16 | `hr.leave`, `steelhouse.leave.delegation`, `leave_approval_flow.py` | none |
+| AC-16 | `hr.leave`, `sh_stage1_user_ids`, `steelhouse.leave.delegation`, `leave_approval_flow.py`, `security/leave_co_head_rules.xml` | shell test with rollback (2026-11-27) |
 | AC-17 | `deploy/manual_video/` | frames checked by hand |
 | - (no AC yet) | `steelhouse_hr_tasks` | shell scripts with rollback + screenshots, by hand |
 

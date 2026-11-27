@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-26, commit: f9478f0 -->
+<!-- last-synced: 2026-11-27, commit: 72334a1 -->
 # Architecture
 
 ## Components
@@ -8,7 +8,7 @@
 | Odoo 19.0 Community | server, service `odoo` | `project`, `hr`, `hr_holidays`, `mail` (Discuss) - the base everything extends |
 | `steelhouse_hr` | `addons/steelhouse_hr` | structure: several equal heads, org chart, hierarchy views; time off: delegations, approval order, balance per quarter, report |
 | `steelhouse_task_flow` | `addons/steelhouse_task_flow` | task life cycle, review, sequences of steps, hold / resume, visibility, boards, home page, approvals app, reports, notifications |
-| `steelhouse_hr_tasks` | `addons/steelhouse_hr_tasks` | HR processes (vacancy, hiring, dismissal) as tasks on the board „კადრები“: required fields, fields HR creates, director approval, sub-tasks (D-10 - D-13) |
+| `steelhouse_hr_tasks` | `addons/steelhouse_hr_tasks` | HR processes (vacancy, hiring, dismissal + templates HR creates, each a menu item made by the module) as tasks on the board „კადრები“: required fields, fields HR creates, director approval, sub-tasks (D-10 - D-14) |
 | `steelhouse_project` | `addons/steelhouse_project` | earlier task module (stages, deadline extension requests) - not installed |
 | OCA `auditlog` | `addons/oca/auditlog` | audit log of tasks, projects, users (rules loaded by `deploy/setup_auditlog.py`) |
 | OCA `web_responsive` | `addons/oca/web_responsive` | apps home screen, mobile layout |

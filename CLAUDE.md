@@ -1,4 +1,4 @@
-<!-- last-synced: 2026-11-26, commit: f9478f0 -->
+<!-- last-synced: 2026-11-27, commit: 72334a1 -->
 # ფოლადის სახლი - task management on Odoo 19
 
 ## Stack
