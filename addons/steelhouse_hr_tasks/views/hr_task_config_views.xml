@@ -22,56 +22,20 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="ვაკანსია" name="vacancy">
-                            <group>
-                                <field name="vacancy_field_ids" widget="many2many_tags" context="{'default_kind': 'vacancy'}"
-                                       options="{'no_quick_create': True}"/>
-                            </group>
-                            <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
-                            <field name="vacancy_subtask_ids">
-                                <list editable="bottom">
-                                    <field name="kind" column_invisible="1"/>
+                        <page string="შაბლონები" name="kinds">
+                            <field name="kind_ids" nolabel="1">
+                                <list delete="0">
                                     <field name="sequence" widget="handle"/>
                                     <field name="name"/>
-                                    <field name="assignee" column_invisible="1"/>
-                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
-                                    <field name="optional"/>
+                                    <field name="required_field_ids" widget="many2many_tags" string="სავალდებულო ველები"/>
+                                    <field name="subtask_ids" widget="many2many_tags" string="ქვედავალებები"/>
+                                    <field name="active" widget="boolean_toggle" string="აქტიური"/>
                                 </list>
                             </field>
-                        </page>
-                        <page string="აყვანა" name="hire">
-                            <group>
-                                <field name="hire_field_ids" widget="many2many_tags" context="{'default_kind': 'hire'}"
-                                       options="{'no_quick_create': True}"/>
-                            </group>
-                            <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
-                            <field name="hire_subtask_ids">
-                                <list editable="bottom">
-                                    <field name="kind" column_invisible="1"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="assignee" column_invisible="1"/>
-                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
-                                    <field name="optional"/>
-                                </list>
-                            </field>
-                        </page>
-                        <page string="გათავისუფლება" name="dismissal">
-                            <group>
-                                <field name="dismissal_field_ids" widget="many2many_tags" context="{'default_kind': 'dismissal'}"
-                                       options="{'no_quick_create': True}"/>
-                            </group>
-                            <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
-                            <field name="dismissal_subtask_ids">
-                                <list editable="bottom">
-                                    <field name="kind" column_invisible="1"/>
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="name"/>
-                                    <field name="assignee" column_invisible="1"/>
-                                    <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
-                                    <field name="optional"/>
-                                </list>
-                            </field>
+                            <div class="text-muted small">
+                                თითო შაბლონი = პუნქტი მენიუში „ახალი მოთხოვნა“. ახალი შაბლონი - „ახალი მოთხოვნა → + ახალი შაბლონი“
+                                ან აქ „სტრიქონის დამატება“. „აქტიური“ მოხსნით შაბლონი მენიუდან ქრება (ძველი მოთხოვნები რჩება); შაბლონის წაშლა - მისი ფორმიდან, თუ მოთხოვნა ჯერ არ შექმნილა.
+                            </div>
                         </page>
                     </notebook>
                     <div class="text-muted small mt-2">
@@ -106,7 +70,7 @@
         <field name="arch" type="xml">
             <form string="ახალი ველი">
                 <group>
-                    <field name="kind" invisible="1"/>
+                    <field name="kind_id" invisible="1"/>
                     <field name="fname" invisible="1"/>
                     <field name="name" placeholder="მაგ. გამოცდილების წლები"/>
                     <field name="ftype" readonly="fname"/>
@@ -114,6 +78,56 @@
                 <div class="text-muted small">ველი გამოჩნდება ამ პროცესის მოთხოვნის ფორმაზე; შენახვისას სავალდებულოდ მოინიშნება.</div>
             </form>
         </field>
+    </record>
+
+    <!-- a request template: the built-in ones and the ones HR creates (D-14) -->
+    <record id="view_steelhouse_hr_kind_form_sh_hr" model="ir.ui.view">
+        <field name="name">steelhouse.hr.kind.form</field>
+        <field name="model">steelhouse.hr.kind</field>
+        <field name="arch" type="xml">
+            <form string="მოთხოვნის შაბლონი">
+                <sheet>
+                    <widget name="web_ribbon" title="დაარქივებული" bg_color="text-bg-danger" invisible="active"/>
+                    <field name="active" invisible="1"/>
+                    <field name="kind" invisible="1"/>
+                    <field name="is_builtin" invisible="1"/>
+                    <div class="oe_title">
+                        <label for="name" string="შაბლონის სახელი"/>
+                        <h1><field name="name" placeholder="მაგ. სტაჟიორის მიღება"/></h1>
+                    </div>
+                    <group>
+                        <field name="required_field_ids" widget="many2many_tags" context="{'default_kind_id': id}"
+                               options="{'no_quick_create': True}" placeholder="„+ ახალი ველი“ - ველის შექმნა"/>
+                    </group>
+                    <div class="text-muted small mb-3">
+                        ველები გამოჩნდება ამ შაბლონის მოთხოვნის ფორმაზე. აქ მონიშნული ველი სავალდებულოა: მის გარეშე
+                        მოთხოვნა არ შეინახება. „მეტის ძიება...“ - ყველა ველი (არასავალდებულოც), იქვე შექმნილის წაშლა.
+                    </div>
+                    <separator string="ქვედავალებები - იქმნება დირექტორის დამტკიცების შემდეგ"/>
+                    <field name="subtask_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="assignee" column_invisible="1"/>
+                            <field name="user_ids" widget="many2many_tags" string="ვის ეწერება"/>
+                            <field name="optional"/>
+                        </list>
+                    </field>
+                    <div class="text-muted small mt-2">
+                        გზა ყველა შაბლონისთვის ერთია: ახალი → HR მენეჯერი („დირექტორს გაგზავნა“) → დირექტორი
+                        (დამტკიცება / უარყოფა) → ქვედავალებები. შენახვის შემდეგ შაბლონი გამოჩნდება მენიუში
+                        „ახალი მოთხოვნა“ (გვერდის განახლების შემდეგ).
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sh_hr_new_kind" model="ir.actions.act_window">
+        <field name="name">ახალი შაბლონი</field>
+        <field name="res_model">steelhouse.hr.kind</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
     </record>
 
     <record id="action_sh_hr_task_config" model="ir.actions.server">

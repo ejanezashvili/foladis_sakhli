@@ -1,4 +1,5 @@
 """HR processes as tasks (client's documents 2026-11-25, D-10): ვაკანსია / ახალი თანამშრომლის აყვანა / გათავისუფლება.
+HR creates more templates (D-14) - a new one has only the fields HR made (properties) and the same flow.
 
 - The process has its own status (`sh_hr_state`) - the task itself stays in the shared columns of the board
   „კადრები“ (new -> in progress -> done / cancelled), so reports and the home page count it as any task.
@@ -21,7 +22,8 @@ APPROVED = ('approved', 'payment', 'done')
 class ProjectTask(models.Model):
     _inherit = 'project.task'
 
-    sh_hr_kind = fields.Selection(KINDS, string='კადრების პროცესი', index=True, copy=False)
+    # the templates (steelhouse.hr.kind: the three built-in ones + the ones HR creates, D-14)
+    sh_hr_kind = fields.Selection('_sh_hr_kind_selection', string='კადრების პროცესი', index=True, copy=False)
     sh_hr_state = fields.Selection(STATES, string='პროცესის სტატუსი', default='new', copy=False, tracking=True,
                                    group_expand='_sh_hr_expand_states')
     sh_hr_refuse_reason = fields.Text('უარყოფის მიზეზი', copy=False, tracking=True)
@@ -71,6 +73,11 @@ class ProjectTask(models.Model):
     sh_hr_need_security = fields.Boolean('შიდა უსაფრთხოება', default=True)
 
     @api.model
+    def _sh_hr_kind_selection(self):
+        kinds = self.env['steelhouse.hr.kind'].sudo().with_context(active_test=False).search([])
+        return [(k.kind, k.name) for k in kinds if k.kind] or list(KINDS)
+
+    @api.model
     def _sh_hr_expand_states(self, states, domain):
         return [key for key, _label in STATES]
 
@@ -89,7 +96,7 @@ class ProjectTask(models.Model):
 
     @api.depends('sh_hr_kind')
     def _compute_sh_hr_kind_id(self):
-        kinds = {k.kind: k for k in self.env['steelhouse.hr.kind'].sudo().search([])}
+        kinds = {k.kind: k for k in self.env['steelhouse.hr.kind'].sudo().with_context(active_test=False).search([])}
         for task in self:
             task.sh_hr_kind_id = kinds.get(task.sh_hr_kind) if task.sh_hr_kind and not task.parent_id else False
 
@@ -138,7 +145,7 @@ class ProjectTask(models.Model):
         config = self.env['steelhouse.hr.task.config']._sh_get()
         project = self.env.ref('steelhouse_hr_tasks.project_sh_hr', raise_if_not_found=False)
         author = self.env.user
-        kinds = {k.kind: k.id for k in self.env['steelhouse.hr.kind'].sudo().search([])}
+        kinds = {k.kind: k.id for k in self.env['steelhouse.hr.kind'].sudo().with_context(active_test=False).search([])}
         for vals, hr in zip(vals_list, is_hr):
             if not hr:
                 continue
@@ -206,7 +213,7 @@ class ProjectTask(models.Model):
                                'sh_extra_viewer_ids': [(4, config.director_id.id)]})
             task.sudo().activity_schedule(
                 'mail.mail_activity_data_todo', user_id=config.director_id.id,
-                summary=_("დასამტკიცებელია: %s", dict(KINDS)[task.sh_hr_kind]),
+                summary=_("დასამტკიცებელია: %s", task.sh_hr_kind_id.name or task.name),
                 note=_("HR-მა შეამოწმა - დაამტკიცეთ ან უარყავით."))
             task.message_post(body=_("HR-მა შეამოწმა და დირექტორს გაუგზავნა (%s).", config.director_id.name))
         return True

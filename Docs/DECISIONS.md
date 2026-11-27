@@ -109,3 +109,19 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
 - Decision: `static/src/hr_field_create.js` patches `Many2XAutocomplete` (`addCreateEditSuggestion`,
   `buildCreateEditSuggestion`) only when the model is `steelhouse.hr.field`; every other field keeps the standard.
 - Consequences: an Odoo upgrade that renames these methods breaks only this item (check after upgrades).
+
+### D-14: HR creates request templates himself (one model for the built-in and the new templates)
+- Date: 2026-11-27 (owner: „თუ საჭირო გახდა კადრებმა ახალი შაბლონის შექმნაც რომ შეძლოს. იყოს + ახალი მოთხოვნა“;
+  plan confirmed: „დაიწყე“)
+- Context: the three processes (vacancy / hire / dismissal) were a fixed selection with one settings tab each and
+  fixed menu items, so HR could not add a fourth one.
+- Standard checked: project task templates (`is_template`, „New from template“) - they copy a task only: no director
+  approval, no required fields, no sub-tasks after the approval, no menu item; Studio - not used (CLAUDE.md rule).
+- Decision: the existing `steelhouse.hr.kind` becomes the template (name, order, active, required fields, sub-tasks,
+  menu item + window action made by the module, `kind` code `k<id>` for a new one); `project.task.sh_hr_kind` takes
+  its choices from it (`_sh_hr_kind_selection`); `steelhouse.hr.field` / `steelhouse.hr.subtask.rule` point to it
+  (`kind_id`, `kind` kept as a stored related code). Menu „ახალი მოთხოვნა → + ახალი შაბლონი“ (HR officers), the
+  settings tab „შაბლონები“ lists all templates. Data moved by `migrations/19.0.1.22.0`.
+- Consequences: a new template has only the fields HR creates (properties) and the same flow (HR -> director ->
+  sub-tasks; „გადახდაში“ stays vacancy only). A template with requests is not deleted, only archived (menu hidden).
+  The built-in menu items stay in XML: an upgrade resets their name to the XML one if HR renamed a built-in template.

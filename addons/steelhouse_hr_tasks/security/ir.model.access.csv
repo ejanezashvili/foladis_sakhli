@@ -9,3 +9,4 @@ access_sh_hr_subtask_rule_hr,sh.hr.subtask.rule hr,model_steelhouse_hr_subtask_r
 access_sh_hr_kind_user,sh.hr.kind user,model_steelhouse_hr_kind,base.group_user,1,0,0,0
 access_sh_hr_field_user,sh.hr.field user,model_steelhouse_hr_field,base.group_user,1,0,0,0
 access_sh_hr_field_hr,sh.hr.field hr,model_steelhouse_hr_field,hr.group_hr_user,1,1,1,1
+access_sh_hr_kind_hr,sh.hr.kind hr,model_steelhouse_hr_kind,hr.group_hr_user,1,1,1,1
