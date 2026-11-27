@@ -30,6 +30,12 @@ class HrLeave(models.Model):
     sh_approval_path = fields.Char(
         string='დაამტკიცებს', compute='_compute_sh_approval_path',
         help="ვინ დაამტკიცებს ამ მოთხოვნას: პირველი და (ორსაფეხურიანზე) მეორე დამტკიცება.")
+    # 2026-11-27 (user): whoever approves a request sees it - the first approvers are kept on the request
+    # (the unit's head, e.g. სოფიკო ერაძე, is often not a head in the chart above the employee, so the chart
+    # rules did not show it to her); read by the record rule `rule_hr_leave_approver` and "Waiting For Me"
+    sh_stage1_user_ids = fields.Many2many(
+        'res.users', 'sh_hr_leave_stage1_user_rel', 'leave_id', 'user_id', string='პირველი დამტკიცება',
+        copy=False, readonly=True)
 
     @api.depends('employee_id')
     def _compute_sh_no_head(self):
@@ -245,17 +251,37 @@ class HrLeave(models.Model):
                                   "(ბარათი: „სამუშაო ინფორმაცია“ - „დამმტკიცებლები“ - „შვებულება“).",
                                   leave.employee_id.name))
 
+    def _sh_store_approvers(self):
+        """Keep the first approvers on the request (added, never removed: who approved keeps seeing it)."""
+        for leave in self.sudo():
+            if not leave.employee_id or leave.validation_type not in ('manager', 'both'):
+                continue
+            users = leave._sh_stage1_users()
+            if users - leave.sh_stage1_user_ids:
+                leave.sh_stage1_user_ids = [(4, u.id) for u in users]
+
     @api.model_create_multi
     def create(self, vals_list):
         leaves = super().create(vals_list)
         leaves._sh_check_has_approver()
+        leaves._sh_store_approvers()
         return leaves
 
     def write(self, vals):
         res = super().write(vals)
         if 'employee_id' in vals or 'holiday_status_id' in vals:
             self._sh_check_has_approver()
+        if {'employee_id', 'holiday_status_id', 'state'} & set(vals):
+            self._sh_store_approvers()
         return res
+
+
+class HrEmployee(models.Model):
+    _inherit = 'hr.employee'
+
+    # the employee's time off requests - only for the allocation rule `rule_hr_leave_allocation_approver_read`
+    # (whoever approves his time off sees his days balance); no column
+    sh_leave_ids = fields.One2many('hr.leave', 'employee_id', string='შვებულებები')
 
 
 class HrLeaveAllocation(models.Model):

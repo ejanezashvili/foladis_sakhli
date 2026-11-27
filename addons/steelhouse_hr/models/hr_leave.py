@@ -134,8 +134,9 @@ class HrLeave(models.Model):
         self.ensure_one()
         user = self.env.user
         employee = self.employee_id.sudo()
+        # the chart's equal heads, or a first approver kept on the request (the unit's head, 2026-11-27)
         return (employee.leave_manager_id != user and employee.user_id != user
-                and user in employee.sh_head_user_ids)
+                and (user in employee.sh_head_user_ids or user in self.sudo().sh_stage1_user_ids))
 
     def _get_next_states_by_state(self):
         result = super()._get_next_states_by_state()
@@ -174,7 +175,8 @@ class HrLeave(models.Model):
         # the first approval of a double-validation request: any equal head may give it
         if state == 'validate1':
             user = self.env.user
-            employees = employees.filtered(lambda e: user not in e.sudo().sh_head_user_ids)
+            approver_of = self.sudo().filtered(lambda l: user in l.sh_stage1_user_ids).employee_id
+            employees = employees.filtered(lambda e: user not in e.sudo().sh_head_user_ids and e not in approver_of)
         return super()._check_double_validation_rules(employees, state)
 
     def _sh_deputy_for(self, employee):

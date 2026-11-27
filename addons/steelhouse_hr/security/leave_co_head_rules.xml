@@ -9,6 +9,17 @@
         <field name="perm_unlink" eval="False"/>
         <field name="groups" eval="[(4, ref('base.group_user'))]"/>
     </record>
+    <!-- 2026-11-27: whoever approves a request sees it and can approve it - the first approvers kept on the
+         request (the unit's head, also when he is not a head in the chart above the employee) and the
+         type's responsible (second approval) -->
+    <record id="rule_hr_leave_approver" model="ir.rule">
+        <field name="name">შვებულება: ვინც ამტკიცებს</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave"/>
+        <field name="domain_force">['|', ('sh_stage1_user_ids', 'in', [user.id]), ('holiday_status_id.responsible_ids', 'in', [user.id])]</field>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
     <!-- ...and see their team's allocations (needed to check the days balance when approving) -->
     <record id="rule_hr_leave_allocation_co_head_read" model="ir.rule">
         <field name="name">მინიჭება: თანაბარი ხელმძღვანელები (ნახვა)</field>
@@ -24,6 +35,17 @@
         <field name="name">შვებულება: შემცვლელი (ნახვა)</field>
         <field name="model_id" ref="hr_holidays.model_hr_leave"/>
         <field name="domain_force">[('delegation_ids.deputy_id.user_id', '=', user.id)]</field>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+    <!-- 2026-11-27: whoever approves an employee's time off sees his allocations (the days balance is checked
+         on approval) -->
+    <record id="rule_hr_leave_allocation_approver_read" model="ir.rule">
+        <field name="name">მინიჭება: ვინც შვებულებას ამტკიცებს (ნახვა)</field>
+        <field name="model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+        <field name="domain_force">[('employee_id.sh_leave_ids.sh_stage1_user_ids', 'in', [user.id])]</field>
         <field name="perm_write" eval="False"/>
         <field name="perm_create" eval="False"/>
         <field name="perm_unlink" eval="False"/>
