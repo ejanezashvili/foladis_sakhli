@@ -33,3 +33,4 @@ from . import task_phase
 from . import task_visibility
 from . import task_pdf
 from . import task_start_request
+from . import task_chat_progress

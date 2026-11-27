@@ -59,8 +59,8 @@
                                               onChange="(id) => this.onSectionUser(section, id)"/>
                             </td>
                             <td>
-                                <input t-if="section.id" type="date" class="form-control form-control-sm" t-att-value="section.deadline"
-                                       t-on-change="(ev) => this.onSectionDeadline(section, ev)"/>
+                                <ShDateInput t-if="section.id" class="'form-control form-control-sm'" value="section.deadline"
+                                             onChange="(v) => this.onSectionDeadline(section, { target: { value: v } })"/>
                             </td>
                             <td t-if="showDone">
                                 <span t-if="section.done_date and sectionState(section) === 'done'" class="text-success fw-bold small">
@@ -87,8 +87,8 @@
                                                   onChange="(id) => this.onUser(item, id)"/>
                                 </td>
                                 <td>
-                                    <input type="date" class="form-control form-control-sm" t-att-value="item.deadline"
-                                           t-on-change="(ev) => this.onDeadline(item, ev)"/>
+                                    <ShDateInput class="'form-control form-control-sm'" value="item.deadline"
+                                                 onChange="(v) => this.onDeadline(item, { target: { value: v } })"/>
                                 </td>
                                 <td t-if="showDone" class="text-muted small">
                                     <t t-if="item.done and sectionState(section) === 'done'" t-esc="item.done_by + (item.done_date ? ' · ' + item.done_date : '')"/>

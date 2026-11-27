@@ -114,7 +114,9 @@ class ProjectTask(models.Model):
                     continue  # the stage line already says it
                 if name == 'stage_id':
                     kind = task.stage_id.sh_kind if task.stage_id.sh_kind in STYLE else 'stage'
-                    if kind in ('new', 'in_progress'):
+                    if kind == 'in_progress' and old_value and old_value.sh_kind == 'new':
+                        kind = 'accepted'  # "ახალი" -> "მიმდინარე": the task is accepted
+                    elif kind in ('new', 'in_progress'):
                         kind = 'stage'
                 lines.append(Markup('%s: <span style="color:#999;text-decoration:line-through">%s</span> → <b>%s</b>') % (
                     labels[name], task._sh_fmt(name, old_value), task._sh_fmt(name, new_value)))

@@ -6,6 +6,7 @@ import { standardFieldProps } from "@web/views/fields/standard_field_props";
 import { FormViewDialog } from "@web/views/view_dialogs/form_view_dialog";
 import { user } from "@web/core/user";
 import { ShUserPicker } from "../task_steps/task_steps";
+import { ShDateInput } from "../date_picker/sh_date_input";
 
 // sizes of the step diagram (px)
 const W = 236; // card
@@ -24,7 +25,7 @@ const POP_H = 400;
 export class TaskChain extends Component {
     static template = "steelhouse_task_flow.TaskChain";
     static props = { ...standardFieldProps };
-    static components = { ShUserPicker };
+    static components = { ShUserPicker, ShDateInput };
 
     setup() {
         this.orm = useService("orm");

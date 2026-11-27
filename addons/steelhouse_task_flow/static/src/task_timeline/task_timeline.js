@@ -32,8 +32,8 @@ const VIEWS = [
     { key: "returns", label: "დაბრუნებები", icon: "fa-undo" },
 ];
 // home page ("მთავარი" - "ჩემი"): which statuses to show, open ones by default
-export const MY_KINDS = ["new", "accepted", "in_progress", "on_hold", "review", "returned", "done", "cancelled"];
-const MY_KINDS_DEFAULT = ["new", "accepted", "in_progress", "on_hold", "review", "returned"];
+export const MY_KINDS = ["new", "in_progress", "on_hold", "review", "returned", "done", "cancelled"];
+const MY_KINDS_DEFAULT = ["new", "in_progress", "on_hold", "review", "returned"];
 // workload colors: open tasks running at the same time (per person for the team view)
 const LOAD_STEPS = [
     [0, ""],

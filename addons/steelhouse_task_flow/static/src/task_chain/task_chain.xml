@@ -187,8 +187,8 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <input type="date" class="form-control form-control-sm" title="ვადა" t-att-value="f.deadline"
-                                           t-on-change="(ev) => f.deadline = ev.target.value"/>
+                                    <ShDateInput class="'form-control form-control-sm'" placeholder="'ვადა'" value="f.deadline"
+                                                 onChange="(v) => f.deadline = v"/>
                                 </div>
                             </div>
 
@@ -206,8 +206,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <input type="date" class="form-control form-control-sm" title="ვადა" t-att-value="s.deadline"
-                                               t-on-change="(ev) => s.deadline = ev.target.value"/>
+                                        <ShDateInput class="'form-control form-control-sm'" placeholder="'ვადა'" value="s.deadline"
+                                                     onChange="(v) => s.deadline = v"/>
                                     </div>
                                     <div class="text-end">
                                         <button class="btn btn-link p-0 text-muted" title="წაშლა" t-on-click="() => this.removeSub(s)"><i class="fa fa-trash-o" title="წაშლა"/></button>

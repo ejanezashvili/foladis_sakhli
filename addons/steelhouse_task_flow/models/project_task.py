@@ -267,6 +267,9 @@ class ProjectTask(models.Model):
                         _("გაგრძელება"), {'default_task_id': self.id, 'default_mode': kind})
                 if kind == 'accepted':
                     self._sh_check_assignee()
+                elif kind == 'in_progress':
+                    # "ახალი" -> "მიმდინარე" is the acceptance (there is no separate "მიღებული" step)
+                    self.filtered(lambda t: t.stage_id.sh_kind == 'new')._sh_check_assignee()
                 if kind in REVIEWER_KINDS:
                     self._sh_check_reviewer(kind)
                 if (kind == 'done' and len(self) == 1 and not self.is_template and not self.env.su
@@ -342,11 +345,12 @@ class ProjectTask(models.Model):
                     ', '.join(task.user_ids.mapped('name')) or '-'))
 
     def action_sh_accept(self):
-        """Assignee confirms they accept the task: ახალი -> მიღებული."""
+        """Assignee confirms they accept the task: ახალი -> მიმდინარე (accepting starts the work;
+        a department that still has a "მიღებული" stage and no "მიმდინარე" one gets the old step)."""
         self.ensure_one()
-        stage = self._sh_stage_of_kind('accepted')
+        stage = self._sh_stage_of_kind('in_progress') or self._sh_stage_of_kind('accepted')
         if not stage:
-            raise UserError(_("ამ დეპარტამენტს არ აქვს „მიღებული“ სტადია."))
+            raise UserError(_("ამ დეპარტამენტს არ აქვს „მიმდინარე“ სტადია."))
         self.write({'stage_id': stage.id})
         return True
 

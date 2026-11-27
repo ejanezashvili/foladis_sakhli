@@ -3,6 +3,7 @@ import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { ConfirmationDialog } from "@web/core/confirmation_dialog/confirmation_dialog";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
+import { ShDateInput } from "../date_picker/sh_date_input";
 
 // Search box with avatars, like Odoo's many2one user field
 export class ShUserPicker extends Component {
@@ -52,7 +53,7 @@ export class ShUserPicker extends Component {
 export class TaskSteps extends Component {
     static template = "steelhouse_task_flow.TaskSteps";
     static props = { ...standardFieldProps };
-    static components = { ShUserPicker };
+    static components = { ShUserPicker, ShDateInput };
 
     setup() {
         this.orm = useService("orm");

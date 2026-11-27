@@ -174,7 +174,7 @@
                             <div class="o_sh_wt_card o_sh_wt_c4"><small>ყველაზე გრძელი</small><b t-esc="state.wt.total.max_str"/></div>
                         </div>
                         <div class="o_sh_wt_tools">
-                            <span class="text-muted">სამუშაო დრო = „მიღებული“ → „შემოწმებაზე“ (შეჩერებული დრო არ ითვლება). ციფრზე დაჭერა - დავალებების სია.</span>
+                            <span class="text-muted">სამუშაო დრო = მიღებიდან „შემოწმებაზე“ გადასვლამდე (შეჩერებული დრო არ ითვლება). ციფრზე დაჭერა - დავალებების სია.</span>
                             <button class="btn btn-sm btn-outline-secondary ms-auto" t-on-click="() => this.exportWt(false)"><i class="fa fa-download me-1"/>Excel</button>
                             <button class="btn btn-sm btn-outline-secondary" t-on-click="() => this.exportWt(true)"><i class="fa fa-file-pdf-o me-1"/>PDF</button>
                         </div>

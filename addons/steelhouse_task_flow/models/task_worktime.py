@@ -4,8 +4,9 @@ from odoo import api, fields, models
 
 TZ = pytz.timezone('Asia/Tbilisi')
 
-# "სამუშაო დრო": runs from "მიღებული" until "შემოწმებაზე" (real time), paused while "შეჩერებული".
+# "სამუშაო დრო": runs from the acceptance ("ახალი" -> "მიმდინარე") until "შემოწმებაზე" (real time), paused while "შეჩერებული".
 # Returned / resumed tasks continue - the extra time is added to the earlier one.
+# The first acceptance also fills an empty "სამუშაოს დაწყება" (sh_work_start) with that day.
 RUN_KINDS = ('accepted', 'in_progress', 'returned')
 STOP_KINDS = ('review', 'done', 'cancelled', 'on_hold')
 
@@ -62,6 +63,10 @@ class ProjectTask(models.Model):
                     vals['sh_wt_run_from'] = when
                 if not task.sh_wt_first:
                     vals['sh_wt_first'] = when
+                    # "სამუშაოს დაწყება": the day of the first acceptance, unless a date was planned.
+                    # Not on a repeating original - its work start is the base of the copies' deadlines.
+                    if not task.sh_work_start and not task.sh_repeat and not task.is_template:
+                        vals['sh_work_start'] = pytz.utc.localize(when).astimezone(TZ).date()
             elif kind in STOP_KINDS and task.sh_wt_run_from:
                 vals.update(sh_wt_secs=(task.sh_wt_secs or 0.0) + (when - task.sh_wt_run_from).total_seconds(),
                             sh_wt_run_from=False, sh_wt_end=when)

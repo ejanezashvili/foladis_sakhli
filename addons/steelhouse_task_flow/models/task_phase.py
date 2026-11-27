@@ -33,7 +33,7 @@ class ProjectTask(models.Model):
     sh_phase = fields.Selection(
         PHASES, string='ეტაპი', compute='_compute_sh_phase', inverse='_inverse_sh_phase',
         store=True, index=True, group_expand='_read_group_sh_phase',
-        help="დაფის სვეტი. „მუშავდება“ აერთიანებს სტადიებს: მიღებული, მიმდინარე, შეჩერებული, დაბრუნებული.")
+        help="დაფის სვეტი. „მუშავდება“ აერთიანებს სტადიებს: მიმდინარე, შეჩერებული, დაბრუნებული.")
 
     @api.depends('stage_id.sh_kind')
     def _compute_sh_phase(self):

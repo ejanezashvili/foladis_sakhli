@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="steelhouse_task_flow.ShDateInput">
+        <DateTimeInput type="'date'" value="date" onApply.bind="onApply" class="cssClass"
+                       placeholder="props.placeholder || 'თარიღი'"/>
+    </t>
+</templates>
