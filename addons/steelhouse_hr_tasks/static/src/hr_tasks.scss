@@ -46,3 +46,29 @@
         display: none !important;
     }
 }
+
+// „კადრები → პარამეტრები“: one line of tabs - „ადამიანები“ + one per template (like Odoo's notebook tabs)
+.o_sh_kind_tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    border-bottom: 1px solid $border-color;
+    margin: 8px 0 16px;
+    .btn.o_sh_kind_tab {
+        border: 1px solid transparent;
+        border-radius: 6px 6px 0 0;
+        margin-bottom: -1px;
+        padding: 8px 16px;
+        background: transparent;
+        color: $body-color;
+        font-weight: normal;
+        &:hover { border-color: $border-color $border-color transparent; }
+    }
+    .btn.o_sh_kind_tab_on {
+        border-color: $border-color $border-color $o-view-background-color;
+        background: $o-view-background-color;
+        color: $o-brand-primary;
+        font-weight: 600;
+    }
+    .btn.o_sh_kind_tab_new { color: $o-brand-primary; margin-left: auto; }
+}

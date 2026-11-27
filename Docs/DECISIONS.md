@@ -120,8 +120,10 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
 - Decision: the existing `steelhouse.hr.kind` becomes the template (name, order, active, required fields, sub-tasks,
   menu item + window action made by the module, `kind` code `k<id>` for a new one); `project.task.sh_hr_kind` takes
   its choices from it (`_sh_hr_kind_selection`); `steelhouse.hr.field` / `steelhouse.hr.subtask.rule` point to it
-  (`kind_id`, `kind` kept as a stored related code). Menu „ახალი მოთხოვნა → + ახალი შაბლონი“ (HR officers), the
-  settings tab „შაბლონები“ lists all templates. Data moved by `migrations/19.0.1.22.0`.
+  (`kind_id`, `kind` kept as a stored related code). Menu „ახალი მოთხოვნა → + ახალი შაბლონი“ (HR officers). The
+  settings keep one line of tabs („ადამიანები“ + one tab per template, built in `_get_view`, owner 2026-11-27: „როგორც
+  იყო ისევ ისე“); a tab is an object button (saves the form, sets `config.kind_id`), the page edits the template
+  through related fields. A front-end patch (`hr_kind_menu.js`) reloads the top menu and the cached views after a save. Data moved by `migrations/19.0.1.22.0`.
 - Consequences: a new template has only the fields HR creates (properties) and the same flow (HR -> director ->
   sub-tasks; „გადახდაში“ stays vacancy only). A template with requests is not deleted, only archived (menu hidden).
   The built-in menu items stay in XML: an upgrade resets their name to the XML one if HR renamed a built-in template.

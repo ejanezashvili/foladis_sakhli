@@ -1,6 +1,8 @@
 """„კადრები → პარამეტრები“: who does what in the HR processes, which fields are required and which sub-tasks
 are made after the director's approval - all set by HR here, not in code (owner, 2026-11-25 / 2026-11-26).
 One settings record (`_sh_get`), the legal entities (name + organisation code), the sub-task list."""
+from lxml import etree
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -30,6 +32,12 @@ class SteelhouseHrTaskConfig(models.Model):
     subtask_ids = fields.One2many('steelhouse.hr.subtask.rule', 'config_id', string='ქვედავალებები')
     # the request templates (the three built-in ones + the ones HR creates) - each one is a menu item
     kind_ids = fields.One2many('steelhouse.hr.kind', 'config_id', string='შაბლონები', context={'active_test': False})
+    # the settings page shows one template at a time - one tab per template (made in _get_view), as the old tabs
+    # ვაკანსია / აყვანა / გათავისუფლება; empty = the tab „ადამიანები“. A tab saves the form before switching.
+    kind_id = fields.Many2one('steelhouse.hr.kind', string='შაბლონი', ondelete='set null')
+    kind_required_field_ids = fields.Many2many(related='kind_id.required_field_ids', readonly=False,
+                                               string='სავალდებულო ველები', domain=[])
+    kind_subtask_ids = fields.One2many(related='kind_id.subtask_ids', readonly=False, string='ქვედავალებები')
 
     @api.model
     def _sh_get(self):
@@ -88,6 +96,40 @@ class SteelhouseHrTaskConfig(models.Model):
                 'user_ids': [(6, 0, users.ids)] if users else False, 'optional': optional,
             } for kind, seq, name, assignee, users, optional in rules])
         return config
+
+    @api.model
+    def _get_view(self, view_id=None, view_type='form', **options):
+        """The tab line of the settings: „ადამიანები“ (in the XML) + one tab per template, in their order."""
+        arch, view = super()._get_view(view_id, view_type, **options)
+        for node in arch.xpath("//div[@name='sh_kind_tabs']"):
+            plus = node.find("button[@name='action_sh_new_kind']")
+            for kind in self.env['steelhouse.hr.kind'].sudo().search([]):
+                for current in (True, False):
+                    button = etree.Element('button', {
+                        'name': 'action_sh_pick_kind', 'type': 'object', 'string': kind.name,
+                        'context': "{'sh_kind_id': %d}" % kind.id,
+                        'class': 'o_sh_kind_tab' + (' o_sh_kind_tab_on' if current else ''),
+                        'invisible': ('kind_id != %d' if current else 'kind_id == %d') % kind.id})
+                    if plus is not None:
+                        plus.addprevious(button)
+                    else:
+                        node.append(button)
+        return arch, view
+
+    def action_sh_pick_kind(self):
+        """A tab of the settings (the form is saved first by the button)."""
+        self.ensure_one()
+        self.kind_id = self.env.context.get('sh_kind_id') or False
+        return True
+
+    def action_sh_open_kind(self):
+        """The template's own form: rename, archive (hides its menu item), delete."""
+        self.ensure_one()
+        return {'type': 'ir.actions.act_window', 'res_model': 'steelhouse.hr.kind', 'res_id': self.kind_id.id,
+                'view_mode': 'form', 'target': 'current', 'name': self.kind_id.name}
+
+    def action_sh_new_kind(self):
+        return self.env['ir.actions.act_window']._for_xml_id('steelhouse_hr_tasks.action_sh_hr_new_kind')
 
     @api.model
     def action_sh_open(self):
@@ -225,12 +267,14 @@ class SteelhouseHrKind(models.Model):
             rec.required_field_ids.filtered(lambda f: not f.kind_id).sudo().kind_id = rec
         records.filtered(lambda r: not r.is_builtin and not r.menu_id)._sh_make_menu()
         records._sh_rebuild()
+        self.env.registry.clear_cache('templates')   # the tabs of the settings (_get_view)
         return records
 
     def write(self, vals):
         res = super().write(vals)
         if {'name', 'sequence', 'active'} & set(vals):
             self._sh_sync_menu()
+            self.env.registry.clear_cache('templates')
         if 'required_field_ids' in vals:
             self._sh_rebuild()   # the * of the required ones
         return res
@@ -270,6 +314,7 @@ class SteelhouseHrKind(models.Model):
         res = super().unlink()
         menus.unlink()
         actions.unlink()
+        self.env.registry.clear_cache('templates')
         return res
 
     def _sh_rebuild(self):

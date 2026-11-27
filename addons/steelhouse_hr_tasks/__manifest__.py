@@ -1,6 +1,6 @@
 {
     'name': 'Steelhouse: კადრების პროცესები',
-    'version': '19.0.1.23.0',
+    'version': '19.0.1.25.0',
     'summary': 'ვაკანსია, ახალი თანამშრომლის აყვანა, გათავისუფლება - დავალებებად, დირექტორის დამტკიცებით',
     'description': """
 HR-ის სამი პროცესი (კომპანიის დოკუმენტები, 2026-11-25) დავალებებად: სავალდებულო ველები, HR-ის შემოწმება,
@@ -18,7 +18,8 @@ HR-ის სამი პროცესი (კომპანიის დო
         'views/task_hr_process_views.xml',
     ],
     'assets': {'web.assets_backend': ['steelhouse_hr_tasks/static/src/hr_tasks.scss',
-                                       'steelhouse_hr_tasks/static/src/hr_field_create.js']},
+                                       'steelhouse_hr_tasks/static/src/hr_field_create.js',
+                                       'steelhouse_hr_tasks/static/src/hr_kind_menu.js']},
     'post_init_hook': '_sh_hr_tasks_post_init',
     'installable': True,
     'application': True,
