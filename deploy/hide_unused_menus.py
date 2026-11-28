@@ -22,6 +22,10 @@ MENUS = [
     'hr.menu_hr_employee_contract_templates',            # კონფიგურაცია / კონტრაქტის შაბლონები
     'hr_gamification.menu_hr_gamification',              # კონფიგურაცია / გამოწვევები
     'hr.menu_config_plan_plan',                          # კონფიგურაცია / ადაპტაცია / გათავისუფლება
+    # whole apps on the home screen (2026-11-28)
+    'project_todo.menu_todo_todos',                      # საქმეები (To-do)
+    'contacts.menu_contacts',                            # კონტაქტები
+    'base.menu_management',                              # აპლიკაციები
 ]
 
 
