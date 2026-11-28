@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- report "პასუხისმგებლის ცვლილებები" (models/task_handover.py): every change, how often, who / when / how many times -->
+    <record id="view_sh_responsible_change_list" model="ir.ui.view">
+        <field name="name">steelhouse.task.responsible.change.list</field>
+        <field name="model">steelhouse.task.responsible.change</field>
+        <field name="arch" type="xml">
+            <list create="0" edit="0" delete="0">
+                <field name="date"/>
+                <field name="task_id"/>
+                <field name="project_id" optional="show"/>
+                <field name="old_user_id" widget="many2one_avatar_user"/>
+                <field name="new_user_id" widget="many2one_avatar_user"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sh_responsible_change_search" model="ir.ui.view">
+        <field name="name">steelhouse.task.responsible.change.search</field>
+        <field name="model">steelhouse.task.responsible.change</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="task_id"/>
+                <field name="old_user_id"/>
+                <field name="new_user_id"/>
+                <field name="user_id"/>
+                <field name="project_id"/>
+                <filter name="sh_date" string="თარიღი" date="date"/>
+                <group>
+                    <filter name="group_task" string="დავალება" context="{'group_by': 'task_id'}"/>
+                    <filter name="group_old" string="ვისგან" context="{'group_by': 'old_user_id'}"/>
+                    <filter name="group_new" string="ვისზე" context="{'group_by': 'new_user_id'}"/>
+                    <filter name="group_who" string="ვინ შეცვალა" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_dept" string="დეპარტამენტი" context="{'group_by': 'project_id'}"/>
+                    <filter name="group_month" string="თვე" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_sh_responsible_change_pivot" model="ir.ui.view">
+        <field name="name">steelhouse.task.responsible.change.pivot</field>
+        <field name="model">steelhouse.task.responsible.change</field>
+        <field name="arch" type="xml">
+            <pivot>
+                <field name="project_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_sh_responsible_change_graph" model="ir.ui.view">
+        <field name="name">steelhouse.task.responsible.change.graph</field>
+        <field name="model">steelhouse.task.responsible.change</field>
+        <field name="arch" type="xml">
+            <graph type="bar">
+                <field name="date" interval="month"/>
+            </graph>
+        </field>
+    </record>
+    <record id="action_sh_responsible_change" model="ir.actions.act_window">
+        <field name="name">პასუხისმგებლის ცვლილებები</field>
+        <field name="path">sh-responsible-changes</field>
+        <field name="res_model">steelhouse.task.responsible.change</field>
+        <field name="view_mode">list,pivot,graph</field>
+        <field name="context">{'search_default_group_task': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">მთავარი პასუხისმგებელი ჯერ არ შეცვლილა</p>
+        </field>
+    </record>
+    <menuitem id="menu_sh_responsible_change" name="პასუხისმგებლის ცვლილებები" parent="project.menu_project_report"
+              action="action_sh_responsible_change" sequence="4"/>
+</odoo>

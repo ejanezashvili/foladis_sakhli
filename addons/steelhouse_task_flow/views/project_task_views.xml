@@ -29,7 +29,11 @@
                         <div colspan="2" class="d-flex justify-content-end" invisible="not id or is_template">
                             <widget name="sh_task_chat_button"/>
                         </div>
-                        <field name="sh_responsible_id" widget="many2one_avatar_user" options="{'no_create': True}" invisible="is_template"/>
+                        <!-- changed right here by the responsible, an assignee, a reviewer or an administrator
+                             (models/task_handover.py); every change goes to the report -->
+                        <field name="sh_can_handover" invisible="1"/>
+                        <field name="sh_responsible_id" widget="many2one_avatar_user" options="{'no_create': True}"
+                               invisible="is_template" readonly="not sh_can_handover"/>
                         <field name="user_ids" class="o_task_user_field" options="{'no_open': True, 'no_quick_create': True}"
                                required="not project_id" widget="many2many_avatar_user"/>
                         <field name="role_ids" invisible="not has_project_template or is_template" widget="many2many_tags"
@@ -135,6 +139,10 @@
             </xpath>
             <xpath expr="//page[@name='task_dependencies']" position="inside">
                 <field name="sh_chain" widget="sh_task_chain" nolabel="1"/>
+            </xpath>
+            <!-- "თანმიმდევრობა" is the first tab (the one a task opens on), "აღწერილობა" comes next -->
+            <xpath expr="//page[@name='description_page']" position="before">
+                <xpath expr="//page[@name='task_dependencies']" position="move"/>
             </xpath>
             <xpath expr="//notebook" position="inside">
                 <page name="sh_reasons" string="მიზეზები" invisible="sh_kind not in ('on_hold', 'returned', 'cancelled')">

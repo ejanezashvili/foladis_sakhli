@@ -152,3 +152,18 @@ Entries D-1 … D-5 are inferred from the code and `README.md` / `Docs/გეგ
   `rule_hr_leave_approver` (read / approve when first approver or a responsible of the type),
   `rule_hr_leave_allocation_approver_read`; the „მელოდება მე“ filter and the approval checks use the same list.
 - Consequences: someone who stops being a head keeps reading the requests stored before.
+
+### D-17: Handing a task over („გადაწერა“) and the log of main-responsible changes
+- Date: 2026-11-28 (owner: the one a task was given to must be able to pass it on when he was chosen by mistake, then
+  stop seeing it; a report of how often and who / when / how many times)
+- Context: the responsible could already edit the field, but once he was no longer on the task the save itself hit the
+  access rules (the record is read back), and nothing countable was kept - `task_log` writes the change as a chatter note
+  with `mail_notrack`, so there are no `mail.tracking.value` rows to report on.
+- Standard checked: field tracking (switched off by `task_log`, and not groupable by from / to / who), automated action
+  (cannot finish the save of a user who loses access in the middle of it), OCA `auditlog` (raw log, no report by task).
+- Decision: `models/task_handover.py` - the field „მთავარი პასუხისმგებელი“ is changed right on the form by the
+  responsible, assignees, reviewers and administrators (owner: no separate button, no reason asked); `web_save` sets
+  the new responsible apart from the rest of the save, as superuser after the check; the former responsible leaves the
+  shared chat if he has no other role. Every change (any path) is stored in `steelhouse.task.responsible.change`;
+  report „რეპორტინგი - პასუხისმგებლის ცვლილებები“ (list / pivot / graph, standard views); `rule_sh_responsible_change`.
+- Consequences: changes made before this version are not in the report; setting the first responsible is not counted.

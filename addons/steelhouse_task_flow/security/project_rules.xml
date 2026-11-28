@@ -75,4 +75,18 @@
             ('sh_task_ids.sh_department_id', 'in', user.sh_see_department_all_ids.ids),
             ('sh_task_ids.sh_view_department_ids', 'in', user.sh_see_department_all_ids.ids)]</field>
     </record>
+    <!-- report "პასუხისმგებლის ცვლილებები": administrators and "ყველა დავალებას ხედავს" - everything;
+         others - the changes they took part in and those of the departments they head / are given -->
+    <record id="rule_sh_responsible_change" model="ir.rule">
+        <field name="name">Steelhouse: პასუხისმგებლის ცვლილებების ხილვა</field>
+        <field name="model_id" ref="model_steelhouse_task_responsible_change"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">[(1, '=', 1)] if user.has_group('project.group_project_manager') or user.sh_see_all_tasks else [
+            '|', '|', '|', '|',
+            ('user_id', '=', user.id),
+            ('old_user_id', '=', user.id),
+            ('new_user_id', '=', user.id),
+            ('project_id.sh_department_id', 'in', user.sh_see_department_all_ids.ids),
+            ('project_id.sh_department_id.sh_all_manager_user_ids', 'in', user.id)]</field>
+    </record>
 </odoo>

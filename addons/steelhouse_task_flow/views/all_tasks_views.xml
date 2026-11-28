@@ -44,4 +44,24 @@
         <field name="act_window_id" ref="action_sh_all_tasks"/>
     </record>
 
+    <!-- "დავალებები - ყველა დავალება" opens the very same page as the button "პროექტები":
+         same board by stage, same search, no default filter. -->
+    <record id="project.menu_project_management_all_tasks" model="ir.ui.menu">
+        <field name="action" ref="action_sh_all_tasks"/>
+    </record>
+    <!-- the old address (/odoo/all-tasks, saved links) shows the same tasks the same way -->
+    <record id="project.action_view_all_task" model="ir.actions.act_window">
+        <field name="domain">[('project_id', '!=', False), ('is_template', '=', False), ('sh_is_step', '=', False)]</field>
+        <field name="context">{'sh_all_tasks': True, 'sh_picker': True, 'default_group_by': 'sh_phase'}</field>
+        <field name="search_view_id" ref="view_sh_all_tasks_search"/>
+    </record>
+    <record id="project.open_view_all_task_list_kanban" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_id" ref="project.view_task_kanban"/>
+    </record>
+    <record id="project.open_view_all_task_list_tree" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_id" ref="project.view_task_tree2"/>
+    </record>
+
 </odoo>

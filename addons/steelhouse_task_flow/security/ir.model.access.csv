@@ -5,3 +5,5 @@ access_steelhouse_task_final_wizard,steelhouse.task.final.wizard,model_steelhous
 access_steelhouse_task_section,steelhouse.task.section,model_steelhouse_task_section,base.group_user,1,1,1,1
 access_sh_task_flow_event_admin,sh.task.flow.event.admin,model_sh_task_flow_event,base.group_system,1,1,1,1
 access_steelhouse_project_hold_wizard,steelhouse.project.hold.wizard,model_steelhouse_project_hold_wizard,project.group_project_user,1,1,1,1
+access_steelhouse_task_responsible_change_user,steelhouse.task.responsible.change.user,model_steelhouse_task_responsible_change,base.group_user,1,0,0,0
+access_steelhouse_task_responsible_change_admin,steelhouse.task.responsible.change.admin,model_steelhouse_task_responsible_change,base.group_system,1,1,1,1
